@@ -10,7 +10,7 @@ ChRIS is designed to manage the execution and data needs of a specific class of 
 
 While ChRIS itself has a web-based user interface, the applications (or plugins as they are also called) that perform the computations, do not have graphical user interfaces but are command line, containerized, Linux-based applications.
 
-ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (by which is meant *any computing environment* that can run docker containers). By conforming to a reasonable command-line standard for ChRIS applications, ChRIS makes it easy to dockerize and run the research software, collect results, visualize data, and share/collaborate.
+ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (by which is meant *any computing environment* that can run docker containers). By conforming to a reasonable command-line specification or contract for ChRIS applications, ChRIS makes it easy to dockerize and run the research software, collect results, visualize data, and share/collaborate.
 
 ## Need
 
