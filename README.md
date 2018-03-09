@@ -58,9 +58,25 @@ Visualization of medical formatted image data is provided by two projects that h
 * xtk 
 * ami
 
+## History
+
+ChRIS has had several historical epochs:
+
+### ``bash`` shell scripts
+The earliest versions were collections of ``bash`` shell scripts that coordinated various types of analysis programs.
+
+### ChRIS v1
+The first version of what would become ChRIS was created in 2010 and was built using **Wt** (web toolkit) from Emweb. It was geared to replacing the interface to the previous ``bash`` scripted system and interfaced with an in-house HPC for analysis.
+
+### ChRIS v2
+The second version of ChRIS, released around 2013, replaced **Wt** with a cleaner, twitter-inspired interface built around the concept of _feeds_ and _plugins_. This version of ChRIS interfaced primarily with HPC clusters. It is still in production use today.
+
+### ChRIS v3
+The current development version of ChRIS features a complete redesign and shift to using REST-based services distributed computing, and dockerized containers for data processing. In some contexts, this version of ChRIS is also called _CHIPS_.
+
 ## Recent Papers
 
-Some papers and conference proceedings on ChRIS -- please note in some papers the system is called *CHIPS*:
+Some papers and conference proceedings on ChRIS -- please note in some papers the system is called *CHIPS* as the internal name for ChRIS v3:
 
 * Rudolph Pienaar, Ata Turk, Jorge L. Bernal-Rusiel, Nicolas Rannou, Daniel. Haehn, Steve Pieper, Patricia E. Grant, and Orran Krieger. “[CHIPS – A Service for Collecting, Organizing, Processing, and Sharing Medical Image Data in the Cloud.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/LNCS_VLDB_Healthcare.pdf)” In: Lecture Notes in Computer Science, Vol. 10494, pp. 29–35, 2017.
 
