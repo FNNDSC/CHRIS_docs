@@ -61,7 +61,7 @@ Some papers and conference proceedings on ChRIS -- please note in some papers th
 
 * Bernal-Rusiel, Jorge L., Nicolas Rannou, Randy L. Gollub, Steve Pieper, Shawn Murphy, Richard Robertson, Patricia E. Grant, and Rudolph Pienaar. “[Reusable Client-Side JavaScript Modules for Immersive Web-Based Real-Time Collaborative Neuroimage Visualization.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/fninf-11-00032.pdf)” In: Frontiers in neuroinformatics 11, p. 32, 2017
 
-* R Pienaar, N Rannou, J Bernal-Rusiel, D Haehn, and P E Grant. “[ChRIS – A Web-Based NeuroImaging and Informatics System for Collecting, Organizing, Processing, Visualizing, and Sharing of Medical Data”](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/EMBS_ChRIS_IEEE_Conference.pdf). In: IEEE Engineering in Medicine and Biology Magazine
+* R Pienaar, N Rannou, J Bernal-Rusiel, D Haehn, and P E Grant. “[ChRIS – A Web-Based NeuroImaging and Informatics System for Collecting, Organizing, Processing, Visualizing, and Sharing of Medical Data](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/EMBS_ChRIS_IEEE_Conference.pdf)”. In: IEEE Engineering in Medicine and Biology Magazine
 
 * Nicolas Rannou, Jorge Luis Bernal-Rusiel, Daniel Haehn, Patricia Ellen Grant, Rudolph Pienaar, "[Medical imaging in the browser with the A* Medical Imaging (AMI) toolkit.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/esmrmb2017.7403b23.NORMAL.pdf)", European Society for Magnetic Resonance in Medicine and Biology 2017
 
