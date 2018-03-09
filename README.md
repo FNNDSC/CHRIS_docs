@@ -8,7 +8,7 @@ ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and openso
 
 ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
 
-While ChRIS itself has a web-based user interface, the applications (or plugins as they are also called) that perform the computations, do not have graphical user interfaces but are command line, containerized, Linux-based applications.
+While ChRIS itself has a web-based user interface, the applications that perform the computations, do not have graphical user interfaces but are command line, containerized, Linux-based applications. Since these apps run "in the woodwork" so to speak, they are called _plugins_ in ChRIS parlance, since they plug-into the ChRIS backend and are accessible from a suitable frontend.
 
 ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (by which is meant *any computing environment* that can run docker containers). By conforming to a reasonable command-line specification or contract for ChRIS applications, ChRIS makes it easy to dockerize and run the research software, collect results, visualize data, and share/collaborate.
 
