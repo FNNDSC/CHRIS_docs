@@ -55,14 +55,15 @@ Visualization of medical formatted image data is provided by two projects that h
 
 Some papers and conference proceedings on ChRIS -- please note in some papers the system is called *CHIPS*:
 
-[Pienaar, Rudolph, Ata Turk, Jorge L. Bernal-Rusiel, Nicolas Rannou, Daniel. Haehn, Steve Pieper, Patricia E. Grant, and Orran Krieger. “CHIPS – A Service for Collecting, Organizing, Processing, and Sharing Medical Image Data in the Cloud.” In: Lecture Notes in Computer Science, Vol. 10494, pp. 29–35.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/FTC_2017_IEEE_Conference.pdf)
+[Rudolph Pienaar, Ata Turk, Jorge L. Bernal-Rusiel, Nicolas Rannou, Daniel. Haehn, Steve Pieper, Patricia E. Grant, and Orran Krieger. “CHIPS – A Service for Collecting, Organizing, Processing, and Sharing Medical Image Data in the Cloud.” In: Lecture Notes in Computer Science, Vol. 10494, pp. 29–35, 2017.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/LNCS_VLDB_Healthcare.pdf)
 
-Pienaar, Rudolph, Jorge L. Bernal-Rusiel, Nicolas Rannou, Daniel Haehn, Patricia E. Grant, Ata Turk, and Orran Krieger. “Architecting and Building the Future of Healthcare Informatics: Cloud, Containers, Big Data and CHIPS.” In: IEEE Future Technologies 11, p. 32. 2017
+[Rudolph Pienaar, Jorge L. Bernal-Rusiel, Nicolas Rannou, Daniel Haehn, Patricia E. Grant, Ata Turk, and Orran Krieger. “Architecting and Building the Future of Healthcare Informatics: Cloud, Containers, Big Data and CHIPS.” In: IEEE Future Technologies, 2017.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/FTC_2017_IEEE_Conference.pdf)
 
-Bernal-Rusiel, Jorge L., Nicolas Rannou, Randy L. Gollub, Steve Pieper, Shawn Murphy, Richard Robertson, Patricia E. Grant, and Rudolph Pienaar. “Reusable Client-Side JavaScript Modules for Immersive Web-Based Real-Time Collaborative Neuroimage Visualization.” eng. In: Frontiers in neuroinformatics 11, p. 32. 2017
+[Bernal-Rusiel, Jorge L., Nicolas Rannou, Randy L. Gollub, Steve Pieper, Shawn Murphy, Richard Robertson, Patricia E. Grant, and Rudolph Pienaar. “Reusable Client-Side JavaScript Modules for Immersive Web-Based Real-Time Collaborative Neuroimage Visualization.” eng. In: Frontiers in neuroinformatics 11, p. 32, 2017](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/fninf-11-00032.pdf)
 
-Pienaar, R, N Rannou, J Bernal-Rusiel, D Haehn, and P E Grant. “ChRIS – A Web-Based NeuroImaging and Informatics System for Collecting, Organizing, Processing, Visualizing, and Sharing of Medical Data”. In: IEEE Engineering in Medicine and Biology Magazine
+[R Pienaar, N Rannou, J Bernal-Rusiel, D Haehn, and P E Grant. “ChRIS – A Web-Based NeuroImaging and Informatics System for Collecting, Organizing, Processing, Visualizing, and Sharing of Medical Data”. In: IEEE Engineering in Medicine and Biology Magazine](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/EMBS_ChRIS_IEEE_Conference.pdf)
 
+[Nicolas Rannou, Jorge Luis Bernal-Rusiel, Daniel Haehn, Patricia Ellen Grant, Rudolph Pienaar, " Medical imaging in the browser with the A* Medical Imaging (AMI) toolkit.", European Society for Magnetic Resonance in Medicine and Biology 2017](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/esmrmb2017.7403b23.NORMAL.pdf)
 
 
 ## Recent Talks
