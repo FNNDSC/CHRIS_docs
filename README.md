@@ -6,7 +6,7 @@ This page presents a quick overview to ChRIS, followed by some links to more res
 ## Overview
 ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource software platform designed to manage and coordinate computation and data on a multitude of computing environments, from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
-ChRIS is designed to manage the execution and data needs of a typical class of computational applications often used in research settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
+ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
 
 While ChRIS itself has a web-based user interface, the applications (or plugins as they are also called) that perform the computations, do not have graphical user interfaces but are command line, containerized, Linux-based applications.
 
