@@ -60,7 +60,8 @@ Some papers on ChRIS:
 Some recent talks on ChRIS (please note there is much recycling on content below! I've added a quick note to the time length as a partial guide):
 
 [National Alliance for Medical Compting, NA-MIC, Jan 2018 Project week talk (30 minutues)](http://slides.com/debio/deck-6-7-8-12-13-19-22)
-[Massachusetts Open Cloud (5 minutes)]([http://slides.com/debio/deck-6-7-8-12-13-19])
+
+[Massachusetts Open Cloud (5 minutes)](http://slides.com/debio/deck-6-7-8-12-13-19)
 
 ## Programming Links
 
