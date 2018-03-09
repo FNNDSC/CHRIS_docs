@@ -63,7 +63,7 @@ Visualization of medical formatted image data is provided by two projects that h
 ChRIS has had several historical epochs:
 
 ### ``bash`` shell scripts
-The earliest versions were collections of ``bash`` shell scripts that coordinated various types of analysis programs.
+The earliest versions of what would coalesce into ChRIS were collections of ``bash`` shell scripts that coordinated various types of analysis programs. This was prior to 2009/2010.
 
 ### ChRIS v1
 The first version of what would become ChRIS was created in 2010 and was built using **Wt** (web toolkit) from Emweb. It was geared to replacing the interface to the previous ``bash`` scripted system and interfaced with an in-house HPC for analysis.
