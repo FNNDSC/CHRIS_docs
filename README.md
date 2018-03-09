@@ -72,13 +72,28 @@ Visualization of medical formatted image data is provided by two projects that h
 * xtk 
 * ami
 
-## More Info
+## Recent Papers
 
-Some papers on ChRIS:
+Some papers and conference proceedings on ChRIS -- please note in some papers the system is called *CHIPS*:
 
-## Talks
+* Rudolph Pienaar, Ata Turk, Jorge L. Bernal-Rusiel, Nicolas Rannou, Daniel. Haehn, Steve Pieper, Patricia E. Grant, and Orran Krieger. “[CHIPS – A Service for Collecting, Organizing, Processing, and Sharing Medical Image Data in the Cloud.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/LNCS_VLDB_Healthcare.pdf)” In: Lecture Notes in Computer Science, Vol. 10494, pp. 29–35, 2017.
 
-Some talks on ChRIS:
+* Rudolph Pienaar, Jorge L. Bernal-Rusiel, Nicolas Rannou, Daniel Haehn, Patricia E. Grant, Ata Turk, and Orran Krieger. “[Architecting and Building the Future of Healthcare Informatics: Cloud, Containers, Big Data and CHIPS.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/FTC_2017_IEEE_Conference.pdf)” In: IEEE Future Technologies, 2017.
+
+* Bernal-Rusiel, Jorge L., Nicolas Rannou, Randy L. Gollub, Steve Pieper, Shawn Murphy, Richard Robertson, Patricia E. Grant, and Rudolph Pienaar. “[Reusable Client-Side JavaScript Modules for Immersive Web-Based Real-Time Collaborative Neuroimage Visualization.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/fninf-11-00032.pdf)” In: Frontiers in neuroinformatics 11, p. 32, 2017.
+
+* R Pienaar, N Rannou, J Bernal-Rusiel, D Haehn, and P E Grant. “[ChRIS – A Web-Based NeuroImaging and Informatics System for Collecting, Organizing, Processing, Visualizing, and Sharing of Medical Data](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/EMBS_ChRIS_IEEE_Conference.pdf)”. In: IEEE Engineering in Medicine and Biology Magazine.
+
+* Nicolas Rannou, Jorge Luis Bernal-Rusiel, Daniel Haehn, Patricia Ellen Grant, Rudolph Pienaar, "[Medical imaging in the browser with the A* Medical Imaging (AMI) toolkit.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/esmrmb2017.7403b23.NORMAL.pdf)", European Society for Magnetic Resonance in Medicine and Biology 2017.
+
+
+## Recent Talks
+
+Some recent talks on ChRIS (please note there is much recycling on content below! I've added a quick note to the time length as a partial guide):
+
+[National Alliance for Medical Compting, NA-MIC, Jan 2018 Project week talk (30 minutues)](http://slides.com/debio/deck-6-7-8-12-13-19-22)
+
+[Massachusetts Open Cloud (5 minutes)](http://slides.com/debio/deck-6-7-8-12-13-19)
 
 ## Programming Links
 
