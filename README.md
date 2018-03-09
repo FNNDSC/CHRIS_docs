@@ -27,7 +27,7 @@ not limited to):
 
 ## Existing solutions
 
-Cloud resources are available from private and public companies -- Amazon, Microsoft, Google, etc. In many contexts, these resources are geared to web-based service provision and not ideal for running commonly found apps in scientific research that simply crunch data and create an output.
+Cloud resources are available from private and public companies -- Amazon, Microsoft, Google, etc. In many contexts, these resources are geared to web-based service provision and not ideal for running commonly found apps in scientific research that simply read data from some directory, crunch the data and create outputs in an output directory.
 
 Not only is there a cost involved to using these services, but the barrier to entry is arguably quite high. In addition there is always the vendor-locking problem that makes it difficult to migrate data not only between different cloud providers but to the user-owned facilities. Running a simple app that takes an input and creates an output often requires complex setup and re-thinking of how the app can fit within a generalized web-services computational model.
 
