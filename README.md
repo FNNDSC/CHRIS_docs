@@ -4,7 +4,7 @@
 This page presents a quick overview to ChRIS, followed by some links to more resources, papers, and talks.
 
 ## Overview
-ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource software platform designed to manage and coordinate computation and data on a multitude of computing environments, from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
+ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments, from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
 ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
 
@@ -72,7 +72,7 @@ The first version of what would become ChRIS was created in 2010 and was built u
 The second version of ChRIS, released around 2013, replaced **Wt** with a cleaner, twitter-inspired interface built around the concept of _feeds_ and _plugins_. This version of ChRIS interfaced primarily with HPC clusters. It is still in production use today.
 
 ### ChRIS v3
-The current development version of ChRIS features a complete redesign and shift to using REST-based services distributed computing, and dockerized containers for data processing. In some contexts, this version of ChRIS is also called _CHIPS_.
+The current development version of ChRIS features a complete redesign and shift to using REST-based services for distributed computing, and dockerized containers for data processing. In some contexts, this version of ChRIS is also called _CHIPS_.
 
 ## Recent Papers
 
