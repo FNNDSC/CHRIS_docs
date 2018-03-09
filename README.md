@@ -4,14 +4,9 @@
 This page presents a quick overview to ChRIS, followed by some links to more resources, papers, and talks.
 
 ## Overview
-ChRIS (ChRIS Research Integration Service) is a novel and opensource software platform designed to manage and coordinate 
-computation and data on a multitude of computing environments, from laptops to loosely connected groups of workstations, 
-to high performance compute clusters, to public clouds.
+ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource software platform designed to manage and coordinate computation and data on a multitude of computing environments, from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
-ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The 
-system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (computing 
-environments). By conforming to a reasonable command-line standard for ChRIS applications, ChRIS makes it easy to dockerize 
-and then run the research software
+ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (computing environments). By conforming to a reasonable command-line standard for ChRIS applications, ChRIS makes it easy to dockerize and then run the research software
 
 ## Need
 
@@ -28,42 +23,29 @@ not limited to):
 
 ## Existing solutions
 
-Cloud resources are available from private and public companies -- Amazon, Microsoft, Google, etc. In many contexts, these 
-resources are geared to web-based service provision and not ideal for running commonly found apps in scientific research  
-that simply crunch data and create an output.
+Cloud resources are available from private and public companies -- Amazon, Microsoft, Google, etc. In many contexts, these resources are geared to web-based service provision and not ideal for running commonly found apps in scientific research that simply crunch data and create an output.
 
-Not only is there a cost involved to using these services, but the barrier to entry is arguably quite high. In addition there 
-is always the vendor-locking problem that makes it difficult to migrate data not only between different cloud providers but 
-to the user-owned facilities. Running a simple app that takes an input and creates an output often requires complex setup and 
-re-thinking of how the app can fit within a generalized web-services computational model.
+Not only is there a cost involved to using these services, but the barrier to entry is arguably quite high. In addition there is always the vendor-locking problem that makes it difficult to migrate data not only between different cloud providers but to the user-owned facilities. Running a simple app that takes an input and creates an output often requires complex setup and re-thinking of how the app can fit within a generalized web-services computational model.
 
-Finally, none of the mentioned services allow an end user to re-create that cloud locally for development / debugging. An end
-user cannot download a "mini-AWS" and run on their local hardware, for example.
+Finally, none of the mentioned services allow an end user to re-create that cloud locally for development / debugging. An end user cannot download a "mini-AWS" and run on their local hardware, for example.
 
 ## Enter ChRIS
 
-ChRIS exists as a public github repo and can be downloaded and instantiated with a few commands. On a local computer, this will 
-download all the necessary services and provide a fully working system that is ready to service client commands.
+ChRIS exists as a public github repo and can be downloaded and instantiated with a few commands. On a local computer, this will download all the necessary services and provide a fully working system that is ready to service client commands.
 
-With some minor additional work, specific micro-services can be instantiated on different computers, and ChRIS can coordinate
-data and compute between all these computers.
+With some minor additional work, specific micro-services can be instantiated on different computers, and ChRIS can coordinate data and compute between all these computers.
 
 ## Quick deep dive -- backend
 
-The main backend engine of ChRIS, called CUBE (ChRIS Ultron Back-End) is a python django app that provides databasing and 
-services through a REST API that uses the standard [Collection+JSON](http://amundsen.com/media-types/collection/) hypermedia 
-type to exchange resource representations with clients.
+The main backend engine of ChRIS, called CUBE (ChRIS Ultron Back-End) is a python django app that provides databasing and services through a REST API that uses the standard [Collection+JSON](http://amundsen.com/media-types/collection/) hypermedia type to exchange resource representations with clients.
 
-CUBE in turn "talks" to a coordinating service called ``pfcon``, which  is the dispatching service between CUBE and an actual
-computational environment. In this environment, two additional services are required to exist and be http accessible: 
-``pman`` that does process management, and ``pfioh`` that handles data IO.
+CUBE in turn "talks" to a coordinating service called ``pfcon``, which  is the dispatching service between CUBE and an actual computational environment. In this environment, two additional services are required to exist and be http accessible: ``pman`` that does process management, and ``pfioh`` that handles data IO.
 
 A companion client app called ``pfurl`` can be used to communicate with all of these services.
 
 ## Quick deep dive -- frontend
 
-There are many possible front-ends to ChRIS. In fact, any program that consumes the ChRIS REST API can construct a tailor made
-experience.
+There are many possible front-ends to ChRIS. In fact, any program that consumes the ChRIS REST API can construct a tailor made experience.
 
 An official front end is currently in active development, see the talk links for more info.
 
