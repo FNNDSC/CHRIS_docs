@@ -32,13 +32,24 @@ ChRIS exists as a github repo and can be downloaded and instantiated with a few 
 
 With some minor additional work, specific micro-services can be instantiated on different computers, and ChRIS can coordinate data and compute between all these computers.
 
-## Quick Deep dive
+## Quick deep dive -- backend
 
 The main backend engine of ChRIS, called CUBE (ChRIS Ultron Back-End) is a python django app that provides databasing and services relating to a collection+json REST API.
 
 CUBE in turn "talks" to a coordinating service called ``pfcon``, which  is the dispatching service between CUBE and an actual computational environment. In this environment, two additional services are required to exist and be http accessible: ``pman`` that does process management, and ``pfioh`` that handles data IO.
 
 A companion client app called ``pfurl`` can be used to communitate with all of these services.
+
+## Quick deep dive -- frontend
+
+There are many possible frontends to ChRIS. In fact, any program that consumes the ChRIS REST API can construct a tailor made experience.
+
+An official front end is currently in active development, see the talk links for more info.
+
+Visualization of medical formatted image data is provided by two projects that have been developed inhouse
+
+* xtk 
+* ami
 
 ## More Info
 
