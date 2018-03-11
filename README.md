@@ -1,12 +1,14 @@
 # ChRIS
 
 ## Abstract
+
 This page presents a quick overview to ChRIS, followed by some links to more resources, papers, and talks.
 
 ## Overview
+
 ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments. Originally developed for medical image analysis, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
-ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research (and in particular medical image research) settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
+ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research (and in particular medical image research) settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files.
 
 While ChRIS itself has a web-based user interface, the applications that perform the computations, do not have graphical user interfaces but are command line, containerized, Linux-based applications. Since these apps run "in the woodwork" so to speak, they are called _plugins_ in ChRIS parlance, since they plug-into the ChRIS backend and are accessible from a suitable frontend.
 
@@ -14,8 +16,7 @@ ChRIS comprises a collection of REST-based web services, backend web apps, and v
 
 ## Need
 
-Computational research in scientific (as opposed to industry) medical-related fields faces many obstacles, including (but 
-not limited to):
+Computational research in scientific (as opposed to industry) medical-related fields faces many obstacles, including (but not limited to):
 
 * data sharing
 * data protection
@@ -51,27 +52,31 @@ A companion client app called ``pfurl`` can be used to communicate with all of t
 
 There are many possible front-ends to ChRIS. In fact, any program that consumes the ChRIS REST API can construct a tailor made experience.
 
-An official front end is currently in active development, see the talk links for more info.
+An [official front end](https://github.com/FNNDSC/chris) is currently in active development. It is built off the latest (yet stable) technology the web platform has to offer (Web Components, WebGL, Service Workers, etc.). It is powered by [Polymer Library](https://www.polymer-project.org/) from Google that helps "create custom reusable HTML elements, and use them to build performant, maintainable apps".
 
 Visualization of medical formatted image data is provided by two projects that have been developed in-house
 
-* xtk 
-* ami
+* [XTK](https://github.com/xtk/X): First generation of the WebGL Javascript Toolkit that have been developped at FNNDSC. It was built from scratch and proved that it was possible to provide useful 3D Web-based experiences for Medical Imaging. It is still being used today.
+* [ami](https://github.com/FNNDSC/ami): XTK's successor. It leverages existing WebGL library [three.js](https://threejs.org/) to let developers focus on medical imaging needs and offers greater extensibility than XTK. It is in active development and already used in many real world projects.
 
 ## History
 
 ChRIS has had several historical epochs:
 
 ### ``bash`` shell scripts
+
 The earliest versions of what would coalesce into ChRIS were collections of ``bash`` shell scripts that coordinated various types of analysis programs. This was prior to 2009/2010.
 
 ### ChRIS v1
+
 The first version of what would become ChRIS was created in 2010 and was built using **Wt** (web toolkit) from Emweb. It was geared to replacing the interface to the previous ``bash`` scripted system and interfaced with an in-house HPC for analysis.
 
 ### ChRIS v2
+
 The second version of ChRIS, released around 2013, replaced **Wt** with a cleaner, twitter-inspired interface built around the concept of _feeds_ and _plugins_. This version of ChRIS interfaced primarily with HPC clusters. It is still in production use today.
 
 ### ChRIS v3
+
 The current development version of ChRIS features a complete redesign and shift to using REST-based services for distributed computing, and dockerized containers for data processing. In some contexts, this version of ChRIS is also called _CHIPS_.
 
 ## Recent Papers
@@ -88,7 +93,6 @@ Some papers and conference proceedings on ChRIS -- please note in some papers th
 
 * Nicolas Rannou, Jorge Luis Bernal-Rusiel, Daniel Haehn, Patricia Ellen Grant, Rudolph Pienaar, "[Medical imaging in the browser with the A* Medical Imaging (AMI) toolkit.](https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/esmrmb2017.7403b23.NORMAL.pdf)", European Society for Magnetic Resonance in Medicine and Biology 2017.
 
-
 ## Recent Talks
 
 Some recent talks on ChRIS (please note there is much recycling on content below! I've added a quick note to the time length as a partial guide):
@@ -100,4 +104,3 @@ Some recent talks on ChRIS (please note there is much recycling on content below
 ## Programming Links
 
 Links to ChRIS components:
-
