@@ -4,7 +4,7 @@
 This page presents a quick overview to ChRIS, followed by some links to more resources, papers, and talks.
 
 ## Overview
-ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments. Originally developed for medical image analysis, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
+ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments. Originally developed for medical image analysis in the Fetal-Neonatal Neuroimaging and Developmental Science Center at Boston Children's Hospital, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
 ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research (and in particular medical image research) settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
 
