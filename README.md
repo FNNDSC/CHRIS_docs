@@ -4,7 +4,7 @@
 This page presents a quick overview to ChRIS, followed by some links to more resources, papers, and talks.
 
 ## Overview
-ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments. Originally developed for medical image analysis, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
+ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments. Originally developed for medical image analysis in the Fetal-Neonatal Neuroimaging and Developmental Science Center at Boston Children's Hospital, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
 ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research (and in particular medical image research) settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
 
@@ -38,6 +38,38 @@ Finally, none of the mentioned services allow an end user to re-create that clou
 ChRIS exists as a public github repo and can be downloaded and instantiated with a few commands. On a local computer, this will download all the necessary services and provide a fully working system that is ready to service client commands.
 
 With some minor additional work, specific micro-services can be instantiated on different computers, and ChRIS can coordinate data and compute between all these computers.
+
+### data sharing
+
+Within the ChRIS framework, data is managed and shared using services such as ``openswift`` between various users of the system.
+
+### data protection
+
+Data is protected on various levels. At the most basic, a ChRIS system can be instantiated and run wholly locally and configured to only connect to local within-network resources.
+
+Any data that might leave the local network can be further processed to strip any identifying information.
+
+### data visualization
+
+Powerful javascript libraries are available for viewing and interacting with especially medical image data formats.
+
+### algorithm/program sharing
+
+ChRIS is built on the idea of using dockerized components that perform the actual analysis and processing. This standardizes program development and allows for simple sharing and redeployment of the analysis components.
+
+Note that these components do not need to be run inside ChRIS, but can exist outside of ChRIS, too.
+
+### re-use of existing programs in different environment
+
+The pervasive use of docker images allows for the easy re-use of analysis in many environments. The same docker image that is run on a local laptop can be deployed out to a cloud resource.
+
+### access to powerful hardware
+
+ChRIS is currently deployed to the Massachusetts Open Cloud (MOC) and provides access for containers to powerful resources including high-end GPUs and large memory processors.
+
+### realtime collaboration
+
+The front end to ChRIS has powerful client-to-client collaboration tools allowing for realtime sharing of the same data and scene image.
 
 ## Quick deep dive -- backend
 
@@ -102,8 +134,15 @@ Some recent talks on ChRIS (please note there is much recycling on content below
 
 Links to ChRIS components:
 
-* [pfcon](https://github.com/FNNDSC/pfcon) 
-* [pman](https://github.com/FNNDSC/pman)
-* [pfioh](https://github.com/FNNDSC/pfioh)
-* [pfurl](https://github.com/FNNDSC/pfurl)
+Main ChRIS engine:
+* [ChRIS Ultron BackEnd (CUBE)](https://github.com/FNNDSC/ChRIS_ultron_backEnd)
+
+Ancillary ChRIS services:
+* [process-and-file controller (pfcon)](https://github.com/FNNDSC/pfcon): Main coordinating service.
+* [process-and-file IO handler (pfioh)](https://github.com/FNNDSC/pfioh): Transfer data to and from different compute environments.
+* [process manager (pman)](https://github.com/FNNDSC/pman): Handles processes on compute environments.
+* [process-and-file url (pfurl)](https://github.com/FNNDSC/pfurl): A curl-based client tailored for use in the system.
+
+ChRIS plugin app store
 * [ChRIS_store](https://github.com/FNNDSC/ChRIS_store)
+
