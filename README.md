@@ -97,7 +97,13 @@ Some recent talks on ChRIS (please note there is much recycling on content below
 
 [Massachusetts Open Cloud (5 minutes)](http://slides.com/debio/deck-6-7-8-12-13-19)
 
+
 ## Programming Links
 
 Links to ChRIS components:
 
+* [pfcon](https://github.com/FNNDSC/pfcon) 
+* [pman](https://github.com/FNNDSC/pman)
+* [pfioh](https://github.com/FNNDSC/pfioh)
+* [pfurl](https://github.com/FNNDSC/pfurl)
+* [ChRIS_store](https://github.com/FNNDSC/ChRIS_store)
