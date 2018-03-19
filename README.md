@@ -133,3 +133,15 @@ Some recent talks on ChRIS (please note there is much recycling on content below
 
 Links to ChRIS components:
 
+Main ChRIS engine:
+* [ChRIS Ultron BackEnd (CUBE)](https://github.com/FNNDSC/ChRIS_ultron_backEnd)
+
+Ancillary ChRIS services:
+* [process-and-file controller (pfcon)](https://github.com/FNNDSC/pfcon): Main coordinating service.
+* [process-and-file IO handler (pfioh)](https://github.com/FNNDSC/pfioh): Transfer data to and from different compute environments.
+* [process manager (pman)](https://github.com/FNNDSC/pman): Handles processes on compute environments.
+* [process-and-file url (pfurl)](https://github.com/FNNDSC/pfurl): A curl-based client tailored for use in the system.
+
+
+
+
