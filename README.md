@@ -1,94 +1,103 @@
 # ChRIS
 
 ## Abstract
-This page presents a quick overview to ChRIS, followed by some links to more resources, papers, and talks.
+This page presents a quick overview of ChRIS, followed by some links to more resources, papers, and talks.
+
+![PACS Pull Output](/images/mpc/PACSPull_Output.png)
 
 ## Overview
-ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is a novel and opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments. Originally developed for medical image analysis in the Fetal-Neonatal Neuroimaging and Developmental Science Center at Boston Children's Hospital, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
+ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is an opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments. Originally developed for medical image analysis in the Fetal-Neonatal Neuroimaging and Developmental Science Center at Boston Children's Hospital, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
-ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research (and in particular medical image research) settings. **These are applications that require no user interaction once started** and typically initialize from a setup-data-state, have runtime specifications typically passed in command line arguments, and collect all output in files. 
+ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research (and in particular medical image research) settings. **These are applications that require no user interaction once started**, have runtime specifications typically passed in command line arguments, and collect all output in files.
 
-While ChRIS itself has a web-based user interface, the applications that perform the computations, do not have graphical user interfaces but are command line, containerized, Linux-based applications. Since these apps run "in the woodwork" so to speak, they are called _plugins_ in ChRIS parlance, since they plug-into the ChRIS backend and are accessible from a suitable frontend.
+While ChRIS itself has a web-based user interface, the applications that perform the computations are containerized, Linux-based applications. Since these apps run "in the woodwork" so to speak, they are called _plugins_ in ChRIS parlance, since they plug-into the ChRIS backend and are accessible from a suitable frontend.
 
-ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (by which is meant *any computing environment* that can run docker containers). By conforming to a reasonable command-line specification or contract for ChRIS applications, ChRIS makes it easy to dockerize and run the research software, collect results, visualize data, and share/collaborate.
+ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (by which is meant *any computing environment* that can run linux containers). By conforming to a reasonable command-line specification or contract for ChRIS applications, ChRIS makes it easy to containerize and run the research software, collect results, visualize data, and share/collaborate.
+![Chris Architecture](chris_architecture_overview.png)
+
 
 ## Need
 
-Computational research in scientific (as opposed to industry) medical-related fields faces many obstacles, including (but 
+Computational research in scientific (as opposed to industry) medical-related fields faces many obstacles, including (but
 not limited to):
-
-* data sharing
-* data protection
-* data visualization
-* algorithm/program sharing
-* re-use of existing programs in different environment
-* access to powerful hardware
-* realtime collaboration
-
-## Existing solutions
-
-Cloud resources are available from private and public companies -- Amazon, Microsoft, Google, etc. In many contexts, these resources are geared to web-based service provision and not ideal for running commonly found apps in scientific research that simply read data from some directory, crunch the data and create outputs in an output directory.
-
-Not only is there a cost involved to using these services, but the barrier to entry is arguably quite high. In addition there is always the vendor-locking problem that makes it difficult to migrate data not only between different cloud providers but to the user-owned facilities. Running a simple app that takes an input and creates an output often requires complex setup and re-thinking of how the app can fit within a generalized web-services computational model.
-
-Finally, none of the mentioned services allow an end user to re-create that cloud locally for development / debugging. An end user cannot download a "mini-AWS" and run on their local hardware, for example.
-
-## Enter ChRIS
-
-ChRIS exists as a public github repo and can be downloaded and instantiated with a few commands. On a local computer, this will download all the necessary services and provide a fully working system that is ready to service client commands.
-
-With some minor additional work, specific micro-services can be instantiated on different computers, and ChRIS can coordinate data and compute between all these computers.
 
 ### data sharing
 
-Within the ChRIS framework, data is managed and shared using services such as ``openswift`` between various users of the system.
+Within the ChRIS framework, data is managed and shared using services such as ``Swift/Ceph`` between various users of the system.
 
 ### data protection
 
-Data is protected on various levels. At the most basic, a ChRIS system can be instantiated and run wholly locally and configured to only connect to local within-network resources.
-
-Any data that might leave the local network can be further processed to strip any identifying information.
+Data is protected on various levels by utilizing the isolation technologies of OpenShift including network isolation, container isolation utilizing namespaces and SELinux, and role level isolation that keep image plugins from escaping outside their linux container.
 
 ### data visualization
 
-Powerful javascript libraries are available for viewing and interacting with especially medical image data formats.
+Powerful javascript libraries are available for viewing and interacting with medical image data formats.
 
 ### algorithm/program sharing
 
-ChRIS is built on the idea of using dockerized components that perform the actual analysis and processing. This standardizes program development and allows for simple sharing and redeployment of the analysis components.
-
-Note that these components do not need to be run inside ChRIS, but can exist outside of ChRIS, too.
+ChRIS is built on the idea of using containerized components that perform the actual analysis and processing. This standardizes application development and deployment for reuse.
 
 ### re-use of existing programs in different environment
 
-The pervasive use of docker images allows for the easy re-use of analysis in many environments. The same docker image that is run on a local laptop can be deployed out to a cloud resource.
+The pervasive use of container images allows for the easy re-use of analysis in many environments. The same container image that is run on a local laptop can be deployed out to a cloud resource.
 
 ### access to powerful hardware
 
-ChRIS is currently deployed to the Massachusetts Open Cloud (MOC) and provides access for containers to powerful resources including high-end GPUs and large memory processors.
+ChRIS is currently deployed to the Mass Open Cloud (MOC) and provides access to powerful resources including high-end GPUs.
 
 ### realtime collaboration
 
-The front end to ChRIS has powerful client-to-client collaboration tools allowing for realtime sharing of the same data and scene image.
+The front end to ChRIS provides a powerful real time collaboration tool.
 
-## Quick deep dive -- backend
+## Deeper dive into how ChRIS works
 
-The main backend engine of ChRIS, called CUBE (ChRIS Ultron Back-End) is a python django app that provides databasing and services through a REST API that uses the standard [Collection+JSON](http://amundsen.com/media-types/collection/) hypermedia type to exchange resource representations with clients.
+To run medical image processing on ChRIS, a medical researcher/programmer encodes the algorithm that needs to be executed in the form of "plugin". The researcher/programmer then makes the plugin available via the ChRIS store. An administration of a ChRIS installation then makes the plugin available through their ChRIS installation. Once registered, users of the ChRIS system can use a plugin within their image analysis pipeline. Once execution of a plugin starts, pfcon, running at BCH datacenter, sends the data via pfioh and the algorithm to be applied on the data to pman. Pman and pfioh can run in a different datacenter (Ex: The MOC running OpenShift on top of OpenStack). Pman then translates the algorithm programmed in the plugin as Kubernetes job. To add scale to medical image processing, pman divides the job amongst several Kubernetes job pods that run in parallel. OpenShift provides the container platform for seamless orchestration and resource management on the cluster.
 
-CUBE in turn "talks" to a coordinating service called ``pfcon``, which  is the dispatching service between CUBE and an actual computational environment. In this environment, two additional services are required to exist and be http accessible: ``pman`` that does process management, and ``pfioh`` that handles data IO.
+![Chris Architecture](chris_architecture_detailed.png)
 
-A companion client app called ``pfurl`` can be used to communicate with all of these services.
 
-## Quick deep dive -- frontend
+## Example: Multi-Party Computation with ChRIS
 
-There are many possible front-ends to ChRIS. In fact, any program that consumes the ChRIS REST API can construct a tailor made experience.
+To understand ChRIS better, an example might help.  You can learn more about this example from [Dr. Ellen Grant’s talk at Red Hat Summit 2019](https://youtu.be/FUu4kMc0PL8?t=3802)
 
-An official front end is currently in active development, see the talk links for more info.
+![PACSPull Plugin](/images/mpc/Feed-Detail-Screencapture-PACS-selected.png)
 
-Visualization of medical formatted image data is provided by two projects that have been developed in-house
+The above tree illustrates how a typical workflow looks in ChRIS. The nodes are various plugins that will be executed in ChRIS in the order of their hierarchy. The first node is for “PACS Pull” plugin. It pulls the MRI scan data for the workflow from BCH database into the computing environment, the MOC in this case. The output of this plugin is the input to the whole operation represented in the tree structure, a patient’s brain MRI.
 
-* xtk 
-* ami
+![PACS Pull Output](/images/mpc/PACSPull_Output.png)
+
+Next in chain is “FreeSurfer” plugin. It performs volume and surface based analysis of the MRI data and facilitates the visualization of the functional regions of the highly folded cerebral cortex.
+
+![Free Surfer Plugin 2D Output](/images/mpc/Freesurfer-2D-image.png)
+This is the 2D image output of FreeSurfer plugin. The colored regions depict various segments in the gray matter of the brain.
+
+![Free Surfer Plugin 3D Output](/images/mpc/Freesurfer-3D-Screencpature.png)
+This is the 3D image output of FreeSurfer plugin. The colored regions depict various segments in the gray matter of the brain.
+
+![Free Surfer Plugin Data table](/images/mpc/Freesurfer-data-table.png)
+
+FreeSurfer plugin also gives output in the format of a datatable. The first column consists of various segments in the cerebral cortex. The following columns gives Surface Area, Volume and Thickness of left and right hemispheres of the brain.
+
+So what is MPC and how does it fit in “Brain Analysis”? Multiparty Computation (MPC) allows computation on encrypted values without sharing data entirely. Understanding rare diseases might require several hospitals to contribute their data toward image processing, and sharing patient data in the clear is restricted by privacy laws and hospital standard practices. Augmenting ChRIS with cryptographically secure multi-party computation allows multiple hospitals to jointly analyze data that they cannot observe individually. As a consequence, each hospital need not entrust other hospitals or the cloud vendor with its patient data. This MPC plugin compares a patient’s brain volume with the population data collected from two different hospitals. To achieve this ChRIS interacts with another open source project [Conclave Cloud Dataverse or C2D](https://github.com/cici-conclave/conclave-web). C2D uses OpenShift to provide isolated computing environment for MPC job pods.
+
+
+![MPC output](/images/mpc/Volumet-screencapture-grids.png)
+
+The above graph extrapolates the patient’s data (who is 10 years old) against the population mean for the segment “G_and_S_frontomargin” for various age groups. The blue line is for left hemisphere and the orange line is for right hemisphere. We can infer from the graph that the patient’s brain volume for both hemispheres is lower than the population mean volume for 10 years olds.
+
+![MPC output](/images/mpc/Segment-screencapture-grids.png)
+
+It is also interesting to know which segments have significant deviation from the population mean in terms of brain volume for the same age group. From this graph one can find that for this patient there are 4 segments which have conspicuous deviation when compared to other 10 year olds.
+
+![MPC output](/images/mpc/zscore-screen_capture.png)
+
+This view represents the raw data that made up the previous bar chart.  It allows the radiologist/researcher to easily see how every brain segment compares to the population mean with helpful color coding for the largest deviations.
+
+The last plugin “z2LabelMap” takes the zscore, output of MPC plugin, and creates a heat map by projecting the zscore as highlighted areas in the actual brain image.
+
+![MPC output](/images/mpc/z-score-2D-image-with-legend.png)
+
+This image shows segments with the most conspicuous deviation from population mean. Blue regions depicts negative deviation and red ones positive deviation.
 
 ## History
 
@@ -125,9 +134,11 @@ Some papers and conference proceedings on ChRIS -- please note in some papers th
 
 Some recent talks on ChRIS (please note there is much recycling on content below! I've added a quick note to the time length as a partial guide):
 
-[Red Hat Summit, "Medical Image Processing with OpenShift and OpenStack" May 2018](https://www.youtube.com/watch?v=p1Y9wlPSgt4) (Video, 50 minutes)
+[Red Hat Summit, “ChRIS and Multi-Party Compute” May 2019 (11 minutes)](https://youtu.be/FUu4kMc0PL8?t=3802)
 
-[National Alliance for Medical Compting, NA-MIC, Jan 2018 Project week talk (30 minutues)](http://slides.com/debio/deck-6-7-8-12-13-19-22)
+[Red Hat Summit, "Medical Image Processing with OpenShift and OpenStack" May 2018 (50 minutes)](https://www.youtube.com/watch?v=p1Y9wlPSgt4)
+
+[National Alliance for Medical Computing, NA-MIC, Jan 2018 Project week talk (30 minutues)](http://slides.com/debio/deck-6-7-8-12-13-19-22)
 
 [Massachusetts Open Cloud (5 minutes)](http://slides.com/debio/deck-6-7-8-12-13-19)
 
@@ -148,3 +159,5 @@ Ancillary ChRIS services:
 ChRIS plugin app store
 * [ChRIS_store](https://github.com/FNNDSC/ChRIS_store)
 
+ChRIS Frontend
+* [ChRIS Frontend](https://github.com/FNNDSC/ChRIS_ui)
