@@ -5,7 +5,7 @@ Jennings Zhang <Jennings.Zhang@childrens.harvard.edu>
 
 == Prerequisites
 
-* Python, version 3.8 or later
+All you need installed is Python, version 3.8 or later.
 
 To share your app publicly you'll need an account on
 
