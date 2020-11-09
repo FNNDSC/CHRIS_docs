@@ -54,7 +54,9 @@ git push origin master
 
 Set up automatic builds on Dockerhub by following the instructions here:
 
-https://docs.docker.com/docker-hub/builds/
+https://docs.docker.com/docker-hub/builds/#configure-automated-build-settings
+
+TIP: Keep the default build rule (source: `master`, tag: `latest`), then click `Trigger&nbsp;▶`
 
 == Register your plugin
 
