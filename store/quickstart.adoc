@@ -1,4 +1,4 @@
-= Getting Started - 4 Simple Steps
+= Getting Started - Simple Steps
 Jennings Zhang <Jennings.Zhang@childrens.harvard.edu>
 
 :sectnums:
