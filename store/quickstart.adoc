@@ -35,7 +35,7 @@ For `app_type` choose "ds" (_data synthesis_ -- learn about the difference in ou
 
 Create a new _public_ repository on https://github.com.
 
-CAUTION: don't initialize the repo with a `README`, a _license_, or a ``.gitignore` file.
+CAUTION: don't initialize the repo with a `README`, a _license_, or a `.gitignore` file.
 
 == Upload your code
 
@@ -67,8 +67,9 @@ pip install -e .
 projectapp --savejson $PWD
 ----
 
-A new file should have appeared with a filename suffix `.json`.
-Upload it to https://chrisstore.co/create
+A new file should have appeared with a filename suffix `.json`, e.g. `Projectapp.json`.
+It's ready to be uploaded to
+https://chrisstore.co/create
 
 :sectnums!:
 == Next Steps
