@@ -22,7 +22,7 @@ pl-fshack -> pl-pfdo_mgz2image
    docker run --rm -ti                                                 \
    -v ${DEVEL}/SAG-anon-nii/:/incoming -v ${DEVEL}/results/:/outgoing  \
    fnndsc/pl-fshack fshack.py                                          \
-   -i 0001-1.3.12.2.1107.5.2.19.45152.2013030808110258929186035.dcm                                                                 \
+   -i 0001-1.3.12.2.1107.5.2.19.45152.2013030808110258929186035.dcm    \                                                                \
    -o recon-of-SAG-anon                                                \
    --exec recon-all                                                    \
    --args 'ARGS: -autorecon1'                                          \
