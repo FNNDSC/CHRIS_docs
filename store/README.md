@@ -1,4 +1,2 @@
-# Documentation for ChRIS Store
-
-Source for documentation which will live on https://chrisstore.co,
-featuring everything related to ChRIS app **plugin development**.
+Nothing here yet!
+Go to https://github.com/FNNDSC/cookiecutter-chrisapp/wiki

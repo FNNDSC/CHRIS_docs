@@ -1,0 +1,133 @@
+= Tunnel Strategy for Private Remote Computes
+Jennings Zhang <Jennings.Zhang@childrens.harvard.edu>
+
+== Abstract
+
+_OpenSSH_ server and `autossh` are used within `docker-compose` managed
+applications to expose services on a private network to other services
+outside the LAN.
+
+== Introduction
+
+You want to make services within a private network accessible to local
+containers managed by `docker-compose`. E.g. _CUBE_ and _pfcon_ (i.e. backend)
+running in a DMZ while _pman_ and _pfioh_ (i.e. satelite services) are inside
+a private LAN.
+
+== Backend
+
+Host name is `cube.example.com`
+
+.docker-compose.yml
+[source,yaml]
+----
+version: '3.7'
+services:
+  tunnels:
+    image: ghcr.io/linuxserver/openssh-server
+    ports:
+      - "26552:2222"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - USER_NAME=premote
+      - DOCKER_MODS=linuxserver/mods:openssh-server-ssh-tunnel  # GatewayPorts clientspecified
+    volumes:
+      - ./tunnel:/config
+    restart: unless-stopped
+  chris:
+    image: fnndsc/pfcon
+    environment:
+      - PFIOH_HOST_NAME=tunnels:2055
+      - PMAN_HOST_NAME=tunnels:2010
+----
+
+WARNING: not actually how pfcon is configured.
+
+After the server starts up, add public SSH keys to `./tunnel/.ssh/authorized_keys`
+
+== Satelites
+
+Run `ssh-keygen` (do not specify a password) and move 
+
+.docker-compose.yml
+[source,yaml]
+----
+version: '3.7'
+services:
+  autossh-pfioh:
+    image: jnovack/autossh
+    environment:
+      - SSH_REMOTE_USER=premote
+      - SSH_REMOTE_HOST=cube.example.com
+      - SSH_MODE=-R
+      - SSH_REMOTE_PORT=26552
+      - SSH_TUNNEL_PORT=2055
+      - SSH_TARGET_HOST=pfioh
+      - SSH_TARGET_PORT=5055
+      - SSH_BIND_IP=*
+    volumes:
+      - ./ssh/id_rsa:/id_rsa:ro
+    restart: unless-stopped
+  autossh-pman:
+    image: jnovack/autossh
+    environment:
+      - SSH_REMOTE_USER=premote
+      - SSH_REMOTE_HOST=cube.example.com
+      - SSH_MODE=-R
+      - SSH_REMOTE_PORT=26552
+      - SSH_TUNNEL_PORT=2010
+      - SSH_TARGET_HOST=pman
+      - SSH_TARGET_PORT=5010
+      - SSH_BIND_IP=*
+    volumes:
+      - ./ssh/id_rsa:/id_rsa:ro
+    restart: unless-stopped
+  pfioh:
+    image: fnndsc/pfioh
+    command: ["--forever", "--httpResponse", "--createDirsAsNeeded", "--storeBase", "/hostFS/storeBase", "--port", "5055"]
+    volumes:
+      - ./FS/remote:/hostFS/storeBase
+    restart: on-failure
+  pman:
+    environment:
+      - STOREBASE=${PWD}/FS/remote
+    image: fnndsc/pman
+    command: ["--rawmode", "1", "--http", "--listeners", "12", "--port", "5010"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./FS/remote:/hostFS/storeBase
+    restart: on-failure
+----
+
+== Diagram
+
+----
++-------+     +------+
+| pfcon |-----| CUBE |
+--------+     +------+
+  |   |
+  |   |
++-------+
+|  SSH  |
++-------+
+  |   |                      DMZ
+================================
+  |   |                 internal
+  |   |      +---------+
+  |   \------| autossh |
+  |          +---------+
++---------+      |
+| autossh |      |
+----------+      |
+  |              |
+  |              |
++-------+     +------+
+| pfioh |     | pman |
++-------+     +------+
+----
+
+== Details
+
+Working on `fnndsc/chris` build 2020-11-04, pfcon v2.2.7.0.
