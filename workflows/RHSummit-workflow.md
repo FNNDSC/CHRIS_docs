@@ -55,7 +55,19 @@ cd ChRIS_ultron_backEnd
 export HOST_IP=$(ip route | grep -v docker | awk '{if(NF==11) print $9}')
 export HOST_PORT=8000
 ```
-## Create the Feed
+## Create the Feed Using `pl-mri10yr06mo01da_normal` FS plugin
+
+Determine the plugin instance ID of the plugin:
+
+```bash
+pfurl --auth chris:chris1234 --verb GET                          \
+      --http ${HOST_IP}:${HOST_PORT}/api/v1/plugins/?limit=50    \
+      --content-type application/vnd.collection+json             \
+      --quiet --jsonpprintindent 4
+```
+
+and search for the `id` of the `pl-10yr06mo01da_normal` plugin. In this example, let's assume this to be 
+
 
 ```bash
 pfurl --auth chris:chris1234 --verb POST                          \
