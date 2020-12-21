@@ -17,7 +17,7 @@ NAME
 
 SYNPOSIS
 
-  RedHatSummit2018.sh           [-C <CUBEjsonDetails>]    \
+  RedHatSummit2018.sh           [-C <CUBEjsonDetails>]    \\
                                 [-l <N>]
 
 DESC
@@ -26,8 +26,8 @@ DESC
   implements the following:
 
                              ⬤:1          pl-mri10yr06mo01da_normal
-                             |
-                             |
+                             │
+                             │
                              ↓
                              ⬤:2          pl-freesurfer_pp
                             ╱│╲
@@ -36,10 +36,10 @@ DESC
                          ╱   │   ╲
                         ╱    │    ╲
                        ↓     ↓     ↓
-                       ⬤:3  ⬤:4  ⬤:5      pl-mpcs
+                       ⬤:3   ⬤:4   ⬤:5    pl-mpcs
                        │     │     │
                        ↓     ↓     ↓
-                       ⬤:6  ⬤:7  ⬤:8      pl-z2labelmap
+                       ⬤:6   ⬤:7   ⬤:8    pl-z2labelmap
 
 ARGS
 
@@ -89,6 +89,11 @@ CUBE='{
         "password":     "chris1234"
 }'
 
+declare -i b_respSuccess=0
+declare -i b_respFail=0
+declare -i STEP=0
+declare -i branches=3
+
 while getopts "C:l:x" opt; do
     case $opt in
         C) CUBE=$OPTARG                         ;;
@@ -96,11 +101,6 @@ while getopts "C:l:x" opt; do
         x) echo "$SYNOPSIS"; exit 0             ;;
     esac
 done
-
-declare -i b_respSuccess=0
-declare -i b_respFail=0
-declare -i STEP=0
-declare -i branches=3
 
 # Global variable that contains the "current" ID returned
 # from a call to CUBE
@@ -170,7 +170,7 @@ function failureReturn_feedback {
     b_respFail=$(( b_respFail+=1 ))
     report="[ failed  ]"
     reportColor=LightRed
-    echo -en "\033[3A\033[2K"
+    echo -en "\033[4A\033[2K"
     printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${RedBG}${White}%-11s${NC}\n"\
     "$PLUGIN" " resp-->" "$report"                            | ./boxes.sh
 }
@@ -218,7 +218,13 @@ function postQuery_report {
         boxcenter "but the first thing to verify  is that  the image  "  ${LightRed}
         boxcenter "names passed are correct.                          "  ${LightRed}
         boxcenter ""
-        boxcenter "This workflow will exit now with code 1.           "  ${LightRed}
+        boxcenter "Also, make sure that you have installed the needed "  ${LightRed}
+        boxcenter "search and run CLI dependencies, 'chrispl-search'  "  ${LightRed}
+        boxcenter "and 'chrispl-run' using                            "  ${LightRed}
+        boxcenter ""
+        boxcenter "pip install python-chrisclient"                       ${LightYellow}
+        boxcenter ""
+        boxcenter "This workflow will exit now with code 1."             ${Yellow}
     fi
 }
 
@@ -236,7 +242,7 @@ function postRun_report {
         boxcenter "a failure. Please examine each container run logs  "  ${LightRed}
         boxcenter "for possible information.                          "  ${LightRed}
         boxcenter ""
-        boxcenter "This workflow will exit now with code 2.           "  ${LightRed}
+        boxcenter "This workflow will exit now with code 2."             ${Yellow}
     fi
 }
 
@@ -261,7 +267,6 @@ title -d 1 "Checking for plugin IDs on CUBE"                    \
                             --onCUBE "$CUBE"
         )
         retValue_parse "$?" "$RESP" "$REPO/$CONTAINER"
-
     done
     postQuery_report
 windowBottom
