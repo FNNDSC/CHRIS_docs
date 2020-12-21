@@ -414,7 +414,7 @@ title -d 1 "Building and Scheduling workflow..."                \
         windowBottom
         COVIDNETNODE=$(
                 chrispl-run --plugin name=$CONTAINER                            \
-                            --args "--inputFile=$image;                         \
+                            --args "--imageFile=sample-slice000..png;           \
                                     --previous_id=$MED2IMGID"                   \
                             --onCUBE "$CUBE"
         )
@@ -428,7 +428,8 @@ title -d 1 "Building and Scheduling workflow..."                \
         windowBottom
         PDFGENERATIONNODE=$(
                 chrispl-run --plugin name=$CONTAINER                            \
-                            --args "--inputFile=$image;                         \
+                            --args "--imageFile=sample-slice000..png;           \
+                                    --patientID=1234567                         \
                                     --previous_id=$COVIDNETID"                  \
                             --onCUBE "$CUBE"
         )
