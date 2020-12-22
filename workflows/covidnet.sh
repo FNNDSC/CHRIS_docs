@@ -404,7 +404,7 @@ title -d 1 "Building and Scheduling workflow..."                \
                                     --previous_id=$FSPLUGINID"                  \
                             --onCUBE "$CUBE"
         )
-        retValue_parse "$?" "$FREESURFERNODE" "$FREESURFERPLUGIN"
+        retValue_parse "$?" "$MED2IMGNODE" "$MED2IMGPLUGIN"
         MED2IMGID=$ID
 
         # Now the pl-covidnet...
@@ -414,7 +414,7 @@ title -d 1 "Building and Scheduling workflow..."                \
         windowBottom
         COVIDNETNODE=$(
                 chrispl-run --plugin name=$CONTAINER                            \
-                            --args "--imageFile=sample-slice000..png;           \
+                            --args "--imagefile=sample-slice000..png;           \
                                     --previous_id=$MED2IMGID"                   \
                             --onCUBE "$CUBE"
         )
@@ -428,8 +428,8 @@ title -d 1 "Building and Scheduling workflow..."                \
         windowBottom
         PDFGENERATIONNODE=$(
                 chrispl-run --plugin name=$CONTAINER                            \
-                            --args "--imageFile=sample-slice000..png;           \
-                                    --patientID=1234567                         \
+                            --args "--imagefile=sample-slice000..png;           \
+                                    --patientId=1234567;                        \
                                     --previous_id=$COVIDNETID"                  \
                             --onCUBE "$CUBE"
         )
