@@ -257,8 +257,19 @@ function postQuery_report {
         boxcenter "failure. There are many possible reasons for this  "  ${LightRed}
         boxcenter "but the first thing to verify  is that  the image  "  ${LightRed}
         boxcenter "names passed are correct.                          "  ${LightRed}
+        boxcenter "Alternatively, have the failed plugins been regi-  "  ${LightRed}
+        boxcenter "stered to the CUBE instance? If not, register the  "  ${LightRed}
+        boxcenter "failed plugins using                               "  ${LightRed}
         boxcenter ""
-        boxcenter "This workflow will exit now with code 2.           "  ${Yellow}
+        boxcenter "plugin_add.sh <pluginContainerImage>"                 ${LightYellow}
+        boxcenter ""
+        boxcenter "Also, make sure that you have installed the needed "  ${LightRed}
+        boxcenter "search and run CLI dependencies, 'chrispl-search'  "  ${LightRed}
+        boxcenter "and 'chrispl-run' using                            "  ${LightRed}
+        boxcenter ""
+        boxcenter "pip install python-chrisclient"                       ${LightYellow}
+        boxcenter ""
+        boxcenter "This workflow will exit now with code 2."             ${Yellow}
     fi
 }
 
@@ -392,6 +403,8 @@ title -d 1 "Building and Scheduling workflow..."                \
 
     for image in "${a_lungCT[@]}" ; do
 
+        boxcenter ""
+        boxcenter "Building prediction branch for image $image..."              ${Yellow}
         # Add the next layer, pl-med2img, also the second container
         # in the container array, connecting it to the FSPLUGINID
         MED2IMGPLUGIN=${a_PLUGINS[1]}

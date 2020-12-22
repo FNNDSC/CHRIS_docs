@@ -170,7 +170,7 @@ function failureReturn_feedback {
     b_respFail=$(( b_respFail+=1 ))
     report="[ failed  ]"
     reportColor=LightRed
-    echo -en "\033[4A\033[2K"
+    echo -en "\033[3A\033[2K"
     printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${RedBG}${White}%-11s${NC}\n"\
     "$PLUGIN" " resp-->" "$report"                            | ./boxes.sh
 }
@@ -217,6 +217,12 @@ function postQuery_report {
         boxcenter "failure. There are many possible reasons for this  "  ${LightRed}
         boxcenter "but the first thing to verify  is that  the image  "  ${LightRed}
         boxcenter "names passed are correct.                          "  ${LightRed}
+        boxcenter ""
+        boxcenter "Alternatively, have the failed plugins been regi-  "  ${LightRed}
+        boxcenter "stered to the CUBE instance? If not, register the  "  ${LightRed}
+        boxcenter "failed plugins using                               "  ${LightRed}
+        boxcenter ""
+        boxcenter "plugin_add.sh <pluginContainerImage>"                 ${LightYellow}
         boxcenter ""
         boxcenter "Also, make sure that you have installed the needed "  ${LightRed}
         boxcenter "search and run CLI dependencies, 'chrispl-search'  "  ${LightRed}
