@@ -1,0 +1,130 @@
+:Revision: 0.1.0
+
+== CUBE on Kubernetes (DRAFT)
+
+=== Requirements
+
+.Kubernetes
+The main requirement is access to a Kubernetes cluster. https://minikube.sigs.k8s.io/docs/start/[Minikube] offers a single-node Kubernetes cluster for local development.
+
+NOTE: If you're running Fedora or RHEL, set up Minikube using the https://minikube.sigs.k8s.io/docs/drivers/kvm2/[KVM] driver.
+
+.CUBE
+Check out the https://github.com/FNNDSC/ChRIS_ultron_backEnd[ChRIS ultron backEnd (CUBE) repository].
+
+Add the necessary environment details to the `secrets.env` file located in the repository's `/k8s/config` subfolder.
+
+=== Getting started
+
+All Kubernetes resources are located in the CUBE repository's `/k8s` subfolder. Navigate to this folder and deploy the CUBE services using Kustomize via kubectl:
+[[apply]]
+[source]
+[user@host k8s]$ kubectl apply -k .
+
+or via Minikube:
+[source]
+[user@host k8s]$ minikube kubectl -- apply -k .
+
+That's it. Kubernetes is creating the CUBE services, pods, and containers based on the provided resource definitions.
+
+TIP: Minikube has integrated support for the Kubernetes https://minikube.sigs.k8s.io/docs/handbook/dashboard/[Dashboard UI] that provides in-depth details about all active resources. It allows to debug individual pods by viewing their logs and executing interactive shell sessions.
+
+Start using your cluster through the available https://kubernetes.io/docs/tasks/access-application-cluster/[Kubernetes services] (check https://minikube.sigs.k8s.io/docs/handbook/accessing/[here] if you're running Minikube).
+
+=== Details
+
+All Kubernetes resources are located in the CUBE repository's `/k8s` subfolder, which is organized as follows:
+
+* The `/configs` subfolder contains the environment's settings.
+* The `/resources` subfolder contains each service's resource definitions.
+* The `kustomization.yaml` file specifies all resources to be created/updated while applying Kustomize as described <<apply,above>>.
+
+==== Configs
+
+All environment-specific settings are currently defined in
+
+* `cube.env` (general settings) and
+* `secrets.env` (sensitive settings).
+
+At deploy time, the contained key-value pairs are turned into ConfigMap items/Secrets and injected into individual pods as environment variables.
+
+Check out the https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/[ConfigMaps], https://kubernetes.io/docs/concepts/configuration/secret/[Secrets], and https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/[Kustomization] documentation for reference.
+
+==== Resources
+
+The resource definitions for each CUBE service are captured by two types of yaml files:
+
+* deployment (e.g. `chris-deployment.yaml`) and
+* service (e.g. `chris-service.yaml`).
+
+.Deployment file
+Each deployment file defines the properties of the corresponding service pods. Notable properties include:
+
+* `replicas`. The desired number of pods.
+* `image`. The name of the container image to use.
+* `ports`. The list of ports intended for the contained services.
+* `command`. The container entrypoint.
+* `args`. The arguments to the entrypoint.
+* `envFrom`. References to the ConfigMaps and Secrets that are made available to the containers as environment variables. These references are defined in the Kustomization file (see below).
+
+Sample deployment file content:
+[source,yaml]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: worker
+  template:
+    metadata:
+      labels:
+        name: worker
+    spec:
+      containers:
+      - name: worker
+        image: fnndsc/chris
+        ports:
+        - containerPort: 6900
+        command: ["celery"]
+        args: ["-A", "core", "worker", "-c", "1", "-l", "DEBUG", "-Q", "main"]
+        envFrom:
+        - configMapRef:
+            name: cube-config
+        - secretRef:
+            name: cube-secrets
+----
+
+.Service file
+Kubernetes Services are a powerful abstraction for dynamically managing access and integration of multiple application services that are distributed over any number of pods.
+
+Each service file defines the properties of the corresponding service object. Notable properties include:
+
+* `selector`. Incoming traffic is routed to pods matching this selection criterion.
+* `port`. The port that is exposed by the service within the cluster.
+* `targetPort`. The port to access on the pods targeted by the Service.
+* `nodePort`. The port that each cluster node proxies into the Service for external consumption.
+
+Sample service file content:
+[source,yaml]
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker
+  labels:
+    name: worker
+spec:
+  type: NodePort
+  selector:
+    name: worker
+  ports:
+  - port: 6900
+    targetPort: 6900
+    nodePort: 30900
+----
+
+==== Kustomization
