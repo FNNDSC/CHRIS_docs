@@ -1,4 +1,4 @@
-:Revision: 1.0.0
+:Revision: 1.0.1
 
 == CUBE on Kubernetes
 
@@ -45,15 +45,15 @@ Keep this session running. Observe the output, which may look like this:
 [source,yaml]
 ----
 Status:	
-	machine: minikube
-	pid: 24515
-	route: 10.96.0.0/12 -> 192.168.39.142
-	minikube: Running
-	services: []
+  machine: minikube
+  pid: 24515
+  route: 10.96.0.0/12 -> 192.168.39.142
+  minikube: Running
+  services: []
     errors: 
-		minikube: no errors
-		router: no errors
-		loadbalancer emulator: no errors
+    minikube: no errors
+    router: no errors
+    loadbalancer emulator: no errors
 ----
 
 The route indicates the IP address that you can use as the cluster IP, `192.168.39.142` in this case.
