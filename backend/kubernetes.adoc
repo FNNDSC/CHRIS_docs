@@ -1,6 +1,6 @@
-:Revision: 0.1.0
+:Revision: 1.0.0
 
-== CUBE on Kubernetes (DRAFT)
+== CUBE on Kubernetes
 
 === Requirements
 
@@ -13,6 +13,8 @@ NOTE: If you're running Fedora or RHEL, set up Minikube using the https://miniku
 Check out the https://github.com/FNNDSC/ChRIS_ultron_backEnd[ChRIS ultron backEnd (CUBE) repository].
 
 Add the necessary environment details to the `secrets.env` file located in the repository's `/k8s/config` subfolder.
+
+CAUTION: String values containing equal signs need to be enclosed by double quotation marks.
 
 === Getting started
 
@@ -31,6 +33,37 @@ TIP: Minikube has integrated support for the Kubernetes https://minikube.sigs.k8
 
 Start using your cluster through the available https://kubernetes.io/docs/tasks/access-application-cluster/[Kubernetes services] (check https://minikube.sigs.k8s.io/docs/handbook/accessing/[here] if you're running Minikube).
 
+==== Local setup with Minikube
+
+How can we now consume the services? Let's assume you're running CUBE on a local Minikube cluster and you'd like to smoke test `pfcon`, for instance.
+
+First, open a tunnel session so you can reach the cluster Services from your local environment:
+[source]
+[user@host k8s]$ minikube tunnel
+
+Keep this session running. Observe the output, which may look like this:
+[source,yaml]
+----
+Status:	
+	machine: minikube
+	pid: 24515
+	route: 10.96.0.0/12 -> 192.168.39.142
+	minikube: Running
+	services: []
+    errors: 
+		minikube: no errors
+		router: no errors
+		loadbalancer emulator: no errors
+----
+
+The route indicates the IP address that you can use as the cluster IP, `192.168.39.142` in this case.
+
+Next, find the service's `nodePort` within its service file, e.g. `resources/pfcon-service.yaml`. If, for instance, `pfcon's nodePort` is `30005`, you can now start using `pfcon` by sending requests to
+[code]
+http://192.168.39.142:30005
+
+The other services can be requested under the same IP address using their respective node ports.
+
 === Details
 
 All Kubernetes resources are located in the CUBE repository's `/k8s` subfolder, which is organized as follows:
@@ -48,7 +81,7 @@ All environment-specific settings are currently defined in
 
 At deploy time, the contained key-value pairs are turned into ConfigMap items/Secrets and injected into individual pods as environment variables.
 
-Check out the https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/[ConfigMaps], https://kubernetes.io/docs/concepts/configuration/secret/[Secrets], and https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/[Kustomization] documentation for reference.
+TIP: Check out the https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/[ConfigMaps] and https://kubernetes.io/docs/concepts/configuration/secret/[Secrets] documentation for details.
 
 ==== Resources
 
@@ -127,4 +160,36 @@ spec:
     nodePort: 30900
 ----
 
+TIP: Check out the https://kubernetes.io/docs/concepts/workloads/controllers/deployment/[Deployment] and the https://kubernetes.io/docs/concepts/services-networking/service/[Service] documentation for details.
+
 ==== Kustomization
+
+Kustomize is a standalone tool offering simplified management of Kubernetes objects using a kustomization file. The CUBE kustomization file references all resources that are required for deploying the CUBE services:
+
+* The `cube-config` configMap is generated based on the contents of the CUBE configuration file and made accessible to the service pods as specified in their deployment files.
+* Similarly, the `cube-secrets` are generated based on the contents of the CUBE secrets file and made accessible to the service pods as specified in their deployment files.
+* The service pods are generated based on the referenced deployment resource files.
+* The Kubernetes Services are generated based on the referenced service resource files.
+
+
+Sample kustomization file content:
+[source,yaml]
+----
+kind: Kustomization
+
+configMapGenerator:
+- name: cube-config
+  env: configs/cube.env
+
+secretGenerator:
+- name: cube-secrets
+  env: configs/secrets.env
+
+resources:
+- resources/service1-deployment.yaml
+- resources/service1-service.yaml
+- resources/service2-deployment.yaml
+- resources/service2-service.yaml
+----
+
+TIP: Check out the https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/[Kustomization] documentation for details.
