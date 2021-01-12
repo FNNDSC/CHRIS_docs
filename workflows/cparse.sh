@@ -90,7 +90,7 @@ function cparse {
         # note: instead of using what we were given, $str_dock,
         # we are rebuilding the string by concatention of its parts
         # because above we might have implicitly filled the repo as "fnndsc"
-        
+
         # cparse is also (mis-)used in make.sh to parse `A_CONTAINER`
         # the services pman, pfioh, pfcon might not have CMD
         # so the else block sets str_mmn to "ERR_NO_CMD"
