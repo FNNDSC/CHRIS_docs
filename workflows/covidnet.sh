@@ -170,7 +170,7 @@ EXAMPLES
 
     or equivalently:
 
-    $ ./covidnet.sh -A megalodon.local
+    $ ./covidnet.sh -a megalodon.local
 
 "
 
