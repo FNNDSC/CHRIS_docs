@@ -1,9 +1,8 @@
 #
-# Workflow Visuals And Control -- wvac
+# fast friendly and efficient -- ffe.sh
 #
-# Script that contains several "helper" type functions geared
-# towards visual feedback beautification as well some control
-# functions.
+# Script that contains several "helper" type functions geared towards
+# Fast Friendly visual feedback as well some Efficient control functions.
 #
 
 source ./decorate.sh
@@ -12,19 +11,20 @@ source ./cparse.sh
 function pluginArray_filterFromWorkflow {
     #
     # ARGS
-    #       $1          workflow array to filter
+    #       $1          feedflow array to filter
     #       $2          return array
     #
-    # Return a string that contains only the list of
-    # plugin names from the workflow specification
-    # array. This return can be read into an array
-    # by the caller.
+    # DESC
+    #   Return a string that contains only the list of
+    #   plugin names from the feedflow specification
+    #   array. This return can be read into an array
+    #   by the caller.
     #
-    local a_workflow=("${!1}")
+    local a_feedflow=("${!1}")
     local __ret=$2
     local a_list=()
 
-    for EL in "${a_workflow[@]}" ; do
+    for EL in "${a_feedflow[@]}" ; do
         EL="${EL//[$'\t\r\n ']}"
         if [[ ${EL:0:1} == [0-9]* ]] ; then
             PLUGIN=$(
@@ -42,20 +42,21 @@ function pluginArray_filterFromWorkflow {
 function pluginName_filterFromWorkflow {
     #
     # ARGS
-    #       $1          workflow array to filter
+    #       $1          feedflow array to filter
     #       $2          search term
     #       $3          return hit
     #
-    # Return the plugin name, filtered from the
-    # feed workflow on the passed search term.
+    # DESC
+    #   Return the plugin name, filtered from the
+    #   feed feedflow on the passed search term.
     #
-    local a_workflow=("${!1}")
+    local a_feedflow=("${!1}")
     local search=$2
     local __ret=$3
     local PLUGIN=""
     local EL=""
 
-    for EL in "${a_workflow[@]}" ; do
+    for EL in "${a_feedflow[@]}" ; do
         EL="${EL//[$'\t\r\n ']}"
         if [[ ${EL:0:1} == [0-9]* ]] ; then
             PLUGIN=$(
@@ -91,12 +92,14 @@ function waitForNodeState {
     local __ret=$4
     local pollIntervalSeconds=$5
     local timeoutSeconds=$6
+
     local pollCount=1
     local b_poll=1
     local b_notimeout=0
+    local totalTime=0
 
     if (( ! ${#pollIntervalSeconds} )) ; then
-        pollIntervalSeconds=10
+        pollIntervalSeconds=5
     fi
     if (( ! ${#timeoutSeconds} )) ; then
         b_notimeout=1
@@ -104,24 +107,25 @@ function waitForNodeState {
 
     boxcenter ""
     windowBottom
+    status="scheduled"
     while (( b_poll )) ; do
         echo -en "\033[3A\033[2K"
-        cmd="chrispl-search  --for status                    \
-                            --using id=$plugininstanceID    \
-                            --across plugininstances        \
-                            --onCUBE "$CUBE"
-        "
+        opBlink_feedback    " $(date +%T), poll $pollCount "            \
+                            "::Waiting on pinst $plugininstanceID..."   \
+                            "state-->"                                  \
+                            "  ${status}"
         search=$(
-            chrispl-search  --for status                    \
-                            --using id=$plugininstanceID    \
-                            --across plugininstances        \
+            chrispl-search  --for status                                \
+                            --using id=$plugininstanceID                \
+                            --across plugininstances                    \
                             --onCUBE "$CUBE"
         )
         status=$(echo $search | awk '{print $3}')
-        opBlink_feedback    "node $plugininstanceID, poll $pollCount" \
-                            "Checking current status"       \
-                            "state"                         \
-                            "${status:0:10}"
+        echo -en "\033[1A\033[2K"
+        opBlink_feedback    " $(date +%T), poll $pollCount "            \
+                            "::Waiting on pinst $plugininstanceID..."   \
+                            "state-->"                                  \
+                            "  ${status}"
         windowBottom
         if [[ "$status" == "$state" ]] ; then break ; fi
         if (( b_notimeout )) ; then
@@ -137,11 +141,12 @@ function waitForNodeState {
         ((pollCount++))
     done
     echo -en "\033[3A\033[2K"
-    opSolid_feedback    "node $plugininstanceID, poll $pollCount" \
-                        "Check operation complete"      \
-                        "final state"                   \
-                        "${status:0:10}"
-
+    totalTime=$(( pollCount * pollIntervalSeconds ))
+    opSolid_feedback    " $(date +%T), poll $pollCount "                \
+                        "::pinst $plugininstanceID complete ($totalTime s)..." \
+                        "state-->"                                      \
+                        "${status}"
+    windowBottom
     eval $__ret="'$status'"
 }
 
@@ -163,31 +168,44 @@ function filesInNode_get {
     local __ret=$3
     local query=""
 
+    echo -en "\033[2A\033[2K"
+
+    opBlink_feedback    "  ${ADDRESS}:${PORT}  "                        \
+                        "::Getting output file list..."                 \
+                        "op-->"                                         \
+                        "    query    "
+    windowBottom
     query=$(
-        chrispl-search  --for fname                                 \
-                        --using plugin_inst_id=$plugininstanceID    \
-                        --across files                              \
+        chrispl-search  --for fname                                     \
+                        --using plugin_inst_id=$plugininstanceID        \
+                        --across files                                  \
                         --onCUBE "$CUBE"
     )
+    echo -en "\033[3A\033[2K"
+    opSolid_feedback    "  ${ADDRESS}:${PORT}  "                        \
+                        "::File list collected..."                      \
+                        "result-->"                                     \
+                        "  $(echo "$query" | wc -l ) files  "
     eval $__ret="'$query'"
+    windowBottom
 }
 
 function argArray_filterFromWorkflow {
     #
     # ARGS
-    #       $1          workflow array to filter
+    #       $1          feedflow array to filter
     #
     # DESG
     #   Return a string that contains only the list of
-    #   plugin names from the workflow specification
+    #   plugin names from the feedflow specification
     #   array. This return can be read into an array
     #   by the caller.
     #
-    local a_workflow=("${!1}")
+    local a_feedflow=("${!1}")
     local __ret=$2
     local a_list=()
 
-    for EL in "${a_workflow[@]}" ; do
+    for EL in "${a_feedflow[@]}" ; do
         EL="${EL//[$'\t\r\n ']}"
         if [[ ${EL:0:1} == [0-9]* ]] ; then
             PLUGIN=$(
@@ -227,6 +245,7 @@ function a_index {
 
 function plugin_argsSub {
     #
+    # ARGS
     #       $1          plugin argument template
     #       $2          plugin argument variable substitution lookup
     #       $3          return string with substituion
@@ -244,6 +263,7 @@ function plugin_argsSub {
     local argTemplate=$1
     local argLookup=$2
     local __ret=$3
+    local IFS
 
     IFS=';' read -ra a_lookup <<< "$argLookup"
     for el in "${a_lookup[@]}" ; do
@@ -271,7 +291,7 @@ function plugin_run {
     #
     # ARGS
     #       $1          (sub)string name of plugin to run
-    #       $2          array of workflow specification
+    #       $2          array of feedflow specification
     #       $3          CUBE instance details
     #       $4          return ID of plugin instance
     #       $5          optional arg substitution lookup
@@ -281,24 +301,28 @@ function plugin_run {
     #   with supporting logic
     #
     local SEARCH="$1"
-    local a_workflow=("${!2}")
+    local a_feedflow=("${!2}")
     local CUBE="$3"
     local __ret=$4
     local SUB="$5"
 
     local a_plugin=()
     local a_arg=()
-    local pluginName=""
     local a_cmd=()
+    local pluginName=""
+    local ID
+    local PLUGINRUN
+    local STATUSRUN
+    local IFS
 
-    pluginArray_filterFromWorkflow  "a_workflow[@]" "a_plugin"
+    pluginArray_filterFromWorkflow  "a_feedflow[@]" "a_plugin"
     a_plugin=($a_plugin)
-    argArray_filterFromWorkflow     "a_workflow[@]" "a_arg"
+    argArray_filterFromWorkflow     "a_feedflow[@]" "a_arg"
     a_arg=($a_arg)
 
-    pidx=$(a_index $SEARCH "a_workflow[@]")
+    pidx=$(a_index $SEARCH "a_feedflow[@]")
     CUBE=$(echo $CUBE | jq -Mc )
-    pluginName_filterFromWorkflow "a_workflow[@]" "$SEARCH" "pluginName"
+    pluginName_filterFromWorkflow "a_feedflow[@]" "$SEARCH" "pluginName"
     if [[ "$pidx" != "-1" ]] ; then
         pidx=$(a_index $pluginName "a_plugin[@]")
         PLUGIN=${a_plugin[$pidx]}
@@ -309,20 +333,29 @@ function plugin_run {
             ARGSUB="$ARGS"
         fi
         cparse $PLUGIN "REPO" "CONTAINER" "MMN" "ENV"
-        runStart_feedback "$PLUGIN"
+        opBlink_feedback " $ADDRESS:$PORT " "::CUBE->$PLUGIN"           \
+                         "op-->" " post run "
         windowBottom
         cmd="chrispl-run --plugin name=$CONTAINER                       \
                             --args \""$ARGSUB"\"                        \
                             --onCUBE "$CUBE"
         "
         IFS=' ' read -ra a_cmd <<< "$cmd"
-        PLUGINNODE=$(${a_cmd[@]})
-        # The retValue_parse sets a global ID
-        retValue_parse "$?" "$PLUGINNODE" "$PLUGIN"
+        PLUGINRUN=$(${a_cmd[@]})
+        STATUSRUN=$?
+        if (( STATUSRUN == 0 )) ; then
+            ID=$(echo $PLUGINRUN | awk '{print $3}')
+        else
+            ID=-1
+        fi
+        opRet_feedback  "$STATUSRUN"                                    \
+                        " $ADDRESS:$PORT " "::CUBE->$PLUGIN"            \
+                        "result-->" " pinst: $(echo $PLUGINRUN | awk '{print $3}')"
     else
-        printf "No matching plugin was found in the workflow spec."
+        boxcenter "No matching plugin was found in the feedflow spec." ${Red}
         ID="-1"
     fi
+    eval $__ret="'$ID'"
 }
 
 function opBlink_feedback {
@@ -342,15 +375,15 @@ function opBlink_feedback {
 
     # echo -e ''$_{1..8}'\b0123456789'
     printf "\
-${LightBlueBG}${White}%*s${NC}\
+${LightBlueBG}${White}[%*s]${NC}\
 ${LightCyan}%-*s\
 ${Yellow}%*s\
-${blink}${LightGreen}%-*s\
+${blink}${LightGreen}[%-*s]\
 ${NC}\n" \
-        "20" "${leftID:0:20}"       \
+        "18" "${leftID:0:18}"       \
         "32" "${op:0:32}"           \
         "14" "${action:0:14}"       \
-        "14" "${result:0:14}"   | ./boxes.sh
+        "12" "${result:0:12}"       | ./boxes.sh
 }
 
 function opSolid_feedback {
@@ -370,15 +403,15 @@ function opSolid_feedback {
 
     # echo -e ''$_{1..8}'\b0123456789'
     printf "\
-${LightBlueBG}${White}%*s${NC}\
+${LightBlueBG}${White}[%*s]${NC}\
 ${LightCyan}%-*s\
 ${Yellow}%*s\
-${LightGreenBG}${White}%-*s\
+${LightGreenBG}${White}[%-*s]\
 ${NC}\n" \
-        "20" "${leftID:0:20}"       \
+        "18" "${leftID:0:18}"       \
         "32" "${op:0:32}"           \
         "14" "${action:0:14}"       \
-        "14" "${result:0:14}"   | ./boxes.sh
+        "12" "${result:0:12}"       | ./boxes.sh
 }
 
 function opFail_feedback {
@@ -398,59 +431,15 @@ function opFail_feedback {
 
     # echo -e ''$_{1..8}'\b0123456789'
     printf "\
-${LightBlueBG}${White}%*s${NC}\
+${LightBlueBG}${White}[%*s]${NC}\
 ${LightCyan}%-*s\
-${Yellow}%*s-->\
-${blink}${LightGreen}%-*s\
+${Yellow}%*s\
+${LightRedBG}${White}[%-*s]\
 ${NC}\n" \
-        "20" "${leftID:0:20}"       \
+        "18" "${leftID:0:18}"       \
         "32" "${op:0:32}"           \
         "14" "${action:0:14}"       \
-        "14" "${result:0:14}"   | ./boxes.sh
-}
-
-
-function queryStart_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #
-    # Print the starting query feedback for a given plugin search
-    #
-    SEARCH=$1
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${blink}${LightGreen}%-11s${NC}\n" \
-        "$SEARCH" "query-->" "[searching]"                        | ./boxes.sh
-}
-
-function runStart_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #
-    # Print the starting query feedback for a given plugin search
-    #
-    RUN=$1
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${blink}${LightGreen}%-11s${NC}\n" \
-        "$RUN" "  run-->" "[ posting ]"                        | ./boxes.sh
-}
-
-function successReturn_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #       $2          Response from client script
-    #
-    # Print some useful feedback on CUBE resp success.
-    #
-    PLUGIN="$1"
-    RESP="$2"
-    ID=$(printf "%04s" $(echo "$RESP" |awk '{print $3}'))
-    b_respSuccess=$(( b_respSuccess+=1 ))
-    report="[ id=$ID ]"
-    reportColor=LightGreen
-    echo -en "\033[3A\033[2K"
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${LightGreenBG}${White}%-11s${NC}\n"     \
-    "$PLUGIN" " resp-->" "$report"                            | ./boxes.sh
+        "12" "${result:0:12}"       | ./boxes.sh
 }
 
 function successReturn_summary {
@@ -459,25 +448,8 @@ function successReturn_summary {
     #
     printf "${LightCyan}%16s${LightGreen}%-64s${NC}\n"                      \
         "$b_respSuccess"                                                    \
-        " operations had a successful response"                             | ./boxes.sh
+        " operation(s) had a successful response"                           | ./boxes.sh
     echo ""                                                                 | ./boxes.sh
-}
-
-function failureReturn_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #
-    # Print some useful feedback on CUBE resp failure
-    #
-    PLUGIN=$1
-    ID="-1"
-    b_respFail=$(( b_respFail+=1 ))
-    report="[ failed  ]"
-    reportColor=LightRed
-    echo -en "\033[3A\033[2K"
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${RedBG}${White}%-11s${NC}\n"\
-    "$PLUGIN" " resp-->" "$report"                            | ./boxes.sh
 }
 
 function failureReturn_summary {
@@ -485,16 +457,18 @@ function failureReturn_summary {
     # Print the summary blurb on a group failure response
     #
     printf "${LightRed}%16s${Brown}%-64s${NC}\n"                            \
-        "$b_respFail"                                                       \
-    " operations had a failure response."                                   | ./boxes.sh
+        "$b_respFail" " operation(s) had a failure response."               | ./boxes.sh
+    echo ""                                                                 | ./boxes.sh
 }
 
 function opRet_feedback {
     #
-    # ARGS
+    # ARG
     #       $1          CLI status from call
-    #       $2          CLI response from call
-    #       $3          Name of the container
+    #       $1          left blue button field text
+    #       $2          left descriptive field text
+    #       $4          right descriptive field text
+    #       $5          right button text
     #
     # Parse the return value from a call to CUBE
     #
@@ -509,27 +483,8 @@ function opRet_feedback {
         opSolid_feedback    "$L1" "$L2" "$L3" "$L4"
     else
         b_respFail=$(( b_respFail+=1 ))
-        reportColor=LightRed
-        opFailure_feedback  "$L1" "$L2" "$L3" "$L4"
-    fi
-}
-
-function retValue_parse {
-    #
-    # ARGS
-    #       $1          CLI status from call
-    #       $2          CLI response from call
-    #       $3          Name of the container
-    #
-    # Parse the return value from a call to CUBE
-    #
-    STATUS=$1
-    CLIResp=$2
-    PLUGIN=$3
-    if (( STATUS == 0 )) ; then
-        successReturn_feedback "$PLUGIN" "$CLIResp"
-    else
-        failureReturn_feedback "$PLUGIN"
+        echo -en "\033[3A\033[2K"
+        opFail_feedback  "$L1" "$L2" "$L3" "  fail  "
     fi
 }
 
@@ -548,7 +503,7 @@ function postImageCheck_report {
         boxcenter "outputs. Please only pass images that exist in the "  ${LightRed}
         boxcenter "base FS plugin.                                    "  ${LightRed}
         boxcenter ""
-        boxcenter "This workflow will exit now with code 1.           "  ${Yellow}
+        boxcenter "This feedflow will exit now with code 1.           "  ${Yellow}
     fi
 }
 
@@ -578,7 +533,7 @@ function postQuery_report {
         boxcenter ""
         boxcenter "pip install python-chrisclient"                       ${LightYellow}
         boxcenter ""
-        boxcenter "This workflow will exit now with code 2."             ${Yellow}
+        boxcenter "This feedflow will exit now with code 2."             ${Yellow}
     fi
 }
 
@@ -596,6 +551,6 @@ function postRun_report {
         boxcenter "a failure. Please examine each container run logs  "  ${LightRed}
         boxcenter "for possible information.                          "  ${LightRed}
         boxcenter ""
-        boxcenter "This workflow will exit now with code 3.           "  ${Yellow}
+        boxcenter "This feedflow will exit now with code 3.           "  ${Yellow}
     fi
 }
