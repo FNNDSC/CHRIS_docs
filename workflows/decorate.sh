@@ -68,21 +68,29 @@ LightCyanBG='\033[1;46m'
 LightGrayBG='\033[0;47m'
 WhiteBG='\033[1;47m'
 
-function center {
-  termwidth=80
-  padding="$(printf '%0.1s' ' '{1..500})"
-  printf '%*.*s %s %*.*s\n' 0 "$(((termwidth-2-${#1})/2))"  \
-            "$padding" "$1" 0 "$(((termwidth-1-${#1})/2))"  \
-            "$padding"
+function boxcenter {
+    color=$2
+    termwidth=80
+    padding="$(printf '%0.1s' ' '{1..500})"
+    printf '%*.*s %s %*.*s\n' 0 "$(((termwidth-2-${#1})/2))"  \
+              "$padding" "$1" 0 "$(((termwidth-1-${#1})/2))"  \
+              "$padding"                                      | ./boxes.sh $color
 }
 
-function boxcenter {
-  color=$2
-  termwidth=80
-  padding="$(printf '%0.1s' ' '{1..500})"
-  printf '%*.*s %s %*.*s\n' 0 "$(((termwidth-2-${#1})/2))"  \
-            "$padding" "$1" 0 "$(((termwidth-1-${#1})/2))"  \
-            "$padding"                                      | ./boxes.sh $color
+function center {
+    if (( ${#2} )) ; then
+        termwidth=$2
+    else
+        termwidth=80
+    fi
+    padding="$(printf '%0.1s' ' '{1..500})"
+    if (( ${#1} < termwidth-2 )) ; then
+        printf '%*.*s %s %*.*s\n' 0 "$(((termwidth-2-${#1})/2))"  \
+                "$padding" "$1" 0 "$(((termwidth-1-${#1})/2))"  \
+                "$padding"
+    else
+        printf "$1"
+    fi
 }
 
 function colorSpec_parse {
