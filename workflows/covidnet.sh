@@ -38,6 +38,62 @@ declare -a a_WORKFLOWSPEC=(
                                 --patientId=@patientID;
                                 --previous_id=@prev_id"
 )
+
+WORKFLOW=\
+'{
+
+    "meta": {
+        "loops":    [
+            {
+                "l1":   {
+                    "var":      "n",
+                    "iterate":  [1, 5]
+                }
+            }
+        ]
+    },
+    "feed": {
+        "tree": [
+            {
+                "node_previous":    { "id": 0},
+                "node_self":        { "id": 0},
+                "container":        "fnndsc/pl-lungct",
+                "args":             ["--NOARGS"]
+            },
+            {
+                "node_previous":    { "id": 0},
+                "node_self":        { "id": 1,  "loop": "l1" },
+                "container":        "fnndsc/pl-med2img",
+                "args":             [
+                                        "--inputFile=@image[_n]",
+                                        "--convertOnlySingleDICOM",
+                                        "--previous_id=@prev_id"
+                                    ]
+            },
+            {
+                "node_previous":    { "id": 1,  "loop": "l1" },
+                "node_self":        { "id": 2,  "loop": "l1" },
+                "container":        "fnndsc/pl-covidnet",
+                "args":             [
+                                        "--imagefile=sample.png",
+                                        "--previous_id=@prev_id"
+                                    ]
+            },
+            {
+                "node_previous":    { "id": 2,  "loop": "l1" },
+                "node_self":        { "id": 3,  "loop": "l1" },
+                "container":        "fnndsc/pl-pdfgeneration",
+                "args":             [
+                                        "--imagefile=sample.png",
+                                        "--patientId=@patientID",
+                                        "--previous_id=@prev_id"
+                                    ]
+            },
+        ]
+    }
+
+}'
+
 declare -a a_PLUGINS=()
 declare -a a_ARGS=()
 pluginArray_filterFromWorkflow  "a_WORKFLOWSPEC[@]" "a_PLUGINS"
@@ -66,6 +122,7 @@ SYNPOSIS
                         [-G <graphvizDotFile>]              \\
                         [-i <listOfLungImagesToProcess>]    \\
                         [-W]                                \\
+                        [-R]                                \\
                         [-q]
 
 DESC
@@ -75,7 +132,7 @@ DESC
                                    ███:0          pl-lungct
                                  __/│\__
                               _ / / | \ \_
-                             /   /  │  \.. \ 
+                             /   /  │  \.. \
                             ↓   ↓   ↓   ↓   ↓
                            ███ ███ ███ ███ ███ :1  pl-med2img
                             │   │   │   │   │
@@ -108,6 +165,10 @@ ARGS
     used for simulating a delay while waiting for  a scarce computing
     resource (like a GPU) to be released for subsequent branches to
     use.
+
+    [-R]
+    If specified, print a final report of the prediction for the image
+    being processed on a given branch. Note that this implies a [-W].
 
     [-G <graphvizDotFile>]
     If specified, write a graphviz .dot file that describes the workflow
@@ -170,7 +231,7 @@ EXAMPLES
 
     or equivalently:
 
-    $ ./covidnet.sh -A megalodon.local
+    $ ./covidnet.sh -a megalodon.local
 
 "
 
@@ -210,12 +271,15 @@ declare -i b_onlyShowImageNames=0
 declare -i b_CUBEjson=0
 declare -i b_graphviz=0
 declare -i b_waitOnBranchFinish=0
+declare -i b_printReport=0
 IMAGESTOPROCESS=""
 GRAPHVIZFILE=""
 
-while getopts "C:G:i:qxr:p:a:u:w:W" opt; do
+while getopts "C:G:i:qxr:p:a:u:w:WR" opt; do
     case $opt in
         W) b_waitOnBranchFinish=1               ;;
+        R) b_waitOnBranchFinish=1
+           b_printReport=1                      ;;
         C) b_CUBEjson=1
            CUBEJSON=$OPTARG                     ;;
         G) b_graphviz=1
@@ -243,7 +307,17 @@ ADDRESS=$(echo $CUBE | jq -r .address)
 # from a call to CUBE
 ID="-1"
 
-title -d 1 "Checking for plugin IDs on CUBE"                    \
+title -d 1 "Checking on required dependencies..."
+    boxcenter "Verify that various command line tools needed to construct this "
+    boxcenter "workflow exist on the UNIX path. If any of the below files are  "
+    boxcenter "not found, please install them according to the requirements of "
+    boxcenter "your OS.                                                        "
+    boxcenter ""
+    dep_check "jq,chrispl-search,chrispl-run,http"
+windowBottom
+if (( b_respFail > 0 )) ; then exit 4 ; fi
+
+title -d 1 "Checking for plugin IDs on CUBE...."                            \
             "(ids below denote plugin ids)"
     #
     # This section queries CUBE for IDs of all plugins in the plugin
@@ -253,10 +327,13 @@ title -d 1 "Checking for plugin IDs on CUBE"                    \
     #
     b_respSuccess=0
     b_respFail=0
+    boxcenter "Verify that all the plugin that constitute this workflow are    "
+    boxcenter "registered to the CUBE instance with which we are communicating."
+    boxcenter ""
     for plugin in "${a_PLUGINS[@]}" ; do
         cparse $plugin "REPO" "CONTAINER" "MMN" "ENV"
-        opBlink_feedback " $ADDRESS:$PORT " "::CUBE->$plugin" \
-                         "op-->" "   search   "
+        opBlink_feedback "$ADDRESS:$PORT" "::CUBE->$plugin"   \
+                         "op-->" "search"
         windowBottom
         RESP=$(
             chrispl-search  --for id                            \
@@ -264,14 +341,14 @@ title -d 1 "Checking for plugin IDs on CUBE"                    \
                             --onCUBE "$CUBE"
         )
         opRet_feedback  "$?"                                    \
-                        " $ADDRESS:$PORT " "::CUBE->$plugin"    \
-                        "result-->" " pid = $(echo $RESP | awk '{print $3}') "
+                        "$ADDRESS:$PORT" "::CUBE->$plugin"    \
+                        "result-->" "pid = $(echo $RESP | awk '{print $3}')"
     done
     postQuery_report
 windowBottom
 if (( b_respFail > 0 )) ; then exit 2 ; fi
 
-title -d 1 "Posting root node, waiting on run, and creating a DICOM file list"
+title -d 1 "Start constructing the Feed by POSTing the root FS node..."
     ROOTID=-1
     retState=""
     filesInNode=""
@@ -279,12 +356,18 @@ title -d 1 "Posting root node, waiting on run, and creating a DICOM file list"
 
     # Post the root node, wait for it to finish, and
     # collect a list of output files
+    boxcenter "Run the root node and dynamically capture a list of output "
+    boxcenter "files created by the base FS plugin. This file list will be"
+    boxcenter "processed to create the actual list of DICOMS to process -- "
+    boxcenter "each DICOM will spawn a new parallel branch.               "
+    boxcenter ""
+    windowBottom
 
     #\\\\\\\\\\\\\\\\\\
     # Core logic here ||
     plugin_run          "0:0"   "a_WORKFLOWSPEC[@]"   "$CUBE"  ROOTID
     waitForNodeState    "$CUBE" "finishedSuccessfully" $ROOTID retState
-    filesInNode_get     "$CUBE"  $ROOTID filesInNode
+    dataInNode_get      fname "$CUBE"  $ROOTID filesInNode
     # Core logic here ||
     #///////////////////
 
@@ -298,33 +381,47 @@ title -d 1 "Posting root node, waiting on run, and creating a DICOM file list"
     a_lungCTorig=("${a_lungCT[@]}")
 windowBottom
 
-title -d 1 "Checking that images to process exist in root pl-lungct"
-    b_respSuccess=0
-    b_respFail=0
+if (( b_imageList )) ; then
+    title -d 1 "Checking that images to process exist in root pl-lungct..."
+        boxcenter "Verify that any DICOMs explicitly listed by the user "
+        boxcenter "when calling this script actually exist in the root  "
+        boxcenter "node.                                                "
+        boxcenter ""
 
-    if (( b_imageList )) ; then
-        read -a a_lungCT <<< $(echo "$IMAGESTOPROCESS" | tr ',' ' ')
-    fi
-    for image in "${a_lungCT[@]}" ; do
-        opBlink_feedback "  Image to process  " "::$image"  \
-                         "valid-->"             "  checking  "
-        windowBottom
-        if [[ " ${a_lungCTorig[@]} " =~ " ${image} " ]] ; then
-            status=0
-        else
-            status=1
+        b_respSuccess=0
+        b_respFail=0
+
+        if (( b_imageList )) ; then
+            read -a a_lungCT <<< $(echo "$IMAGESTOPROCESS" | tr ',' ' ')
         fi
-        opRet_feedback  "$status" \
-                        " Image to process "    "::$image"  \
-                        "can process-->"        "   valid    "                \
+        for image in "${a_lungCT[@]}" ; do
+            opBlink_feedback "Image to process" "::$image"  \
+                             "valid-->"         "checking"
+            windowBottom
+            if [[ " ${a_lungCTorig[@]} " =~ " ${image} " ]] ; then
+                status=0
+            else
+                status=1
+            fi
+            opRet_feedback  "$status" \
+                            "Image to process" "::$image"  \
+                            "can process-->"   "valid"
 
-    done
-    postImageCheck_report
-windowBottom
-if (( b_respFail > 0 )) ;       then exit 1 ; fi
-if (( b_onlyShowImageNames )) ; then exit 0 ; fi
+        done
+        postImageCheck_report
+    windowBottom
+    if (( b_respFail > 0 )) ;       then exit 1 ; fi
+    if (( b_onlyShowImageNames )) ; then exit 0 ; fi
+fi
 
 title -d 1 "Building and Scheduling workflow..."
+    boxcenter "Construct and run each branch, one per input DICOM file.    "
+    boxcenter "If a wait condition has been specified, pause at the end of "
+    boxcenter "each branch until the final compute is successful before    "
+    boxcenter "buidling the next parallel branch.                          "
+    boxcenter ""
+    boxcenter "If a report has been specified, print a final report on the "
+    boxcenter "prediction of the input image for that branch.              "
     # Now the branch(es)
     b_respSuccess=1
     b_respFail=0
@@ -332,20 +429,61 @@ title -d 1 "Building and Scheduling workflow..."
 
         boxcenter ""
         boxcenter "Building prediction branch for image $image..." ${Yellow}
+        boxcenter ""
+        boxcenter ""
 
         plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 \
                     "@prev_id=$ROOTID;@image[_n]=$image"
         plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 \
                     "@prev_id=$ID1"
         plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 \
-                    "@prev_id=$ID2;@patientID=$ID3-12345"
+                    "@prev_id=$ID2;@patientID=$ID1-12345"
 
         if (( b_waitOnBranchFinish )) ; then
             waitForNodeState    "$CUBE" "finishedSuccessfully" $ID3 retState
+        fi
+
+        if (( b_printReport )) ; then
+            # get list of file resources for the prediction plugin (ID2)
+            dataInNode_get      file_resource "$CUBE"  $ID2 linksInNode
             echo -en "\033[2A\033[2K"
+            prediction=$(echo "$linksInNode"            |\
+                         grep "prediction-default.json" |\
+                         awk '{print $3}')
+            rm -f prediction-default.json 2>/dev/null
+            http -a chris:chris1234 --quiet --download  "$prediction"
+            final=$(cat prediction-default.json | jq .prediction --raw-output)
+            RESULT=$(cat prediction-default.json    |\
+                     sed -E 's/(.{70})/\1\n/g')
+            echo "$RESULT"                          | ./boxes.sh ${White}
+            case "$final" in
+                "normal")
+                    perc=$( cat prediction-default.json                     |\
+                            jq .Normal --raw-output                         |\
+                            xargs -i% printf 'scale=2 ; (%*10000)/100\n'    | bc)
+                    boxcenter "ANALYSIS: image $image is predicted to be normal at $perc percent." ${Green}
+                    ;;
+                "pneumonia")
+                    perc=$( cat prediction-default.json                     |\
+                            jq .Pneumonia --raw-output                      |\
+                            xargs -i% printf 'scale=2 ; (%*10000)/100\n'    | bc)
+                    boxcenter "ANALYSIS: image $image shows pneumonia at $perc percent." ${Yellow}
+                    ;;
+                "COVID-19")
+                    perc=$( cat prediction-default.json                     |\
+                            jq '.["COVID-19"]' --raw-output                 |\
+                            xargs -i% printf 'scale=2 ; (%*10000)/100\n'    | bc)
+                    boxcenter "ANALYSIS: image $image shows COVID-19 infection at $perc percent." ${Red}
+                    ;;
+            esac
+            boxcenter ""
+            boxcenter ""
+
+            windowBottom
         fi
 
     done
+    echo -en "\033[2A\033[2K"
     postRun_report
 windowBottom
 if (( b_respFail > 0 )) ; then exit 3 ; fi
