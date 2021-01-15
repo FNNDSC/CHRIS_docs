@@ -8,6 +8,39 @@
 source ./decorate.sh
 source ./cparse.sh
 
+function dep_check {
+    #
+    # ARGS
+    #       $1          string comma-separated list of dependencies
+    #
+    # DESC
+    #   Checks if each dependency (i.e. program) in the passed list
+    #   is existant on the current UNIX path. Silently updates the
+    #   success and failure variables b_resp[Success|Fail]
+    #
+    local deplist=$1
+    local status="checking"
+
+    deplist=$(echo $deplist | tr ',' ' ')
+    b_respSuccess=0
+    b_respFail=0
+    for dep in $deplist ; do
+        opBlink_feedback    "dependency check "                             \
+                            "::'$dep'"                                      \
+                            "on path-->"                                    \
+                            "checking"
+        windowBottom
+        type $dep 2>/dev/null >/dev/null
+        status=$?
+        opRet_feedback      "$status"                                       \
+                            "dependency check "                             \
+                            "::'$dep'"                                      \
+                            "on path-->"                                    \
+                            "found"
+    done
+    postDep_report
+}
+
 function pluginArray_filterFromWorkflow {
     #
     # ARGS
@@ -105,15 +138,16 @@ function waitForNodeState {
         b_notimeout=1
     fi
 
+    # echo -en "\033[2A\033[2K"
+    # boxcenter ""
     boxcenter ""
-    windowBottom
     status="scheduled"
     while (( b_poll )) ; do
         echo -en "\033[3A\033[2K"
-        opBlink_feedback    " $(date +%T), poll $pollCount "            \
+        opBlink_feedback    "$(date +%T), poll $pollCount"              \
                             "::Waiting on pinst $plugininstanceID..."   \
                             "state-->"                                  \
-                            "  ${status}"
+                            "${status}"
         search=$(
             chrispl-search  --for status                                \
                             --using id=$plugininstanceID                \
@@ -122,10 +156,10 @@ function waitForNodeState {
         )
         status=$(echo $search | awk '{print $3}')
         echo -en "\033[1A\033[2K"
-        opBlink_feedback    " $(date +%T), poll $pollCount "            \
+        opBlink_feedback    "$(date +%T), poll $pollCount"              \
                             "::Waiting on pinst $plugininstanceID..."   \
                             "state-->"                                  \
-                            "  ${status}"
+                            "${status}"
         windowBottom
         if [[ "$status" == "$state" ]] ; then break ; fi
         if (( b_notimeout )) ; then
@@ -150,12 +184,13 @@ function waitForNodeState {
     eval $__ret="'$status'"
 }
 
-function filesInNode_get {
+function dataInNode_get {
     #
     # ARGS
-    #       $1          CUBE instance to query
-    #       $2          pluginInstance ID
-    #       $3          file return string
+    #       $1          fname or file_resource
+    #       $2          CUBE instance to query
+    #       $3          pluginInstance ID
+    #       $4          file return string
     #
     # DESC
     #   Returns a string of all the files in a node.
@@ -163,29 +198,40 @@ function filesInNode_get {
     # PRECONDITIONS
     #   Assume that pluginInstanceID has finished successfully!
     #
-    local CUBE=$1
-    local plugininstanceID=$2
-    local __ret=$3
+    local target=$1
+    local CUBE=$2
+    local plugininstanceID=$3
+    local __ret=$4
     local query=""
+    local FOR=""
+    local ACROSS=""
 
     echo -en "\033[2A\033[2K"
 
-    opBlink_feedback    "  ${ADDRESS}:${PORT}  "                        \
-                        "::Getting output file list..."                 \
+    if [[ "$target" == "fname" ]] ; then
+        FOR="$target"
+        ACROSS="files"
+    else
+        FOR="$target"
+        ACROSS="links"
+    fi
+
+    opBlink_feedback    "${ADDRESS}:${PORT}"                            \
+                        "::Getting node data..."                        \
                         "op-->"                                         \
-                        "    query    "
+                        "query"
     windowBottom
     query=$(
-        chrispl-search  --for fname                                     \
+        chrispl-search  --for "$FOR"                                    \
                         --using plugin_inst_id=$plugininstanceID        \
-                        --across files                                  \
+                        --across "$ACROSS"                              \
                         --onCUBE "$CUBE"
     )
     echo -en "\033[3A\033[2K"
-    opSolid_feedback    "  ${ADDRESS}:${PORT}  "                        \
-                        "::File list collected..."                      \
+    opSolid_feedback    "${ADDRESS}:${PORT}"                            \
+                        "::Node data collected..."                      \
                         "result-->"                                     \
-                        "  $(echo "$query" | wc -l ) files  "
+                        "$(echo "$query" | wc -l ) values"
     eval $__ret="'$query'"
     windowBottom
 }
@@ -315,6 +361,7 @@ function plugin_run {
     local STATUSRUN
     local IFS
 
+    echo -en "\033[2A\033[2K"
     pluginArray_filterFromWorkflow  "a_feedflow[@]" "a_plugin"
     a_plugin=($a_plugin)
     argArray_filterFromWorkflow     "a_feedflow[@]" "a_arg"
@@ -333,8 +380,8 @@ function plugin_run {
             ARGSUB="$ARGS"
         fi
         cparse $PLUGIN "REPO" "CONTAINER" "MMN" "ENV"
-        opBlink_feedback " $ADDRESS:$PORT " "::CUBE->$PLUGIN"           \
-                         "op-->" " post run "
+        opBlink_feedback "$ADDRESS:$PORT" "::CUBE->$PLUGIN"             \
+                         "op-->" "posting"
         windowBottom
         cmd="chrispl-run --plugin name=$CONTAINER                       \
                             --args \""$ARGSUB"\"                        \
@@ -349,13 +396,15 @@ function plugin_run {
             ID=-1
         fi
         opRet_feedback  "$STATUSRUN"                                    \
-                        " $ADDRESS:$PORT " "::CUBE->$PLUGIN"            \
-                        "result-->" " pinst: $(echo $PLUGINRUN | awk '{print $3}')"
+                        "$ADDRESS:$PORT " "::CUBE->$PLUGIN"             \
+                        "result-->"                                     \
+                        "pinst: $(echo $PLUGINRUN| awk '{print $3}')"
     else
         boxcenter "No matching plugin was found in the feedflow spec." ${Red}
         ID="-1"
     fi
     eval $__ret="'$ID'"
+    windowBottom
 }
 
 function opBlink_feedback {
@@ -368,12 +417,13 @@ function opBlink_feedback {
     #
     # Pretty print some operation in a blink state
     #
-    leftID=$1
+    leftID=$(center "${1:0:18}" 18)
     op=$2
     action=$3
-    result=$4
+    result=$(center "${4:0:12}" 12)
 
     # echo -e ''$_{1..8}'\b0123456789'
+    # echo " --> $leftID <---"
     printf "\
 ${LightBlueBG}${White}[%*s]${NC}\
 ${LightCyan}%-*s\
@@ -396,10 +446,10 @@ function opSolid_feedback {
     #
     # Pretty print some operation in a solid state
     #
-    leftID=$1
+    leftID=$(center "${1:0:18}" 18)
     op=$2
     action=$3
-    result=$4
+    result=$(center "${4:0:12}" 12)
 
     # echo -e ''$_{1..8}'\b0123456789'
     printf "\
@@ -424,10 +474,10 @@ function opFail_feedback {
     #
     # Pretty print some operation in a failed state
     #
-    leftID=$1
+    leftID=$(center "${1:0:18}" 18)
     op=$2
     action=$3
-    result=$4
+    result=$(center "${4:0:12}" 12)
 
     # echo -e ''$_{1..8}'\b0123456789'
     printf "\
@@ -457,7 +507,8 @@ function failureReturn_summary {
     # Print the summary blurb on a group failure response
     #
     printf "${LightRed}%16s${Brown}%-64s${NC}\n"                            \
-        "$b_respFail" " operation(s) had a failure response."               | ./boxes.sh
+        "$b_respFail"                                                       \
+        " operation(s) had a failure response."                             | ./boxes.sh
     echo ""                                                                 | ./boxes.sh
 }
 
@@ -552,5 +603,24 @@ function postRun_report {
         boxcenter "for possible information.                          "  ${LightRed}
         boxcenter ""
         boxcenter "This feedflow will exit now with code 3.           "  ${Yellow}
+    fi
+}
+
+function postDep_report {
+    #
+    # Print a report after the dependencies have all been schedued.
+    #
+    boxcenter " "
+    if (( b_respSuccess > 0 )) ; then
+        successReturn_summary
+    fi
+    if (( b_respFail > 0 )) ; then
+        failureReturn_summary
+        boxcenter "Some required dependencies were not found in your  "  ${LightRed}
+        boxcenter "shell path and are required for this script to     "  ${LightRed}
+        boxcenter "correctly execute. Please manually install these   "  ${LightRed}
+        boxcenter "and try again.                                     "  ${LightRed}
+        boxcenter ""
+        boxcenter "This feedflow will exit now with code 4.           "  ${Yellow}
     fi
 }
