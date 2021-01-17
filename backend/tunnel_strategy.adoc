@@ -59,30 +59,34 @@ services:
   autossh-pfioh:
     image: jnovack/autossh
     environment:
-      - SSH_REMOTE_USER=premote
-      - SSH_REMOTE_HOST=cube.example.com
-      - SSH_MODE=-R
-      - SSH_REMOTE_PORT=26552
-      - SSH_TUNNEL_PORT=2055
-      - SSH_TARGET_HOST=pfioh
-      - SSH_TARGET_PORT=5055
-      - SSH_BIND_IP=*
-    volumes:
-      - ./ssh/id_rsa:/id_rsa:ro
+      SSH_REMOTE_USER: premote
+      SSH_REMOTE_HOST: cube.example.com
+      SSH_REMOTE_PORT: 22
+      SSH_MODE: -R
+      SSH_TARGET_HOST: pfioh
+      SSH_TARGET_PORT: 5055
+      SSH_TUNNEL_PORT: 2055
+      SSH_BIND_IP: "*"
+      SSH_KEY_FILE: /run/secrets/ssh-privatekey
+    secrets:
+      - ssh-privatekey
+    depends_on:
+      - pfioh
     restart: unless-stopped
   autossh-pman:
     image: jnovack/autossh
     environment:
-      - SSH_REMOTE_USER=premote
-      - SSH_REMOTE_HOST=cube.example.com
-      - SSH_MODE=-R
-      - SSH_REMOTE_PORT=26552
-      - SSH_TUNNEL_PORT=2010
-      - SSH_TARGET_HOST=pman
-      - SSH_TARGET_PORT=5010
-      - SSH_BIND_IP=*
-    volumes:
-      - ./ssh/id_rsa:/id_rsa:ro
+      SSH_REMOTE_USER: premote
+      SSH_REMOTE_HOST: cube.example.com
+      SSH_REMOTE_PORT: 22
+      SSH_MODE: -R
+      SSH_TARGET_HOST: pman
+      SSH_TARGET_PORT: 5010
+      SSH_TUNNEL_PORT: 2010
+      SSH_BIND_IP: "*"
+      SSH_KEY_FILE: /run/secrets/ssh-privatekey
+    secrets:
+      - ssh-privatekey
     restart: unless-stopped
   pfioh:
     image: fnndsc/pfioh
@@ -99,6 +103,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./FS/remote:/hostFS/storeBase
     restart: on-failure
+secrets:
+  ssh-privatekey:
+    file: ./host1.id_rsa
+  
 ----
 
 == Diagram
