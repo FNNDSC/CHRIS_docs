@@ -54,22 +54,50 @@ function pluginArray_filterFromWorkflow {
     #   by the caller.
     #
     local a_feedflow=("${!1}")
-    local __ret=$2
-    local a_list=()
+    local -n a_list=$2
+    local PLUGIN=""
+    local EL=""
 
     for EL in "${a_feedflow[@]}" ; do
-        EL="${EL//[$'\t\r\n ']}"
         if [[ ${EL:0:1} == [0-9]* ]] ; then
             PLUGIN=$(
                 echo "$EL" | xargs                  |\
                             awk -F\| '{print $2}'   |\
                             awk -F\: '{print $1}'
             )
+            PLUGIN="${PLUGIN:1}"
             a_list+=("$PLUGIN")
         fi
     done
-    str_array="${a_list[@]}"
-    eval $__ret="'$str_array'"
+}
+
+function argArray_filterFromWorkflow {
+    #
+    # ARGS
+    #       $1          feedflow array to filter
+    #
+    # DESG
+    #   Return a string that contains only the list of
+    #   plugin names from the feedflow specification
+    #   array. This return can be read into an array
+    #   by the caller.
+    #
+    local a_feedflow=("${!1}")
+    local -n a_list=$2
+    local ARG=""
+    local EL=""
+
+    for EL in "${a_feedflow[@]}" ; do
+        if [[ ${EL:0:1} == [0-9]* ]] ; then
+            ARG=$(
+                        printf "%s" "$EL" | xargs   |\
+                            awk -F\| '{print $2}'   |\
+                            awk -F\: '{print $2}'
+            )
+            ARG="${ARG:1}"
+            a_list+=("$ARG")
+        fi
+    done
 }
 
 function pluginName_filterFromWorkflow {
@@ -105,6 +133,46 @@ function pluginName_filterFromWorkflow {
     done
 }
 
+function criticalError_exit {
+    #
+    # ARGS
+    #       $1          exit code
+    #       $2          error message
+    #
+    # DESC
+    #   Report a critical error and exit to shell.
+    #
+
+    local exitCode="$1"
+    local errorMessage="$2"
+
+    echo -en "\033[2A\033[2K"
+    boxcenter "───────┤ ERROR ├───────" ${LightRedBG}${White}
+    boxcenter "$errorMessage"           ${LightRedBG}${White}
+    boxcenter ""
+    boxcenter "This script will now terminate to the system with code $exitCode."   ${NC}${White}
+    boxcenter ""
+    windowBottom
+    exit $exitCode
+}
+
+function id_check {
+    #
+    # ARGS
+    #       $1          code returned by POSTing a plugin run
+    #
+    # DESC
+    #   Checks the return plugin instance ID on a POST'ed job and
+    #   errors out if this ID is "-1".
+    #
+
+    ID=$1
+    if [[ $ID == "-1" ]] ; then
+        criticalError_exit 10 \
+        "The CUBE API reported a run failure on the POSTed plugin instance."
+    fi
+}
+
 function waitForNodeState {
     #
     # ARGS
@@ -131,15 +199,14 @@ function waitForNodeState {
     local b_notimeout=0
     local totalTime=0
 
-    if (( ! ${#pollIntervalSeconds} )) ; then
-        pollIntervalSeconds=5
-    fi
-    if (( ! ${#timeoutSeconds} )) ; then
-        b_notimeout=1
+    if (( ! ${#pollIntervalSeconds} )) ; then pollIntervalSeconds=5;    fi
+    if (( ! ${#timeoutSeconds} )) ;      then b_notimeout=1;            fi
+
+    if [[ $plugininstanceID == "-1" ]] ; then
+        criticalError_exit 10 \
+        "The CUBE API reported a run failure on the POSTed plugin instance."
     fi
 
-    # echo -en "\033[2A\033[2K"
-    # boxcenter ""
     boxcenter ""
     status="scheduled"
     while (( b_poll )) ; do
@@ -236,34 +303,18 @@ function dataInNode_get {
     windowBottom
 }
 
-function argArray_filterFromWorkflow {
-    #
-    # ARGS
-    #       $1          feedflow array to filter
-    #
-    # DESG
-    #   Return a string that contains only the list of
-    #   plugin names from the feedflow specification
-    #   array. This return can be read into an array
-    #   by the caller.
-    #
-    local a_feedflow=("${!1}")
-    local __ret=$2
-    local a_list=()
-
-    for EL in "${a_feedflow[@]}" ; do
-        EL="${EL//[$'\t\r\n ']}"
-        if [[ ${EL:0:1} == [0-9]* ]] ; then
-            PLUGIN=$(
-                echo "$EL" | xargs                  |\
-                            awk -F\| '{print $2}'  |\
-                            awk -F\: '{print $2}'
-            )
-            a_list+=("$PLUGIN")
-        fi
+function arrayValues_doubleToSingleQuote {
+    typeset -n _arr_in="$1"
+    for ((i=0; i<"${#_arr_in[@]}"; i++)); do
+        _arr_in[i]="${_arr_in[i]//\"/\'}"
     done
-    str_array="${a_list[@]}"
-    eval $__ret="'$str_array'"
+}
+
+function array_print {
+    local arr=("${!1}")
+    for ((i=0; i<"${#arr[@]}"; i++)); do
+        echo "$i: ${arr[$i]}"
+    done
 }
 
 function a_index {
@@ -308,7 +359,7 @@ function plugin_argsSub {
 
     local argTemplate=$1
     local argLookup=$2
-    local __ret=$3
+    local -n argSub=$3
     local IFS
 
     IFS=';' read -ra a_lookup <<< "$argLookup"
@@ -316,7 +367,9 @@ function plugin_argsSub {
         IFS='='; read -r key val <<< "$el"
         argTemplate=${argTemplate//"$key"/"$val"}
     done
-    eval $__ret="'$argTemplate'"
+        # argTemplate=$(echo "$argTemplate" | tr "'" '"')
+    argTemplate=$(echo "$argTemplate" | sed 's/; --/;--/g')
+    argSub=$argTemplate
 }
 
 function string_flatten {
@@ -333,14 +386,48 @@ function string_flatten {
     echo $str_input | tr -d '\n'
 }
 
+function plugin_runFromFile {
+    #
+    # ARGS
+    #       $1          command array to write file
+    #       $2          return string from running file
+    #
+    # DESC
+    #   Due to considerable difficulties in executing a command
+    #   string *within* a bash script (mostly relating to preserving)
+    #   possible embedded spaces in embedded argument strings to pass
+    #   down to the `chrispl-run` command, the next best solution was
+    #   to construct an explicit file script, source that script from
+    #   this script, and return the script output to the calling
+    #   method.
+    #
+    typeset -n _a_cmd="$1"
+    typeset -n _RUN="$2"
+    local plugin=$(echo ${_a_cmd[2]})
+    plugin=${plugin#"name="}
+    file=${plugin}-$(uuidgen).sh
+
+    argStr=${_a_cmd[4]}
+    argStr=${argStr:1:-1}
+    echo "chrispl-run \\" > $file
+    echo -e "\t\t--plugin   ${_a_cmd[2]} \\"        >> $file
+    echo -e "\t\t--args     \"$argStr\"  \\"        >> $file
+    echo -e "\t\t--onCUBE   '${_a_cmd[6]}'"         >> $file
+    _RUN=$(source $file)
+    if (( ! b_saveCalls )) ; then
+        rm $file
+    fi
+}
+
 function plugin_run {
     #
     # ARGS
     #       $1          (sub)string name of plugin to run
     #       $2          array of feedflow specification
     #       $3          CUBE instance details
-    #       $4          return ID of plugin instance
-    #       $5          optional arg substitution lookup
+    #       $4          return ID of plugin instance\
+    #       $5          amount to sleep after after posting
+    #       $6          optional arg substitution lookup
     #
     # DESC
     #   Run a plugin image with appropriate args (and substitions)
@@ -350,7 +437,8 @@ function plugin_run {
     local a_feedflow=("${!2}")
     local CUBE="$3"
     local __ret=$4
-    local SUB="$5"
+    local sleepAfterPluginRun=$5
+    local SUB="$6"
 
     local a_plugin=()
     local a_arg=()
@@ -361,17 +449,15 @@ function plugin_run {
     local STATUSRUN
     local IFS
 
+
     echo -en "\033[2A\033[2K"
     pluginArray_filterFromWorkflow  "a_feedflow[@]" "a_plugin"
-    a_plugin=($a_plugin)
     argArray_filterFromWorkflow     "a_feedflow[@]" "a_arg"
-    a_arg=($a_arg)
-
     pidx=$(a_index $SEARCH "a_feedflow[@]")
     CUBE=$(echo $CUBE | jq -Mc )
     pluginName_filterFromWorkflow "a_feedflow[@]" "$SEARCH" "pluginName"
     if [[ "$pidx" != "-1" ]] ; then
-        pidx=$(a_index $pluginName "a_plugin[@]")
+        # pidx=$(a_index $pluginName "a_plugin[@]")
         PLUGIN=${a_plugin[$pidx]}
         ARGS=${a_arg[$pidx]}
         if (( ${#SUB} )) ; then
@@ -383,12 +469,12 @@ function plugin_run {
         opBlink_feedback "$ADDRESS:$PORT" "::CUBE->$PLUGIN"             \
                          "op-->" "posting"
         windowBottom
-        cmd="chrispl-run --plugin name=$CONTAINER                       \
-                            --args \""$ARGSUB"\"                        \
-                            --onCUBE "$CUBE"
-        "
-        IFS=' ' read -ra a_cmd <<< "$cmd"
-        PLUGINRUN=$(${a_cmd[@]})
+        # Explicitly construct the command as a bash array
+        a_cmd[0]="chrispl-run";     a_cmd[1]="--plugin"
+                                    a_cmd[2]="name=$CONTAINER"
+                                    a_cmd[3]="--args";   a_cmd[4]="\"$ARGSUB\""
+                                    a_cmd[5]="--onCUBE"; a_cmd[6]="$CUBE"
+        plugin_runFromFile "a_cmd" PLUGINRUN
         STATUSRUN=$?
         if (( STATUSRUN == 0 )) ; then
             ID=$(echo $PLUGINRUN | awk '{print $3}')
@@ -405,6 +491,7 @@ function plugin_run {
     fi
     eval $__ret="'$ID'"
     windowBottom
+    sleep $sleepAfterPluginRun
 }
 
 function opBlink_feedback {

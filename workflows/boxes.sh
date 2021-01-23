@@ -10,10 +10,10 @@
 #   in line by line fashion -- useful to create the "body" of
 #   a box of text, for example:
 #
-#       │      Here is some text that          │▒ 
-#       │      is created in a box of          │▒ 
-#       │      some fixed width, with          │▒ 
-#       │      a shadow effect also!           │▒ 
+#       │      Here is some text that          │▒
+#       │      is created in a box of          │▒
+#       │      some fixed width, with          │▒
+#       │      a shadow effect also!           │▒
 #
 
 . ./decorate.sh
@@ -50,5 +50,5 @@ while IFS= read line; do
 	if (( TRAILLEN > 0 )) ; then
 		PADDING=$(head -c $TRAILLEN < /dev/zero | tr '\0' ' ')
 	fi
-	printf "${Yellow}│${lineColor}${line}${PADDING}${Yellow}│${Brown}▒${NC}\n"
+	printf "${Yellow}│${lineColor}${line}${PADDING}${NC}${Yellow}│${Brown}▒${NC}\n"
 done
