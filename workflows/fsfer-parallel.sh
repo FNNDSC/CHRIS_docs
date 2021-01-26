@@ -40,7 +40,7 @@ declare -a a_WORKFLOWSPEC=(
 
     "1*_n:3*_n:l1|
     fnndsc/pl-fastsurfer_inference: ARGS;
-                                --multi=subjects;;
+                                --multi=subjects;
                                 --previous_id=@prev_id"
 
     "3*_n:4*_n:l1|
@@ -66,57 +66,7 @@ declare -a a_WORKFLOWSPEC=(
 
 WORKFLOW=\
 '{
-
-    "meta": {
-        "loops":    [
-            {
-                "l1":   {
-                    "var":      "n",
-                    "iterate":  [1, 5]
-                }
-            }
-        ]
-    },
-    "feed": {
-        "tree": [
-            {
-                "node_previous":    { "id": 0},
-                "node_self":        { "id": 0},
-                "container":        "fnndsc/pl-lungct",
-                "args":             ["--NOARGS"]
-            },
-            {
-                "node_previous":    { "id": 0},
-                "node_self":        { "id": 1,  "loop": "l1" },
-                "container":        "fnndsc/pl-med2img",
-                "args":             [
-                                        "--inputFile=@image[_n]",
-                                        "--convertOnlySingleDICOM",
-                                        "--previous_id=@prev_id"
-                                    ]
-            },
-            {
-                "node_previous":    { "id": 1,  "loop": "l1" },
-                "node_self":        { "id": 2,  "loop": "l1" },
-                "container":        "fnndsc/pl-covidnet",
-                "args":             [
-                                        "--imagefile=sample.png",
-                                        "--previous_id=@prev_id"
-                                    ]
-            },
-            {
-                "node_previous":    { "id": 2,  "loop": "l1" },
-                "node_self":        { "id": 3,  "loop": "l1" },
-                "container":        "fnndsc/pl-pdfgeneration",
-                "args":             [
-                                        "--imagefile=sample.png",
-                                        "--patientId=@patientID",
-                                        "--previous_id=@prev_id"
-                                    ]
-            },
-        ]
-    }
-
+        "message": "This is a WIP"
 }'
 
 declare -a a_PLUGINS=()
@@ -197,6 +147,10 @@ ARGS
     services when large amount of plugins are being dispatched
     concurrently.
 
+    [-S]
+    If specified, save each plugin POST command on the filesystem. Useful
+    for debugging.
+
     [-W]
     If specified, will wait at the end of a single branch for success
     of termination node before building a subsequent branch. This
@@ -214,10 +168,21 @@ ARGS
     pl-covidnet. Note that this implies a [-W].
 
     [-G <graphvizDotFile>]
-    If specified, write a graphviz .dot file that describes the workflow
-    and is suitable for rendering by graphviz parsers, e.g.
+    If specified, write two graphviz .dot files called
+
+                        <graphvizDotFile>-nodes.dot
+                     <graphvizDotFile>-nodes-args.dot
+
+    that describes the workflow in graphviz format. The first dot file
+    contains only the nodes in the tree, while the second contains the nodes
+    with graph edges labeled with the CLI args denoting the tranition from
+    one node to another.
+
+    These dot files are suitable for rendering by graphviz parsers, e.g.
 
                 http://dreampuf.github.io/GraphvizOnline
+                http://viz-js.com
+
 
     [-i <listOflLungImageToProcess>]
     Runs the inference pipeline of each of the comma separated images
@@ -264,17 +229,43 @@ EXAMPLES
 
     Typical execution:
 
-    $ ./covidnet.sh  -C '{
-               \"protocol\":     \"http\",
-               \"port\":         \"8000\",
-               \"address\":      \"megalodon.local\",
-               \"user\":         \"chris\",
-               \"password\":     \"chris1234\"
-    }'
+        $ ./fsfer-parallel.sh  -C '{
+                   \"protocol\":     \"http\",
+                   \"port\":         \"8000\",
+                   \"address\":      \"megalodon.local\",
+                   \"user\":         \"chris\",
+                   \"password\":     \"chris1234\"
+        }'
 
     or equivalently:
 
-    $ ./covidnet.sh -a megalodon.local
+        $ ./fsfer-parallel.sh -a megalodon.local
+
+TIMING CONSIDERATIONS
+
+    While this client script should ideally not concern itself with execution
+    concerns beyond the logical structure of a feedflow, some notes are
+    important:
+
+        * GPU resources might be such that only one node can use at a time;
+        * Too many apps POSTed in quick succession *might* overwhelm the
+          scheduler;
+
+    To mitigate against GPU clashes, for many parallel branches, execution
+    should wait for each branch to conclude before moving to the next.
+    This is enabled with a '-W' flag.
+
+    To not overwhelm the scheduler, it is a good idea to pause for a few
+    seconds after POSTing each app to the backend with a '-s 3' (for 3s
+    pause) flag.
+
+    Thus,
+
+        $ ./fsfer-parallel.sh -a megalodon.local -W -s 3 -G feed
+
+    where the '-G feed' also produces two graphviz dot files suitable for
+    rendering with a graphviz viewer.
+
 
 "
 
@@ -292,18 +283,19 @@ CUBE_FMT='{
         "password":     "%s"
 }'
 
-GRAPHVIZ="
-digraph G {
+GRAPHVIZHEADER='digraph G {
+    rankdir="LR";
 
-  subgraph cluster_0 {
-    style=filled;
-    color=lightgrey;
-    node [style=filled,color=white,fontname='mono',fontsize=8];
-    %s
-    label = 'ChRIS COVIDNET Feedgraph';
-  }
-}
-"
+    subgraph cluster_0 {
+        style=filled;
+        color=lightgrey;
+        label = "ChRIS Parallel Segmentation Feedgraph";
+        node [style=filled,fillcolor=white,fontname="mono",fontsize=5];
+        edge [fontname="mono", fontsize=5];
+'
+GRAPHVIZBODY=""
+GRAPHVIZBODYARGS=""
+
 
 declare -i b_respSuccess=0
 declare -i b_respFail=0
@@ -489,64 +481,31 @@ title -d 1 "Building and Scheduling workflow..."
 
         plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
                     "@prev_id=$ROOTID;@SUBJID=$image" && id_check $ID1
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
+                    "a_WORKFLOWSPEC[@]"
 
         plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun\
                     "@prev_id=$ID1;@SUBJID=$image" && id_check $ID2
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
+                    "a_WORKFLOWSPEC[@]"
 
         plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun\
                     "@prev_id=$ID1;@SUBJID=$image" && id_check $ID3
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":3;$ID3" \
+                    "a_WORKFLOWSPEC[@]"
 
         plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@SUBJID=$image" && id_check $ID3
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4" \
+                    "a_WORKFLOWSPEC[@]"
 
         plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@SUBJID=$image" && id_check $ID3
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":5;$ID5" \
+                    "a_WORKFLOWSPEC[@]"
 
         if (( b_waitOnBranchFinish )) ; then
             waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState
-        fi
-
-        if (( b_printReport || b_printJSONprediction )) ; then
-            # get list of file resources for the prediction plugin (ID2)
-            dataInNode_get      file_resource "$CUBE"  $ID2 linksInNode
-            echo -en "\033[2A\033[2K"
-            prediction=$(echo "$linksInNode"            |\
-                         grep "prediction-default.json" |\
-                         awk '{print $3}')
-            rm -f prediction-default.json 2>/dev/null
-            http -a chris:chris1234 --quiet --download  "$prediction"
-            final=$(cat prediction-default.json | jq .prediction --raw-output)
-            RESULT=$(cat prediction-default.json    |\
-                     sed -E 's/(.{70})/\1\n/g')
-            if (( b_printJSONprediction )) ; then
-                echo "$RESULT"                      | ./boxes.sh ${LightGray}
-            fi
-            if (( b_printReport )) ; then
-              case "$final" in
-              "normal")
-                    perc=$( cat prediction-default.json                     |\
-                            jq .Normal --raw-output                         |\
-                            xargs -i% printf 'scale=2 ; (%*10000)/100\n'    | bc)
-                    boxcenter "ANALYSIS: image $image is predicted to be normal at $perc percent." ${Green}
-                    ;;
-                "pneumonia")
-                    perc=$( cat prediction-default.json                     |\
-                            jq .Pneumonia --raw-output                      |\
-                            xargs -i% printf 'scale=2 ; (%*10000)/100\n'    | bc)
-                    boxcenter "ANALYSIS: image $image shows pneumonia at $perc percent." ${LightPurple}
-                    ;;
-                "COVID-19")
-                    perc=$( cat prediction-default.json                     |\
-                            jq '.["COVID-19"]' --raw-output                 |\
-                            xargs -i% printf 'scale=2 ; (%*10000)/100\n'    | bc)
-                    boxcenter "ANALYSIS: image $image shows COVID-19 infection at $perc percent." ${Red}
-                    ;;
-              esac
-            fi
-            boxcenter ""
-            boxcenter ""
-
-            windowBottom
         fi
 
     done
@@ -554,3 +513,10 @@ title -d 1 "Building and Scheduling workflow..."
     postRun_report
 windowBottom
 if (( b_respFail > 0 )) ; then exit 3 ; fi
+
+if (( b_graphviz )) ; then
+    graphVis_printFile "$GRAPHVIZHEADER"    \
+                        "$GRAPHVIZBODY"     \
+                        "$GRAPHVIZBODYARGS" \
+                        "$GRAPHVIZFILE"
+fi
