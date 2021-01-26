@@ -419,6 +419,83 @@ function plugin_runFromFile {
     fi
 }
 
+function graphVis_printFile {
+    #
+    # ARGS
+    #       $1          graphviz header string
+    #       $2          graphviz body with only nodes
+    #       $3          graphviz body with nodes and args
+    #       $4          output file stem
+    #
+    # DESC
+    #   Create a graphviz representation of the feed, suitable
+    #   for rendering by any graphviz dot file interpreter, i.e.
+
+    local GRAPHVIZHEADER=$1
+    local GRAPHVIZBODY=$2
+    local GRAPHVIZBODYARGS=$3
+    local GRAPHVIZFILE=$4
+
+    echo "$GRAPHVIZHEADER" > ${GRAPHVIZFILE}-node.dot
+    echo "$GRAPHVIZHEADER" > ${GRAPHVIZFILE}-node-args.dot
+    echo "$GRAPHVIZBODY" >> ${GRAPHVIZFILE}-node.dot
+    echo "$GRAPHVIZBODYARGS" >> ${GRAPHVIZFILE}-node-args.dot
+    echo -e "    }\n}" >> ${GRAPHVIZFILE}-node.dot
+    echo -e "    }\n}" >> ${GRAPHVIZFILE}-node-args.dot
+
+}
+
+function digraph_add {
+    #
+    # ARGS
+    #       $1          graphviz string without edge args to edit in place
+    #       $2          graphviz string with edge args to edit in place
+    #       $3          (sub)string name of parent node in workflow spec
+    #       $4          (sub)string name of child node in workflow spec
+    #       $5          array of workflow specification
+    #
+    # DESC
+    #   Create a graphviz representation of the feed, suitable
+    #   for rendering by any graphviz dot file interpreter, i.e.
+    #
+    #                           viz-js.com
+
+    local -n GRAPH="$1"
+    local -n GRAPHARGS="$2"
+    local parentid="$3"
+    local parent=""
+    local PARENT=""
+    local PID=""
+    local childid=$4
+    local child=""
+    local CHILD=""
+    local CID=""
+    local a_feedflow=("${!5}")
+    local IFS=""
+    local LABELARGS=""
+    local a_plugin=()
+    local a_arg=()
+
+    IFS=";" read -r parent PID <<<$parentid
+    IFS=";" read -r child CID <<<$childid
+    pluginArray_filterFromWorkflow  "a_feedflow[@]" "a_plugin"
+    argArray_filterFromWorkflow     "a_feedflow[@]" "a_arg"
+    ppidx=$(a_index $parent "a_feedflow[@]")
+    pcidx=$(a_index $child "a_feedflow[@]")
+    PARENT=${a_plugin[$ppidx]}
+    PARENT=$(echo "$PARENT" | awk -F\/ '{print $2}' | awk -F \- '{print $2}')
+    CHILD=${a_plugin[$pcidx]}
+    CHILD=$(echo "$CHILD" | awk -F\/ '{print $2}' | awk -F \- '{print $2}')
+    ARGS=$(echo "${a_arg[$pcidx]}" | sed 's/;/\\l/g')
+    LABELARGS="[label = \"$ARGS\"]"
+
+    LINE="\"${PARENT}\\n${PID}\" -> \"${CHILD}\\n${CID}\";"
+    LINEARGS="\"${PARENT}\\n${PID}\" -> \"${CHILD}\\n${CID}\" $LABELARGS;"
+
+    GRAPH=$(printf "%s\n\t%s" "$GRAPH" "$LINE")
+    GRAPHARGS=$(printf "%s\n\t%s" "$GRAPHARGS" "$LINEARGS")
+}
+
 function plugin_run {
     #
     # ARGS
@@ -482,7 +559,7 @@ function plugin_run {
             ID=-1
         fi
         opRet_feedback  "$STATUSRUN"                                    \
-                        "$ADDRESS:$PORT " "::CUBE->$PLUGIN"             \
+                        "$ADDRESS:$PORT" "::CUBE->$PLUGIN"              \
                         "result-->"                                     \
                         "pinst: $(echo $PLUGINRUN| awk '{print $3}')"
     else
