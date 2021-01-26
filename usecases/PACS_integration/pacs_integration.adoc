@@ -4,6 +4,191 @@
 This document describes, in some detail, the steps required to connect a ChRIS instance to a PACS resource. The intended audience is system's developers.
 
 
-== Introduction
+== Setting environment variables
+----
+export HOST_IP=$(ip route | grep -v docker | awk '{if(NF==11) print $9}')
+export HOST_PORT=4055
+----
+Make note of the values of each of these variables as some of the steps that follow require manual insertion of the values.
 
+== Setting up Orthanc
 
+=== Clone the `orthanc-fnndsc` repo
+----
+git clone https://github.com/FNNDSC/orthanc-fnndsc.git
+----
+
+=== Switch to the `persistent-db` branch
+----
+cd orthanc-fnndsc
+git checkout persistent-db
+----
+
+=== Set the list of DICOM Modalities in `orthanc.json`
+Ensure that the following setting is listed under the `DicomModalities` block of `orthanc.json`, being sure to replace `<HOST_IP>` with its appropriate value.
+----
+  "DicomModalities" : {
+    /**
+     * CHIPS CALLING AET.
+     * Dicom listener running on 
+     **/
+    "chips" : [ "CHIPS", "<HOST_IP>", 10402 ]
+    
+    ...
+
+  },
+----
+
+=== Start `orthanc`
+----
+docker-compose up
+----
+An alternative method that might provide a bit more guidance in starting up `orthanc` is to run the makefile.
+----
+sudo ./make.sh -h ${HOST_IP}:10402
+----
+
+=== Push DICOM data to `orthanc`
+Navigate to `http://localhost:8042` in a browser and sign into the `orthanc` web GUI. Use `orthanc` as the username and password. Upload DICOM files on the "Upload" page.
+
+== Setting up `pfdcm`
+
+=== Install `pfdcm`
+Since the system requires the installation of some system-level companion services, the recommend vector is via the docker mechanism.
+----
+docker pull fnndsc/pfdcm
+----
+
+=== Start `pfdcm`
+----
+docker run --name pfdcm     \
+            -v /home:/Users \
+            --rm -ti        \
+            fnndsc/pfdcm    \
+            --forever --httpResponse
+----
+
+It may be necessary to add a `--network="host"` flag to allow `orthanc` to be reachable by `pypx` within its container. Note that this should only be used for development purposes:
+----
+docker run --name pfdcm     \
+            -v /home:/Users \
+            --network="host"\
+            --rm -ti        \
+            fnndsc/pfdcm    \
+            --forever --httpResponse
+----
+
+=== Set internal values specifying the remote PACS host
+Be sure to replace `<HOST_IP>` and `<HOST_PORT>` with their respective values.
+----
+docker run --rm --name pfurl fnndsc/pfurl --verb POST \
+      --raw \
+      --http ${HOST_IP}:${HOST_PORT}/api/v1/cmd   \
+      --jsonwrapper 'payload' \
+      --msg \
+'{  "action": "internalctl",
+    "meta": {
+                "var":     "/PACS",
+                "set":     {
+                             "orthanc" : {
+                                  "serverIP": "<HOST_IP>",
+                                  "aet": "CHIPS",
+                                  "aet_listener": "CHIPS",
+                                  "aec": "ORTHANC",
+                                  "serverPort": "<HOST_PORT>"
+                               }
+                           }
+            }
+}'
+----
+
+=== Set up the listener infrastructure
+----
+docker run --rm --name pfurl fnndsc/pfurl --verb POST \
+        --raw                                   \
+        --http ${HOST_IP}:${HOST_PORT}/api/v1/cmd   \
+        --jsonwrapper 'payload'                 \
+        --msg                                   \
+        '{  
+            "action": "xinetd",
+            "meta": {
+                "object" : "service",
+                "do":      "everything"            
+            }
+        }'
+----
+
+=== Check the internal data tree
+The following command can be run to check the state of the tree.
+----
+docker run --rm --name pfurl fnndsc/pfurl   --verb POST                             \
+        --raw                                   \
+        --http ${HOST_IP}:${HOST_PORT}/api/v1/cmd       \
+        --jsonwrapper 'payload'                 \
+        --msg                                   \
+        '{  
+            "action": "internalctl", 
+            "meta": 
+            {
+                "var":     "/",
+                "get":      "value"
+            }
+        }'
+----
+
+== Query the PACS server
+=== Query by `PatientID`
+Replace `<patient-id>` with the desired PatientID. 
+----
+docker run --rm --name pfurl fnndsc/pfurl --verb POST --raw \
+            --http ${HOST_IP}:${HOST_PORT}/api/v1/cmd     \
+            --jsonwrapper 'payload'    \
+            --msg '{  
+            "action": "PACSinteract",          
+            "meta": {
+                "do":  "query",
+                "on" : {
+                   "PatientID": "<patient-id>"
+                },
+                "PACS" : "orthanc"
+            }
+        }'
+----
+
+== Retrieve from the PACS server
+=== Retrieve by `PatientID`
+Use the `<study-instance-uid>` and `<series-instance-uid>` obtained from a query to retrieve the PACS files.
+----
+docker run --rm --name pfurl fnndsc/pfurl   --verb POST  \
+        --raw                                   \
+        --http ${HOST_IP}:${HOST_PORT}/api/v1/cmd        \
+        --jsonwrapper 'payload'                 \
+        --msg '{  
+            "action": "PACSinteract",          
+            "meta": {
+                "do":  "retrieve",
+                "on" : {
+                    "StudyInstanceUID":  "<study-instance-uid>",
+                    "SeriesInstanceUID": "<series-instance-uid>"
+                },
+                "PACS" : "orthanc"
+            }
+        }'
+----
+=== Check status of PACS retrieve
+----
+docker run --rm --name pfurl fnndsc/pfurl   --verb POST  \
+        --raw                                   \
+        --http ${HOST_IP}:${HOST_PORT}/api/v1/cmd       \
+        --jsonwrapper 'payload'                 \
+        --msg '{  
+            "action": "PACSinteract",          
+            "meta": {
+                "do":  "retrieveStatus",
+                "on" : {
+                   "series_uid": "<series-instance-uid>"
+                 },
+                "PACS" : "orthanc"
+            }
+        }'
+----
