@@ -40,7 +40,8 @@ declare -a a_WORKFLOWSPEC=(
 
     "1*_n:3*_n:l1|
     fnndsc/pl-fastsurfer_inference: ARGS;
-                                --multi=subjects;
+                                --subjectDir=subjects;
+                                --copyInputImage;
                                 --previous_id=@prev_id"
 
     "3*_n:4*_n:l1|
