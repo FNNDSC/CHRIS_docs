@@ -526,7 +526,6 @@ function plugin_run {
     local STATUSRUN
     local IFS
 
-
     echo -en "\033[2A\033[2K"
     pluginArray_filterFromWorkflow  "a_feedflow[@]" "a_plugin"
     argArray_filterFromWorkflow     "a_feedflow[@]" "a_arg"
@@ -552,16 +551,16 @@ function plugin_run {
                                     a_cmd[3]="--args";   a_cmd[4]="\"$ARGSUB\""
                                     a_cmd[5]="--onCUBE"; a_cmd[6]="$CUBE"
         plugin_runFromFile "a_cmd" PLUGINRUN
-        STATUSRUN=$?
-        if (( STATUSRUN == 0 )) ; then
-            ID=$(echo $PLUGINRUN | awk '{print $3}')
+        ID=$(echo $PLUGINRUN | awk '{print $3}')
+        if [[ $ID == "failed" ]] ; then
+            STATUSRUN=1
         else
-            ID=-1
+            STATUSRUN=0
         fi
         opRet_feedback  "$STATUSRUN"                                    \
                         "$ADDRESS:$PORT" "::CUBE->$PLUGIN"              \
                         "result-->"                                     \
-                        "pinst: $(echo $PLUGINRUN| awk '{print $3}')"
+                        "pinst: $ID"
     else
         boxcenter "No matching plugin was found in the feedflow spec." ${Red}
         ID="-1"
