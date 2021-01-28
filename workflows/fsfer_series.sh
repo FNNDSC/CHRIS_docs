@@ -103,28 +103,13 @@ SYNPOSIS
                         [-R]                                \\
                         [-q]
 DESC
-  'fsfer_series.sh' posts a workflow based off COVID-NET to CUBE:
+  'fsfer_series.sh' posts a workflow based off GE pipeline to CUBE:
 
-    The FS plugin, ``pl-lungct``, generates an output directory containing
-    several candidate images. This workflow will process each of those
-    images, resulting in a fanned tree execution toplogy.
-    By specifying a specific image in the [-i <lungImageToProcess>], only
-    one branch will be created.
-    Note, this does require some implicit knowledge since the user of
-    this script would need to know which images exist. By running this
-    script with a ``-q``, a hard coded list of available images to process
-    is printed.
+    The FS plugin, ``pl-brainmgz``, generates an output directory containing
+    several candidate subjects with brain.mgz files. This workflow will process 
+    each of those mgz, resulting in a fanned tree execution toplogy.
+    
 ARGS
-    [-W]
-    If specified, will wait at the end of a single branch for success
-    of termination node before building a subsequent branch. This
-    demonstrates how to script wait functionality. This logic can be
-    used for simulating a delay while waiting for  a scarce computing
-    resource (like a GPU) to be released for subsequent branches to
-    use.
-    [-R]
-    If specified, print a final report of the prediction for the image
-    being processed on a given branch. Note that this implies a [-W].
     [-G <graphvizDotFile>]
     If specified, write a graphviz .dot file that describes the workflow
     and is suitable for rendering by graphviz parsers, e.g.
@@ -132,7 +117,7 @@ ARGS
     [-i <listOflLungImageToProcess>]
     Runs the inference pipeline of each of the comma separated images
     in the <listOfLungImagesToProcess string. Note these images *MUST*
-    be valid image(s) that exists in the output of ``pl-lungct``.
+    be valid image(s) that exists in the output of ``pl-brainmgz``.
     To see a list of valid images run this script with a ``-q``.
     [-q]
     Print a list of valid images and exit.
@@ -163,7 +148,7 @@ ARGS
       string 'localhost' can be problematic.
 EXAMPLES
     Typical execution:
-    $ ./covidnet.sh  -C '{
+    $ ./fsfer_series.sh  -C '{
                \"protocol\":     \"http\",
                \"port\":         \"8000\",
                \"address\":      \"117.local\",
@@ -171,7 +156,7 @@ EXAMPLES
                \"password\":     \"chris1234\"
     }'
     or equivalently:
-    $ ./covidnet.sh -a 117.local
+    $ ./fsfer_series.sh -a 117.local
 "
 
 
