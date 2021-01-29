@@ -60,7 +60,7 @@ declare -a a_WORKFLOWSPEC=(
     "3*_n:5*_n:l1|
     fnndsc/pl-mgz2lut_report:   ARGS;
                                 --file_name=@SUBJID/aparc.DKTatlas+aseg.deep.mgz;
-                                --report_types=txt,html;
+                                --report_types=txt,html,pdf;
                                 --previous_id=@prev_id"
 
 )
@@ -111,7 +111,7 @@ DESC
                               ███:0                             pl-brainmgz
             __________________/│\_____..._______..._
          _ /     _ /     _ /   |   \_      \_        \_
-        /       /       /      │      \  ...  \    ...  \
+        /       /       /      │      \  ...  \    ...  \ 
        ↓       ↓       ↓       ↓       ↓       ↓         ↓
       ███     ███     ███     ███     ███     ███       ███ :1  pl-pfdorun
       /│      /│      /│      /│      /│      /│        /│
