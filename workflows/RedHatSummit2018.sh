@@ -1,13 +1,52 @@
 #!/bin/bash
 #
 
+source ./ffe.sh
 
-declare -a a_PLUGINS=(
-    "fnndsc/pl-mri10yr06mo01da_normal"
-    "fnndsc/pl-freesurfer_pp"
-    "fnndsc/pl-mpcs"
-    "fnndsc/pl-z2labelmap"
+
+# \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+# start feedflow specification section
+# |||||||||||||||||||||||||||||||||||||
+#
+# The following array declares the specific containers in the workflow
+# as well as the arguments to be passed to each. This is a WIP attempt
+# to templatize/describe feedflow structure.
+#
+declare -a a_WORKFLOWSPEC=(
+    "0:0|
+    fnndsc/pl-mri10yr06mo01da_normal:   NOARGS"
+
+    "0:1|
+    fnndsc/pl-freesurfer_pp:            ARGS;
+                                        --ageSpec=10-06-01;
+                                        --copySpec=sag,cor,tra,stats,3D,mri,surf;
+                                        --previous_id=@prev_id"
+
+    "1:2*_n:l1|
+    fnndsc/pl-mpcs:                     ARGS;
+                                        --random;
+                                        --seed=1;
+                                        --posRange=3.0;
+                                        --negRange=-3.0;
+                                        --previous_id=@prev_id"
+
+    "2*_n:3*_n:l1|
+    fnndsc/pl-z2labelmap:               ARGS;
+                                        --imageSet=../data/set1;
+                                        --negColor=B;
+                                        --posColor=R;
+                                        --previous_id=@prev_id"
 )
+
+declare -a a_PLUGINS=()
+declare -a a_ARGS=()
+pluginArray_filterFromWorkflow  "a_WORKFLOWSPEC[@]" "a_PLUGINS"
+argArray_filterFromWorkflow     "a_WORKFLOWSPEC[@]" "a_ARGS"
+
+# ||||||||||||||||||||||||||||||||||
+# end feedflow specification section
+# //////////////////////////////////
+
 
 SYNOPSIS="
 
@@ -17,34 +56,81 @@ NAME
 
 SYNPOSIS
 
-  RedHatSummit2018.sh           [-C <CUBEjsonDetails>]    \\
-                                [-l <N>]
+  RedHatSummit2018.sh   [-l <N>]                            \\
+                        [-C <CUBEjsonDetails>]              \\
+                        [-r <protocol>]                     \\
+                        [-p <port>]                         \\
+                        [-a <cubeIP>]                       \\
+                        [-u <user>]                         \\
+                        [-w <passwd>]                       \\
+                        [-G <graphvizDotFile>]              \\
+                        [-i <listOfLungImagesToProcess>]    \\
+                        [-s <sleepAfterPluginRun>]
 
 DESC
 
   'RedHatSummit2018.sh' posts a workflow to a CUBE instance that
   implements the following:
 
-                             ⬤:1          pl-mri10yr06mo01da_normal
+                             ⬤:0          pl-mri10yr06mo01da_normal
                              │
                              │
                              ↓
-                             ⬤:2          pl-freesurfer_pp
+                             ⬤:1          pl-freesurfer_pp
                             ╱│╲
                            ╱ │ ╲
                           ╱  │  ╲
                          ╱   │   ╲
                         ╱    │    ╲
                        ↓     ↓     ↓
-                       ⬤:3   ⬤:4   ⬤:5    pl-mpcs
+                       ⬤:2   ⬤:4   ⬤:6    pl-mpcs
                        │     │     │
                        ↓     ↓     ↓
-                       ⬤:6   ⬤:7   ⬤:8    pl-z2labelmap
+                       ⬤:3   ⬤:5   ⬤:7    pl-z2labelmap
 
 ARGS
 
     [-l <N>]
     Create <N> branches. Default is 3.
+
+    [-s <sleepAfterPluginRun>]
+    Default is '0'. Adds an explicit system ``sleep`` after executing
+    a plugin. This can be useful in not overloading the ancillary
+    services when large amount of plugins are being dispatched
+    concurrently.
+
+    [-S]
+    If specified, save each plugin POST command on the filesystem. Useful
+    for debugging.
+
+    [-G <graphvizDotFile>]
+    If specified, write two graphviz .dot files called
+
+                        <graphvizDotFile>-nodes.dot
+                     <graphvizDotFile>-nodes-args.dot
+
+    that describes the workflow in graphviz format. The first dot file
+    contains only the nodes in the tree, while the second contains the nodes
+    with graph edges labeled with the CLI args denoting the tranition from
+    one node to another.
+
+    These dot files are suitable for rendering by graphviz parsers, e.g.
+
+                http://dreampuf.github.io/GraphvizOnline
+                http://viz-js.com
+
+    [-r <protocol>]         (http)
+    [-p <port>]             (8000)
+    [-a <cubeIP>]           (%HOSTIP)
+    [-u <cubeUser>]         (chris)
+    [-w <cubeUserPasswd>]   (chris1234)
+    A set of values to specify the details of the CUBE instance to use
+    for running the workflow. Each of the above has (defaults) as shown.
+    This information can also be specified by passing a JSON string with
+    the [-C <CUBEjsonDetails>].
+
+    Using one of these specific args, however, is generally simpler. Most
+    often, the [-a <cubeIP>] will be used.
 
     [-C <CUBEjsonDetails>]
 
@@ -68,192 +154,100 @@ EXAMPLES
 
     Typical execution:
 
-    $ ./RedHatSummit2018.sh  -C '{
-               \"protocol\":     \"http\",
-               \"port\":         \"8000\",
-               \"address\":      \"megalodon.local\",
-               \"user\":         \"chris\",
-               \"password\":     \"chris1234\"
-    }'
+        $ ./RedHatSummit2018.sh  -C '{
+                   \"protocol\":     \"http\",
+                   \"port\":         \"8000\",
+                   \"address\":      \"megalodon.local\",
+                   \"user\":         \"chris\",
+                   \"password\":     \"chris1234\"
+        }'
+
+    or equivalently:
+
+        $ ./RedHatSummit2018.sh -a megalodon.local
 
 "
 
-source ./decorate.sh
-source ./cparse.sh
+PROTOCOL="http"
+PORT="8000"
+ADDRESS="%%HOSTIP"
+USER="chris"
+PASSWD="chris1234"
 
-CUBE='{
-        "protocol":     "http",
-        "port":         "8000",
-        "address":      "%HOSTIP",
-        "user":         "chris",
-        "password":     "chris1234"
+CUBE_FMT='{
+        "protocol":     "%s",
+        "port":         "%s",
+        "address":      "%s",
+        "user":         "%s",
+        "password":     "%s"
 }'
+
+GRAPHVIZHEADER='digraph G {
+    rankdir="LR";
+
+    subgraph cluster_0 {
+        style=filled;
+        color=lightgrey;
+        label = "ChRIS COVID-NET Graph";
+        node [style=filled,fillcolor=white,fontname="mono",fontsize=8];
+        edge [fontname="mono", fontsize=8];
+'
+GRAPHVIZBODY=""
+GRAPHVIZBODYARGS=""
 
 declare -i b_respSuccess=0
 declare -i b_respFail=0
 declare -i STEP=0
+declare -i b_CUBEjson=0
+declare -i b_graphviz=0
+declare -i sleepAfterPluginRun=0
+declare -i b_saveCalls=0
+IMAGESTOPROCESS=""
+GRAPHVIZFILE=""
 declare -i branches=3
 
-while getopts "C:l:x" opt; do
+while getopts "C:G:l:xr:p:a:u:w:s:S" opt; do
     case $opt in
-        C) CUBE=$OPTARG                         ;;
+        C) b_CUBEjson=1
+           CUBEJSON=$OPTARG                     ;;
         l) branches=$OPTARG                     ;;
+        G) b_graphviz=1
+           GRAPHVIZFILE=$OPTARG                 ;;
+        S) b_saveCalls=1                        ;;
+        s) sleepAfterPluginRun=$OPTARG          ;;
+        r) PROTOCOL=$OPTARG                     ;;
+        p) PORT=$OPTARG                         ;;
+        a) ADDRESS=$OPTARG                      ;;
+        u) USER=$OPTARG                         ;;
+        w) PASSWD=$OPTARG                       ;;
         x) echo "$SYNOPSIS"; exit 0             ;;
+        *) exit 1                               ;;
     esac
 done
+
+
+CUBE=$(printf "$CUBE_FMT" "$PROTOCOL" "$PORT" "$ADDRESS" "$USER" "$PASSWD")
+if (( b_CUBEjson )) ; then
+    CUBE="$CUBEJSON"
+fi
+ADDRESS=$(echo $CUBE | jq -r .address)
 
 # Global variable that contains the "current" ID returned
 # from a call to CUBE
 ID="-1"
 
-function queryStart_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #
-    # Print the starting query feedback for a given plugin search
-    #
-    SEARCH=$1
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${blink}${LightGreen}%-11s${NC}\n" \
-        "$SEARCH" "query-->" "[searching]"                        | ./boxes.sh
-}
+title -d 1 "Checking on required dependencies..."
+    boxcenter "Verify that various command line tools needed to construct this "
+    boxcenter "workflow exist on the UNIX path. If any of the below files are  "
+    boxcenter "not found, please install them according to the requirements of "
+    boxcenter "your OS.                                                        "
+    boxcenter ""
+    dep_check "jq,chrispl-search,chrispl-run,http"
+windowBottom
+if (( b_respFail > 0 )) ; then exit 4 ; fi
 
-function runStart_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #
-    # Print the starting query feedback for a given plugin search
-    #
-    RUN=$1
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${blink}${LightGreen}%-11s${NC}\n" \
-        "$RUN" "  run-->" "[ posting ]"                        | ./boxes.sh
-}
-
-function successReturn_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #       $2          Response from client script
-    #
-    # Print some useful feedback on CUBE resp success.
-    #
-    PLUGIN="$1"
-    RESP="$2"
-    ID=$(printf "%04d" $(echo "$RESP" |awk '{print $3}'))
-    b_respSuccess=$(( b_respSuccess+=1 ))
-    report="[ id=$ID ]"
-    reportColor=LightGreen
-    echo -en "\033[3A\033[2K"
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${LightGreenBG}${White}%-11s${NC}\n"     \
-    "$PLUGIN" " resp-->" "$report"                            | ./boxes.sh
-}
-
-function successReturn_summary {
-    #
-    # Print the summary blurb on a group successful response
-    #
-    printf "${LightCyan}%16s${LightGreen}%-64s${NC}\n"                      \
-        "$b_respSuccess"                                                    \
-        " operations had a successful response"                             | ./boxes.sh
-    echo ""                                                                 | ./boxes.sh
-}
-
-function failureReturn_feedback {
-    #
-    # ARGS
-    #       $1          Name of the container
-    #
-    # Print some useful feedback on CUBE resp failure
-    #
-    PLUGIN=$1
-    b_respFail=$(( b_respFail+=1 ))
-    report="[ failed  ]"
-    reportColor=LightRed
-    echo -en "\033[3A\033[2K"
-    printf "${LightBlueBG}${White}[ CUBE ]${NC}::${LightCyan}%-40s${Yellow}%19s${RedBG}${White}%-11s${NC}\n"\
-    "$PLUGIN" " resp-->" "$report"                            | ./boxes.sh
-}
-
-function failureReturn_summary {
-    #
-    # Print the summary blurb on a group failure response
-    #
-    printf "${LightRed}%16s${Brown}%-64s${NC}\n"                            \
-        "$b_respFail"                                                       \
-    " operations had a failure response."                                   | ./boxes.sh
-}
-
-function retValue_parse {
-    #
-    # ARGS
-    #       $1          CLI status from call
-    #       $2          CLI response from call
-    #       $3          Name of the container
-    #
-    # Parse the return value from a call to CUBE
-    #
-    STATUS=$1
-    CLIResp=$2
-    PLUGIN=$3
-    if (( STATUS == 0 )) ; then
-        successReturn_feedback "$PLUGIN" "$CLIResp"
-    else
-        failureReturn_feedback "$PLUGIN"
-    fi
-}
-
-function postQuery_report {
-    #
-    # Print a report after the initial query has been performed.
-    #
-    boxcenter " "
-    if (( b_respSuccess > 0 )) ; then
-        successReturn_summary
-    fi
-    if (( b_respFail > 0 )) ; then
-        failureReturn_summary
-        boxcenter "The attempt to query some containers resulted in a "  ${LightRed}
-        boxcenter "failure. There are many possible reasons for this  "  ${LightRed}
-        boxcenter "but the first thing to verify  is that  the image  "  ${LightRed}
-        boxcenter "names passed are correct.                          "  ${LightRed}
-        boxcenter ""
-        boxcenter "Alternatively, have the failed plugins been regi-  "  ${LightRed}
-        boxcenter "stered to the CUBE instance? If not, register the  "  ${LightRed}
-        boxcenter "failed plugins using                               "  ${LightRed}
-        boxcenter ""
-        boxcenter "plugin_add.sh <pluginContainerImage>"                 ${LightYellow}
-        boxcenter ""
-        boxcenter "Also, make sure that you have installed the needed "  ${LightRed}
-        boxcenter "search and run CLI dependencies, 'chrispl-search'  "  ${LightRed}
-        boxcenter "and 'chrispl-run' using                            "  ${LightRed}
-        boxcenter ""
-        boxcenter "pip install python-chrisclient"                       ${LightYellow}
-        boxcenter ""
-        boxcenter "This workflow will exit now with code 1."             ${Yellow}
-    fi
-}
-
-function postRun_report {
-    #
-    # Print a report after the runs have all been schedued.
-    #
-    boxcenter " "
-    if (( b_respSuccess > 0 )) ; then
-        successReturn_summary
-    fi
-    if (( b_respFail > 0 )) ; then
-        failureReturn_summary
-        boxcenter "The attempt to schedule some containers resulted in"  ${LightRed}
-        boxcenter "a failure. Please examine each container run logs  "  ${LightRed}
-        boxcenter "for possible information.                          "  ${LightRed}
-        boxcenter ""
-        boxcenter "This workflow will exit now with code 2."             ${Yellow}
-    fi
-}
-
-title -d 1 "Checking for plugin IDs on CUBE"                    \
-            "ids below denote plugin ids"
+title -d 1 "Checking for plugin IDs on CUBE...."                            \
+            "(ids below denote plugin ids)"
     #
     # This section queries CUBE for IDs of all plugins in the plugin
     # array structure.
@@ -262,103 +256,88 @@ title -d 1 "Checking for plugin IDs on CUBE"                    \
     #
     b_respSuccess=0
     b_respFail=0
+    boxcenter "Verify that all the plugins that constitute this workflow are    "
+    boxcenter "registered to the CUBE instance with which we are communicating."
+    boxcenter ""
     for plugin in "${a_PLUGINS[@]}" ; do
         cparse $plugin "REPO" "CONTAINER" "MMN" "ENV"
-        queryStart_feedback "$REPO/$CONTAINER"
+        opBlink_feedback "$ADDRESS:$PORT" "::CUBE->$plugin"   \
+                         "op-->" "search"
         windowBottom
-
         RESP=$(
             chrispl-search  --for id                            \
                             --using name="$CONTAINER"           \
                             --onCUBE "$CUBE"
         )
-        retValue_parse "$?" "$RESP" "$REPO/$CONTAINER"
+        opRet_feedback  "$?"                                    \
+                        "$ADDRESS:$PORT" "::CUBE->$plugin"    \
+                        "result-->" "pid = $(echo $RESP | awk '{print $3}')"
     done
     postQuery_report
 windowBottom
-if (( b_respFail > 0 )) ; then exit 1 ; fi
+if (( b_respFail > 0 )) ; then exit 2 ; fi
 
-title -d 1 "Building and Scheduling workflow..."                \
-        "ids below denote plugin instance ids"
-    #
-    # Build the actual workflow
-    #
-    b_respSuccess=0
+title -d 1 "Start constructing the Feed by POSTing the root FS and next nodes..."
+    ROOTID=-1
+    retState=""
+    filesInNode=""
+    dcmFiles=""
+
+    # Post the root node, wait for it to finish, and
+    # collect a list of output files
+    boxcenter "Run the root and first nodes in series.                    "
+    boxcenter ""
+    windowBottom
+
+    #\\\\\\\\\\\\\\\\\\
+    # Core logic here ||
+    plugin_run          "0:0"   "a_WORKFLOWSPEC[@]"   "$CUBE"  ROOTID \
+                        $sleepAfterPluginRun && id_check $ROOTID
+    # waitForNodeState    "$CUBE" "finishedSuccessfully" $ROOTID retState
+    # dataInNode_get      fname "$CUBE"  $ROOTID filesInNode
+
+    plugin_run          "0:1"   "a_WORKFLOWSPEC[@]"   "$CUBE"  ID1 \
+                        $sleepAfterPluginRun "@prev_id=$ROOTID" && id_check $ID1
+    digraph_add         "GRAPHVIZBODY"  "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
+                        "a_WORKFLOWSPEC[@]"
+    # Core logic here ||
+    #///////////////////
+windowBottom
+
+title -d 1 "Build the branching structure workflow..."
+    boxcenter "Construct and run each branch, one per MPC comparison.      "
+    boxcenter ""
+
+    # Now the branch(es)
+    b_respSuccess=1
     b_respFail=0
+    boxcenter ""
+    boxcenter ""
 
-    # ROOTNODE -- pl-mri10yr06mo01da_normal
-    # We'll pull this from the array so as not make any spelling errors
-    FSPLUGIN=${a_PLUGINS[0]}
-    cparse $FSPLUGIN "REPO" "CONTAINER" "MMN" "ENV"
-    runStart_feedback "$FSPLUGIN"
-    windowBottom
-    FSNODE=$(
-            chrispl-run --plugin name=$CONTAINER                            \
-                        --onCUBE "$CUBE"
-    )
-    retValue_parse "$?" "$FSNODE" "$FSPLUGIN"
-    FSPLUGINID=$ID
-
-    # Add the next layer, pl-freesurfer_pp, also the second container
-    # in the container array, connecting it to the FSPLUGINID
-    FREESURFERPLUGIN=${a_PLUGINS[1]}
-    cparse $FREESURFERPLUGIN "REPO" "CONTAINER" "MMN" "ENV"
-    runStart_feedback "$FREESURFERPLUGIN"
-    windowBottom
-    FREESURFERNODE=$(
-            chrispl-run --plugin name=$CONTAINER                            \
-                        --args "--ageSpec=10-06-01;                         \
-                                --copySpec=sag,cor,tra,stats,3D,mri,surf;   \
-                                --previous_id=$FSPLUGINID"                  \
-                        --onCUBE "$CUBE"
-    )
-    retValue_parse "$?" "$FREESURFERNODE" "$FREESURFERPLUGIN"
-    FREESURFERID=$ID
-
-    # Now the N pl-mpcs plugins, each connected to the
-    # FREESURFERID. For ease of scripting, we'll just
-    # loop N times and capture the individual IDs in an
-    # array
-    declare -a a_MPCSID
-    MPCSPLUGIN=${a_PLUGINS[2]}
-    cparse $MPCSPLUGIN "REPO" "CONTAINER" "MMN" "ENV"
     for LOOP in $(seq 1 $branches); do
-        runStart_feedback "$MPCSPLUGIN"
-        windowBottom
-        MPCSNODE=$(
-                chrispl-run --plugin name=$CONTAINER                            \
-                            --args "--random;                                   \
-                                    --seed=1;                                   \
-                                    --posRange=3.0;                             \
-                                    --negRange=-3.0;                            \
-                                    --previous_id=$FREESURFERID"                \
-                            --onCUBE "$CUBE"
-        )
-        retValue_parse "$?" "$MPCSNODE" "$MPCSPLUGIN"
-        MPCSID=$ID
-        a_MPCSID+=("$MPCSID")
-    done
+        echo -en "\033[2A\033[2K"
+        boxcenter ""
+        boxcenter "Building prediction branch $LOOP..." ${LightGray}
+        boxcenter ""
+        boxcenter ""
 
-    # And finally, connect a pl-z2labelmap plugin to each
-    # pl-mpcs in turn...
-    declare -a a_Z2LABELMAP
-    ZPLUGIN=${a_PLUGINS[3]}
-    cparse $ZPLUGIN "REPO" "CONTAINER" "MMN" "ENV"
-    for MPCSID in "${a_MPCSID[@]}" ; do
-        runStart_feedback "$ZPLUGIN"
-        windowBottom
-        ZNODE=$(
-                chrispl-run --plugin name=$CONTAINER                            \
-                            --args "--imageSet=../data/set1;                    \
-                                    --negColor=B;                               \
-                                    --posColor=R;                               \
-                                    --previous_id=$MPCSID"                      \
-                            --onCUBE "$CUBE"
-        )
-        retValue_parse "$?" "$ZNODE" "$ZPLUGIN"
-        ZNODEID=$ID
-        a_Z2LABELMAP+=(ZNODEID)
+        plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun \
+                    "@prev_id=$ID1" && id_check $ID2
+        digraph_add "GRAPHVIZBODY"  "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
+                    "a_WORKFLOWSPEC[@]"
+        plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun \
+                    "@prev_id=$ID2" && id_check $ID3
+        digraph_add "GRAPHVIZBODY"  "GRAPHVIZBODYARGS" ":2;$ID2" ":3;$ID3" \
+                    "a_WORKFLOWSPEC[@]"
     done
+    echo -en "\033[2A\033[2K"
     postRun_report
 windowBottom
-if (( b_respFail > 0 )) ; then exit 2 ; fi
+if (( b_respFail > 0 )) ; then exit 3 ; fi
+
+if (( b_graphviz )) ; then
+    graphVis_printFile "$GRAPHVIZHEADER"    \
+                        "$GRAPHVIZBODY"     \
+                        "$GRAPHVIZBODYARGS" \
+                        "$GRAPHVIZFILE"
+fi
