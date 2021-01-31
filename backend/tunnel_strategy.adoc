@@ -139,3 +139,7 @@ secrets:
 == Details
 
 Working on `fnndsc/chris` build 2020-11-04, pfcon v2.2.7.0.
+
+== TODO
+
+Faster? https://wiki.archlinux.org/index.php/OpenSSH#Speeding_up_SSH
