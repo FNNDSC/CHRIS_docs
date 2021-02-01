@@ -16,7 +16,7 @@ declare -a a_WORKFLOWSPEC=(
     
 
     "0:0|
-    fnndsc/pl-brainmgz:mini:           NOARGS"
+    fnndsc/pl-brainmgz:         NOARGS"
     
     "0:1*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;
@@ -64,6 +64,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --inputFile=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
                                 --outputFileStem=sample;
                                 --outputFileType=png;
+                                --lookupTable=__fs__;
                                 --skipAllLabels;
                                 --saveImages;
                                 --wholeVolume=entireVolume;
@@ -156,7 +157,7 @@ EXAMPLES
                \"password\":     \"chris1234\"
     }'
     or equivalently:
-    $ ./fsfer_series.sh -a 117.local
+    $ ./fsfer_series.sh -a 117.local -W
 "
 
 
@@ -374,7 +375,9 @@ title -d 1 "Building and Scheduling workflow..."
     b_respFail=0
     boxcenter ""
     boxcenter ""
+    wait_count=0
     for image in "${a_subjID[@]}" ; do
+        wait_count=$((wait_count+1))
         echo -en "\033[2A\033[2K"
         boxcenter ""
         boxcenter "Building prediction branch for subjectimage $image..." ${LightGray}
@@ -390,6 +393,14 @@ title -d 1 "Building and Scheduling workflow..."
                     "@prev_id=$ID1;@SUBJID=$image" && id_check $ID2
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
                     "a_WORKFLOWSPEC[@]"
+                    
+        if ((wait_count==10)) ; then
+                    
+            if (( b_waitOnBranchFinish )) ; then
+                waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
+            fi
+            wait_count=0
+        fi
     done
     echo -en "\033[2A\033[2K"
     postRun_report
@@ -472,7 +483,9 @@ title -d 1 "Building and Scheduling workflow..."
             waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
     fi
     
+    wait_count_1=0
     for mgz in "${a_segMGZ[@]}" ; do
+        wait_count_1=$((wait_count_1+1))
     
         plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID4
@@ -488,6 +501,14 @@ title -d 1 "Building and Scheduling workflow..."
                     "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID6
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":6;$ID6" \
                     "a_WORKFLOWSPEC[@]"
+                    
+        if ((wait_count_1==3)) ; then
+                    
+            if (( b_waitOnBranchFinish )) ; then
+                waitForNodeState    "$CUBE" "finishedSuccessfully" $ID6 retState
+            fi
+            wait_count_1=0
+        fi
     done
 
    
