@@ -391,6 +391,7 @@ function plugin_runFromFile {
     # ARGS
     #       $1          command array to write file
     #       $2          return string from running file
+    #       $3          optional if specified, dump run output to file
     #
     # DESC
     #   Due to considerable difficulties in executing a command
@@ -403,6 +404,7 @@ function plugin_runFromFile {
     #
     typeset -n _a_cmd="$1"
     typeset -n _RUN="$2"
+    local logFile="$3"
     local plugin=$(echo ${_a_cmd[2]})
     plugin=${plugin#"name="}
     file=${plugin}-$(uuidgen).sh
@@ -413,7 +415,13 @@ function plugin_runFromFile {
     echo -e "\t\t--plugin   ${_a_cmd[2]} \\"        >> $file
     echo -e "\t\t--args     \"$argStr\"  \\"        >> $file
     echo -e "\t\t--onCUBE   '${_a_cmd[6]}'"         >> $file
+    if (( ${#3} )) ; then
+        echo -e "\t\t'${_a_cmd[6]}'"                >> $file
+    fi
     _RUN=$(source $file)
+    if (( ${#3} )) ; then
+        echo "$_RUN" >> $file-${logFile}
+    fi
     if (( ! b_saveCalls )) ; then
         rm $file
     fi
@@ -554,6 +562,9 @@ function plugin_run {
         ID=$(echo $PLUGINRUN | awk '{print $3}')
         if [[ $ID == "failed" ]] ; then
             STATUSRUN=1
+            # if failure, rerun the plugin to capture json return
+            a_cmd[7]=" --jsonReturn"
+            plugin_runFromFile "a_cmd" PLUGINRUN errToFile
         else
             STATUSRUN=0
         fi
