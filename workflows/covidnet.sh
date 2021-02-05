@@ -15,23 +15,27 @@ source ./ffe.sh
 declare -a a_WORKFLOWSPEC=(
 
     "0:0|
-    fnndsc/pl-lungct:           NOARGS"
+    fnndsc/pl-lungct:           ARGS;
+                                --title=lung-set"
 
     "0:1*_n:l1|
     fnndsc/pl-med2img:          ARGS;
                                 --inputFile=@image[_n];
                                 --convertOnlySingleDICOM;
+                                --title=@image[_n];
                                 --previous_id=@prev_id"
 
     "1*_n:2*_n:l1|
     fnndsc/pl-covidnet:         ARGS;
                                 --imagefile=sample.png;
+                                --title=COVIDNET;
                                 --previous_id=@prev_id"
 
     "2*_n:3*_n:l1|
     fnndsc/pl-pdfgeneration:    ARGS;
                                 --imagefile=sample.png;
                                 --patientId=@patientID;
+                                --title=report;
                                 --previous_id=@prev_id"
 )
 
