@@ -14,12 +14,14 @@ source ./ffe.sh
 #
 declare -a a_WORKFLOWSPEC=(
     "0:0|
-    fnndsc/pl-mri10yr06mo01da_normal:   NOARGS"
+    fnndsc/pl-mri10yr06mo01da_normal:   ARGS;
+                                        --title=BrainMRI"
 
     "0:1|
     fnndsc/pl-freesurfer_pp:            ARGS;
                                         --ageSpec=10-06-01;
                                         --copySpec=sag,cor,tra,stats,3D,mri,surf;
+                                        --title=FreeSurfer;
                                         --previous_id=@prev_id"
 
     "1:2*_n:l1|
@@ -28,6 +30,7 @@ declare -a a_WORKFLOWSPEC=(
                                         --seed=1;
                                         --posRange=3.0;
                                         --negRange=-3.0;
+                                        --title=MultiPartyCompute;
                                         --previous_id=@prev_id"
 
     "2*_n:3*_n:l1|
@@ -35,6 +38,7 @@ declare -a a_WORKFLOWSPEC=(
                                         --imageSet=../data/set1;
                                         --negColor=B;
                                         --posColor=R;
+                                        --title=RegionalHeatMap;
                                         --previous_id=@prev_id"
 )
 
@@ -313,14 +317,12 @@ title -d 1 "Build the branching structure workflow..."
     b_respFail=0
     boxcenter ""
     boxcenter ""
-
     for LOOP in $(seq 1 $branches); do
         echo -en "\033[2A\033[2K"
-        boxcenter ""
-        boxcenter "Building prediction branch $LOOP..." ${LightGray}
-        boxcenter ""
-        boxcenter ""
-
+        boxcenter   ""
+        boxcenter   "Building prediction branch $LOOP..." ${LightGray}
+        boxcenter   ""
+        boxcenter   ""
         plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun \
                     "@prev_id=$ID1" && id_check $ID2
         digraph_add "GRAPHVIZBODY"  "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
