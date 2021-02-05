@@ -93,6 +93,8 @@ NAME
   fsfer_series.sh
 SYNPOSIS
   fsfer_series.sh       [-C <CUBEjsonDetails>]              \\
+                        [-B1 <batchSize>]                   \\
+                        [-B2 <batchSize>]                   \\
                         [-r <protocol>]                     \\
                         [-p <port>]                         \\
                         [-a <cubeIP>]                       \\
@@ -105,10 +107,33 @@ SYNPOSIS
                         [-q]
 DESC
   'fsfer_series.sh' posts a workflow based off GE pipeline to CUBE:
+  
+  
+                              ███:0 pl-brainmgz
+                            __/│\_____..._______...____________________
+                         _ /   |   \_      \_                          \_
+                        /      │      \  ...  \                          \                                      
+                      ███     ███     ███     ███ :1 pl-pfdorun          ███ :3  pl-fastsurfer_inference
+                       │       │       │       │                          |
+                       │       │       │       │                          |
+                      ███     ███     ███     ███ :2  pl-mgz2imageslices  |
+      							     _______________|________________
+      							    |	     |	     |   ↓   |   ↓    |  ↓     
+  						           ███     ███     ███     ███     ███   :4 pl-pfdorun
+ 							    /│      /│      /│      /│      /│    
+ 						           │ |   ↓ │     ↓ │     ↓ │     ↓ │    
+						          ███│    ███│    ███│    ███│    ███│   :5  pl-mgz2imageslices
+							     │       │       │       │       │             
+							   ███     ███     ███     ███     ███   :6  pl-mgz2lut_report
+
 
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
     several candidate subjects with brain.mgz files. This workflow will process 
     each of those mgz, resulting in a fanned tree execution toplogy.
+    The topography contains 2 fans that needs some throttle for consistency 
+    in the entire feed. Therefore, we have introduced 2 paratmeters B1 & B2
+    for the user to enter a batch size for each of the two fans. I recommend 
+    a B1=10 & B2=3 that I have tested on my system of 128GB RAM.
     
 ARGS
     [-G <graphvizDotFile>]
@@ -239,6 +264,8 @@ while getopts "C:G:i:qxr:p:a:u:w:WRJs:S" opt; do
         w) PASSWD=$OPTARG                       ;;
         x) echo "$SYNOPSIS"; exit 0             ;;
         *) exit 1                               ;;
+        B1) batch1=$OPTARG                      ;;
+        B2) batch2=$OPTARG                      ;;
     esac
 done
 
@@ -394,7 +421,7 @@ title -d 1 "Building and Scheduling workflow..."
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
                     "a_WORKFLOWSPEC[@]"
                     
-        if ((wait_count==10)) ; then
+        if ((wait_count==$batch1)) ; then
                     
             if (( b_waitOnBranchFinish )) ; then
                 waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
@@ -502,7 +529,7 @@ title -d 1 "Building and Scheduling workflow..."
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":6;$ID6" \
                     "a_WORKFLOWSPEC[@]"
                     
-        if ((wait_count_1==3)) ; then
+        if ((wait_count_1==$batch2)) ; then
                     
             if (( b_waitOnBranchFinish )) ; then
                 waitForNodeState    "$CUBE" "finishedSuccessfully" $ID6 retState
