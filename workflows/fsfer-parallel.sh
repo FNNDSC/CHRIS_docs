@@ -16,7 +16,7 @@ declare -a a_WORKFLOWSPEC=(
 
     "0:0|
     fnndsc/pl-brainmgz:         ARGS;
-                                --title=subjects"
+                                --title=FastSurfer_Subjects"
 
     "0:1*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;

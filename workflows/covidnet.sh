@@ -16,7 +16,7 @@ declare -a a_WORKFLOWSPEC=(
 
     "0:0|
     fnndsc/pl-lungct:           ARGS;
-                                --title=lung-set"
+                                --title=COVIDNET_lung_CT_subjects"
 
     "0:1*_n:l1|
     fnndsc/pl-med2img:          ARGS;

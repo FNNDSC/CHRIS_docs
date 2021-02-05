@@ -15,7 +15,7 @@ source ./ffe.sh
 declare -a a_WORKFLOWSPEC=(
     "0:0|
     fnndsc/pl-mri10yr06mo01da_normal:   ARGS;
-                                        --title=BrainMRI"
+                                        --title=BrainMRI_MPC"
 
     "0:1|
     fnndsc/pl-freesurfer_pp:            ARGS;
