@@ -16,7 +16,7 @@ declare -a a_WORKFLOWSPEC=(
     
 
     "0:0|
-    fnndsc/pl-brainmgz:mini:           NOARGS"
+    fnndsc/pl-brainmgz:         NOARGS"
     
     "0:1*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;
@@ -64,6 +64,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --inputFile=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
                                 --outputFileStem=sample;
                                 --outputFileType=png;
+                                --lookupTable=__fs__;
                                 --skipAllLabels;
                                 --saveImages;
                                 --wholeVolume=entireVolume;
@@ -92,6 +93,8 @@ NAME
   fsfer_series.sh
 SYNPOSIS
   fsfer_series.sh       [-C <CUBEjsonDetails>]              \\
+                        [-B1 <batchSize>]                   \\
+                        [-B2 <batchSize>]                   \\
                         [-r <protocol>]                     \\
                         [-p <port>]                         \\
                         [-a <cubeIP>]                       \\
@@ -104,10 +107,33 @@ SYNPOSIS
                         [-q]
 DESC
   'fsfer_series.sh' posts a workflow based off GE pipeline to CUBE:
+  
+  
+                              ███:0 pl-brainmgz
+                            __/│\_____..._______...____________________
+                         _ /   |   \_      \_                          \_
+                        /      │      \  ...  \                          \                                      
+                      ███     ███     ███     ███ :1 pl-pfdorun          ███ :3  pl-fastsurfer_inference
+                       │       │       │       │                          |
+                       │       │       │       │                          |
+                      ███     ███     ███     ███ :2  pl-mgz2imageslices  |
+      							     _______________|________________
+      							    |	     |	     |   ↓   |   ↓    |  ↓     
+  						           ███     ███     ███     ███     ███   :4 pl-pfdorun
+ 							    /│      /│      /│      /│      /│    
+ 						           │ |   ↓ │     ↓ │     ↓ │     ↓ │    
+						          ███│    ███│    ███│    ███│    ███│   :5  pl-mgz2imageslices
+							     │       │       │       │       │             
+							   ███     ███     ███     ███     ███   :6  pl-mgz2lut_report
+
 
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
     several candidate subjects with brain.mgz files. This workflow will process 
     each of those mgz, resulting in a fanned tree execution toplogy.
+    The topography contains 2 fans that needs some throttle for consistency 
+    in the entire feed. Therefore, we have introduced 2 paratmeters B1 & B2
+    for the user to enter a batch size for each of the two fans. I recommend 
+    a B1=10 & B2=3 that I have tested on my system of 128GB RAM.
     
 ARGS
     [-G <graphvizDotFile>]
@@ -156,7 +182,7 @@ EXAMPLES
                \"password\":     \"chris1234\"
     }'
     or equivalently:
-    $ ./fsfer_series.sh -a 117.local
+    $ ./fsfer_series.sh -a 117.local -W
 "
 
 
@@ -238,6 +264,8 @@ while getopts "C:G:i:qxr:p:a:u:w:WRJs:S" opt; do
         w) PASSWD=$OPTARG                       ;;
         x) echo "$SYNOPSIS"; exit 0             ;;
         *) exit 1                               ;;
+        B1) batch1=$OPTARG                      ;;
+        B2) batch2=$OPTARG                      ;;
     esac
 done
 
@@ -374,7 +402,9 @@ title -d 1 "Building and Scheduling workflow..."
     b_respFail=0
     boxcenter ""
     boxcenter ""
+    wait_count=0
     for image in "${a_subjID[@]}" ; do
+        wait_count=$((wait_count+1))
         echo -en "\033[2A\033[2K"
         boxcenter ""
         boxcenter "Building prediction branch for subjectimage $image..." ${LightGray}
@@ -390,6 +420,14 @@ title -d 1 "Building and Scheduling workflow..."
                     "@prev_id=$ID1;@SUBJID=$image" && id_check $ID2
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
                     "a_WORKFLOWSPEC[@]"
+                    
+        if ((wait_count==$batch1)) ; then
+                    
+            if (( b_waitOnBranchFinish )) ; then
+                waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
+            fi
+            wait_count=0
+        fi
     done
     echo -en "\033[2A\033[2K"
     postRun_report
@@ -472,7 +510,9 @@ title -d 1 "Building and Scheduling workflow..."
             waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
     fi
     
+    wait_count_1=0
     for mgz in "${a_segMGZ[@]}" ; do
+        wait_count_1=$((wait_count_1+1))
     
         plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID4
@@ -488,6 +528,14 @@ title -d 1 "Building and Scheduling workflow..."
                     "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID6
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":6;$ID6" \
                     "a_WORKFLOWSPEC[@]"
+                    
+        if ((wait_count_1==$batch2)) ; then
+                    
+            if (( b_waitOnBranchFinish )) ; then
+                waitForNodeState    "$CUBE" "finishedSuccessfully" $ID6 retState
+            fi
+            wait_count_1=0
+        fi
     done
 
    
