@@ -16,59 +16,53 @@ declare -a a_WORKFLOWSPEC=(
     
 
     "0:0|
-    fnndsc/pl-brainmgz:         NOARGS"
-    
-    "0:1*_n:l1|
-    fnndsc/pl-pfdorun:          ARGS;
-                                --fileFilter=\' \';
-                                --dirFilter=@SUBJID;
-                                --noJobLogging; --verbose=3;
-                                --exec=\'cp %inputWorkingDir/brain.mgz
-                                %outputWorkingDir/brain.mgz\';
-                                --previous_id=@prev_id"
-
-    "1*_n:2*_n:l1|
-    fnndsc/pl-mgz2imageslices:  ARGS;
-                                --inputFile=subjects/@SUBJID/brain.mgz;
-                                --outputFileStem=sample;
-                                --outputFileType=png;
-                                --lookupTable=__none__;
-                                --skipAllLabels;
-                                --saveImages;
-                                --wholeVolume=entireVolume;
-                                --verbosity=5;
-                                --previous_id=@prev_id"
-
-    "0:3|
+    fnndsc/pl-brainmgz:         ARGS;
+                                --title=Subjects"
+                                
+    "0:1|
     fnndsc/pl-fastsurfer_inference: ARGS;
                                 --subjectDir=subjects;
                                 --copyInputImage;
-                                --previous_id=@prev_id"
+                                --title=Segmented_Subjects;
+                                --previous_id=@prev_id"                            
     
-    "3:4*_n:l1|
+    "1:2*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;
-                                --fileFilter=\' \';
                                 --dirFilter=@mgz[_n];
                                 --noJobLogging; --verbose=3;
-                                --exec=\'cp %inputWorkingDir/aparc.DKTatlas+aseg.deep.mgz
-                                %outputWorkingDir/aparc.DKTatlas+aseg.deep.mgz\';
+                                --exec=\'cp -rf %inputWorkingDir/%inputWorkingFile
+                                %outputWorkingDir/%inputWorkingFile\';
+                                --title=@mgz[_n];
                                 --previous_id=@prev_id"
-    "4*_n:5*_n:l1|
-    fnndsc/pl-mgz2lut_report: ARGS;
-                                --report_types=txt,html;
-                                --file_name=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
+
+    "2*_n:3*_n:l1|
+    fnndsc/pl-multipass:        ARGS;
+                                --splitExpr='++';
+                                --commonArgs=\'--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png\';
+                                --specificArgs=\'--wholeVolume brainVolume --fileFilter brain ++ --wholeVolume segVolume --fileFilter aparc --lookupTable __fs__\';
+                                --exec=pfdo_mgz2image;
+                                --verbosity=5;
+                                --title=segmented-png;
                                 --previous_id=@prev_id"
                                 
-    "4*_n:6*_n:l1|
-    fnndsc/pl-mgz2imageslices:  ARGS;
-                                --inputFile=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
-                                --outputFileStem=sample;
-                                --outputFileType=png;
-                                --lookupTable=__fs__;
-                                --skipAllLabels;
-                                --saveImages;
-                                --wholeVolume=entireVolume;
-                                --verbosity=5;
+    "3*_n:4*_n:l1|
+    fnndsc/pl-pfdorun:          ARGS;
+                                --dirFilter=label-brainVolume;
+                                --verbose=5;
+                                --exec=\'composite -dissolve 90 -gravity Center
+                                %inputWorkingDir/%inputWorkingFile
+                                %inputWorkingDir/../../aparc.DKTatlas+aseg.deep.mgz/label-segVolume/%inputWorkingFile
+                                -alpha Set
+                                %outputWorkingDir/%inputWorkingFile\';
+                                --noJobLogging;
+                                --title=overlay-png;
+                                --previous_id=@prev_id"
+                                
+    "2*_n:5*_n:l1|
+    fnndsc/pl-mgz2lut_report:   ARGS;
+                                --file_name=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
+                                --report_types=txt,html,pdf;
+                                --title=report;
                                 --previous_id=@prev_id"
                                 
     
@@ -93,40 +87,45 @@ NAME
   fsfer_series.sh
 SYNPOSIS
   fsfer_series.sh       [-C <CUBEjsonDetails>]              \\
-                        [-B1 <batchSize>]                   \\
-                        [-B2 <batchSize>]                   \\
                         [-r <protocol>]                     \\
                         [-p <port>]                         \\
                         [-a <cubeIP>]                       \\
                         [-u <user>]                         \\
                         [-w <passwd>]                       \\
                         [-G <graphvizDotFile>]              \\
-                        [-i <listOfLungImagesToProcess>]    \\
+                        [-i <listOfSubjectsToProcess>]      \\
+                        [-s <sleepAfterPluginRun>]          \\
+                        [-S]                                \\
                         [-W]                                \\
                         [-R]                                \\
+                        [-J]                                \\
                         [-q]
+                        
 DESC
-  'fsfer_series.sh' posts a workflow based off GE pipeline to CUBE:
+  'fsfer_series.sh' posts a workflow based off GE pipeline
+  (a segmentation of 25 subjects in series) to CUBE:
   
-  
-                              ███:0 pl-brainmgz
-                            __/│\_____..._______...____________________
-                         _ /   |   \_      \_                          \_
-                        /      │      \  ...  \                          \                                      
-                      ███     ███     ███     ███ :1 pl-pfdorun          ███ :3  pl-fastsurfer_inference
-                       │       │       │       │                          |
-                       │       │       │       │                          |
-                      ███     ███     ███     ███ :2  pl-mgz2imageslices  |
-      							     _______________|________________
-      							    |	     |	     |   ↓   |   ↓    |  ↓     
-  						           ███     ███     ███     ███     ███   :4 pl-pfdorun
- 							    /│      /│      /│      /│      /│    
- 						           │ |   ↓ │     ↓ │     ↓ │     ↓ │    
-						          ███│    ███│    ███│    ███│    ███│   :5  pl-mgz2imageslices
-							     │       │       │       │       │             
-							   ███     ███     ███     ███     ███   :6  pl-mgz2lut_report
+                              ███:0                             pl-brainmgz
+                               |
+                               |
+                              ███:1                             pl-fastsurfer_inference
+            __________________/│\_____..._______..._
+         _ /     _ /     _ /   |   \_      \_        \_
+        /       /       /      │      \  ...  \    ...  \ 
+       ↓       ↓       ↓       ↓       ↓       ↓         ↓
+      ███     ███     ███     ███     ███     ███       ███ :2  pl-pfdorun
+      /│      /│      /│      /│      /│      /│        /│
+     ↓ │     ↓ │     ↓ │     ↓ │     ↓ │     ↓ │       ↓ │
+    ███│    ███│    ███│    ███│    ███│    ███│      ███│  :3  pl-mgz2lut_report
+       │       │       │       │       │       │         │
+       ↓       ↓       ↓       ↓       ↓       ↓         ↓
+      ███     ███     ███     ███     ███     ███       ███ :4  pl-multipass
+       │       │       │       │       │       │         │          (mgz2imageslices)
+       │       │       │       │       │       │         │
+      ███     ███     ███     ███     ███     ███       ███ :5  pl-pfdorun
+                                                                    (imageMagick)
 
-
+      
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
     several candidate subjects with brain.mgz files. This workflow will process 
     each of those mgz, resulting in a fanned tree execution toplogy.
@@ -182,7 +181,7 @@ EXAMPLES
                \"password\":     \"chris1234\"
     }'
     or equivalently:
-    $ ./fsfer_series.sh -a 117.local -W
+    $ ./fsfer_series.sh -a 117.local -W -s 3 -G feed
 "
 
 
@@ -387,51 +386,6 @@ if (( b_imageList || b_onlyShowImageNames )) ; then
     if (( b_respFail > 0 )) ;       then exit 1 ; fi
     if (( b_onlyShowImageNames )) ; then exit 0 ; fi
 fi
-title -d 1 "Building and Scheduling workflow..."
-    boxcenter "Construct and run each branch, one per input subject id.    "
-    boxcenter "If a wait condition has been specified, pause at the end of "
-    boxcenter "each branch until the final compute is successful before    "
-    boxcenter "buidling the next parallel branch.                          "
-    boxcenter ""
-    boxcenter "If a report has been specified, print a final report on the "
-    boxcenter "prediction of the input image for that branch.              "
-    boxcenter ""
-
-    # Now the branch(es)
-    b_respSuccess=0
-    b_respFail=0
-    boxcenter ""
-    boxcenter ""
-    wait_count=0
-    for image in "${a_subjID[@]}" ; do
-        wait_count=$((wait_count+1))
-        echo -en "\033[2A\033[2K"
-        boxcenter ""
-        boxcenter "Building prediction branch for subjectimage $image..." ${LightGray}
-        boxcenter ""
-        boxcenter ""
-
-        plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
-                    "@prev_id=$ROOTID;@SUBJID=$image" && id_check $ID1
-        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
-                    "a_WORKFLOWSPEC[@]"
-
-        plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun\
-                    "@prev_id=$ID1;@SUBJID=$image" && id_check $ID2
-        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
-                    "a_WORKFLOWSPEC[@]"
-                    
-        if ((wait_count==$batch1)) ; then
-                    
-            if (( b_waitOnBranchFinish )) ; then
-                waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
-            fi
-            wait_count=0
-        fi
-    done
-    echo -en "\033[2A\033[2K"
-    postRun_report
-windowBottom
 
 title -d 1 "Building and Scheduling workflow..."
     boxcenter "Construct and run each branch, one per input DICOM file.    "
@@ -453,12 +407,12 @@ title -d 1 "Building and Scheduling workflow..."
     boxcenter ""
     
 
-    plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun\
-                    "@prev_id=$ROOTID" && id_check $ID3
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":3;$ID3" \
+    plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
+                    "@prev_id=$ROOTID" && id_check $ID1
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
                     "a_WORKFLOWSPEC[@]"
-    waitForNodeState    "$CUBE" "finishedSuccessfully" $ID3 retState
-    dataInNode_get      fname "$CUBE"  $ID3 filesInNode
+    waitForNodeState    "$CUBE" "finishedSuccessfully" $ID1 retState
+    dataInNode_get      fname "$CUBE"  $ID1 filesInNode
     
     
     # Now, parse the list of files for DICOMs, read into an
@@ -472,7 +426,7 @@ title -d 1 "Building and Scheduling workflow..."
     
     if (( b_imageList )) ; then
         title -d 1 "Checking that images to process exist in root pl-lungct..."
-            boxcenter "Verify that any DICOMs explicitly listed by the user "
+            boxcenter "Verify that any subject explicitly listed by the user "
             boxcenter "when calling this script actually exist in the root  "
             boxcenter "node.                                                "
             boxcenter ""
@@ -507,37 +461,46 @@ title -d 1 "Building and Scheduling workflow..."
    
 
     if (( b_waitOnBranchFinish )) ; then
-            waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
+            waitForNodeState    "$CUBE" "finishedSuccessfully" $ID1 retState
     fi
     
     wait_count_1=0
     for mgz in "${a_segMGZ[@]}" ; do
-        wait_count_1=$((wait_count_1+1))
+        
     
+        plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun\
+                    "@prev_id=$ID1;@mgz[_n]=$mgz" && id_check $ID2
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
+                    "a_WORKFLOWSPEC[@]"
+                    
+        plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun\
+                    "@prev_id=$ID2;@mgz[_n]=$mgz" && id_check $ID3
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":3;$ID3" \
+                    "a_WORKFLOWSPEC[@]"
+        
         plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID4
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4" \
                     "a_WORKFLOWSPEC[@]"
-        
+                    
         plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun\
-                    "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID5
-        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5" \
+                    "@prev_id=$ID2;@mgz[_n]=$mgz" && id_check $ID5
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":5;$ID5" \
                     "a_WORKFLOWSPEC[@]"
-                    
-        plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun\
-                    "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID6
-        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":6;$ID6" \
-                    "a_WORKFLOWSPEC[@]"
-                    
-        if ((wait_count_1==$batch2)) ; then
-                    
-            if (( b_waitOnBranchFinish )) ; then
-                waitForNodeState    "$CUBE" "finishedSuccessfully" $ID6 retState
-            fi
-            wait_count_1=0
-        fi
+        
+        if (( b_waitOnBranchFinish )) ; then
+            waitForNodeState    "$CUBE" "finishedSuccessfully" $ID4 retState
+        fi            
+       
     done
 
    
 windowBottom
 if (( b_respFail > 0 )) ; then exit 3 ; fi
+
+if (( b_graphviz )) ; then
+    graphVis_printFile "$GRAPHVIZHEADER"    \
+                        "$GRAPHVIZBODY"     \
+                        "$GRAPHVIZBODYARGS" \
+                        "$GRAPHVIZFILE"
+fi
