@@ -129,10 +129,7 @@ DESC
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
     several candidate subjects with brain.mgz files. This workflow will process 
     each of those mgz, resulting in a fanned tree execution toplogy.
-    The topography contains 2 fans that needs some throttle for consistency 
-    in the entire feed. Therefore, we have introduced 2 paratmeters B1 & B2
-    for the user to enter a batch size for each of the two fans. I recommend 
-    a B1=10 & B2=3 that I have tested on my system of 128GB RAM.
+    
     
 ARGS
     [-G <graphvizDotFile>]
