@@ -20,13 +20,22 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=Subjects"
                                 
     "0:1|
+    fnndsc/pl-pfdorun:          ARGS;
+                                --dirFilter=@subjects;
+                                --noJobLogging; --verbose=3;
+                                --exec=\'cp -rf %inputWorkingDir/%inputWorkingFile
+                                %outputWorkingDir/%inputWorkingFile\';
+                                --title=@mgz[_n];
+                                --previous_id=@prev_id"
+                                
+    "1:2|
     fnndsc/pl-fastsurfer_inference: ARGS;
                                 --subjectDir=subjects;
                                 --copyInputImage;
                                 --title=Segmented_Subjects;
                                 --previous_id=@prev_id"                            
     
-    "1:2*_n:l1|
+    "2:3*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=@mgz[_n];
                                 --noJobLogging; --verbose=3;
@@ -35,7 +44,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=@mgz[_n];
                                 --previous_id=@prev_id"
 
-    "2*_n:3*_n:l1|
+    "3*_n:4*_n:l1|
     fnndsc/pl-multipass:        ARGS;
                                 --splitExpr='++';
                                 --commonArgs=\'--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png\';
@@ -45,7 +54,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=segmented-png;
                                 --previous_id=@prev_id"
                                 
-    "3*_n:4*_n:l1|
+    "4*_n:5*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=label-brainVolume;
                                 --verbose=5;
@@ -58,7 +67,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=overlay-png;
                                 --previous_id=@prev_id"
                                 
-    "2*_n:5*_n:l1|
+    "3*_n:6*_n:l1|
     fnndsc/pl-mgz2lut_report:   ARGS;
                                 --file_name=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
                                 --report_types=txt,html,pdf;
@@ -105,24 +114,28 @@ DESC
   'fsfer_series.sh' posts a workflow based off GE pipeline
   (a segmentation of 25 subjects in series) to CUBE:
   
+    
                               ███:0                             pl-brainmgz
                                |
                                |
-                              ███:1                             pl-fastsurfer_inference
+                              ███:1                             pl-pfdorun
+                               |
+                               |
+                              ███:2                             pl-fastsurfer_inference
             __________________/│\_____..._______..._
          _ /     _ /     _ /   |   \_      \_        \_
         /       /       /      │      \  ...  \    ...  \ 
        ↓       ↓       ↓       ↓       ↓       ↓         ↓
-      ███     ███     ███     ███     ███     ███       ███ :2  pl-pfdorun
+      ███     ███     ███     ███     ███     ███       ███ :3  pl-pfdorun
       /│      /│      /│      /│      /│      /│        /│
      ↓ │     ↓ │     ↓ │     ↓ │     ↓ │     ↓ │       ↓ │
-    ███│    ███│    ███│    ███│    ███│    ███│      ███│  :3  pl-mgz2lut_report
+    ███│    ███│    ███│    ███│    ███│    ███│      ███│  :4  pl-mgz2lut_report
        │       │       │       │       │       │         │
        ↓       ↓       ↓       ↓       ↓       ↓         ↓
-      ███     ███     ███     ███     ███     ███       ███ :4  pl-multipass
+      ███     ███     ███     ███     ███     ███       ███ :5  pl-multipass
        │       │       │       │       │       │         │          (mgz2imageslices)
        │       │       │       │       │       │         │
-      ███     ███     ███     ███     ███     ███       ███ :5  pl-pfdorun
+      ███     ███     ███     ███     ███     ███       ███ :6  pl-pfdorun
                                                                     (imageMagick)
 
       
@@ -355,7 +368,7 @@ if (( b_imageList || b_onlyShowImageNames )) ; then
     title -d 1 "Checking that mgz to process exist in root pl-brainmgz..."
         boxcenter "Verify that any subject IDs explicitly listed by the user "
         boxcenter "when calling this script actually exist in the root node  "
-        boxcenter "output directory space.                                   "
+        boxcenter "output directory space.                                  "
         boxcenter ""
 
         b_respSuccess=0
@@ -384,7 +397,20 @@ if (( b_imageList || b_onlyShowImageNames )) ; then
     if (( b_onlyShowImageNames )) ; then exit 0 ; fi
 fi
 
+# Construct a parameter for filtering
+    filter=""
+    for subject in "${a_subjID[@]}" ; do
+        filter+="$subject,"
+    done
+    filter="${filter%,}"
+
+    plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
+                    "@prev_id=$ROOTID;@subjects=$filter" && id_check $ID1
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
+                    "a_WORKFLOWSPEC[@]"
+
 title -d 1 "Building and Scheduling workflow..."
+
     boxcenter "Construct and run each branch, one per input DICOM file.    "
     boxcenter "If a wait condition has been specified, pause at the end of "
     boxcenter "each branch until the final compute is successful before    "
@@ -404,89 +430,50 @@ title -d 1 "Building and Scheduling workflow..."
     boxcenter ""
     
 
-    plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
-                    "@prev_id=$ROOTID" && id_check $ID1
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
+    plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun\
+                    "@prev_id=$ID1" && id_check $ID2
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
                     "a_WORKFLOWSPEC[@]"
-    waitForNodeState    "$CUBE" "finishedSuccessfully" $ID1 retState
-    dataInNode_get      fname "$CUBE"  $ID1 filesInNode
+    waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
+    dataInNode_get      fname "$CUBE"  $ID2 filesInNode
     
     
-    # Now, parse the list of files for DICOMs, read into an
+    # Now, parse the list of files for segmented mgzs, read into an
     # array, and print the pruned file list
     mgzFiles=$( echo "$filesInNode"           |\
-                awk -F \/ '{print $6}' | grep 10 | awk '!seen[$0]++')
+                awk -F \/ '{print $7}' | grep 10 | awk '!seen[$0]++')
     boxcenter $mgzFiles
     read -a a_segMGZ <<< $(echo $mgzFiles)
     a_segMGZorig=("${a_segMGZ[@]}")
     
+        
     
-    if (( b_imageList )) ; then
-        title -d 1 "Checking that images to process exist in root pl-lungct..."
-            boxcenter "Verify that any subject explicitly listed by the user "
-            boxcenter "when calling this script actually exist in the root  "
-            boxcenter "node.                                                "
-            boxcenter ""
 
-            b_respSuccess=0
-            b_respFail=0
-
-            if (( b_imageList )) ; then
-                read -a a_segMGZ <<< $(echo "$IMAGESTOPROCESS" | tr ',' ' ')
-            fi
-            for mgz in "${a_segMGZ[@]}" ; do
-                opBlink_feedback "Image to process" "::$mgz"  \
-                             "valid-->"         "checking"
-                windowBottom
-                if [[ " ${a_segMGZorig[@]} " =~ " ${mgz} " ]] ; then
-                    status=0
-                else
-                    status=1
-                fi
-                opRet_feedback  "$status" \
-                                "Image to process" "::$mgz"  \
-                                "can process-->"   "valid"
-
-            done
-            postImageCheck_report
-        windowBottom
-        if (( b_respFail > 0 )) ;       then exit 1 ; fi
-        if (( b_onlyShowImageNames )) ; then exit 0 ; fi
-    fi
-    
-    
-   
-
-    if (( b_waitOnBranchFinish )) ; then
-            waitForNodeState    "$CUBE" "finishedSuccessfully" $ID1 retState
-    fi
-    
-    wait_count_1=0
     for mgz in "${a_segMGZ[@]}" ; do
         
     
-        plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun\
-                    "@prev_id=$ID1;@mgz[_n]=$mgz" && id_check $ID2
-        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2" \
-                    "a_WORKFLOWSPEC[@]"
-                    
         plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun\
                     "@prev_id=$ID2;@mgz[_n]=$mgz" && id_check $ID3
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":3;$ID3" \
                     "a_WORKFLOWSPEC[@]"
-        
+                    
         plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID4
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4" \
                     "a_WORKFLOWSPEC[@]"
-                    
+        
         plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun\
-                    "@prev_id=$ID2;@mgz[_n]=$mgz" && id_check $ID5
-        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":5;$ID5" \
+                    "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID5
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5" \
+                    "a_WORKFLOWSPEC[@]"
+                    
+        plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun\
+                    "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID6
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":6;$ID6" \
                     "a_WORKFLOWSPEC[@]"
         
         if (( b_waitOnBranchFinish )) ; then
-            waitForNodeState    "$CUBE" "finishedSuccessfully" $ID4 retState
+            waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState
         fi            
        
     done
