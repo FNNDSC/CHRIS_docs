@@ -31,7 +31,7 @@ declare -a a_WORKFLOWSPEC=(
     "1:2|
     fnndsc/pl-fastsurfer_inference: ARGS;
                                 --subjectDir=subjects;
-                                --copyInputImage;
+                                --copyInputFiles=mgz;
                                 --title=Segmented_Subjects;
                                 --previous_id=@prev_id"                            
     
@@ -48,24 +48,20 @@ declare -a a_WORKFLOWSPEC=(
     fnndsc/pl-multipass:        ARGS;
                                 --splitExpr='++';
                                 --commonArgs=\'--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png\';
-                                --specificArgs=\'--wholeVolume brainVolume --fileFilter brain ++ --wholeVolume segVolume --fileFilter aparc --lookupTable __fs__\';
+                                --specificArgs=\'--wholeVolume brainVolume --fileFilter brain ++ --wholeVolume segVolume --fileFilter aparc\';
                                 --exec=pfdo_mgz2image;
                                 --verbosity=5;
                                 --title=segmented-png;
                                 --previous_id=@prev_id"
-                                
+    
     "4*_n:5*_n:l1|
-    fnndsc/pl-pfdorun:          ARGS;
-                                --dirFilter=label-brainVolume;
-                                --verbose=5;
-                                --exec=\'composite -dissolve 90 -gravity Center
-                                %inputWorkingDir/%inputWorkingFile
-                                %inputWorkingDir/../../aparc.DKTatlas+aseg.deep.mgz/label-segVolume/%inputWorkingFile
-                                -alpha Set
-                                %outputWorkingDir/%inputWorkingFile\';
-                                --noJobLogging;
-                                --title=overlay-png;
+    fnndsc/pl-heatmap:          ARGS;
+                                --input1=@mgz[_n]/aparc+aseg.mgz/label-segVolume;
+                                --input2=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz/label-segVolume;
+                                --title=heatmap;
                                 --previous_id=@prev_id"
+    
+                                
                                 
     "3*_n:6*_n:l1|
     fnndsc/pl-mgz2lut_report:   ARGS;
@@ -135,8 +131,8 @@ DESC
       ███     ███     ███     ███     ███     ███       ███ :5  pl-multipass
        │       │       │       │       │       │         │          (mgz2imageslices)
        │       │       │       │       │       │         │
-      ███     ███     ███     ███     ███     ███       ███ :6  pl-pfdorun
-                                                                    (imageMagick)
+      ███     ███     ███     ███     ███     ███       ███ :6  pl-heatmap
+                                                                    
 
       
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
