@@ -171,27 +171,36 @@ DESC
   'fsfer-parallel.sh' posts a workflow based off running a segmentation
   engine, ``pl-fastsurfer_inference`` and related machinery to CUBE:
 
-                              ███:0                             pl-brainmgz
-            __________________/│\_____..._______..._
-         _ /     _ /     _ /   |   \_      \_        \_
-        /       /       /      │      \  ...  \    ...  \ 
-       ↓       ↓       ↓       ↓       ↓       ↓         ↓
-      ███     ███     ███     ███     ███     ███       ███ :1  pl-pfdorun
-      /│      /│      /│      /│      /│      /│        /│
-     ↓ │     ↓ │     ↓ │     ↓ │     ↓ │     ↓ │       ↓ │
-    ███│    ███│    ███│    ███│    ███│    ███│      ███│  :2  pl-mgz2imageslices
-       │       │       │       │       │       │         │
-       ↓       ↓       ↓       ↓       ↓       ↓         ↓
-      ███     ███     ███     ███     ███     ███       ███ :3  pl-fastsurfer_inference
-      /│      /│      /│      /│      /│      /│        /│
-     ↓ │     ↓ │     ↓ │     ↓ │     ↓ │     ↓ │       ↓ │
-    ███│    ███│    ███│    ███│    ███│    ███│      ███│  :4  pl-multipass
-    /  │    /  │    /  │    /  │    /  │    /  │      /  │          (mgz2imageslices)
-   ↓   │   ↓   │   ↓   │   ↓   │   ↓   │   ↓   │     ↓   │
-  ███  │  ███  │  ███  │  ███  │  ███  │  ███  │    ███  │  :5  pl-pfdorun
-       │       │       │       │       │       │         │          (imageMagick)
-       ↓       ↓       ↓       ↓       ↓       ↓         ↓
-      ███     ███     ███     ███     ███     ███       ███ :6  pl-mgz2lut_report
+                              ███                                    :0   pl-brainmgz
+       ┌───────────────────────┼────────── ... ─────────┐                 (many subjects)
+       ↓                       ↓                        ↓
+      ███                     ███                      ███           0:1  pl-pfdorun
+     ┌─┴─┐                   ┌─┴─┐                    ┌─┴─┐               (single subject)
+     ↓   │                   ↓   │                    ↓   │
+    ███  │                  ███  │                   ███  │          1:2  pl-mgz2imageslices
+         │                       │                        │               (raw brain image)
+         ↓                       ↓                        ↓
+        ███                     ███                      ███         1:3  pl-fastsurfer_inference
+ ┌───┬───┼───┬───┐       ┌───┬───┼───┬───┐        ┌───┬───┼───┬───┐       ( cNN )
+ │   │   │   ↓   │       │   │   │   ↓   │        │   │   │   ↓   │
+ │   │   │  ███  │       │   │   │  ███  │        │   │   │  ███  │  3:10 pl-mgz2lut_report
+ │   │   │       ↓       │   │   │       ↓        │   │   │       ↓       ( cNN )
+ │   │   │      ███      │   │   │      ███       │   │   │      ███ 3:11 pl-mgz2lut_report
+ │   │   │               │   │   │                │   │   │               (FreeSurfer)
+ ↓   │   │               ↓   │   │                ↓   │   │
+███  │   │              ███  │   │               ███  │   │          3:4  pl-multipass
+ │   ↓   │               │   ↓   │                │   ↓   │               (brain/NN)
+ │  ███  │               │  ███  │                │  ███  │          3:6  pl-multipass
+ │   │   ↓               │   │   ↓                │   │   ↓               (brain/FS)
+ │   │  ███              │   │  ███               │   │  ███         3:8  pl-multipass
+ │   │   │               │   │   │                │   │   │               (NN/FS)
+ ↓   │   │               ↓   │   │                ↓   │   │
+███  │   │              ███  │   │               ███  │   │          4:5  pl-pfdorun
+     ↓   │                   ↓   │                    ↓   │               (overlay brain/NN)
+    ███  │                  ███  │                   ███  │          6:7  pl-pfdorun
+         ↓                       ↓                        ↓               (overlay brain/FS)
+        ███                     ███                      ███         8:9  pl-heatmap
+                                                                          (NN/FS)
 
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
     data from several subject brain images. This workflow will process each
