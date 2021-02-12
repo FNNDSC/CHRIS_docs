@@ -200,7 +200,7 @@ function waitForNodeState {
     local totalTime=0
 
     if (( ! ${#pollIntervalSeconds} )) ; then pollIntervalSeconds=5;    fi
-    if (( ! ${#timeoutSeconds} )) ;      then b_timeout=1;              fi
+    if (( ${#timeoutSeconds} )) ;        then b_timeout=1;              fi
 
     if [[ $plugininstanceID == "-1" ]] ; then
         criticalError_exit 10 \
@@ -230,7 +230,11 @@ function waitForNodeState {
         windowBottom
         if [[ "$status" == "$state" ]] ; then break ; fi
         if (( b_timeout )) ; then
-            if (( pollCount * pollIntervalSecodns < timeoutSeconds )) ; then
+            echo "In timeout!"
+            echo "pollCount = $pollCount"
+            echo "pollIntervalSeconds = $pollIntervalSeconds"
+            echo "timeoutSeconds = $timeoutSeconds"
+            if (( pollCount * pollIntervalSeconds < timeoutSeconds )) ; then
                 b_poll=1
             else
                 b_poll=0
