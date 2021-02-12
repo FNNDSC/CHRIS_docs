@@ -415,9 +415,11 @@ function plugin_runFromFile {
     echo "chrispl-run \\" > $file
     echo -e "\t\t--plugin   ${_a_cmd[2]} \\"        >> $file
     echo -e "\t\t--args     \"$argStr\"  \\"        >> $file
-    echo -e "\t\t--onCUBE   '${_a_cmd[6]}'"         >> $file
     if (( ${#3} )) ; then
-        echo -e "\t\t'${_a_cmd[6]}'"                >> $file
+        echo -e "\t\t--onCUBE   '${_a_cmd[6]}' \\"  >> $file
+        echo -e "\t\t${_a_cmd[7]}"                  >> $file
+    else
+        echo -e "\t\t--onCUBE   '${_a_cmd[6]}'"     >> $file
     fi
     _RUN=$(source $file)
     if (( ${#3} )) ; then
