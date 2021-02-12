@@ -197,6 +197,7 @@ function waitForNodeState {
     local pollCount=1
     local b_poll=1
     local b_timeout=0
+    local b_waitTimedOut=0
     local totalTime=0
 
     if (( ! ${#pollIntervalSeconds} )) ; then pollIntervalSeconds=5;    fi
@@ -230,14 +231,12 @@ function waitForNodeState {
         windowBottom
         if [[ "$status" == "$state" ]] ; then break ; fi
         if (( b_timeout )) ; then
-            echo "In timeout!"
-            echo "pollCount = $pollCount"
-            echo "pollIntervalSeconds = $pollIntervalSeconds"
-            echo "timeoutSeconds = $timeoutSeconds"
             if (( pollCount * pollIntervalSeconds < timeoutSeconds )) ; then
                 b_poll=1
             else
                 b_poll=0
+                b_waitTimedOut=1
+                status="timeout"
             fi
         fi
         sleep $pollIntervalSeconds
