@@ -1,0 +1,264 @@
+{
+    "status": false,
+    "query": {
+        "status": true,
+        "search": {
+            "status": true,
+            "templatize": {
+                "status": true,
+                "message": "1 parameters templatized",
+                "CLI": {
+                    "str_CUBE": "{\"protocol\":\"http\",\"port\":\"8000\",\"address\":\"117.local\",\"user\":\"chris\",\"password\":\"chris1234\"}",
+                    "str_CUBEaddress": "",
+                    "str_CUBEport": "",
+                    "b_version": false,
+                    "b_man": false,
+                    "b_syslog": false,
+                    "b_json": true,
+                    "str_pluginSpec": "name=pl-fastsurfer_inference",
+                    "str_args": "ARGS;--subjectDir=subjects;--copyInputFiles=mgz;--title=Segmented_Subjects;--previous_id=",
+                    "str_across": "plugins",
+                    "str_filterFor": "",
+                    "verbosity": 1,
+                    "str_using": "name=pl-fastsurfer_inference",
+                    "str_for": "id",
+                    "str_configFileLoad": "",
+                    "str_configFileSave": "",
+                    "str_debugToDir": "/tmp"
+                },
+                "params": {
+                    "name": "pl-fastsurfer_inference"
+                }
+            },
+            "response": {
+                "collection": {
+                    "version": "1.0",
+                    "href": "http://117.local:8000/api/v1/plugins/search/?limit=50000&name=pl-fastsurfer_inference",
+                    "items": [
+                        {
+                            "data": [
+                                {
+                                    "name": "id",
+                                    "value": 7
+                                },
+                                {
+                                    "name": "creation_date",
+                                    "value": "2021-02-17T09:53:34.858923-05:00"
+                                },
+                                {
+                                    "name": "name",
+                                    "value": "pl-fastsurfer_inference"
+                                },
+                                {
+                                    "name": "version",
+                                    "value": "1.0.15"
+                                },
+                                {
+                                    "name": "dock_image",
+                                    "value": "fnndsc/pl-fastsurfer_inference"
+                                },
+                                {
+                                    "name": "public_repo",
+                                    "value": "https://github.com/FNNDSC"
+                                },
+                                {
+                                    "name": "icon",
+                                    "value": ""
+                                },
+                                {
+                                    "name": "type",
+                                    "value": "ds"
+                                },
+                                {
+                                    "name": "stars",
+                                    "value": 0
+                                },
+                                {
+                                    "name": "authors",
+                                    "value": "Martin Reuter (FastSurfer), Sandip Samal (FNNDSC) (sandip.samal@childrens.harvard.edu)"
+                                },
+                                {
+                                    "name": "title",
+                                    "value": "An inference app of FastSurfer"
+                                },
+                                {
+                                    "name": "category",
+                                    "value": ""
+                                },
+                                {
+                                    "name": "description",
+                                    "value": "An app to efficiently perform cortical parcellation and segmentation on raw brain MRI images"
+                                },
+                                {
+                                    "name": "documentation",
+                                    "value": "http://wiki"
+                                },
+                                {
+                                    "name": "license",
+                                    "value": "Opensource (MIT)"
+                                },
+                                {
+                                    "name": "execshell",
+                                    "value": "python3"
+                                },
+                                {
+                                    "name": "selfpath",
+                                    "value": "/usr/src/fastsurfer_inference"
+                                },
+                                {
+                                    "name": "selfexec",
+                                    "value": "fastsurfer_inference.py"
+                                },
+                                {
+                                    "name": "min_number_of_workers",
+                                    "value": 1
+                                },
+                                {
+                                    "name": "max_number_of_workers",
+                                    "value": 1
+                                },
+                                {
+                                    "name": "min_cpu_limit",
+                                    "value": 1000
+                                },
+                                {
+                                    "name": "max_cpu_limit",
+                                    "value": 2147483647
+                                },
+                                {
+                                    "name": "min_memory_limit",
+                                    "value": 200
+                                },
+                                {
+                                    "name": "max_memory_limit",
+                                    "value": 2147483647
+                                },
+                                {
+                                    "name": "min_gpu_limit",
+                                    "value": 0
+                                },
+                                {
+                                    "name": "max_gpu_limit",
+                                    "value": 0
+                                }
+                            ],
+                            "href": "http://117.local:8000/api/v1/plugins/7/",
+                            "links": [
+                                {
+                                    "rel": "meta",
+                                    "href": "http://117.local:8000/api/v1/plugins/metas/7/"
+                                },
+                                {
+                                    "rel": "parameters",
+                                    "href": "http://117.local:8000/api/v1/plugins/7/parameters/"
+                                },
+                                {
+                                    "rel": "instances",
+                                    "href": "http://117.local:8000/api/v1/plugins/7/instances/"
+                                },
+                                {
+                                    "rel": "compute_resources",
+                                    "href": "http://117.local:8000/api/v1/plugins/7/computeresources/"
+                                }
+                            ]
+                        }
+                    ],
+                    "links": [],
+                    "total": 1
+                }
+            },
+            "message": "CUBE call returned a response"
+        },
+        "target": [
+            [
+                {
+                    "name": "id",
+                    "value": 7
+                }
+            ]
+        ],
+        "message": "1 target(s) found",
+        "keys": [
+            "id",
+            "creation_date",
+            "name",
+            "version",
+            "dock_image",
+            "public_repo",
+            "icon",
+            "type",
+            "stars",
+            "authors",
+            "title",
+            "category",
+            "description",
+            "documentation",
+            "license",
+            "execshell",
+            "selfpath",
+            "selfexec",
+            "min_number_of_workers",
+            "max_number_of_workers",
+            "min_cpu_limit",
+            "max_cpu_limit",
+            "min_memory_limit",
+            "max_memory_limit",
+            "min_gpu_limit",
+            "max_gpu_limit"
+        ]
+    },
+    "run": {
+        "status": false,
+        "run": {
+            "status": true,
+            "templatize": {
+                "status": true,
+                "message": "4 key(s) parsed into template",
+                "template": {
+                    "data": [
+                        {
+                            "name": "subjectDir",
+                            "value": "subjects"
+                        },
+                        {
+                            "name": "copyInputFiles",
+                            "value": "mgz"
+                        },
+                        {
+                            "name": "title",
+                            "value": "Segmented_Subjects"
+                        },
+                        {
+                            "name": "previous_id",
+                            "value": ""
+                        }
+                    ]
+                },
+                "argsParse": {
+                    "status": true,
+                    "message": "5 args parsed",
+                    "CLIdict": {
+                        "ARGS": true,
+                        "subjectDir": "subjects",
+                        "copyInputFiles": "mgz",
+                        "title": "Segmented_Subjects",
+                        "previous_id": ""
+                    }
+                }
+            },
+            "response": {
+                "collection": {
+                    "version": "1.0",
+                    "href": "http://117.local:8000/api/v1/plugins/7/instances/",
+                    "error": {
+                        "message": "{\"previous_id\": [\"This field is required.\"]}"
+                    }
+                }
+            },
+            "message": "CUBE call return a response"
+        },
+        "target": [],
+        "message": "{\"previous_id\": [\"This field is required.\"]}"
+    },
+    "message": "plugin run NOT scheduled"
+}
