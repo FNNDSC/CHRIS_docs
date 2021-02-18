@@ -1,0 +1,26 @@
+= MOC Integration
+== Abstract
+This document describes the steps that are required to get ChRIS up and running on the MOC.
+
+. Registering to Mass Open Cloud
+. Adding Projects to Openshift and Openstack
+. Installing Openshift CLI Tool
+. Creating Secrets on Openshift Using CLI Tool
+. Deploying Pfioh on Openshift
+. Deploying Pman on Openshift
+. Running Test Scripts on Openshift
+
+
+== Registering to Mass Open Cloud
+
+== Adding Projects to Openshift and Openstack
+
+== Installing Openshift CLI Tool
+
+== Creating Secrets on Openshift Using CLI Tool
+
+== Deploying Pfioh on Openshift
+
+== Deploying Pman on Openshift
+
+== Running Test Scripts on Openshift
