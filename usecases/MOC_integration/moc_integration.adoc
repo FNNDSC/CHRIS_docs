@@ -1,8 +1,9 @@
 = MOC Integration
-== Abstract
-This document describes the steps that are required to get ChRIS up and running on the MOC.
 
-. Registering to Mass Open Cloud
+== Abstract
+This document describes the steps that are required to get ChRIS up and running on the MOC. The intended audience is ChRIS developers.
+
+. xref:#registering-to-mass-open-cloud[Registering to Mass Open Cloud]
 . Adding Projects to Openshift and Openstack
 . Installing Openshift CLI Tool
 . Creating Secrets on Openshift Using CLI Tool
