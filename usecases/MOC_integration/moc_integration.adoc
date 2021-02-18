@@ -13,9 +13,12 @@ This document describes the steps that are required to get ChRIS up and running 
 
 
 == Registering to Mass Open Cloud
-Follow this link to submit an account request --> https://massopen.cloud/request-an-account/[Request Account on MOC]
-Follow this link to learn more about adding users to your Openstack project --> https://support.massopen.cloud/kb/faq.php?id=22[Add Users to Openstack Project]
-If your access is approved, Follow these links to login to the Openshift and Openstack platforms --> https://k-openshift.osh.massopen.cloud:8443/[Openshift] | http://kaizen.massopen.cloud/[Openstack]
+Follow this link to submit an account request -> https://massopen.cloud/request-an-account/[Request Account on MOC]
+
+Follow this link to learn more about adding users to your Openstack project -> https://support.massopen.cloud/kb/faq.php?id=22[Add Users to Openstack Project]
+
+If your access is approved, Follow these links to login to the Openshift and Openstack platforms -> https://k-openshift.osh.massopen.cloud:8443/[Openshift] | http://kaizen.massopen.cloud/[Openstack]
+
 You should be able to login to these platforms by using your 'SSO' credentials.
 
 
