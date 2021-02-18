@@ -61,6 +61,7 @@ declare -a a_WORKFLOWSPEC=(
     "4:5:l1|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=label-brainVolume;
+                                --fileFilter=png;
                                 --verbose=5;
                                 --exec=\'composite -dissolve 90 -gravity Center
                                 %inputWorkingDir/%inputWorkingFile
@@ -84,6 +85,7 @@ declare -a a_WORKFLOWSPEC=(
     "6:7:l1|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=label-brainVolume;
+                                --fileFilter=png;
                                 --verbose=5;
                                 --exec=\'composite -dissolve 90 -gravity Center
                                 %inputWorkingDir/%inputWorkingFile
@@ -576,9 +578,7 @@ title -d 1 "Building and Scheduling workflow..."
                     "@prev_id=$ID4" && id_check $ID5
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5"     \
                     "a_WORKFLOWSPEC[@]"
-
-        waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState 5 300
-
+        # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState 5 300
 
         plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun \
                     "@prev_id=$ID3" && id_check $ID6
@@ -588,7 +588,7 @@ title -d 1 "Building and Scheduling workflow..."
                     "@prev_id=$ID6" && id_check $ID7
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":6;$ID6" ":7;$ID7"     \
                     "a_WORKFLOWSPEC[@]"
-        waitForNodeState    "$CUBE" "finishedSuccessfully" $ID7 retState 5 300
+        # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID7 retState 5 300
 
         plugin_run  ":8" "a_WORKFLOWSPEC[@]" "$CUBE" ID8 $sleepAfterPluginRun \
                     "@prev_id=$ID3" && id_check $ID8
@@ -598,7 +598,7 @@ title -d 1 "Building and Scheduling workflow..."
                     "@prev_id=$ID8;@SUBJID=$image" && id_check $ID9
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":8;$ID8" ":9;$ID9"     \
                     "a_WORKFLOWSPEC[@]"
-        waitForNodeState    "$CUBE" "finishedSuccessfully" $ID9 retState 5 300
+        # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID9 retState 5 300
 
         plugin_run  ":10" "a_WORKFLOWSPEC[@]" "$CUBE" ID10 $sleepAfterPluginRun \
                     "@prev_id=$ID3;@SUBJID=$image" && id_check $ID10
