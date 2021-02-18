@@ -25,14 +25,14 @@ declare -a a_WORKFLOWSPEC=(
                                 --noJobLogging; --verbose=3;
                                 --exec=\'cp -rf %inputWorkingDir/%inputWorkingFile
                                 %outputWorkingDir/%inputWorkingFile\';
-                                --title=@mgz[_n];
+                                --title=Filter;
                                 --previous_id=@prev_id"
                                 
     "1:2|
     fnndsc/pl-fastsurfer_inference: ARGS;
                                 --subjectDir=subjects;
                                 --copyInputFiles=mgz;
-                                --title=Segmented_Subjects;
+                                --title=CNN;
                                 --previous_id=@prev_id"                            
     
     "2:3*_n:l1|
@@ -48,7 +48,7 @@ declare -a a_WORKFLOWSPEC=(
     fnndsc/pl-multipass:        ARGS;
                                 --splitExpr='++';
                                 --commonArgs=\'--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png\';
-                                --specificArgs=\'--wholeVolume brainVolume --fileFilter brain ++ --wholeVolume segVolume --fileFilter aparc\';
+                                --specificArgs=\'--wholeVolume brainVolume --fileFilter brain ++ --wholeVolume segVolume --fileFilter aparc --lookupTable __fs__\';
                                 --exec=pfdo_mgz2image;
                                 --verbosity=5;
                                 --title=segmented-png;
@@ -56,18 +56,50 @@ declare -a a_WORKFLOWSPEC=(
     
     "4*_n:5*_n:l1|
     fnndsc/pl-heatmap:          ARGS;
-                                --input1=@mgz[_n]/aparc+aseg.mgz/label-segVolume;
-                                --input2=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz/label-segVolume;
+                                --inputSubDir1=@mgz[_n]/aparc+aseg.mgz/label-segVolume;
+                                --inputSubDir2=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz/label-segVolume;
                                 --title=heatmap;
                                 --previous_id=@prev_id"
-    
+                                
+    "4*_n:6*_n:l1|
+    fnndsc/pl-pfdorun:          ARGS;
+                                --dirFilter=label-brainVolume;
+                                --verbose=5;
+                                --exec=\'composite -dissolve 90 -gravity Center
+                                %inputWorkingDir/%inputWorkingFile
+                                %inputWorkingDir/../../aparc+aseg.mgz/label-segVolume/%inputWorkingFile
+                                -alpha Set
+                                %outputWorkingDir/%inputWorkingFile\';
+                                --noJobLogging;
+                                --title=overlayFS-png;
+                                --previous_id=@prev_id"
+
+    "4*_n:8*_n:l1|
+    fnndsc/pl-pfdorun:          ARGS;
+                                --dirFilter=label-brainVolume;
+                                --verbose=5;
+                                --exec=\'composite -dissolve 90 -gravity Center
+                                %inputWorkingDir/%inputWorkingFile
+                                %inputWorkingDir/../../aparc+DKTatlas+aseg.deep.mgz/label-segVolume/%inputWorkingFile
+                                -alpha Set
+                                %outputWorkingDir/%inputWorkingFile\';
+                                --noJobLogging;
+                                --title=overlayNN-png;
+                                --previous_id=@prev_id"    
                                 
                                 
-    "3*_n:6*_n:l1|
+    "3*_n:7*_n:l1|
     fnndsc/pl-mgz2lut_report:   ARGS;
                                 --file_name=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
                                 --report_types=txt,html,pdf;
-                                --title=report;
+                                --title=CNN-Report;
+                                --previous_id=@prev_id"
+                                
+    "3*_n:9*_n:l1|
+    fnndsc/pl-mgz2lut_report:   ARGS;
+                                --file_name=@mgz[_n]/aparc+aseg.mgz;
+                                --report_types=txt,html,pdf;
+                                --title=FS-Report;
                                 --previous_id=@prev_id"
                                 
     
@@ -393,17 +425,25 @@ if (( b_imageList || b_onlyShowImageNames )) ; then
     if (( b_onlyShowImageNames )) ; then exit 0 ; fi
 fi
 
+if (( b_imageList )) ; then   
 # Construct a parameter for filtering
     filter=""
     for subject in "${a_subjID[@]}" ; do
         filter+="$subject,"
     done
     filter="${filter%,}"
-
     plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
                     "@prev_id=$ROOTID;@subjects=$filter" && id_check $ID1
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
                     "a_WORKFLOWSPEC[@]"
+else
+    plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
+                    "@prev_id=$ROOTID;@subjects=''" && id_check $ID1
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
+                    "a_WORKFLOWSPEC[@]" 
+                    
+fi
+    
 
 title -d 1 "Building and Scheduling workflow..."
 
@@ -463,9 +503,24 @@ title -d 1 "Building and Scheduling workflow..."
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5" \
                     "a_WORKFLOWSPEC[@]"
                     
-        plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun\
-                    "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID6
-        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":6;$ID6" \
+        plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun\
+                    "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID6
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":6;$ID6" \
+                    "a_WORKFLOWSPEC[@]"
+                    
+        plugin_run  ":8" "a_WORKFLOWSPEC[@]" "$CUBE" ID8 $sleepAfterPluginRun\
+                    "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID8
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":8;$ID8" \
+                    "a_WORKFLOWSPEC[@]"
+                    
+        plugin_run  ":7" "a_WORKFLOWSPEC[@]" "$CUBE" ID7 $sleepAfterPluginRun\
+                    "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID7
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":7;$ID7" \
+                    "a_WORKFLOWSPEC[@]"
+                    
+        plugin_run  ":9" "a_WORKFLOWSPEC[@]" "$CUBE" ID9 $sleepAfterPluginRun\
+                    "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID9
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":9;$ID9" \
                     "a_WORKFLOWSPEC[@]"
         
         if (( b_waitOnBranchFinish )) ; then
