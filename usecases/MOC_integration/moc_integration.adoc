@@ -29,11 +29,11 @@ If the projects are created, you should be able to login and view the projects.
 
 Use your `SSO` credentials to login to https://kaizen.massopen.cloud to view your project in Openstack. (See the image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-Project.png[Openstack Project]
+image::https:https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-project.png[Openstack Project]
 
 Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-Project.png[Openshift Project]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.png[Openshift Project]
 
 You can create a project manually in the Openshift UI or by using a terminal command:
 
@@ -63,6 +63,26 @@ After succesfully installing Openshift CLI Tool, you can login to Opeshift using
 
 First go to https://k-openshift.osh.massopen.cloud:8443/[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
 
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-login.png[Openshift Login]
+
+Open a terminal and paste the login command. (Your token will differ from the example)
+
+....
+$ oc login https://k-openshift.osh.massopen.cloud:8443 --token=MQCsXU6Gs1DWNE0zk67eYA0A7eCmH0-cM576qZooRFY
+....
+
+=== Creating Secrets
+
+. Create `kubecfg`
+....
+oc project myproject
+oc create secret generic kubecfg --from-file=$HOME/.kube/config -n myproject
+....
+
+
+. Create `pfioh_config & pman_config`
+
+. Create `swift-credentials`
 
 
 == Deploying Pfioh on Openshift
