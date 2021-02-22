@@ -29,7 +29,7 @@ If the projects are created, you should be able to login and view the projects.
 
 Use your `SSO` credentials to login to https://kaizen.massopen.cloud to view your project in Openstack. (See the image below)
 
-image::https:https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-project.png[Openstack Project]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-project.png[Openstack Project]
 
 Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
 
@@ -81,8 +81,105 @@ oc create secret generic kubecfg --from-file=$HOME/.kube/config -n myproject
 
 
 . Create `pfioh_config & pman_config`
+.. Create a file `example-config.cfg` and add the following:
+
+....
+[AUTH TOKENS]
+token = password
+....
+
+.. Convert the configuration to base64 & copy the base64 encoded results with the following command:
+
+....
+cat example-config.cfg | base64
+....
+
+... Create a file `example-secret.yml` and add the encoded result (For `pfioh`):
+
+....
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pfioh-config
+type: Opaque
+data:
+  pfioh_config.cfg: <base64 encoded configuration>
+....
+
+.... Create the secret for `pfioh`
+
+....
+oc create -f example-secret.yml
+....
+
+..... Edit the file example-secret.yml and add the following (For `pman`):
+
+....
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pman-config
+type: Opaque
+data:
+  pman_config.cfg: <base64 encoded configuration>
+....
+
+...... Create the secret for `pman`
+
+....
+oc create -f example-secret.yml
+....
+
 
 . Create `swift-credentials`
+
+.. Create a file swift-credentials.cfg and add the following:
+
+....
+[AUTHORIZATION]
+osAuthUrl          = https://kaizen.massopen.cloud:13000/v3
+
+[SECRET]
+applicationId      = <Follow the below steps to generate applicationId>
+applicationSecret  = <Follow the below steps to generate applicationSecret>
+....
+
+Follow these steps to create and `applicationId` and `applicationSecret` for the Openstack project:
+
+....
+    1) Visit the identity panel at https://onboarding.massopen.cloud/identity/
+    2) Click the "+ Create Application Credential" button
+    3) In the follow dialog, give your credential a name. You can leave the other fields blank.
+    4) Click "Create Application Credential"
+    5) This will present a window with an ID and secret. Record these values because you won't be able to retrieve them after closing the window.
+....
+
+.. Create the secret `swift-credentials`
+
+....
+oc create secret generic swift-credentials --from-file=<path-to-file>/swift-credentials.cfg
+....
+
+If all the steps above went well, you should be able to see the secrets that were created succesfully
+
+....
+(chris_env) [cyoruk@localhost ChRISWORK]$ oc get secrets
+NAME                       TYPE                                  DATA   AGE
+builder-dockercfg-s4shq    kubernetes.io/dockercfg               1      155d
+builder-token-5p9nl        kubernetes.io/service-account-token   4      155d
+builder-token-xqpz2        kubernetes.io/service-account-token   4      155d
+default-dockercfg-nh5s5    kubernetes.io/dockercfg               1      155d
+default-token-n9lx8        kubernetes.io/service-account-token   4      155d
+default-token-xb6x7        kubernetes.io/service-account-token   4      155d
+deployer-dockercfg-hszz4   kubernetes.io/dockercfg               1      155d
+deployer-token-fqvc5       kubernetes.io/service-account-token   4      155d
+deployer-token-vcf2f       kubernetes.io/service-account-token   4      155d
+kubecfg                    Opaque                                1      4d
+pfioh-config               Opaque                                1      4d
+pman-config                Opaque                                1      4d
+swift-credentials          Opaque                                1      4d
+
+....
 
 
 == Deploying Pfioh on Openshift
