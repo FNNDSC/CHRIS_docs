@@ -23,6 +23,29 @@ You should be able to login to these platforms by using your `SSO` credentials.
 
 
 == Adding Projects to Openshift and Openstack
+In order to create new projects on Openshift and Openstack you can create a ticket here -> https://osticket.massopen.cloud/[Create a Ticket]
+
+If the projects are created, you should be able to login and view the projects.
+
+Use your `SSO` credentials to login to https://kaizen.massopen.cloud to view your project in Openstack. (See the image below)
+
+image:Openstack-project.png[Openstack Project]
+
+Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
+
+You can create a project manually in the Openshift UI or by using a terminal command:
+
+....
+$ oc new-project cs6620-sp2021-integrated-med-ai --display-name="CS6620 Spring 2021 \
+Integrating Medical AI Compute CPU/GPU worklows on the MOC -- PowerPC and x86-64 -- Using OpenShift"
+....
+
+Note: Make sure that you have OC libraries installed on your system.
+
+image:Openshift-project.png[Openshift Project]
+
+
+
 
 == Installing Openshift CLI Tool
 
