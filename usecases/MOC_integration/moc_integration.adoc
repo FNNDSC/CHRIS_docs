@@ -59,6 +59,11 @@ Follow this link to get information on how to download and install the Openshift
 If you do not wish to create a RedHat account, you can download the packages from this GitHub repo: https://github.com/openshift/origin/releases
 
 == Creating Secrets on Openshift Using CLI Tool
+After succesfully installing Openshift CLI Tool, you can login to Opeshift using CLI commands.
+
+First go to https://k-openshift.osh.massopen.cloud:8443/[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
+
+
 
 == Deploying Pfioh on Openshift
 
