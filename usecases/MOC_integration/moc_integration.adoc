@@ -29,7 +29,7 @@ If the projects are created, you should be able to login and view the projects.
 
 Use your `SSO` credentials to login to https://kaizen.massopen.cloud to view your project in Openstack. (See the image below)
 
-image:Openstack-project.png[Openstack Project]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-Project.png[Openstack Project]
 
 Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
 
@@ -40,11 +40,10 @@ $ oc new-project cs6620-sp2021-integrated-med-ai --display-name="CS6620 Spring 2
 Integrating Medical AI Compute CPU/GPU worklows on the MOC -- PowerPC and x86-64 -- Using OpenShift"
 ....
 
-Note: Make sure that you have OC libraries installed on your system.
+Note: Make sure that you have OC libraries installed on your system. (See . xref:#installing-openshift-cli-tool[Installing Openshift CLI Tool]
+)
 
-image:Openshift-project.png[Openshift Project]
-
-
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-Project.png[Openshift Project]
 
 
 == Installing Openshift CLI Tool
