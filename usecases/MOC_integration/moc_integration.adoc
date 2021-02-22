@@ -33,6 +33,8 @@ image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack
 
 Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
 
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-Project.png[Openshift Project]
+
 You can create a project manually in the Openshift UI or by using a terminal command:
 
 ....
@@ -40,13 +42,21 @@ $ oc new-project cs6620-sp2021-integrated-med-ai --display-name="CS6620 Spring 2
 Integrating Medical AI Compute CPU/GPU worklows on the MOC -- PowerPC and x86-64 -- Using OpenShift"
 ....
 
-Note: Make sure that you have OC libraries installed on your system. (See . xref:#installing-openshift-cli-tool[Installing Openshift CLI Tool]
+Note: Make sure that you have OC libraries installed on your system. (See xref:#installing-openshift-cli-tool[Installing Openshift CLI Tool]
 )
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-Project.png[Openshift Project]
-
-
 == Installing Openshift CLI Tool
+It is recommended to install the Openshift CLI Tool on your system to ease the next steps working on MOC platform smoothly.
+
+=== Recommended Method
+
+In order to download the Openshift CLI Tool, you will have to create/open a RedHat account. This method is reccomended in order to get the most up to date OC libraries.
+
+Follow this link to get information on how to download and install the Openshift CLI Tool -> https://docs.openshift.com/container-platform/4.6/cli_reference/openshift_cli/getting-started-cli.html[Download Openshift CLI Tool]
+
+=== Alternative Method (Deprecated)
+
+If you do not wish to create a RedHat account, you can download the packages from this GitHub repo: https://github.com/openshift/origin/releases
 
 == Creating Secrets on Openshift Using CLI Tool
 
