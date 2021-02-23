@@ -1,18 +1,19 @@
 = MOC Integration
-
 == Abstract
+
 This document describes the steps that are required to get ChRIS up and running on the MOC. The intended audience is ChRIS developers.
 
 . xref:#registering-to-mass-open-cloud[Registering to Mass Open Cloud]
 . xref:#adding-projects-to-openshift-and-openstack[Adding Projects to Openshift and Openstack]
 . xref:#installing-openshift-cli-tool[Installing Openshift CLI Tool]
 . xref:#creating-secrets-on-openshift-using-cli-tool[Creating Secrets on Openshift Using CLI Tool]
-. xref:#deploying-pfioh-on-openshift[Deploying Pfioh on Openshift]
-. xref:#deploying-pman-on-openshift[Deploying Pman on Openshift]
+. xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
+. xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 . xref:#running-test-scripts-on-openshift[Running Test Scripts on Openshift]
 
 
 == Registering to Mass Open Cloud
+
 In order to get an account from MOC, you should submit an account request. Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]
 
 If you want to learn more about adding users to your Openstack project, follow this link -> https://support.massopen.cloud/kb/faq.php?id=22[Add Users to Openstack Project]
@@ -23,6 +24,7 @@ You should be able to login to these platforms by using your `SSO` credentials.
 
 
 == Adding Projects to Openshift and Openstack
+
 In order to create new projects on Openshift and Openstack you can create a ticket here -> https://osticket.massopen.cloud/[Create a Ticket]
 
 If the projects are created, you should be able to login and view the projects.
@@ -46,6 +48,7 @@ Note: Make sure that you have OC libraries installed on your system. (See xref:#
 )
 
 == Installing Openshift CLI Tool
+
 It is recommended to install the Openshift CLI Tool on your system to ease the next steps working on MOC platform smoothly.
 
 === Recommended Method
@@ -59,6 +62,7 @@ Follow this link to get information on how to download and install the Openshift
 If you do not wish to create a RedHat account, you can download the packages from this GitHub repo: https://github.com/openshift/origin/releases
 
 == Creating Secrets on Openshift Using CLI Tool
+
 After succesfully installing Openshift CLI Tool, you can login to Opeshift using CLI commands.
 
 First go to https://k-openshift.osh.massopen.cloud:8443/[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
@@ -72,14 +76,12 @@ $ oc login https://k-openshift.osh.massopen.cloud:8443 --token=MQCsXU6Gs1DWNE0zk
 ....
 
 === Creating Secrets
-
 ==== Create `kubecfg`
 
 ....
 oc project myproject
 oc create secret generic kubecfg --from-file=$HOME/.kube/config -n myproject
 ....
-
 
 ==== Create `pfioh_config & pman_config`
 
@@ -138,7 +140,6 @@ data:
 oc create -f example-secret.yml
 ....
 
-
 ==== Create `swift-credentials`
 
 ["loweralpha", start=1]
@@ -188,12 +189,41 @@ kubecfg                    Opaque                                1      4d
 pfioh-config               Opaque                                1      4d
 pman-config                Opaque                                1      4d
 swift-credentials          Opaque                                1      4d
-
 ....
 
+== Deploying pfioh on Openshift
 
-== Deploying Pfioh on Openshift
+Follow this link to download `pfioh` -> https://github.com/FNNDSC/pfioh
 
-== Deploying Pman on Openshift
+After downloading it, enter the subdirectory `openshift`:
+
+....
+cd pfioh/openshift
+....
+
+To deploy 'pfioh' on Openshift we need a file that contains all the information about the service we're going to deploy which is `pfioh-openshift-template.json`. 
+
+For deploying `pfioh` to Openshift:
+
+....
+oc new-app pfioh-openshift-template.json
+....
+
+To delete `pfioh`
+
+....
+oc delete all -l app=pfioh
+oc delete route pfioh
+....
+
+=== Advanced
+
+If you want to deploy your own version of `pfioh` you can edit `pfioh-openshift-template.json` which is present in pfioh/openshift. You will find a line containing "image": "fnndsc/pfioh", which is basically the name of the docker image we want to deploy. As an example you can change it to sandip117/pfioh. So it would look like "image": "sandip117/pfioh". (See the image below)
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-template.png[Pfioh Template]
+
+Note: The current version that supports `SSO` is `fnndsc/pfioh`
+
+== Deploying pman on Openshift
 
 == Running Test Scripts on Openshift
