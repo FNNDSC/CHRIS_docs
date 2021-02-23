@@ -73,8 +73,7 @@ $ oc login https://k-openshift.osh.massopen.cloud:8443 --token=MQCsXU6Gs1DWNE0zk
 
 === Creating Secrets
 
-[arabic]
-1. Create `kubecfg`
+==== Create `kubecfg`
 
 ....
 oc project myproject
@@ -82,21 +81,25 @@ oc create secret generic kubecfg --from-file=$HOME/.kube/config -n myproject
 ....
 
 
-2. Create `pfioh_config & pman_config`
-a.. Create a file `example-config.cfg` and add the following:
+==== Create `pfioh_config & pman_config`
+
+["loweralpha", start=1]
+. Create a file `example-config.cfg` and add the following:
 
 ....
 [AUTH TOKENS]
 token = password
 ....
 
-b.. Convert the configuration to base64 & copy the base64 encoded results with the following command:
+["loweralpha", start=2]
+. Convert the configuration to base64 & copy the base64 encoded results with the following command:
 
 ....
 cat example-config.cfg | base64
 ....
 
-c.. Create a file `example-secret.yml` and add the encoded result (For `pfioh`):
+["loweralpha", start=3]
+. Create a file `example-secret.yml` and add the encoded result (For `pfioh`):
 
 ....
 apiVersion: v1
@@ -108,13 +111,15 @@ data:
   pfioh_config.cfg: <base64 encoded configuration>
 ....
 
-d.. Create the secret for `pfioh`
+["loweralpha", start=4]
+. Create the secret for `pfioh`
 
 ....
 oc create -f example-secret.yml
 ....
 
-e.. Edit the file example-secret.yml and add the following (For `pman`):
+["loweralpha", start=5]
+. Edit the file example-secret.yml and add the following (For `pman`):
 
 ....
 apiVersion: v1
@@ -126,16 +131,18 @@ data:
   pman_config.cfg: <base64 encoded configuration>
 ....
 
-f.. Create the secret for `pman`
+["loweralpha", start=6]
+. Create the secret for `pman`
 
 ....
 oc create -f example-secret.yml
 ....
 
 
-3. Create `swift-credentials`
+==== Create `swift-credentials`
 
-a.. Create a file swift-credentials.cfg and add the following:
+["loweralpha", start=1]
+. Create a file swift-credentials.cfg and add the following:
 
 ....
 [AUTHORIZATION]
@@ -156,7 +163,8 @@ Follow these steps to create and `applicationId` and `applicationSecret` for the
     5) This will present a window with an ID and secret. Record these values because you won't be able to retrieve them after closing the window.
 ....
 
-b.. Create the secret `swift-credentials`
+["loweralpha", start=2]
+. Create the secret `swift-credentials`
 
 ....
 oc create secret generic swift-credentials --from-file=<path-to-file>/swift-credentials.cfg
