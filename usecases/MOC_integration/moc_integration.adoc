@@ -222,7 +222,7 @@ oc delete all -l app=pfioh
 oc delete route pfioh
 ....
 
-=== Advanced
+=== Deploying your own version of `pfioh` 
 
 If you want to deploy your own version of `pfioh` you can edit `pfioh-openshift-template.json` which is present in pfioh/openshift. You will find a line containing "image": "fnndsc/pfioh", which is basically the name of the docker image we want to deploy. As an example you can change it to sandip117/pfioh. So it would look like "image": "sandip117/pfioh". (See the image below)
 
