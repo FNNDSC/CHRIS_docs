@@ -2,7 +2,7 @@
 
 == Abstract
 
-This document describes the steps that are required to get ChRIS with `legacy pman(v2.2.4)`up and running on the MOC. The intended audience is ChRIS developers.
+This document describes the steps that are required to get ChRIS with `legacy pman(v2.2.4)` up and running on the MOC. The intended audience is ChRIS developers.
 
 . xref:#registering-to-mass-open-cloud[Registering to Mass Open Cloud]
 . xref:#adding-projects-to-openshift-and-openstack[Adding Projects to Openshift and Openstack]
@@ -15,11 +15,11 @@ This document describes the steps that are required to get ChRIS with `legacy pm
 
 == Registering to Mass Open Cloud
 
-*Submit an account request to MOC. It usually takes 2-3 business days to get approved. Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]
+* In order to create an account, you should submit a request to MOC. It usually takes 2-3 business days to get approved. Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]
 
-*Learn more about adding users to your Openstack project. Follow this link -> https://support.massopen.cloud/kb/faq.php?id=22[Add Users to Openstack Project]
+* Learn more about adding users to your Openstack project. Follow this link -> https://support.massopen.cloud/kb/faq.php?id=22[Add Users to Openstack Project]
 
-*If your access is approved, Follow these links to login to the Openshift and Openstack platforms -> https://k-openshift.osh.massopen.cloud:8443/[Openshift] | http://kaizen.massopen.cloud/[Openstack]
+* If your access is approved, Follow these links to login to the Openshift and Openstack platforms -> https://k-openshift.osh.massopen.cloud:8443/[Openshift] | http://kaizen.massopen.cloud/[Openstack]
 
 You should be able to login to these platforms by using your `SSO` credentials.
 
@@ -233,3 +233,5 @@ Note: The current version that supports `SSO` is `fnndsc/pfioh`
 == Deploying pman on Openshift
 
 == Running Test Scripts on Openshift
+
+== (Additional Step) Building a Local Openshift Cluster
