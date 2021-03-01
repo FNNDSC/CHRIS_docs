@@ -237,3 +237,23 @@ Note: The current version that supports `SSO` is `fnndsc/pfioh`
 
 == (Additional Step) Building a Local Openshift Cluster
 
+Note: This step is focused on bringing a minimal `OpenShift 4.x` cluster to your local laptop or desktop computer. If you are looking for a solution for running `OpenShift 3.x` , you will need tools such as oc cluster up, https://github.com/minishift/minishift[Minishift] or https://developers.redhat.com/products/cdk/overview[CDK].
+
+This additional step is helpful for people who build ChRIS plugin/services to test/debug the application locally before testing it on the cloud environment.
+
+There are couple steps involved to build a local `Openshift 4.x` cluster.
+
+* xref:#download-codeready-containers[Download CodeReady Containers]
+
+* xref:#install-codeready-containers[Install CodeReady Containers]
+
+* xref:#setup-openshift-cluster[Setup Openshift Cluster]
+
+=== Download CodeReady Containers
+
+Download CodeReady Containers binaries with an embedded OpenShift disk image from https://cloud.redhat.com/openshift/create/local
+
+=== Install CodeReady Containers
+
+=== Setup Openshift Cluster
+
