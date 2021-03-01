@@ -247,8 +247,6 @@ There are couple steps involved to build a local `Openshift 4.x` cluster.
 
 * xref:#install-codeready-containers[Install CodeReady Containers]
 
-* xref:#setup-openshift-cluster[Setup Openshift Cluster]
-
 === Download CodeReady Containers
 
 Select your OS and Download CodeReady Containers binaries with an embedded OpenShift disk image from https://cloud.redhat.com/openshift/create/local[CodeReady Containers] (See Image Below)
@@ -289,7 +287,3 @@ Start the CodeReady Containers virtual machine:
 ....
 $ crc start
 ....
-
-
-=== Setup ChRIS on Local Openshift Cluster
-
