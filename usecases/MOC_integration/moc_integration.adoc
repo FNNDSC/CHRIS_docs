@@ -233,6 +233,40 @@ Note: The current version that supports `SSO` is `fnndsc/pfioh`
 
 == Deploying pman on Openshift
 
+Follow this link to download `pman` -> https://github.com/FNNDSC/pman
+
+After downloading it, enter the subdirectory `openshift`:
+
+....
+cd pman/openshift
+....
+
+Note: The current version that supports `SSO` is `fnndsc/pman:2.2.4`. There are 2 places in the template where you need to change your project name. Look for a field saying OPENSHIFTMGR_PROJECT
+
+Now edit the `pman-openshift-template.json present` with your OPENSHIFT project name and updated pman docker image (See image below)
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-template.png[Pman Template]
+
+To deploy `pman` on Openshift we need a file that contains all the information about the service we're going to deploy which is `pman-openshift-template.json`. 
+
+For deploying `pman` to Openshift:
+
+....
+oc new-app pman-openshift-template.json
+....
+
+After deploying `pman`, you can see it deployed and running on Openshift. (See image below)
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-Overview.png[Pman Overview]
+
+To delete `pman`
+
+....
+oc delete all -l app=pman
+oc delete route pman
+oc delete cronjob pman-reaper
+....
+
 == Running Test Scripts on Openshift
 
 == (Additional Step) Building a Local Openshift Cluster
@@ -251,11 +285,10 @@ There are couple steps involved to build a local `Openshift 4.x` cluster.
 
 Select your OS and Download CodeReady Containers binaries with an embedded OpenShift disk image from https://cloud.redhat.com/openshift/create/local[CodeReady Containers] (See Image Below)
 
-image:https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/CodeReady-Containers.png[CodeReady Containers]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/CodeReady-Containers.png[CodeReady Containers]
 
 
 After downloading CodeReady containers, extract it and place the executable in your `$PATH` (You can check your `$PATH` with `$ echo $PATH`)
-
 
 ....
 $ tar -xf crc-linux-amd64.tar.xz (Extract CodeReady Containers)
@@ -286,4 +319,10 @@ Start the CodeReady Containers virtual machine:
 
 ....
 $ crc start
+....
+
+Login to the Openshift Cluster as a developer:
+
+....
+$ oc login -u developer https://api.crc.testing:6443
 ....
