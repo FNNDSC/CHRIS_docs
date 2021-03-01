@@ -239,7 +239,7 @@ Note: The current version that supports `SSO` is `fnndsc/pfioh`
 
 Note: This step is focused on bringing a minimal `OpenShift 4.x` cluster to your local laptop or desktop computer. If you are looking for a solution for running `OpenShift 3.x` , you will need tools such as oc cluster up, https://github.com/minishift/minishift[Minishift] or https://developers.redhat.com/products/cdk/overview[CDK].
 
-This additional step is helpful for people who build ChRIS plugin/services to test/debug the application locally before testing it on the cloud environment.
+This additional step is helpful for people who build ChRIS plugins/services to test/debug applications locally before testing it on the cloud environment.
 
 There are couple steps involved to build a local `Openshift 4.x` cluster.
 
@@ -251,7 +251,23 @@ There are couple steps involved to build a local `Openshift 4.x` cluster.
 
 === Download CodeReady Containers
 
-Download CodeReady Containers binaries with an embedded OpenShift disk image from https://cloud.redhat.com/openshift/create/local
+Select your OS and Download CodeReady Containers binaries with an embedded OpenShift disk image from https://cloud.redhat.com/openshift/create/local[CodeReady Containers] (See Image Below)
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/CodeReady-containers.png[CodeReady Containers]
+
+
+After downloading CodeReady containers, extract it and place the executable in your $PATH (You can check your $PATH with `$ echo $PATH`)
+
+
+''''
+$ tar -xf crc-linux-amd64.tar.xz (Extract CodeReady Containers)
+$ cp -r crc-linux-amd64 $PATH (Place the executable in one of your $PATH)
+
+''''
+
+You need to Download or copy your pull secret. The install program will prompt you for your pull secret during installation.
+
+Note: In order to download the CodeReady Containers, you will have to create/open a RedHat account.
 
 === Install CodeReady Containers
 
