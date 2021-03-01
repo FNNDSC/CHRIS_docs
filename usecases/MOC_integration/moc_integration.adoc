@@ -11,11 +11,12 @@ This document describes the steps that are required to get ChRIS with `legacy pm
 . xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
 . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 . xref:#running-test-scripts-on-openshift[Running Test Scripts on Openshift]
-
+. xref:#additional-step-building-a-local-openshift-cluster[(Additional Step) Building a Local Openshift Cluster]
 
 == Registering to Mass Open Cloud
 
-* In order to create an account, you should submit a request to MOC. It usually takes 2-3 business days to get approved. Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]
+* In order to create an account, you should submit a request to MOC. It usually takes 2-3 business days to get approved. + 
+Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]
 
 * Learn more about adding users to your Openstack project. Follow this link -> https://support.massopen.cloud/kb/faq.php?id=22[Add Users to Openstack Project]
 
@@ -235,3 +236,4 @@ Note: The current version that supports `SSO` is `fnndsc/pfioh`
 == Running Test Scripts on Openshift
 
 == (Additional Step) Building a Local Openshift Cluster
+
