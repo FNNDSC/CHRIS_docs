@@ -309,7 +309,7 @@ CodeReady Containers requires the libvirt and NetworkManager packages to run on 
 
 * Debian/Ubuntu -> `sudo apt install qemu-kvm libvirt-daemon libvirt-daemon-system network-manager`
 
-Set up the CodeReady Containers
+Set up the CodeReady Containers. We're going to use the `Pull Secret` that we copied from the CodeReady Container page.
 
 ....
 $ crc setup
