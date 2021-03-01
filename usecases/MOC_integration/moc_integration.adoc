@@ -253,17 +253,16 @@ There are couple steps involved to build a local `Openshift 4.x` cluster.
 
 Select your OS and Download CodeReady Containers binaries with an embedded OpenShift disk image from https://cloud.redhat.com/openshift/create/local[CodeReady Containers] (See Image Below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/CodeReady-containers.png[CodeReady Containers]
+image:https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/CodeReady-Containers.png[CodeReady Containers]
 
 
-After downloading CodeReady containers, extract it and place the executable in your $PATH (You can check your $PATH with `$ echo $PATH`)
+After downloading CodeReady containers, extract it and place the executable in your `$PATH` (You can check your `$PATH` with `$ echo $PATH`)
 
 
-''''
+....
 $ tar -xf crc-linux-amd64.tar.xz (Extract CodeReady Containers)
 $ cp -r crc-linux-amd64 $PATH (Place the executable in one of your $PATH)
-
-''''
+....
 
 You need to Download or copy your pull secret. The install program will prompt you for your pull secret during installation.
 
@@ -271,5 +270,26 @@ Note: In order to download the CodeReady Containers, you will have to create/ope
 
 === Install CodeReady Containers
 
-=== Setup Openshift Cluster
+CodeReady Containers requires the libvirt and NetworkManager packages to run on Linux. Consult the following code block to find the command used to install these packages for your Linux distribution:
+
+* Fedora -> `sudo dnf install NetworkManager`
+
+* Red Hat Enterprise Linux/CentOS -> `su -c 'yum install NetworkManager'`
+
+* Debian/Ubuntu -> `sudo apt install qemu-kvm libvirt-daemon libvirt-daemon-system network-manager`
+
+Set up the CodeReady Containers
+
+....
+$ crc setup
+....
+
+Start the CodeReady Containers virtual machine:
+
+....
+$ crc start
+....
+
+
+=== Setup ChRIS on Local Openshift Cluster
 
