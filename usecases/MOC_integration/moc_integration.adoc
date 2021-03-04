@@ -269,6 +269,57 @@ oc delete cronjob pman-reaper
 
 == Running Test Scripts on Openshift
 
+=== Prerequisites
+
+* xref:#create-a-python-virtual-environment[Create a Python Virtual Environment]
+
+* xref:#install-pfurl[Install pfurl]
+
+* Download test scripts -> https://github.com/FNNDSC/ChRIS-E2E
+
+==== Create a Python Virtual Environment
+
+["arabic", start=1]
+. Install the Python virtual environment creator
+
+* For Fedora -> `sudo dnf install python3-virtualenv`
+
+* For Ubuntu -> `sudo apt install virtualenv virtualenvwrapper python3-tk
+
+["arabic", start=2]
+. Create a directory for your virtual environments
+
+....
+mkdir ~/python-envs
+....
+
+["arabic", start=3]
+. Add these two lines to your .bashrc file
+
+....
+export WORKON_HOME=~/python-envs
+source /usr/local/bin/virtualenvwrapper.sh
+....
+
+["arabic", start=4]
+. Source your .bashrc and create a new Python3 virtual env
+
+....
+source .bashrc
+mkvirtualenv --python=python3 chris_env
+....
+
+["arabic", start=5]
+. Activate your virtual environment
+
+....
+workon chris_env
+....
+
+Note: To deactivate the virtual environment you can use `deactivate` command on the terminal
+
+==== Install pfurl
+
 == (Additional Step) Building a Local Openshift Cluster
 
 Note: This step is focused on bringing a minimal `OpenShift 4.x` cluster to your local laptop or desktop computer. If you are looking for a solution for running `OpenShift 3.x` , you will need tools such as oc cluster up, https://github.com/minishift/minishift[Minishift] or https://developers.redhat.com/products/cdk/overview[CDK].
