@@ -269,7 +269,7 @@ oc delete cronjob pman-reaper
 
 == Running Test Scripts on Openshift
 
-=== Prerequisites
+There are a couple of prerequisites that we have to satisfy before running any plugins on Openshift.
 
 * xref:#create-a-python-virtual-environment[Create a Python Virtual Environment]
 
@@ -277,14 +277,14 @@ oc delete cronjob pman-reaper
 
 * Download test scripts -> https://github.com/FNNDSC/ChRIS-E2E
 
-==== Create a Python Virtual Environment
+=== Create a Python Virtual Environment
 
 ["arabic", start=1]
 . Install the Python virtual environment creator
 
 * For Fedora -> `sudo dnf install python3-virtualenv`
 
-* For Ubuntu -> `sudo apt install virtualenv virtualenvwrapper python3-tk
+* For Ubuntu -> `sudo apt install virtualenv virtualenvwrapper python3-tk`
 
 ["arabic", start=2]
 . Create a directory for your virtual environments
@@ -318,7 +318,13 @@ workon chris_env
 
 Note: To deactivate the virtual environment you can use `deactivate` command on the terminal
 
-==== Install pfurl
+=== Install pfurl
+
+If you cretad the python virtual environment succesfully, you can install pfurl
+
+....
+pip install pfurl
+....
 
 == (Additional Step) Building a Local Openshift Cluster
 
