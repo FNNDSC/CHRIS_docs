@@ -229,7 +229,7 @@ If you want to deploy your own version of `pfioh` you can edit `pfioh-openshift-
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-template.png[Pfioh Template]
 
-Note: The current version that supports `SSO` is `fnndsc/pfioh`
+*Note:* The current version that supports `SSO` is `fnndsc/pfioh`
 
 == Deploying pman on Openshift
 
@@ -241,7 +241,7 @@ After downloading it, enter the subdirectory `openshift`:
 cd pman/openshift
 ....
 
-Note: The current version that supports `SSO` is `fnndsc/pman:2.2.4`. There are 2 places in the template where you need to change your project name. Look for a field saying OPENSHIFTMGR_PROJECT
+*Note:* The current version that supports `SSO` is `fnndsc/pman:2.2.4`. There are 2 places in the template where you need to change your project name. Look for a field saying OPENSHIFTMGR_PROJECT
 
 Now edit the `pman-openshift-template.json present` with your OPENSHIFT project name and updated pman docker image (See image below)
 
@@ -275,7 +275,7 @@ There are a couple of prerequisites that we have to satisfy before running any p
 
 * xref:#install-pfurl[Install pfurl]
 
-* Download test scripts -> https://github.com/FNNDSC/ChRIS-E2E
+* xref:#download-test-scripts[Download test scripts]
 
 === Create a Python Virtual Environment
 
@@ -316,7 +316,7 @@ mkvirtualenv --python=python3 chris_env
 workon chris_env
 ....
 
-Note: To deactivate the virtual environment you can use `deactivate` command on the terminal
+*Note:* To deactivate the virtual environment you can use `deactivate` command on the terminal
 
 === Install pfurl
 
@@ -325,6 +325,19 @@ If you cretad the python virtual environment succesfully, you can install pfurl
 ....
 pip install pfurl
 ....
+
+=== Download Test Scripts
+
+You can download the test scripts from https://github.com/FNNDSC/ChRIS-E2E
+
+*Note:* Sometimes, you can get an invalid response like 502 or 401 error when you execute the scripts. To resolve this is add --authToken password to each of the scripts that you want to execute.
+
+Example:
+
+....
+}' --quiet --jsonpprintindent 4 --authToken password
+....
+
 
 == (Additional Step) Building a Local Openshift Cluster
 
