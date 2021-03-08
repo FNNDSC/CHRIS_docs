@@ -353,14 +353,120 @@ pman    pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud       
 . Run `hello` script
 ....
 (chris_env) [cyoruk@localhost scripts]$ ./run_hello pfioh-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud
-"{\n    \"stdout\": {\n        \"d_ret\": {\n            \"User-agent\": \"PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0\",\n            \"name\": \"pfioh\",\n            \"sysinfo\": {\n                \"cpu_percent\": 1.6,\n                \"cpucount\": 56,\n                \"hostname\": \"pfioh-1-krd72\",\n                \"inet\": \"10.128.9.35\",\n                \"loadavg\": [\n                    0.3,\n                    0.64,\n                    0.97\n                ],\n                \"machine\": \"x86_64\",\n                \"memory\": [\n                    115996803072,\n                    105949904896,\n                    8.7,\n                    9272127488,\n                    34102452224,\n                    48426278912,\n                    20114894848,\n                    2138112,\n                    72620085248,\n                    17678336,\n                    11343912960\n                ],\n                \"platform\": \"Linux-3.10.0-1127.el7.x86_64-x86_64-with-glibc2.29\",\n                \"system\": \"Linux\",\n                \"uname\": [\n                    \"Linux\",\n                    \"pfioh-1-krd72\",\n                    \"3.10.0-1127.el7.x86_64\",\n                    \"#1 SMP Tue Feb 18 16:39:12 EST 2020\",\n                    \"x86_64\",\n                    \"x86_64\"\n                ],\n                \"version\": \"#1 SMP Tue Feb 18 16:39:12 EST 2020\"\n            },\n            \"version\": \"3.0.2\"\n        },\n        \"status\": true\n    }\n}"
+"{
+    "stdout": {
+        "d_ret": {
+            "User-agent": "PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0",
+            "name": "pfioh",
+            "sysinfo": {
+                "cpu_percent": 1.6,
+                "cpucount": 56,
+                "hostname": "pfioh-1-krd72",
+                "inet": "10.128.9.35",
+                "loadavg": [
+                    0.3,
+                    0.64,
+                    0.97
+                ],
+                "machine": "x86_64",
+                "memory": [
+                    115996803072,
+                    105949904896,
+                    8.7,
+                    9272127488,
+                    34102452224,
+                    48426278912,
+                    20114894848,
+                    2138112,
+                    72620085248,
+                    17678336,
+                    11343912960
+                ],
+                "platform": "Linux-3.10.0-1127.el7.x86_64-x86_64-with-glibc2.29",
+                "system": "Linux",
+                "uname": [
+                    "Linux",
+                    "pfioh-1-krd72",
+                    "3.10.0-1127.el7.x86_64",
+                    "#1 SMP Tue Feb 18 16:39:12 EST 2020",
+                    "x86_64",
+                    "x86_64"
+                ],
+                "version": "#1 SMP Tue Feb 18 16:39:12 EST 2020"
+            },
+            "version": "3.0.2"
+        },
+        "status": true
+    }
+}"
 ....
 
 ["arabic", start=2]
 . Run `pfioh_push` script
 ....
 (chris_env) [cyoruk@localhost scripts]$ ./run_pfioh_push pfioh-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud jid288
-"{\n    \"stdout\": {\n        \"compress\": {\n            \"local\": {\n                \"zip\": {\n                    \"fileProcessed\": \"2584e7d2-09d2-4930-8bac-b99e58334053.zip\",\n                    \"filesInZip\": 35,\n                    \"filesize\": \"16,437,171\",\n                    \"localFSsize\": 16919963,\n                    \"msg\": \"zip operation successful\",\n                    \"path\": \"/tmp/small\",\n                    \"status\": true,\n                    \"timestamp\": \"2021-03-08 15:20:23.217966\",\n                    \"zipmode\": \"w\"\n                }\n            },\n            \"msg\": \"File/Directory stored in Swift\",\n            \"remoteServer\": {\n                \"User-agent\": \"PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0\",\n                \"msg\": \"File/Directory stored in Swift\",\n                \"postop\": {\n                    \"status\": false,\n                    \"timestamp\": \"2021-03-08 20:20:47.024191\"\n                },\n                \"status\": true,\n                \"write\": {}\n            },\n            \"status\": true\n        },\n        \"localCheck\": {\n            \"check\": {\n                \"action\": \"pushPath\",\n                \"dir\": \"/tmp/small\",\n                \"isdir\": true,\n                \"isfile\": false,\n                \"msg\": \"\",\n                \"status\": true\n            },\n            \"msg\": \"Check on local path successful.\",\n            \"status\": true,\n            \"timestamp\": \"2021-03-08 15:20:22.613293\"\n        },\n        \"msg\": \"File/Directory stored in Swift\",\n        \"remoteCheck\": {\n            \"msg\": \"Check on remote path successful.\",\n            \"response\": {\n                \"data\": {\n                    \"createdNewDir\": false,\n                    \"isdir\": false,\n                    \"isfile\": false,\n                    \"isswiftstore\": true,\n                    \"status\": true\n                },\n                \"status\": true\n            },\n            \"size\": \"2\",\n            \"status\": true,\n            \"timestamp\": \"2021-03-08 15:20:22.768343\"\n        },\n        \"status\": true\n    }\n}"
+"{
+    "stdout": {
+        "compress": {
+            "local": {
+                "zip": {
+                    "fileProcessed": "2584e7d2-09d2-4930-8bac-b99e58334053.zip",
+                    "filesInZip": 35,
+                    "filesize": "16,437,171",
+                    "localFSsize": 16919963,
+                    "msg": "zip operation successful",
+                    "path": "/tmp/small",
+                    "status": true,
+                    "timestamp": "2021-03-08 15:20:23.217966",
+                    "zipmode": "w"
+                }
+            },
+            "msg": "File/Directory stored in Swift",
+            "remoteServer": {
+                "User-agent": "PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0",
+                "msg": "File/Directory stored in Swift",
+                "postop": {
+                    "status": false,
+                    "timestamp": "2021-03-08 20:20:47.024191"
+                },
+                "status": true,
+                "write": {}
+            },
+            "status": true
+        },
+        "localCheck": {
+            "check": {
+                "action": "pushPath",
+                "dir": "/tmp/small",
+                "isdir": true,
+                "isfile": false,
+                "msg": "",
+                "status": true
+            },
+            "msg": "Check on local path successful.",
+            "status": true,
+            "timestamp": "2021-03-08 15:20:22.613293"
+        },
+        "msg": "File/Directory stored in Swift",
+        "remoteCheck": {
+            "msg": "Check on remote path successful.",
+            "response": {
+                "data": {
+                    "createdNewDir": false,
+                    "isdir": false,
+                    "isfile": false,
+                    "isswiftstore": true,
+                    "status": true
+                },
+                "status": true
+            },
+            "size": "2",
+            "status": true,
+            "timestamp": "2021-03-08 15:20:22.768343"
+        },
+        "status": true
+    }
+}"
 ....
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-Push.png[Pfioh Push]
