@@ -618,19 +618,17 @@ $ oc login -u developer https://api.crc.testing:6443
 
 === Deploying `pfioh` and `pman`
 
+Deploying `pfioh` and `pman` to local Openshift cluster is the same with deploying it on MOC. You can follow the referenced headers to deploy them.
+
 * Create a new project in the local Openshift cluster
 
 ....
 oc new-project local-chris
 ....
 
-* Deploy `pfioh`
+* xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
 
-Follow the same steps from . xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
-
-* Deploy `pman`
-
-Follow the same steps from . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
+* xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 
 == Troubleshoot Errors
 
