@@ -478,7 +478,7 @@ image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-Pus
 ["arabic", start=3]
 . Run `pman` script
 
-*Note:* Before using the script run_pman, change the "auid" to your username or e-mail address to avoid Authorization related issues.
+*Note:* Before using the script `run_pman`, change the "auid" to your username or e-mail address to avoid Authorization related issues.
 
 ....
 #!/usr/bin/env bash                                                                                                                                                     
@@ -506,10 +506,10 @@ pfurl --verb POST --raw --http $IP/api/v1/cmd --jsonwrapper 'payload' --msg \
            }' --quiet --jsonpprintindent 4 --authToken password
 ....
 
-Now let's run the run_pman script
+After changing the "auid", you're ready to execute the script `run_pman`
 
 ....
-# ./run_pman <pman route> <the exact job name that we used for pfioh>
+# ./run_pman <pman route> <the exact job name that we used for pman>
 (chris_env) [cyoruk@localhost scripts]$ ./run_pman jid288 pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud
 "{
     "RESTheader": "POST /api/v1/cmd HTTP/1.1\r",
@@ -554,12 +554,9 @@ Now let's run the run_pman script
 }
 ....
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-output.png[Simpledsapp Output]
-
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-Openshift.png[Simpledsapp Openshift]
 
-
-
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-output.png[Simpledsapp Output]
 
 == (Additional Step) Building a Local Openshift Cluster
 
@@ -618,3 +615,29 @@ Login to the Openshift Cluster as a developer:
 ....
 $ oc login -u developer https://api.crc.testing:6443
 ....
+
+== Troubleshoot Errors
+
+=== HTTP 400 Bad Request
+
+This indicates that the server couldn't understand the request due to invalid syntax. Check Openshift logs to find out the exact issue.
+
+=== HTTP 401 Unauthorized
+
+If you're getting an HTTP 401 error, there are couple things you can do.
+
+["arabic", start=1]
+. Double check your `swift-credentials` secret is to see if it's missing anything.
+
+["arabic", start=2]
+. Add `--authToken password` at the of the script that your trying to run.
+
+["arabic", start=3]
+. Change the `auid` to your e-mail in the script.
+
+["arabic", start=4]
+. Recreate kubecfg (Every time you log in you need to recreate the kubecfg)
+
+=== HTTP 409 Conflict
+
+If your getting a HTTP 409 error, it's likely that you already have a same jid(job id). Check Openshift storage to see if there are existing persistent storage. If yes, you can delete it and run the application again.
