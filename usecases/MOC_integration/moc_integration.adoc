@@ -633,7 +633,7 @@ If you're getting an HTTP 401 error, there are couple things you can do.
 . Add `--authToken password` at the of the script that your trying to run.
 
 ["arabic", start=3]
-. Change the `auid` to your e-mail in the script.
+. Double check if the `auid` is correct in the script.
 
 ["arabic", start=4]
 . Recreate secret kubecfg (Every time you log in you need to recreate the kubecfg)
