@@ -403,7 +403,11 @@ pman    pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud       
 
 ["arabic", start=2]
 . Run `pfioh_push` script
+
+Create a folder /tmp/small & add some files above 100KB to that folder first. Then run the below script to push files to Openstack
+
 ....
+# ./run_pfioh_push <pfioh route> <any alphanumeric job name>
 (chris_env) [cyoruk@localhost scripts]$ ./run_pfioh_push pfioh-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud jid288
 "{
     "stdout": {
@@ -486,7 +490,7 @@ IMAGE=$3
 pfurl --verb POST --raw --http $IP/api/v1/cmd --jsonwrapper 'payload' --msg \
           '{   "action": "run",                                                                                                                                         
                "meta":  {                                                                                                                                               
-                    "cmd":      "python3 /usr/src/simpledsapp/simpledsapp.py --prefix test- --sleepLength 0 /share/incoming /share/outgoing",                           
+                    "cmd":      "simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing",                           
                     "auid": "cyoruk@bu.edu",                                                                                                                           
                     "jid":      "'$JOBID'",                                                                                                                             
                     "threaded": true,                                                                                                                                   
@@ -495,10 +499,67 @@ pfurl --verb POST --raw --http $IP/api/v1/cmd --jsonwrapper 'payload' --msg \
                               "image": "'${IMAGE:-fnndsc/pl-simpledsapp}'"                                                                                                                       
                               }                                                                                                                                         
                           },                                                                                                                                            
-                    "number_of_workers": "1"                                                                                                                            
+                    "number_of_workers": "1",
+                    "memory_limit": "4000Mi",
+                    "cpu_limit": "4000M"                                                                                                                           
                 }                                                                                                                                                       
            }' --quiet --jsonpprintindent 4 --authToken password
 ....
+
+Now let's run the run_pman script
+
+....
+# ./run_pman <pman route> <the exact job name that we used for pfioh>
+(chris_env) [cyoruk@localhost scripts]$ ./run_pman jid288 pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud
+"{
+    "RESTheader": "POST /api/v1/cmd HTTP/1.1\r",
+    "RESTverb": "POST",
+    "action": "run",
+    "client_json_len": 320,
+    "client_json_payload": "{\"payload\": {\"action\": \"run\", \"meta\": {\"cmd\": \"simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing\", \"auid\": \"cyoruk@bu.edu\", \"jid\": \"jid288\", \"threaded\": true, \"container\": {\"target\": {\"image\": \"fnndsc/pl-simpledsapp\"}}, \"number_of_workers\": \"1\", \"memory_limit\": \"4000Mi\", \"cpu_limit\": \"4000M\"}}}",
+    "meta": {
+        "auid": "cyoruk@bu.edu",
+        "cmd": "simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing",
+        "container": {
+            "target": {
+                "image": "fnndsc/pl-simpledsapp"
+            }
+        },
+        "cpu_limit": "4000M",
+        "jid": "jid288",
+        "memory_limit": "4000Mi",
+        "number_of_workers": "1",
+        "threaded": true
+    },
+    "path": "/api/v1/cmd",
+    "payloadsize": 320,
+    "receivedByServer": [
+        "POST /api/v1/cmd HTTP/1.1\r",
+        "User-Agent: PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0\r",
+        "Accept: */*\r",
+        "Authorization: bearer password\r",
+        "Mode: control\r",
+        "Content-Length: 320\r",
+        "Content-Type: application/x-www-form-urlencoded\r",
+        "Host: pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud\r",
+        "X-Forwarded-Host: pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud\r",
+        "X-Forwarded-Port: 80\r",
+        "X-Forwarded-Proto: http\r",
+        "Forwarded: for=209.94.140.248;host=pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud;proto=http;proto-version=\r",
+        "X-Forwarded-For: 209.94.140.248\r",
+        "\r",
+        "{\"payload\": {\"action\": \"run\", \"meta\": {\"cmd\": \"simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing\", \"auid\": \"cyoruk@bu.edu\", \"jid\": \"jid288\", \"threaded\": true, \"container\": {\"target\": {\"image\": \"fnndsc/pl-simpledsapp\"}}, \"number_of_workers\": \"1\", \"memory_limit\": \"4000Mi\", \"cpu_limit\": \"4000M\"}}}"
+    ],
+    "status": true
+}
+....
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-output.png[Simpledsapp Output]
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-Openshift.png[Simpledsapp Openshift]
+
+
+
 
 == (Additional Step) Building a Local Openshift Cluster
 
