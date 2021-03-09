@@ -616,6 +616,22 @@ Login to the Openshift Cluster as a developer:
 $ oc login -u developer https://api.crc.testing:6443
 ....
 
+=== Deploying `pfioh` and `pman`
+
+* Create a new project in the local Openshift cluster
+
+....
+oc new-project local-chris
+....
+
+* Deploy `pfioh`
+
+Follow the same steps from . xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
+
+* Deploy `pman`
+
+Follow the same steps from . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
+
 == Troubleshoot Errors
 
 === HTTP 400 Bad Request
