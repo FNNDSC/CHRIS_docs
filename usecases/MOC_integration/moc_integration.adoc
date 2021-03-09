@@ -636,7 +636,7 @@ If you're getting an HTTP 401 error, there are couple things you can do.
 . Change the `auid` to your e-mail in the script.
 
 ["arabic", start=4]
-. Recreate kubecfg (Every time you log in you need to recreate the kubecfg)
+. Recreate secret kubecfg (Every time you log in you need to recreate the kubecfg)
 
 === HTTP 409 Conflict
 
