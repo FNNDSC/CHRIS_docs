@@ -1,0 +1,76 @@
+Running the covidnet workflow on a local ChRIS instance using WSL
+-----------------------------------------------------------------
+
+. Instantiate a local ChRIS instance on WSL by following the steps in the ChRIS_on_WSL guide
+
+. `cd` to the home directory and clone the `CHRIS_docs` repo
++
+[source,shell]
+-----------------               
+    git clone https://github.com/FNNDSC/CHRIS_docs.git
+-----------------
+
+. For the next step, you can either - 
+    - cd to the workflows directory in CHRIS_docs
++
+[source,shell]
+-----------------               
+    cd CHRIS_docs/workflows
+-----------------
+    
+
+    - Copy `covidplugins_upload.sh` and paste it into your `ChRIS_ultron_backEnd` directory
++
+*OR*
+
+    - `cd` to `ChRIS_ultron_backEnd`
+
+    - create a new bash file titled -  `covidplugins_upload.sh` and paste the following lines of code in that file:
++
+[source,shell]
+-----------------
+        ./plugin_add.sh  "\
+		        	            fnndsc/pl-lungct,		\
+			                    fnndsc/pl-med2img,		\
+			                    fnndsc/pl-covidnet,		\
+        	            		fnndsc/pl-pdfgeneration
+        "  
+-----------------
+
+. Now, doing either of the things in step 3, you should be in the `ChRIS_ultron_backEnd`  directory and have `covidplugins_upload.sh` in it
+
+. Run that script while you have a running ChRIS instance to add your plugins for the covidnet workflow
++
+[source,shell]
+-----------------               
+    ./covidplugins_upload.sh
+-----------------
+
+. Run the following command to grep the ip of your localhost
++
+[source,shell]
+-----------------               
+    ip route | grep -v docker
+-----------------
+
+    - This command should print something that resembles this on your terminal:
++
+[source,shell]
+-----------------               
+    default via 172.24.112.1 dev eth0
+    172.24.112.0/20 dev eth0 proto kernel scope link src 172.24.126.43
+-----------------    
+
+. Replace <ip> with the ip address printed after src in the following command and run it:
++
+[source,shell]
+-----------------               
+    export HOST_IP=<ip> 
+-----------------
+
+. Run the following command to run the covidnet workflow on your local ChRIS instance:
++
+[source,shell]
+-----------------               
+    ./covidnet.sh -a $HOST_IP  
+-----------------
