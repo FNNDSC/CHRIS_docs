@@ -57,8 +57,8 @@ Running the covidnet workflow on a local ChRIS instance using WSL
 +
 [source,shell]
 -----------------               
-    default via 172.24.112.1 dev eth0
-    172.24.112.0/20 dev eth0 proto kernel scope link src 172.24.126.43
+    default via 111.22.333.1 dev eth0
+    111.22.333.0/20 dev eth0 proto kernel scope link src 111.22.126.43
 -----------------    
 
 . Replace <ip> with the ip address printed after src in the following command and run it:
