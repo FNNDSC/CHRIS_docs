@@ -12,7 +12,7 @@ This document describes the steps that are required to get ChRIS with `legacy pm
 . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 . xref:#running-test-scripts-on-openshift[Running Test Scripts on Openshift]
 . xref:#additional-step-building-a-local-openshift-cluster-via-crc[(Additional Step) Building a Local Openshift Cluster via CRC]
-. xref:#additional-step-building-a-local-openshift-cluster-via-openshfit-origin[(Additional Step) Building a Local Openshift Cluster via OpenShift Origin]
+. xref:#additional-step-building-a-local-openshift-cluster-via-openshift-origin[(Additional Step) Building a Local Openshift Cluster via OpenShift Origin]
 
 == Registering to Mass Open Cloud
 
