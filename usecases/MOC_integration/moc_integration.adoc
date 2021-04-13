@@ -11,7 +11,8 @@ This document describes the steps that are required to get ChRIS with `legacy pm
 . xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
 . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 . xref:#running-test-scripts-on-openshift[Running Test Scripts on Openshift]
-. xref:#additional-step-building-a-local-openshift-cluster[(Additional Step) Building a Local Openshift Cluster]
+. xref:#additional-step-building-a-local-openshift-cluster-via-crc[(Additional Step) Building a Local Openshift Cluster via CRC]
+. xref:#additional-step-building-a-local-openshift-cluster-via-openshfit-origin[(Additional Step) Building a Local Openshift Cluster via OpenShift Origin]
 
 == Registering to Mass Open Cloud
 
@@ -558,9 +559,11 @@ image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsa
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-output.png[Simpledsapp Output]
 
-== (Additional Step) Building a Local Openshift Cluster
+== (Additional Step) Building a Local Openshift Cluster via CRC
 
-Note: This step is focused on bringing a minimal `OpenShift 4.x` cluster to your local laptop or desktop computer. If you are looking for a solution for running `OpenShift 3.x` , you will need tools such as oc cluster up, https://github.com/minishift/minishift[Minishift] or https://developers.redhat.com/products/cdk/overview[CDK].
+Note: This step is focused on bringing a minimal `OpenShift 4.x` cluster to your local laptop or desktop computer. If you are looking for a solution for running `OpenShift 3.x` , you will need tools such as https://www.okd.io/[OpenShift Origin], https://github.com/minishift/minishift[Minishift] or https://developers.redhat.com/products/cdk/overview[CDK]. The step below provides an example for running OpenShift 3.x.
+
+xref:#additional-step-building-a-local-openshift-cluster-via-openshfit-origin[(Additional Step) Building a Local Openshift Cluster via OpenShift Origin]
 
 This additional step is helpful for people who build ChRIS plugins/services to test/debug applications locally before testing it on the cloud environment.
 
@@ -629,6 +632,150 @@ oc new-project local-chris
 * xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
 
 * xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
+
+== (Additional Step) Building a Local Openshift Cluster via OpenShift Origin
+
+This additional step is helpful for people who build ChRIS plugins/services to test/debug applications locally before testing it on the cloud environment, especially for people that require a local OpenShift cluster that has the same version as the MOC (3.11 at the time of writing). This step uses Ubuntu 20.04 LTS.
+
+* xref:#prerequisite[Prerequisite]
+
+* xref:#download-openshift-origin[Download OpenShift Origin]
+
+* xref:#run-openshift-origin[Run OpenShift Origin]
+
+* xref:#issue-resolution[Issue Resolution]
+
+=== Prerequisite
+
+You need to have Docker CE installed. See Docker's document for detailed steps. Make sure you add your user to the docker group after installation.
+
+https://docs.docker.com/engine/install/ubuntu/[Install Docker Engine on Ubuntu]
+
+https://docs.docker.com/engine/install/linux-postinstall/[Post-installation steps for Linux]
+
+=== Download OpenShift Origin
+
+At the time of writing, the newest version available is 3.11. Find all releases https://github.com/openshift/origin/releases[here].
+
+Download OpenShift Origin, extract it and place the executable in your `$PATH` (You can check your `$PATH` with `$ echo $PATH`):
+
+....
+$ wget https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
+$ tar xvzf openshift*.tar.gz
+$ cd openshift-origin-client-tools*/
+$ mv oc kubectl $PATH (Place the executable in one of your $PATH)
+....
+
+At this point you should be able to call `oc` to check version:
+
+....
+$ oc version
+oc v3.11.0+0cbc58b
+kubernetes v1.11.0+d4cacc0
+features: Basic-Auth GSSAPI Kerberos SPNEGO
+
+Server https://127.0.0.1:8443
+kubernetes v1.11.0+d4cacc0
+....
+
+=== Run OpenShift Origin
+
+Before bringing up the cluster, configure the Docker daemon so it can use an insecure registry:
+
+....
+$ cat << EOF | sudo tee /etc/docker/daemon.json
+{
+    "insecure-registries" : [ "172.30.0.0/16" ]
+}
+EOF
+....
+
+Then restart docker service:
+
+....
+$ sudo systemctl restart docker
+....
+
+If you have a public hostname or IP address, you can specify that so OpenShift Origin will use that address. If not, use your local network IP address (find it with `$ ifconfig`), or just use localhost (not specifying `public_hostname`; discouraged as it may cause other issues):
+
+....
+$ oc cluster up --public-hostname=<your hostname or IP>
+....
+
+Access the web portal at:
+
+....
+https://<server>:8443/console
+....
+
+Login as a user:
+
+....
+$ oc login -u developer <hostname>:8443
+....
+
+Login as kube admin (for debugging):
+
+....
+$ oc login -u system:admin <hostname>:8443
+....
+
+=== Issue Resolution
+
+With OpenShift Origin, there can be some obscure issues with IP config and name resolution. Here are some tips.
+
+==== Restarting helps
+
+Sometimes the configuration needs to be overwritten and the updates are not in place until it runs again. Run `oc cluster down` then `oc cluster up <args>` to apply these changes.
+
+==== Specify what IP the server uses
+
+If not, sometimes it defaults to 127.0.0.1 which could cause other problems. You could use your local network IP (find it with `$ ifconfig`).
+
+==== Redirection problem
+
+If the cluster constantly redirects from the server address you specified to 127.0.0.1, there are two solutions:
+
+1) Check this file under the dir you ran `oc cluster up`:
+
+....
+$ sudo vim ./openshift.local.clusterup/openshift-controller-manager/openshift-master.kubeconfig
+....
+
+Search for this line:
+
+....
+server: https://127.0.0.1:8443
+....
+
+Replace with:
+
+....
+server: https://<host_ip>:8443
+....
+
+Then run `oc cluster up --public-hostname=<host_ip>`.
+
+2) A workaround is to setup a tunnel:
+
+....
+$ sudo ssh -L 8443:localhost:8443 -f -N <username>@<host_ip>
+....
+
+==== Name resolution problem
+
+If docker pull works fine (check this in pod's events section) but processes in pods cannot resolve names...
+
+Try restarting first. (`oc cluster down` then `oc cluster up <args>`)
+
+If the problem persists, bring down the cluster, find the name resolution file inside the dir created by running `oc cluster up`:
+
+....
+$ sudo vim ./openshift.local.clusterup/kubedns/resolv.conf
+....
+
+Find the nameserver line, and change it to `8.8.8.8` (Google's DNS server). Start the cluster.
+
 
 == Troubleshoot Errors
 
