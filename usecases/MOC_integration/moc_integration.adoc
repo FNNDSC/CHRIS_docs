@@ -2,14 +2,14 @@
 
 == Abstract
 
-This document describes the steps that are required to get ChRIS with `legacy pman(v2.2.4)` up and running on the MOC. The intended audience is ChRIS developers.
+This document describes the steps that are required to get ChRIS with `pfcon` and `pman` up and running on the MOC. The intended audience is ChRIS developers.
 
 . xref:#registering-to-mass-open-cloud[Registering to Mass Open Cloud]
 . xref:#adding-projects-to-openshift-and-openstack[Adding Projects to Openshift and Openstack]
 . xref:#installing-openshift-cli-tool[Installing Openshift CLI Tool]
 . xref:#creating-secrets-on-openshift-using-cli-tool[Creating Secrets on Openshift Using CLI Tool]
-. xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
 . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
+. xref:#deploying-pfcon-on-openshift[Deploying pfcon on Openshift]
 . xref:#running-test-scripts-on-openshift[Running Test Scripts on Openshift]
 . xref:#additional-step-building-a-local-openshift-cluster-via-crc[(Additional Step) Building a Local Openshift Cluster via CRC]
 . xref:#alternative-way-building-a-local-openshift-cluster-via-openshift-origin[(Alternative Way) Building a Local Openshift Cluster via OpenShift Origin]
@@ -87,7 +87,7 @@ oc project myproject
 oc create secret generic kubecfg --from-file=$HOME/.kube/config -n myproject
 ....
 
-==== Create `pfioh_config & pman_config`
+==== Create `pman_config`
 
 ["loweralpha", start=1]
 . Create a file `example-config.cfg` and add the following:
@@ -105,27 +105,7 @@ cat example-config.cfg | base64
 ....
 
 ["loweralpha", start=3]
-. Create a file `example-secret.yml` and add the encoded result (For `pfioh`):
-
-....
-apiVersion: v1
-kind: Secret
-metadata:
-  name: pfioh-config
-type: Opaque
-data:
-  pfioh_config.cfg: <base64 encoded configuration>
-....
-
-["loweralpha", start=4]
-. Create the secret for `pfioh`
-
-....
-oc create -f example-secret.yml
-....
-
-["loweralpha", start=5]
-. Edit the file example-secret.yml and add the following (For `pman`):
+. Create a file `example-secret.yml` and add the encoded result:
 
 ....
 apiVersion: v1
@@ -137,7 +117,7 @@ data:
   pman_config.cfg: <base64 encoded configuration>
 ....
 
-["loweralpha", start=6]
+["loweralpha", start=4]
 . Create the secret for `pman`
 
 ....
@@ -195,46 +175,9 @@ pman-config                Opaque                                1      4d
 swift-credentials          Opaque                                1      4d
 ....
 
-== Deploying pfioh on Openshift
-
-Follow this link to download `pfioh` -> https://github.com/FNNDSC/pfioh
-
-After downloading it, enter the subdirectory `openshift`:
-
-....
-cd pfioh/openshift
-....
-
-To deploy `pfioh` on Openshift we need a file that contains all the information about the service we're going to deploy which is `pfioh-openshift-template.json`. 
-
-For deploying `pfioh` to Openshift:
-
-....
-oc new-app pfioh-openshift-template.json
-....
-
-After deploying `pfioh`, you can see it deployed and running on Openshift. (See image below)
-
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-Overview.png[Pfioh Overview]
-
-To delete `pfioh`
-
-....
-oc delete all -l app=pfioh
-oc delete route pfioh
-....
-
-=== Deploying your own version of `pfioh` 
-
-If you want to deploy your own version of `pfioh` you can edit `pfioh-openshift-template.json` which is present in pfioh/openshift. You will find a line containing "image": "fnndsc/pfioh", which is basically the name of the docker image we want to deploy. As an example you can change it to sandip117/pfioh. So it would look like "image": "sandip117/pfioh". (See the image below)
-
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-template.png[Pfioh Template]
-
-*Note:* The current version that supports `SSO` is `fnndsc/pfioh`
-
 == Deploying pman on Openshift
 
-Follow this link to download `pman` -> https://github.com/FNNDSC/pman
+Follow this link to download `pman` -> https://github.com/Sandip117/pman-1
 
 After downloading it, enter the subdirectory `openshift`:
 
@@ -242,7 +185,7 @@ After downloading it, enter the subdirectory `openshift`:
 cd pman/openshift
 ....
 
-*Note:* The current version that supports `SSO` is `fnndsc/pman:2.2.4`. There are 2 places in the template where you need to change your project name. Look for a field saying OPENSHIFTMGR_PROJECT
+*Note:* The current version that supports `flask` is `fnndsc/pman:flask`. There are 2 places in the template where you need to change your project name. Look for a field saying OPENSHIFTMGR_PROJECT
 
 Now edit the `pman-openshift-template.json present` with your OPENSHIFT project name and updated pman docker image (See image below)
 
@@ -265,8 +208,44 @@ To delete `pman`
 ....
 oc delete all -l app=pman
 oc delete route pman
-oc delete cronjob pman-reaper
 ....
+
+== Deploying pfcon on Openshift
+
+Follow this link to download `pfioh` -> https://github.com/Sandip117/pfcon
+
+After downloading it, enter the subdirectory `openshift`:
+
+....
+cd pfcon/openshift
+....
+
+To deploy `pfcon` on Openshift we need a file that contains all the information about the service we're going to deploy which is `pfcon-openshift-template.json`. 
+
+For deploying `pfcon` to Openshift:
+
+....
+oc new-app pfcon-openshift-template.json
+....
+
+After deploying `pfcon`, you can see it deployed and running on Openshift. (See image below)
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-Overview.png[Pfioh Overview]
+
+To delete `pfcon`
+
+....
+oc delete all -l app=pfcon
+oc delete route pfcon
+....
+
+=== Deploying your own version of `pfcon` 
+
+If you want to deploy your own version of `pfcon` you can edit `pfcon-openshift-template.json` which is present in pfcon/openshift. You will find a line containing "image": "fnndsc/pfcon:pfiohless", which is basically the name of the docker image we want to deploy. As an example you can change it to cagriyoruk/pfcon. So it would look like "image": "cagriyoruk/pfcon". (See the image below)
+
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-template.png[Pfioh Template]
+
+*Note:* The current version that supports `flask` is `fnndsc/pfcon:pfiohless`
 
 == Running Test Scripts on Openshift
 
