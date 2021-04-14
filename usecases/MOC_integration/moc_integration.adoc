@@ -36,9 +36,11 @@ Use your `SSO` credentials to login to https://kaizen.massopen.cloud to view you
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-project.png[Openstack Project]
 
+
 Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.png[Openshift Project]
+
 
 You can create a project manually in the Openshift UI or by using a terminal command:
 
@@ -71,6 +73,7 @@ After succesfully installing Openshift CLI Tool, you can login to Opeshift using
 First go to https://k-openshift.osh.massopen.cloud:8443/[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-login.png[Openshift Login]
+
 
 Open a terminal and paste the login command. (Your token will differ from the example)
 
@@ -185,11 +188,12 @@ After downloading it, enter the subdirectory `openshift`:
 cd pman/openshift
 ....
 
-*Note:* The current version that supports `flask` is `fnndsc/pman:flask`. There are 2 places in the template where you need to change your project name. Look for a field saying `OPENSHIFTMGR_PROJECT`
+*Note:* The current version that supports `flask` is `fnndsc/pman:flask`. There is one place in the template where you need to change your project name. Look for a field saying `OPENSHIFTMGR_PROJECT`
 
 Now edit the `pman-openshift-template.json` with your OPENSHIFT project name and updated pman docker image (See image below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-template.png[Pman Template]
+
 
 To deploy `pman` on Openshift we need a file that contains all the information about the service we're going to deploy which is `pman-openshift-template.json`. 
 
@@ -202,6 +206,7 @@ oc new-app pman-openshift-template.json
 After deploying `pman`, you can see it deployed and running on Openshift. (See image below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-Overview.png[Pman Overview]
+
 
 To delete `pman`
 
@@ -224,7 +229,11 @@ cd pfcon/openshift
 
 To deploy `pfcon` on Openshift we need a file that contains all the information about the service we're going to deploy which is `pfcon-openshift-template.json`. 
 
-Now edit the `pfcon-openshift-template.json`
+Now update the `COMPUTE_SERVICE_URL` in `pfcon-openshift-template.json` with your `pman` route that you deployed in step 5. You can find your route with this command:
+
+....
+oc get route
+.....
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-template.png[Pfcon Template]
 
@@ -238,6 +247,7 @@ oc new-app pfcon-openshift-template.json
 After deploying `pfcon`, you can see it deployed and running on Openshift. (See image below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Overview.png[Pfcon Overview]
+
 
 To delete `pfcon`
 
@@ -454,6 +464,7 @@ Create a folder /tmp/small & add some files above 100KB to that folder first. Th
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-Push.png[Pfioh Push]
 
+
 ["arabic", start=3]
 . Run `pman` script
 
@@ -535,7 +546,9 @@ After changing the "auid", you're ready to execute the script `run_pman`
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-Openshift.png[Simpledsapp Openshift]
 
+
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-output.png[Simpledsapp Output]
+
 
 == (Additional Step) Building a Local Openshift Cluster via CRC
 
