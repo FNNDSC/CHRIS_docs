@@ -12,7 +12,7 @@ This document describes the steps that are required to get ChRIS with `legacy pm
 . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 . xref:#running-test-scripts-on-openshift[Running Test Scripts on Openshift]
 . xref:#additional-step-building-a-local-openshift-cluster-via-crc[(Additional Step) Building a Local Openshift Cluster via CRC]
-. xref:#additional-step-building-a-local-openshift-cluster-via-openshift-origin[(Additional Step) Building a Local Openshift Cluster via OpenShift Origin]
+. xref:#alternative-way-building-a-local-openshift-cluster-via-openshift-origin[(Alternative Way) Building a Local Openshift Cluster via OpenShift Origin]
 
 == Registering to Mass Open Cloud
 
@@ -633,7 +633,7 @@ oc new-project local-chris
 
 * xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 
-== (Additional Step) Building a Local Openshift Cluster via OpenShift Origin
+== (Alternative Way) Building a Local Openshift Cluster via OpenShift Origin
 
 This additional step is helpful for people who build ChRIS plugins/services to test/debug applications locally before testing it on the cloud environment, especially for people that require a local OpenShift cluster that has the same version as the MOC (3.11 at the time of writing). This step uses Ubuntu 20.04 LTS.
 
