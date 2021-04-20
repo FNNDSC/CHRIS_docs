@@ -324,7 +324,7 @@ pip install httpie
 
 You can download the test scripts from https://github.com/FNNDSC/ChRIS-E2E
 
-*Note:* Sometimes, you can get an invalid response like 502 or 401 error when you execute the scripts. You have to recreate the secret `kubecfg` every time you log in. More information * xref:#http-401-unauthorized[here]
+*Note:* Sometimes, you can get an invalid response like 502 or 401 error when you execute the scripts. You have to recreate the secret `kubecfg` every time you log in. More information xref:#http-401-unauthorized[Troubleshoot]
 
 === Running the Scripts
 
@@ -408,9 +408,9 @@ Create a folder /tmp/small & add some files above 100KB to that folder first. Th
 # $ ./post_pfcon_ds <pfcon-route> <job-id>
 
 
-(chris_env) [cyoruk@localhost scripts]$ ./post_pfcon_ds pfcon-flask-chris.apps-crc.testing jid04201513
+(chris_env) [cyoruk@localhost scripts]$ ./post_pfcon_ds pfcon-flask-chris.k-apps.osh.massopen.cloud jid04201513
 
-Submitting job jid04201513 to pfcon service at -->http://pfcon-flask-chris.apps-crc.testing/api/v1/<--...
+Submitting job jid04201513 to pfcon service at -->http://pfcon-flask-chris.k-apps.osh.massopen.cloud/api/v1/<--...
 Waiting for 2s before next polling for job status ...
 
 Polling job jid04201513 status, poll number: 1
@@ -436,9 +436,11 @@ Deleting job jid04201513 data from the remote...
 Done
 ....
 
-We can view the containers that are created in Openstack. 
+We can see that the containers are created in the `Openstack` environment.
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Output.png[Pfcon Output]
+
+
 
 == (Additional Step) Building a Local Openshift Cluster via CRC
 
@@ -499,9 +501,9 @@ Login to the Openshift Cluster as a developer:
 $ oc login -u developer https://api.crc.testing:6443
 ....
 
-=== Deploying `pfioh` and `pman`
+=== Deploying `pfcon` and `pman`
 
-Deploying `pfioh` and `pman` to local Openshift cluster is the same with deploying it on MOC. You can follow the referenced headers to deploy them.
+Deploying `pfcon` and `pman` to local Openshift cluster is the same with deploying it on MOC. You can follow the referenced headers to deploy them.
 
 * Create a new project in the local Openshift cluster
 
@@ -509,7 +511,7 @@ Deploying `pfioh` and `pman` to local Openshift cluster is the same with deployi
 oc new-project local-chris
 ....
 
-* xref:#deploying-pfioh-on-openshift[Deploying pfioh on Openshift]
+* xref:#deploying-pfcon-on-openshift[Deploying pfcon on Openshift]
 
 * xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 
