@@ -36,11 +36,9 @@ Use your `SSO` credentials to login to https://kaizen.massopen.cloud to view you
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-project.png[Openstack Project]
 
-
 Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.png[Openshift Project]
-
 
 You can create a project manually in the Openshift UI or by using a terminal command:
 
@@ -73,7 +71,6 @@ After succesfully installing Openshift CLI Tool, you can login to Opeshift using
 First go to https://k-openshift.osh.massopen.cloud:8443/[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-login.png[Openshift Login]
-
 
 Open a terminal and paste the login command. (Your token will differ from the example)
 
@@ -194,7 +191,6 @@ Now edit the `pman-openshift-template.json` with your OPENSHIFT project name and
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-template.png[Pman Template]
 
-
 To deploy `pman` on Openshift we need a file that contains all the information about the service we're going to deploy which is `pman-openshift-template.json`. 
 
 For deploying `pman` to Openshift:
@@ -206,7 +202,6 @@ oc new-app pman-openshift-template.json
 After deploying `pman`, you can see it deployed and running on Openshift. (See image below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-Overview.png[Pman Overview]
-
 
 To delete `pman`
 
@@ -237,7 +232,6 @@ oc get route
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-template.png[Pfcon Template]
 
-
 For deploying `pfcon` to Openshift:
 
 ....
@@ -247,7 +241,6 @@ oc new-app pfcon-openshift-template.json
 After deploying `pfcon`, you can see it deployed and running on Openshift. (See image below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Overview.png[Pfcon Overview]
-
 
 To delete `pfcon`
 
@@ -262,7 +255,9 @@ There are a couple of prerequisites that we have to satisfy before running any p
 
 * xref:#create-a-python-virtual-environment[Create a Python Virtual Environment]
 
-* xref:#install-pfurl[Install pfurl]
+* xref:#install-pfconclient[Install pfconclient]
+
+* xref:#install-httpie[Install httpie]
 
 * xref:#download-test-scripts[Download test scripts]
 
@@ -307,25 +302,29 @@ workon chris_env
 
 *Note:* To deactivate the virtual environment you can use `deactivate` command on the terminal
 
-=== Install pfurl
+=== Install pfconclient
 
-If you cretad the python virtual environment succesfully, you can install pfurl
+If you cretad the python virtual environment succesfully, you can install pfconclient:
 
 ....
-pip install pfurl
+pip install -U python-pfconclient
+....
+
+You can learn more about pfconclient: https://github.com/FNNDSC/python-pfconclient
+
+=== Install httpie
+
+For some of the scripts, you might need to install httpie:
+
+....
+pip install httpie
 ....
 
 === Download Test Scripts
 
 You can download the test scripts from https://github.com/FNNDSC/ChRIS-E2E
 
-*Note:* Sometimes, you can get an invalid response like 502 or 401 error when you execute the scripts. To resolve this is add `--authToken password` to each of the scripts that you want to execute.
-
-Example:
-
-....
-}' --quiet --jsonpprintindent 4 --authToken password
-....
+*Note:* Sometimes, you can get an invalid response like 502 or 401 error when you execute the scripts. You have to recreate the secret `kubecfg` every time you log in. More information * xref:#http-401-unauthorized[here]
 
 === Running the Scripts
 
@@ -333,222 +332,113 @@ If you've succesfully completed all the prerequisites, you can start running the
 
 ....
 (chris_env) [cyoruk@localhost scripts]$ oc get routes
-NAME    HOST/PORT                                                            PATH   SERVICES   PORT       TERMINATION   WILDCARD
-pfioh   pfioh-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud          pfioh      5055-tcp                 None
-pman    pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud           pman       5010-tcp                 None
+NAME    HOST/PORT                                     PATH   SERVICES   PORT       TERMINATION   WILDCARD
+pfcon   pfcon-flask-chris.k-apps.osh.massopen.cloud          pfcon      5005-tcp                 None
+pman    pman-flask-chris.k-apps.osh.massopen.cloud           pman       5010-tcp                 None
 ....
 
 ["arabic", start=1]
-. Run `hello` script
+. Test `pman`
 ....
-(chris_env) [cyoruk@localhost scripts]$ ./run_hello pfioh-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud
-"{
-    "stdout": {
-        "d_ret": {
-            "User-agent": "PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0",
-            "name": "pfioh",
-            "sysinfo": {
-                "cpu_percent": 1.6,
-                "cpucount": 56,
-                "hostname": "pfioh-1-krd72",
-                "inet": "10.128.9.35",
-                "loadavg": [
-                    0.3,
-                    0.64,
-                    0.97
-                ],
-                "machine": "x86_64",
-                "memory": [
-                    115996803072,
-                    105949904896,
-                    8.7,
-                    9272127488,
-                    34102452224,
-                    48426278912,
-                    20114894848,
-                    2138112,
-                    72620085248,
-                    17678336,
-                    11343912960
-                ],
-                "platform": "Linux-3.10.0-1127.el7.x86_64-x86_64-with-glibc2.29",
-                "system": "Linux",
-                "uname": [
-                    "Linux",
-                    "pfioh-1-krd72",
-                    "3.10.0-1127.el7.x86_64",
-                    "#1 SMP Tue Feb 18 16:39:12 EST 2020",
-                    "x86_64",
-                    "x86_64"
-                ],
-                "version": "#1 SMP Tue Feb 18 16:39:12 EST 2020"
-            },
-            "version": "3.0.2"
-        },
-        "status": true
-    }
-}"
+# $ http <pman-route>/api/v1/hello/
+
+
+(chris_env) [cyoruk@localhost scripts]$ http pman-flask-chris.k-apps.osh.massopen.cloud/api/v1/hello/
+HTTP/1.0 200 OK
+Cache-control: private
+Connection: keep-alive
+Content-Length: 1171
+Content-Type: application/json
+Date: Mon, 19 Apr 2021 17:52:14 GMT
+Server: Werkzeug/1.0.1 Python/3.8.5
+Set-Cookie: 8f72863408ccaf75ef5904d263aa663f=6b2c25e4b707fd5a818643eecefe12d7; path=/; HttpOnly
+
+{
+    "d_ret": {
+        "message": "pman says hello from openshift 😃",
+        "sysinfo": {
+            "cpu_percent": 1.2,
+            "cpucount": 56,
+            "hostname": "pman-1-45hv5",
+            "inet": "10.128.9.19",
+            "loadavg": [
+                0.39,
+                0.67,
+                0.51
+            ],
+            "machine": "x86_64",
+            "memory": [
+                115996803072,
+                105224880128,
+                9.3,
+                10000596992,
+                63990882304,
+                28992512000,
+                17136709632,
+                2138112,
+                42003185664,
+                14237696,
+                4056023040
+            ],
+            "platform": "Linux-3.10.0-1127.el7.x86_64-x86_64-with-glibc2.29",
+            "system": "Linux",
+            "uname": [
+                "Linux",
+                "pman-1-45hv5",
+                "3.10.0-1127.el7.x86_64",
+                "#1 SMP Tue Feb 18 16:39:12 EST 2020",
+                "x86_64",
+                "x86_64"
+            ],
+            "version": "#1 SMP Tue Feb 18 16:39:12 EST 2020"
+        }
+    },
+    "status": true
+}
+
+
 ....
 
 ["arabic", start=2]
-. Run `pfioh_push` script
+. Test `pfcon`
 
-Create a folder /tmp/small & add some files above 100KB to that folder first. Then run the below script to push files to Openstack
-
-....
-# ./run_pfioh_push <pfioh route> <any alphanumeric job name>
-(chris_env) [cyoruk@localhost scripts]$ ./run_pfioh_push pfioh-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud jid288
-"{
-    "stdout": {
-        "compress": {
-            "local": {
-                "zip": {
-                    "fileProcessed": "2584e7d2-09d2-4930-8bac-b99e58334053.zip",
-                    "filesInZip": 35,
-                    "filesize": "16,437,171",
-                    "localFSsize": 16919963,
-                    "msg": "zip operation successful",
-                    "path": "/tmp/small",
-                    "status": true,
-                    "timestamp": "2021-03-08 15:20:23.217966",
-                    "zipmode": "w"
-                }
-            },
-            "msg": "File/Directory stored in Swift",
-            "remoteServer": {
-                "User-agent": "PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0",
-                "msg": "File/Directory stored in Swift",
-                "postop": {
-                    "status": false,
-                    "timestamp": "2021-03-08 20:20:47.024191"
-                },
-                "status": true,
-                "write": {}
-            },
-            "status": true
-        },
-        "localCheck": {
-            "check": {
-                "action": "pushPath",
-                "dir": "/tmp/small",
-                "isdir": true,
-                "isfile": false,
-                "msg": "",
-                "status": true
-            },
-            "msg": "Check on local path successful.",
-            "status": true,
-            "timestamp": "2021-03-08 15:20:22.613293"
-        },
-        "msg": "File/Directory stored in Swift",
-        "remoteCheck": {
-            "msg": "Check on remote path successful.",
-            "response": {
-                "data": {
-                    "createdNewDir": false,
-                    "isdir": false,
-                    "isfile": false,
-                    "isswiftstore": true,
-                    "status": true
-                },
-                "status": true
-            },
-            "size": "2",
-            "status": true,
-            "timestamp": "2021-03-08 15:20:22.768343"
-        },
-        "status": true
-    }
-}"
-....
-
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfioh-Push.png[Pfioh Push]
-
-
-["arabic", start=3]
-. Run `pman` script
-
-*Note:* Before using the script `run_pman`, change the "auid" to your username or e-mail address to avoid Authorization related issues.
+Create a folder /tmp/small & add some files above 100KB to that folder first. Then run the below script to run a job.
 
 ....
-#!/usr/bin/env bash                                                                                                                                                     
+# $ ./post_pfcon_ds <pfcon-route> <job-id>
 
-JOBID=$1
-IP=$2
-IMAGE=$3
 
-pfurl --verb POST --raw --http $IP/api/v1/cmd --jsonwrapper 'payload' --msg \
-          '{   "action": "run",                                                                                                                                         
-               "meta":  {                                                                                                                                               
-                    "cmd":      "simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing",                           
-                    "auid": "cyoruk@bu.edu",                                                                                                                           
-                    "jid":      "'$JOBID'",                                                                                                                             
-                    "threaded": true,                                                                                                                                   
-                    "container": {                                                                                                                                      
-                         "target": {                                                                                                                                    
-                              "image": "'${IMAGE:-fnndsc/pl-simpledsapp}'"                                                                                                                       
-                              }                                                                                                                                         
-                          },                                                                                                                                            
-                    "number_of_workers": "1",
-                    "memory_limit": "4000Mi",
-                    "cpu_limit": "4000M"                                                                                                                           
-                }                                                                                                                                                       
-           }' --quiet --jsonpprintindent 4 --authToken password
+(chris_env) [cyoruk@localhost scripts]$ ./post_pfcon_ds pfcon-flask-chris.apps-crc.testing jid04201513
+
+Submitting job jid04201513 to pfcon service at -->http://pfcon-flask-chris.apps-crc.testing/api/v1/<--...
+Waiting for 2s before next polling for job status ...
+
+Polling job jid04201513 status, poll number: 1
+Job jid04201513 status: ['started']
+Waiting for 4s before next polling for job status ...
+
+Polling job jid04201513 status, poll number: 2
+Job jid04201513 status: ['started']
+Waiting for 8s before next polling for job status ...
+
+Polling job jid04201513 status, poll number: 3
+Job jid04201513 status: ['started']
+Waiting for 16s before next polling for job status ...
+
+Polling job jid04201513 status, poll number: 4
+Job jid04201513 status: finishedSuccessfully
+
+Downloading and unpacking job jid04201513 files...
+Number of files to decompress at /tmp/jid04201513: 29
+Done
+
+Deleting job jid04201513 data from the remote...
+Done
 ....
 
-After changing the "auid", you're ready to execute the script `run_pman`
+We can view the containers that are created in Openstack. 
 
-....
-# ./run_pman <pman route> <the exact job name that we used for pman>
-(chris_env) [cyoruk@localhost scripts]$ ./run_pman jid288 pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud
-"{
-    "RESTheader": "POST /api/v1/cmd HTTP/1.1\r",
-    "RESTverb": "POST",
-    "action": "run",
-    "client_json_len": 320,
-    "client_json_payload": "{\"payload\": {\"action\": \"run\", \"meta\": {\"cmd\": \"simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing\", \"auid\": \"cyoruk@bu.edu\", \"jid\": \"jid288\", \"threaded\": true, \"container\": {\"target\": {\"image\": \"fnndsc/pl-simpledsapp\"}}, \"number_of_workers\": \"1\", \"memory_limit\": \"4000Mi\", \"cpu_limit\": \"4000M\"}}}",
-    "meta": {
-        "auid": "cyoruk@bu.edu",
-        "cmd": "simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing",
-        "container": {
-            "target": {
-                "image": "fnndsc/pl-simpledsapp"
-            }
-        },
-        "cpu_limit": "4000M",
-        "jid": "jid288",
-        "memory_limit": "4000Mi",
-        "number_of_workers": "1",
-        "threaded": true
-    },
-    "path": "/api/v1/cmd",
-    "payloadsize": 320,
-    "receivedByServer": [
-        "POST /api/v1/cmd HTTP/1.1\r",
-        "User-Agent: PycURL/7.43.0.6 libcurl/7.71.1 OpenSSL/1.1.1i-fips zlib/1.2.11 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.1 (+libidn2/2.3.0) libssh/0.9.5/openssl/zlib nghttp2/1.43.0\r",
-        "Accept: */*\r",
-        "Authorization: bearer password\r",
-        "Mode: control\r",
-        "Content-Length: 320\r",
-        "Content-Type: application/x-www-form-urlencoded\r",
-        "Host: pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud\r",
-        "X-Forwarded-Host: pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud\r",
-        "X-Forwarded-Port: 80\r",
-        "X-Forwarded-Proto: http\r",
-        "Forwarded: for=209.94.140.248;host=pman-ece-528-containerizing-neural-nets.k-apps.osh.massopen.cloud;proto=http;proto-version=\r",
-        "X-Forwarded-For: 209.94.140.248\r",
-        "\r",
-        "{\"payload\": {\"action\": \"run\", \"meta\": {\"cmd\": \"simpledsapp --prefix test- --sleepLength 0 /share/incoming /share/outgoing\", \"auid\": \"cyoruk@bu.edu\", \"jid\": \"jid288\", \"threaded\": true, \"container\": {\"target\": {\"image\": \"fnndsc/pl-simpledsapp\"}}, \"number_of_workers\": \"1\", \"memory_limit\": \"4000Mi\", \"cpu_limit\": \"4000M\"}}}"
-    ],
-    "status": true
-}
-....
-
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-Openshift.png[Simpledsapp Openshift]
-
-
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Simpledsapp-output.png[Simpledsapp Output]
-
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Output.png[Pfcon Output]
 
 == (Additional Step) Building a Local Openshift Cluster via CRC
 
@@ -569,7 +459,6 @@ There are couple steps involved to build a local `Openshift 4.x` cluster.
 Select your OS and Download CodeReady Containers binaries with an embedded OpenShift disk image from https://cloud.redhat.com/openshift/create/local[CodeReady Containers] (See Image Below)
 
 image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/CodeReady-Containers.png[CodeReady Containers]
-
 
 After downloading CodeReady containers, extract it and place the executable in your `$PATH` (You can check your `$PATH` with `$ echo $PATH`)
 
