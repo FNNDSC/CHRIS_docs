@@ -1,0 +1,46 @@
+Instantiating a Local ChRIS instance on WSL
+-------------------------------------------
+
+This is a step-by-step guide on instantiating a local ChRIS instance on a Windows Host using WSL 2 (Windows Subsystem for Linux 2)
+
+Enabling and/or installing WSL and a Linux distribution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+* Follow the *Manual Installation Steps* from the https://docs.microsoft.com/en-us/windows/wsl/install-win10#manual-installation-steps[Windows Subsystem for Linux Installation Guide for Windows 10^]  
+
+* At the end of Step 6 in the link above, you should have your choice of Linux distribution installed and configured with WSL.
+
+
+
+Installing docker and docker-compose (on the terminal) on Ubuntu on WSL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here's the list of commands in the specified order to be run on the terminal - 
+
+. Installing `docker`
+
+    * Follow the *Install using the repository* steps from the https://docs.docker.com/engine/install/ubuntu/[Install Docker Engine on Ubuntu guide^]
+    
+    * Docker Engine is installed and running. The `docker` group is created but no users are added to it. You need to use `sudo` to run Docker commands. Continue to https://docs.docker.com/engine/install/linux-postinstall/[Linux postinstall^] to allow non-privileged users to run Docker commands and for other optional configuration steps.
+
+. Installing `docker-compose`
+
+    * Follow the *Install Compose on Linux systems* steps from the https://docs.docker.com/compose/install/#install-compose-on-linux-systems[Install Docker Compose Guide^]
+
+
+Instantiating a local ChRIS instance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Once you have `docker` and `docker-compose installed`, open a new terminal window and run `sudo dockerd`
+    - `dockerd` is the daemon service for docker containers
+
+* Instantiating CUBE
+    - Once you have `dockerd` running, open a new terminal window and follow the steps in the https://github.com/FNNDSC/ChRIS_ultron_backEnd/blob/master/README.md[ChRIS Ultron Backend ReadME^] to instatiate an instance of the ChRIS backend services
+
+    - Once the system is "up", you can add more compute plugins to the ecosystem by running:
+    `./postscript.sh`
+
+* Instatiating the ChRIS UI 
+    - Once you have CUBE running, open a new terminal window and follow the steps in the https://github.com/FNNDSC/ChRIS_ui[ChRIS UI ReadME^]
+
