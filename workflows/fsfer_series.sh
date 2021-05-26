@@ -13,12 +13,12 @@ source ./ffe.sh
 # to templatize/describe feedflow structure.
 #
 declare -a a_WORKFLOWSPEC=(
-    
+
 
     "0:0|
     fnndsc/pl-brainmgz:         ARGS;
                                 --title=Subjects"
-                                
+
     "0:1|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=@subjects;
@@ -27,14 +27,14 @@ declare -a a_WORKFLOWSPEC=(
                                 %outputWorkingDir/%inputWorkingFile\';
                                 --title=Filter;
                                 --previous_id=@prev_id"
-                                
+
     "1:2|
     fnndsc/pl-fastsurfer_inference: ARGS;
                                 --subjectDir=subjects;
                                 --copyInputFiles=mgz;
                                 --title=CNN;
-                                --previous_id=@prev_id"                            
-    
+                                --previous_id=@prev_id"
+
     "2:3*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=@mgz[_n];
@@ -53,14 +53,14 @@ declare -a a_WORKFLOWSPEC=(
                                 --verbosity=5;
                                 --title=segmented-png;
                                 --previous_id=@prev_id"
-    
+
     "4*_n:5*_n:l1|
     fnndsc/pl-heatmap:          ARGS;
                                 --inputSubDir1=@mgz[_n]/aparc+aseg.mgz/label-segVolume;
                                 --inputSubDir2=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz/label-segVolume;
                                 --title=heatmap;
                                 --previous_id=@prev_id"
-                                
+
     "4*_n:6*_n:l1|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=label-brainVolume;
@@ -85,27 +85,27 @@ declare -a a_WORKFLOWSPEC=(
                                 %outputWorkingDir/%inputWorkingFile\';
                                 --noJobLogging;
                                 --title=overlayNN-png;
-                                --previous_id=@prev_id"    
-                                
-                                
+                                --previous_id=@prev_id"
+
+
     "3*_n:7*_n:l1|
     fnndsc/pl-mgz2lut_report:   ARGS;
                                 --file_name=@mgz[_n]/aparc.DKTatlas+aseg.deep.mgz;
                                 --report_types=txt,html,pdf;
                                 --title=CNN-Report;
                                 --previous_id=@prev_id"
-                                
+
     "3*_n:9*_n:l1|
     fnndsc/pl-mgz2lut_report:   ARGS;
                                 --file_name=@mgz[_n]/aparc+aseg.mgz;
                                 --report_types=txt,html,pdf;
                                 --title=FS-Report;
                                 --previous_id=@prev_id"
-                                
-    
 
-   
-    
+
+
+
+
 )
 
 
@@ -121,8 +121,11 @@ argArray_filterFromWorkflow     "a_WORKFLOWSPEC[@]" "a_ARGS"
 
 SYNOPSIS="
 NAME
+
   fsfer_series.sh
+
 SYNPOSIS
+
   fsfer_series.sh       [-C <CUBEjsonDetails>]              \\
                         [-r <protocol>]                     \\
                         [-p <port>]                         \\
@@ -137,12 +140,13 @@ SYNPOSIS
                         [-R]                                \\
                         [-J]                                \\
                         [-q]
-                        
+
 DESC
+
   'fsfer_series.sh' posts a workflow based off GE pipeline
   (a segmentation of 25 subjects in series) to CUBE:
-  
-    
+
+
                               ███:0                             pl-brainmgz
                                |
                                |
@@ -152,7 +156,7 @@ DESC
                               ███:2                             pl-fastsurfer_inference
             __________________/│\_____..._______..._
          _ /     _ /     _ /   |   \_      \_        \_
-        /       /       /      │      \  ...  \    ...  \ 
+        /       /       /      │      \  ...  \    ...  \
        ↓       ↓       ↓       ↓       ↓       ↓         ↓
       ███     ███     ███     ███     ███     ███       ███ :3  pl-pfdorun
       /│      /│      /│      /│      /│      /│        /│
@@ -164,26 +168,50 @@ DESC
        │       │       │       │       │       │         │          (mgz2imageslices)
        │       │       │       │       │       │         │
       ███     ███     ███     ███     ███     ███       ███ :6  pl-heatmap
-                                                                    
 
-      
+
+
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
-    several candidate subjects with brain.mgz files. This workflow will process 
+    several candidate subjects with brain.mgz files. This workflow will process
     each of those mgz, resulting in a fanned tree execution toplogy.
-    
-    
+
+    By specifying specific subject(s) in the [-i <listOfSubjectsToProcess>],
+    only those subject branches will be created, otherwise all subjects
+    will be processed.
+
+    Note, this does require some implicit knowledge since the user of
+    this script would need to know which subjects exist. By running this
+    script with a ``-q``, a hard coded list of available images to process
+    is printed.
+
+
 ARGS
+
+    [-s <sleepAfterPluginRun>]
+    Default is '0'. Adds an explicit system ``sleep`` after executing
+    a plugin. This can be useful in not overloading the ancillary
+    services when large amount of plugins are being dispatched
+    concurrently.
+
+    [-S]
+    If specified, save each plugin POST command on the filesystem. Useful
+    for debugging.
+
     [-G <graphvizDotFile>]
     If specified, write a graphviz .dot file that describes the workflow
     and is suitable for rendering by graphviz parsers, e.g.
                 http://dreampuf.github.io/GraphvizOnline
+
     [-i <listOflLungImageToProcess>]
     Runs the inference pipeline of each of the comma separated images
     in the <listOfLungImagesToProcess string. Note these images *MUST*
     be valid image(s) that exists in the output of ``pl-brainmgz``.
+
     To see a list of valid images run this script with a ``-q``.
+
     [-q]
     Print a list of valid images and exit.
+
     [-r <protocol>]         (http)
     [-p <port>]             (8000)
     [-a <cubeIP>]           (%HOSTIP)
@@ -193,24 +221,31 @@ ARGS
     for running the workflow. Each of the above has (defaults) as shown.
     This information can also be specified by passing a JSON string with
     the [-C <CUBEjsonDetails>].
+
     Using one of these specific args, however, is generally simpler. Most
     often, the [-a <cubeIP>] will be used.
+
     [-C <CUBEjsonDetails>]
-      If specified, interpret passed JSON string as the CUBE instance
-      on which to schedule the run. The default is of the form:
-          '{
-               \"protocol\":     \"http\",
-               \"port\":         \"8000\",
-               \"address\":      \"%HOSTIP\",
-               \"user\":         \"chris\",
-               \"password\":     \"chris1234\"
-          }'
-      Note the single quotes about the structure. The '%HOSTIP' is a special
-      construct that will be dynamically replaced by the fully qualified IP
-      of the current host. This is useful in some proxied networks where the
-      string 'localhost' can be problematic.
+
+    If specified, interpret passed JSON string as the CUBE instance
+    on which to schedule the run. The default is of the form:
+        '{
+             \"protocol\":     \"http\",
+             \"port\":         \"8000\",
+             \"address\":      \"%HOSTIP\",
+             \"user\":         \"chris\",
+             \"password\":     \"chris1234\"
+        }'
+
+    Note the single quotes about the structure. The '%HOSTIP' is a special
+    construct that will be dynamically replaced by the fully qualified IP
+    of the current host. This is useful in some proxied networks where the
+    string 'localhost' can be problematic.
+
 EXAMPLES
+
     Typical execution:
+
     $ ./fsfer_series.sh  -C '{
                \"protocol\":     \"http\",
                \"port\":         \"8000\",
@@ -218,8 +253,10 @@ EXAMPLES
                \"user\":         \"chris\",
                \"password\":     \"chris1234\"
     }'
+
     or equivalently:
-    $ ./fsfer_series.sh -a 117.local -W -s 3 -G feed
+
+    $ ./fsfer_series.sh -a 117.local
 "
 
 
@@ -425,7 +462,7 @@ if (( b_imageList || b_onlyShowImageNames )) ; then
     if (( b_onlyShowImageNames )) ; then exit 0 ; fi
 fi
 
-if (( b_imageList )) ; then   
+if (( b_imageList )) ; then
 # Construct a parameter for filtering
     filter=""
     for subject in "${a_subjID[@]}" ; do
@@ -440,10 +477,10 @@ else
     plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun\
                     "@prev_id=$ROOTID;@subjects=''" && id_check $ID1
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1" \
-                    "a_WORKFLOWSPEC[@]" 
-                    
+                    "a_WORKFLOWSPEC[@]"
+
 fi
-    
+
 
 title -d 1 "Building and Scheduling workflow..."
 
@@ -457,14 +494,14 @@ title -d 1 "Building and Scheduling workflow..."
     # Now the branch(es)
     b_respSuccess=1
     b_respFail=0
-    
-    
+
+
     # Run pl-fastsurfer_inference
     boxcenter ""
     boxcenter "Building prediction branch for image $image..." ${Yellow}
     boxcenter ""
     boxcenter ""
-    
+
 
     plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun\
                     "@prev_id=$ID1" && id_check $ID2
@@ -472,8 +509,8 @@ title -d 1 "Building and Scheduling workflow..."
                     "a_WORKFLOWSPEC[@]"
     waitForNodeState    "$CUBE" "finishedSuccessfully" $ID2 retState
     dataInNode_get      fname "$CUBE"  $ID2 filesInNode
-    
-    
+
+
     # Now, parse the list of files for segmented mgzs, read into an
     # array, and print the pruned file list
     mgzFiles=$( echo "$filesInNode"           |\
@@ -481,55 +518,55 @@ title -d 1 "Building and Scheduling workflow..."
     boxcenter $mgzFiles
     read -a a_segMGZ <<< $(echo $mgzFiles)
     a_segMGZorig=("${a_segMGZ[@]}")
-    
-        
-    
+
+
+
 
     for mgz in "${a_segMGZ[@]}" ; do
-        
-    
+
+
         plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun\
                     "@prev_id=$ID2;@mgz[_n]=$mgz" && id_check $ID3
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":3;$ID3" \
                     "a_WORKFLOWSPEC[@]"
-                    
+
         plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID4
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4" \
                     "a_WORKFLOWSPEC[@]"
-        
+
         plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun\
                     "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID5
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5" \
                     "a_WORKFLOWSPEC[@]"
-                    
+
         plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun\
                     "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID6
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":6;$ID6" \
                     "a_WORKFLOWSPEC[@]"
-                    
+
         plugin_run  ":8" "a_WORKFLOWSPEC[@]" "$CUBE" ID8 $sleepAfterPluginRun\
                     "@prev_id=$ID4;@mgz[_n]=$mgz" && id_check $ID8
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":8;$ID8" \
                     "a_WORKFLOWSPEC[@]"
-                    
+
         plugin_run  ":7" "a_WORKFLOWSPEC[@]" "$CUBE" ID7 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID7
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":7;$ID7" \
                     "a_WORKFLOWSPEC[@]"
-                    
+
         plugin_run  ":9" "a_WORKFLOWSPEC[@]" "$CUBE" ID9 $sleepAfterPluginRun\
                     "@prev_id=$ID3;@mgz[_n]=$mgz" && id_check $ID9
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":9;$ID9" \
                     "a_WORKFLOWSPEC[@]"
-        
+
         if (( b_waitOnBranchFinish )) ; then
             waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState
-        fi            
-       
+        fi
+
     done
 
-   
+
 windowBottom
 if (( b_respFail > 0 )) ; then exit 3 ; fi
 
