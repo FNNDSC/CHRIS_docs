@@ -536,21 +536,29 @@ title -d 1 "Building and Scheduling workflow..."
         boxcenter ""
 
         if (( b_createUIFeed )) ; then
-            MRN=$(basename $image .dcm)
-            SWIFTPATH=$(http -a chris:chris1234                              \
-                        GET ${PROTOCOL}://${ADDRESS}:${PORT}/api/v1/pacsfiles/search/   \
-                        PatientID=="$MRN"                                   |\
-                        jq '.collection.items | .[] | .data | .[] | .value' | grep PACS
+            #
+            # Determining the MRN from the DICOM image name is a bit
+            # idiosyncratic.
+            #
+            # The assumption of naming is:
+            #
+            #   <MRN>[_XX_YY].dcm
+            #
+            MRN=$(basename $image .dcm | awk -F \_ '{print $1}')
+            SWIFTFULLPATH=$(http -a chris:chris1234                             \
+                GET ${PROTOCOL}://${ADDRESS}:${PORT}/api/v1/pacsfiles/search/   \
+                PatientID=="$MRN"                                               |\
+                jq '.collection.items | .[] | .data | .[] | .value'             | grep PACS
             )
-            # echo $SWIFTPATH
+            SWIFTPATH=$(echo "$SWIFTFULLPATH" | tr ' ' '\n' | grep $image)
             if (( ! ${#SWIFTPATH} )) ; then
                 boxcenter   "The swift path had zero length. This means that the DICOM" ${Cyan}
                 boxcenter   "file does not seem to be registered to the PACS/SERVICES " ${Cyan}
                 boxcenter   "handler.                                                 " ${Cyan}
                 boxcenter   ""
-                boxcenter   "This script will now exit." ${LightPurple}
+                boxcenter   "Skipping this image." ${LightPurple}
                 windowBottom
-                exit 2
+                continue
             fi
             plugin_run  "0:0" "a_WORKFLOWSPECALT[@]" "$CUBE" ROOTID         \
                         $sleepAfterPluginRun                                \
