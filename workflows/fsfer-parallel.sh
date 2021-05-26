@@ -213,7 +213,7 @@ DESC
     will be processed.
 
     Note, this does require some implicit knowledge since the user of
-    this script would need to know which sibjects exist. By running this
+    this script would need to know which subjects exist. By running this
     script with a ``-q``, a hard coded list of available images to process
     is printed.
 
