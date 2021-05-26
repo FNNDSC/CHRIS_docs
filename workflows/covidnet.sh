@@ -12,87 +12,43 @@ source ./ffe.sh
 # as well as the arguments to be passed to each. This is a WIP attempt
 # to templatize/describe feedflow structure.
 #
+
+# An alternate start to a workflow using ``pl-dircopy``.
+declare -a a_WORKFLOWSPECALT=(
+
+    "0:0|
+    fnndsc/pl-dircopy:          ARGS;
+                                --title=COVIDNET_Analysis_of_@image;
+                                --dir=@swiftPath"
+
+)
+
 declare -a a_WORKFLOWSPEC=(
 
     "0:0|
-    fnndsc/pl-lungct:           ARGS;
+    fnndsc/pl-lung_cnp:         ARGS;
                                 --title=COVIDNET_lung_CT_subjects"
 
-    "0:1*_n:l1|
+    "0:1:l1|
     fnndsc/pl-med2img:          ARGS;
                                 --inputFile=@image[_n];
                                 --convertOnlySingleDICOM;
                                 --title=@image[_n];
                                 --previous_id=@prev_id"
 
-    "1*_n:2*_n:l1|
+    "1:2:l1|
     fnndsc/pl-covidnet:         ARGS;
                                 --imagefile=sample.png;
                                 --title=COVIDNET;
                                 --previous_id=@prev_id"
 
-    "2*_n:3*_n:l1|
+    "2:3:l1|
     fnndsc/pl-pdfgeneration:    ARGS;
                                 --imagefile=sample.png;
                                 --patientId=@patientID;
                                 --title=report;
                                 --previous_id=@prev_id"
 )
-
-WORKFLOW=\
-'{
-    "WARNING":  "THIS JSON STRUCTURE IS NOT USED!!!"
-    "meta": {
-        "loops":    [
-            {
-                "l1":   {
-                    "var":      "n",
-                    "iterate":  [1, 5]
-                }
-            }
-        ]
-    },
-    "feed": {
-        "tree": [
-            {
-                "node_previous":    { "id": 0},
-                "node_self":        { "id": 0},
-                "container":        "fnndsc/pl-lungct",
-                "args":             ["--NOARGS"]
-            },
-            {
-                "node_previous":    { "id": 0},
-                "node_self":        { "id": 1,  "loop": "l1" },
-                "container":        "fnndsc/pl-med2img",
-                "args":             [
-                                        "--inputFile=@image[_n]",
-                                        "--convertOnlySingleDICOM",
-                                        "--previous_id=@prev_id"
-                                    ]
-            },
-            {
-                "node_previous":    { "id": 1,  "loop": "l1" },
-                "node_self":        { "id": 2,  "loop": "l1" },
-                "container":        "fnndsc/pl-covidnet",
-                "args":             [
-                                        "--imagefile=sample.png",
-                                        "--previous_id=@prev_id"
-                                    ]
-            },
-            {
-                "node_previous":    { "id": 2,  "loop": "l1" },
-                "node_self":        { "id": 3,  "loop": "l1" },
-                "container":        "fnndsc/pl-pdfgeneration",
-                "args":             [
-                                        "--imagefile=sample.png",
-                                        "--patientId=@patientID",
-                                        "--previous_id=@prev_id"
-                                    ]
-            },
-        ]
-    }
-
-}'
 
 declare -a a_PLUGINS=()
 declare -a a_ARGS=()
@@ -112,7 +68,10 @@ NAME
 
 SYNPOSIS
 
-  covidnet.sh           [-C <CUBEjsonDetails>]              \\
+  covidnet.sh           [-K]                                \\
+                        [-N <email>]                        \\
+                        [-F]                                \\
+                        [-C <CUBEjsonDetails>]              \\
                         [-r <protocol>]                     \\
                         [-p <port>]                         \\
                         [-a <cubeIP>]                       \\
@@ -129,12 +88,14 @@ SYNPOSIS
 
 DESC
 
-  'covidnet.sh' posts a workflow based off COVID-NET to CUBE:
+  'covidnet.sh' posts a workflow based off COVID-NET to CUBE. It operates
+  in two modes. In the first mode, the workflow runs a base plugin that
+  contains all the images and analyzes them:
 
-                                   ███:0          pl-lungct
+                                   ███:0           pl-lungct_cnp
                                  __/│\__
                               _ / / | \ \_
-                             /   /  │  \.. \
+                             /   /  │  \.. \.
                             ↓   ↓   ↓   ↓   ↓
                            ███ ███ ███ ███ ███ :1  pl-med2img
                             │   │   │   │   │
@@ -146,12 +107,31 @@ DESC
                             ↓   ↓   ↓   ↓   ↓
                            ███ ███ ███ ███ ███ :3  pl-pdfgeneration
 
-    The FS plugin, ``pl-lungct``, generates an output directory containing
+    The FS plugin, ``pl-lung_cp``, generates an output directory containing
     several candidate images. This workflow will process each of those
     images, resulting in a fanned tree execution toplogy.
 
-    By specifying a specific image in the [-i <lungImageToProcess>], only
-    one branch will be created.
+    Alternatively, a single-feed-per-possible-image can be specifed using a
+    [-F]:
+
+                    ███  ███  ███  ███  ███  ███ ... ███ :0 pl-dircopy
+                     │    │    │    │    │    │  ...  │
+                     |    |    |    |    |    |  ...  |
+                     │    │    │    │    │    │  ...  │
+                     ↓    ↓    ↓    ↓    ↓    ↓  ...  ↓
+                    ███  ███  ███  ███  ███  ███ ... ███ :1  pl-med2img
+                     │    │    │    │    │    │  ...  │
+                     │    │    │    │    │    │  ...  │
+                     ↓    ↓    ↓    ↓    ↓    ↓  ...  ↓
+                    ███  ███  ███  ███  ███  ███ ... ███ :2  pl-covidnet
+                     │    │    │    │    │    │  ...  │
+                     │    │    │    │    │    │  ...  │
+                     ↓    ↓    ↓    ↓    ↓    ↓  ...  ↓
+                    ███  ███  ███  ███  ███  ███ ... ███ :3  pl-pdfgeneration
+
+
+    By specifying a specific image set in the [-i <listOfLungImagesToProcess>],
+    only those specific images will be processed.
 
     Note, this does require some implicit knowledge since the user of
     this script would need to know which images exist. By running this
@@ -159,6 +139,23 @@ DESC
     is printed.
 
 ARGS
+
+    [-K]
+    Skip the ``pl-lung_cnp`` node. In the Feed generation case, the default
+    operation is to create a ``pl-lung_cnp`` node and capture its contents.
+    These are then compared with any specified in the [-i <imageList>] to
+    provide some failsafe that images to compare possible images to process
+    with ones that have been pushed to swift. This check can be skipped with
+    this flag.
+
+    [-N <email>]
+    If specified, _create_ a new user on CUBE using the <user>:<passwd> and
+    with email <email>.
+
+    [-F]
+    If specified, create a new Feed top level feed using ``pl-dircopy`` off
+    an explicit DICOM filename. The DICOM filename is passed with a spec
+    [-i <fname>].
 
     [-s <sleepAfterPluginRun>]
     Default is '0'. Adds an explicit system ``sleep`` after executing
@@ -318,6 +315,7 @@ GRAPHVIZHEADER='digraph G {
 GRAPHVIZBODY=""
 GRAPHVIZBODYARGS=""
 
+declare -i b_skipFScheck=0
 declare -i b_respSuccess=0
 declare -i b_respFail=0
 declare -i STEP=0
@@ -330,11 +328,17 @@ declare -i b_printReport=0
 declare -i b_printJSONprediction=0
 declare -i sleepAfterPluginRun=0
 declare -i b_saveCalls=0
+declare -i b_newUserCreate=0
+declare -i b_createUIFeed=0
 IMAGESTOPROCESS=""
 GRAPHVIZFILE=""
 
-while getopts "C:G:i:qxr:p:a:u:w:WRJs:S" opt; do
+while getopts "KN:FC:G:i:qxr:p:a:u:w:WRJs:S" opt; do
     case $opt in
+        K) b_skipFScheck=1                      ;;
+        N) b_newUserCreate=1
+           EMAIL=$OPTARG                        ;;
+        F) b_createUIFeed=1                     ;;
         S) b_saveCalls=1                        ;;
         s) sleepAfterPluginRun=$OPTARG          ;;
         W) b_waitOnBranchFinish=1               ;;
@@ -379,6 +383,32 @@ title -d 1 "Checking on required dependencies..."
 windowBottom
 if (( b_respFail > 0 )) ; then exit 4 ; fi
 
+if (( b_newUserCreate )) ; then
+    title -d 1 "Create a new user on CUBE"
+        boxcenter "Create a new user with name:password = $USER:$PASSWD "
+        boxcenter ""
+
+        CMD="http POST $PROTOCOL://$ADDRESS:$PORT/api/v1/users/ \
+            Content-Type:application/vnd.collection+json \
+            Accept:application/vnd.collection+json \
+            template:='{
+                \"data\":[{\"name\":\"email\",\"value\":\"$EMAIL\"},
+                          {\"name\":\"password\",\"value\":\"$PASSWD\"},
+                          {\"name\":\"username\",\"value\":\"$USER\"}]
+            }'"
+        RES=$(eval "$CMD")
+        ERR=$(echo $RES | grep error | wc -l)
+        echo "$RES" | jq | sed -E 's/(.{80})/\1\n/g' | ./boxes.sh ${LightGreen}
+        if (( ERR )) ; then
+            boxcenter ""
+            boxcenter "Some error has occured in the user creation!" ${LightRed}
+            boxcenter ""
+            windowBottom
+            exit 1
+        fi
+    windowBottom
+fi
+
 title -d 1 "Checking for plugin IDs on CUBE...."                            \
             "(ids below denote plugin ids)"
     #
@@ -394,7 +424,7 @@ title -d 1 "Checking for plugin IDs on CUBE...."                            \
     boxcenter ""
     for plugin in "${a_PLUGINS[@]}" ; do
         cparse $plugin "REPO" "CONTAINER" "MMN" "ENV"
-        opBlink_feedback "$ADDRESS:$PORT" "::CUBE->$plugin"   \
+        opBlink_feedback "$ADDRESS:$PORT" "::CUBE->$plugin"     \
                          "op-->" "search"
         windowBottom
         RESP=$(
@@ -403,14 +433,15 @@ title -d 1 "Checking for plugin IDs on CUBE...."                            \
                             --onCUBE "$CUBE"
         )
         opRet_feedback  "$?"                                    \
-                        "$ADDRESS:$PORT" "::CUBE->$plugin"    \
+                        "$ADDRESS:$PORT" "::CUBE->$plugin"      \
                         "result-->" "pid = $(echo $RESP | awk '{print $3}')"
     done
     postQuery_report
 windowBottom
 if (( b_respFail > 0 )) ; then exit 2 ; fi
 
-title -d 1 "Start constructing the Feed by POSTing the root FS node..."
+if (( ! b_skipFScheck )) ; then
+  title -d 1 "Start constructing the Feed by POSTing the root FS node..."
     ROOTID=-1
     retState=""
     filesInNode=""
@@ -418,10 +449,10 @@ title -d 1 "Start constructing the Feed by POSTing the root FS node..."
 
     # Post the root node, wait for it to finish, and
     # collect a list of output files
-    boxcenter "Run the root node and dynamically capture a list of output "
-    boxcenter "files created by the base FS plugin. This file list will be"
+    boxcenter "Run the root node and dynamically capture a list of output  "
+    boxcenter "files created by the base FS plugin. This file list will be "
     boxcenter "processed to create the actual list of DICOMS to process -- "
-    boxcenter "each DICOM will spawn a new parallel branch.               "
+    boxcenter "each DICOM will spawn a new parallel branch.                "
     boxcenter ""
     windowBottom
 
@@ -442,21 +473,23 @@ title -d 1 "Start constructing the Feed by POSTing the root FS node..."
     echo -en "\033[2A\033[2K"
     read -a a_lungCT <<< $(echo $dcmFiles)
     a_lungCTorig=("${a_lungCT[@]}")
-windowBottom
+  windowBottom
+fi
 
 if (( b_imageList )) ; then
-    title -d 1 "Checking that images to process exist in root pl-lungct..."
-        boxcenter "Verify that any DICOMs explicitly listed by the user "
-        boxcenter "when calling this script actually exist in the root  "
-        boxcenter "node.                                                "
+    read -a a_lungCT <<< $(echo "$IMAGESTOPROCESS" | tr ',' ' ')
+fi
+
+if (( b_imageList && ! b_skipFScheck )) ; then
+    title -d 1 "Checking that images to process exist in root pl-lung_cnp..."
+        boxcenter "Cross reference that any DICOMs explicitly listed by the "
+        boxcenter "user when calling this script with DICOMS that are of the"
+        boxcenter "payload in pl-lung_cnp.                                  "
         boxcenter ""
 
         b_respSuccess=0
         b_respFail=0
 
-        if (( b_imageList )) ; then
-            read -a a_lungCT <<< $(echo "$IMAGESTOPROCESS" | tr ',' ' ')
-        fi
         for image in "${a_lungCT[@]}" ; do
             opBlink_feedback "Image to process" "::$image"  \
                              "valid-->"         "checking"
@@ -486,6 +519,9 @@ title -d 1 "Building and Scheduling workflow..."
     boxcenter "If a report has been specified, print a final report on the "
     boxcenter "prediction of the input image for that branch.              "
     boxcenter ""
+    boxcenter "If a per feed has been indicated, then create a new feed FS "
+    boxcenter "for each image, and process subsequently                    "
+    boxcenter ""
 
     # Now the branch(es)
     b_respSuccess=1
@@ -498,6 +534,69 @@ title -d 1 "Building and Scheduling workflow..."
         boxcenter "Building prediction branch for image $image..." ${LightGray}
         boxcenter ""
         boxcenter ""
+
+        if (( b_createUIFeed )) ; then
+            MRN=$(basename $image .dcm)
+            SWIFTPATH=$(http -a chris:chris1234                              \
+                        GET ${PROTOCOL}://${ADDRESS}:${PORT}/api/v1/pacsfiles/search/   \
+                        PatientID=="$MRN"                                   |\
+                        jq '.collection.items | .[] | .data | .[] | .value' | grep PACS
+            )
+            # echo $SWIFTPATH
+            if (( ! ${#SWIFTPATH} )) ; then
+                boxcenter   "The swift path had zero length. This means that the DICOM" ${Cyan}
+                boxcenter   "file does not seem to be registered to the PACS/SERVICES " ${Cyan}
+                boxcenter   "handler.                                                 " ${Cyan}
+                boxcenter   ""
+                boxcenter   "This script will now exit." ${LightPurple}
+                windowBottom
+                exit 2
+            fi
+            plugin_run  "0:0" "a_WORKFLOWSPECALT[@]" "$CUBE" ROOTID         \
+                        $sleepAfterPluginRun                                \
+                        "@image=$MRN;@swiftPath=$SWIFTPATH" && id_check $ROOTID
+
+            # Determine the Feed ID from the instance ID:
+            echo -en "\033[2A\033[2K"
+            FEEDID=$(
+                chrispl-search  --for feed_id --using id=$ROOTID --across plugininstances \
+                                --onCUBE "$CUBE" | awk '{print $3}'
+            )
+            boxcenter   "Feed ID: ${FEEDID}" ${Cyan}
+            # Get the note URL:
+            NOTEURL=$(
+                http -a ${USER}:${PASSWD} GET                           \
+                ${PROTOCOL}://${ADDRESS}:${PORT}/api/v1/${FEEDID}/      |\
+                jq  '.collection.items | . [] | .links | .[] | .href'   |\
+                grep note
+            )
+            boxcenter   "PUT a title to note URL: ${NOTEURL}... " 
+            # Set the note title:
+            CMD="
+                http -a ${USER}:${PASSWD} PUT                           \
+                ${NOTEURL}                                              \
+                Content-Type:application/vnd.collection+json            \
+                Accept:application/vnd.collection+json                  \
+                template:='{
+                    \"data\":[
+                        {\"name\":\"title\",    \"value\":\"COVIDNET_ANALYSIS_NOTE\"},
+                        {\"name\":\"content\",  \"value\":\"Note content\"}
+                    ]
+                }'
+            "
+            # echo "$CMD"
+            RES=$(eval "$CMD")
+            ERR=$(echo $RES | grep error | wc -l)
+            echo "$RES" | jq | sed -E 's/(.{80})/\1\n/g' | ./boxes.sh ${LightGreen}
+            if (( ERR )) ; then
+                boxcenter ""
+                boxcenter "Some error has occured in the user creation!" ${LightRed}
+                boxcenter ""
+                windowBottom
+                exit 1
+            fi
+            windowBottom
+        fi
 
         plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun \
                     "@prev_id=$ROOTID;@image[_n]=$image" && id_check $ID1
@@ -533,7 +632,7 @@ title -d 1 "Building and Scheduling workflow..."
             if (( b_printJSONprediction )) ; then
                 echo "$RESULT"                      | ./boxes.sh ${LightGray}
             fi
-            if (( b_printReport )) ; then 
+            if (( b_printReport )) ; then
               case "$final" in
               "normal")
                     perc=$( cat prediction-default.json                     |\
