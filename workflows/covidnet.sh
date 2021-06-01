@@ -79,6 +79,7 @@ SYNPOSIS
                         [-w <passwd>]                       \\
                         [-G <graphvizDotFile>]              \\
                         [-i <listOfLungImagesToProcess>]    \\
+                        [-D <listOfAnalysisDatesForImages>] \\
                         [-s <sleepAfterPluginRun>]          \\
                         [-W]                                \\
                         [-S]                                \\
@@ -158,6 +159,18 @@ ARGS
     an explicit DICOM filename. The DICOM filename is passed with a spec
     [-i <fname>].
 
+    [-i <listOflLungImageToProcess>]
+    Runs the inference pipeline of each of the comma separated images
+    in the <listOfLungImagesToProcess string. Note these images *MUST*
+    be valid image(s) that exists in the output of ``pl-lungct``.
+
+    To see a list of valid images run this script with a ``-q``.
+
+    [-D <listOfDateStringsPerImage>]
+    If specified, then for each image in [-i <imageList>] read a corresponding
+    date string from this comma separated list and use that date as the time-
+    stamp for the analysis.
+
     [-s <sleepAfterPluginRun>]
     Default is '0'. Adds an explicit system ``sleep`` after executing
     a plugin. This can be useful in not overloading the ancillary
@@ -199,14 +212,6 @@ ARGS
 
                 http://dreampuf.github.io/GraphvizOnline
                 http://viz-js.com
-
-
-    [-i <listOflLungImageToProcess>]
-    Runs the inference pipeline of each of the comma separated images
-    in the <listOfLungImagesToProcess string. Note these images *MUST*
-    be valid image(s) that exists in the output of ``pl-lungct``.
-
-    To see a list of valid images run this script with a ``-q``.
 
     [-q]
     Print a list of valid images and exit.
@@ -331,10 +336,12 @@ declare -i sleepAfterPluginRun=0
 declare -i b_saveCalls=0
 declare -i b_newUserCreate=0
 declare -i b_createUIFeed=0
+declare -i b_useAnalysisDates
 IMAGESTOPROCESS=""
+ANALYSISDATES=""
 GRAPHVIZFILE=""
 
-while getopts "KN:FC:G:i:qxr:p:a:u:w:WRJs:S" opt; do
+while getopts "KN:FC:G:i:D:qxr:p:a:u:w:WRJs:S" opt; do
     case $opt in
         K) b_skipFScheck=1                      ;;
         N) b_newUserCreate=1
@@ -351,6 +358,8 @@ while getopts "KN:FC:G:i:qxr:p:a:u:w:WRJs:S" opt; do
            CUBEJSON=$OPTARG                     ;;
         G) b_graphviz=1
            GRAPHVIZFILE=$OPTARG                 ;;
+        D) b_useAnalysisDates=1 ;
+           ANALYSISDATES=$OPTARG                ;;
         i) b_imageList=1 ;
            IMAGESTOPROCESS=$OPTARG              ;;
         q) b_onlyShowImageNames=1               ;;
@@ -481,6 +490,10 @@ if (( b_imageList )) ; then
     read -a a_lungCT <<< $(echo "$IMAGESTOPROCESS" | tr ',' ' ')
 fi
 
+if (( b_useAnalysisDates )) ; then
+    read -a a_analysisDate <<< $(echo "$ANALYSISDATES" | tr ',' ' ')
+fi
+
 if (( b_imageList && ! b_skipFScheck )) ; then
     title -d 1 "Checking that images to process exist in root pl-lung_cnp..."
         boxcenter "Cross reference that any DICOMs explicitly listed by the "
@@ -529,6 +542,7 @@ title -d 1 "Building and Scheduling workflow..."
     b_respFail=0
     boxcenter ""
     boxcenter ""
+    idx=0
     for image in "${a_lungCT[@]}" ; do
         echo -en "\033[2A\033[2K"
         boxcenter ""
@@ -590,6 +604,9 @@ title -d 1 "Building and Scheduling workflow..."
             # Extract the 'creation_date' and convert to timestamp:
             CREATIONDATE=$(echo $JSONquery | jq '.creation_date')
             CREATIONDATE="${CREATIONDATE//\"/}"
+            if (( b_useAnalysisDates )) ; then
+                CREATIONDATE=${a_analysisDate[$idx]}
+            fi
             TIMESTAMP=$(date -d $CREATIONDATE +"%s%3N")
             JSONcontents=$(
                 jq --arg key0 'timestamp' --arg value0 $TIMESTAMP           \
@@ -720,7 +737,7 @@ title -d 1 "Building and Scheduling workflow..."
 
             windowBottom
         fi
-
+        ((idx=idx+1))
     done
     echo -en "\033[2A\033[2K"
     postRun_report
