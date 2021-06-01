@@ -550,6 +550,10 @@ title -d 1 "Building and Scheduling workflow..."
                 PatientID=="$MRN"                                               |\
                 jq '.collection.items | .[] | .data | .[] | .value'             | grep PACS
             )
+            # Read all the possible path hits into an array...
+            a_SWIFTPATH=($SWIFTFULLPATH)
+            # ... and find the index of the $image in this array
+            sidx=$(a_index $image "a_SWIFTPATH[@]")
             SWIFTPATH=$(echo "$SWIFTFULLPATH" | tr ' ' '\n' | grep $image)
             if (( ! ${#SWIFTPATH} )) ; then
                 boxcenter   "The swift path had zero length. This means that the DICOM" ${Cyan}
@@ -560,6 +564,52 @@ title -d 1 "Building and Scheduling workflow..."
                 windowBottom
                 continue
             fi
+            l_keys=$(http -a chris:chris1234                                    \
+                GET ${PROTOCOL}://${ADDRESS}:${PORT}/api/v1/pacsfiles/search/   \
+                PatientID=="$MRN"                                               |\
+                jq '.collection.items  | .['$sidx'] | .data | .[] | .name' | tr '\n' '|'
+            )
+            l_keys=${l_keys::-1}
+            l_keys="${l_keys//\"/}"
+            l_value=$(http -a chris:chris1234                                    \
+                GET ${PROTOCOL}://${ADDRESS}:${PORT}/api/v1/pacsfiles/search/   \
+                PatientID=="$MRN"                                               |\
+                jq '.collection.items  | .['$sidx'] | .data | .[] | .value' | tr '\n' '|'
+            )
+            l_value=${l_value::-1}
+            l_value="${l_value//\"/}"
+            s=$(printf "%s\n%s" "$l_keys" "$l_value")
+            JSONquery=$(
+                jq -Rn '
+                    ( input  | split("|") ) as $keys |
+                    ( inputs | split("|") ) as $vals |
+                    [[$keys, $vals] | transpose[] | {key:.[0],value:.[1]}] | from_entries
+                    ' <<<"$s" | tr -d '[:space:]'
+            )
+            # Extract the 'creation_date' and convert to timestamp:
+            CREATIONDATE=$(echo $JSONquery | jq '.creation_date')
+            CREATIONDATE="${CREATIONDATE//\"/}"
+            TIMESTAMP=$(date -d $CREATIONDATE +"%s%3N")
+            JSONcontents=$(
+                jq --arg key0 'timestamp' --arg value0 $TIMESTAMP           \
+                   --arg key1 'img'       --arg value1 "$JSONquery"         \
+                   '. | .[$key0]=$value0 | .[$key1]=$value1' <<< '{}'       |\
+                tr -d '[:space:]'
+            )
+            # remove the stringify formatting that jq added...
+            JSONcontents=$(echo "$JSONcontents" | sed 's/\\//g')
+            # and now put it back!
+            JSONcontents=${JSONcontents//\"/\\\"}
+            # and some more fudging...
+            JSONcontents=$(echo $JSONcontents | sed 's/\\"{/{/' | sed 's/}\\"}/}}/')
+            JSONcontents=$(echo "$JSONcontents"                         |\
+                            sed 's/tamp\\\":\\\"/tamp\\":/'             |\
+                            sed 's/\\\",\\\"img/,\\\"img/'              |\
+                            sed 's/id\\\":\\\"/id\\":/'                 |\
+                            sed 's/\\\",\\\"creation/,\\\"creation/'    |\
+                            sed 's/PatientAge\\\":\\\"/PatientAge\\":/' |\
+                            sed 's/\\\",\\\"PatientSex/,\\\"PatientSex/'
+            )
             plugin_run  "0:0" "a_WORKFLOWSPECALT[@]" "$CUBE" ROOTID         \
                         $sleepAfterPluginRun                                \
                         "@image=$MRN;@swiftPath=$SWIFTPATH" && id_check $ROOTID
@@ -578,8 +628,9 @@ title -d 1 "Building and Scheduling workflow..."
                 jq  '.collection.items | . [] | .links | .[] | .href'   |\
                 grep note
             )
-            boxcenter   "PUT a title to note URL: ${NOTEURL}... " 
-            # Set the note title:
+            boxcenter   "Edit (PUT) title/content to note URL:"
+            boxcenter   "${NOTEURL}"
+            # Set the note information:
             CMD="
                 http -a ${USER}:${PASSWD} PUT                           \
                 ${NOTEURL}                                              \
@@ -588,14 +639,15 @@ title -d 1 "Building and Scheduling workflow..."
                 template:='{
                     \"data\":[
                         {\"name\":\"title\",    \"value\":\"COVIDNET_ANALYSIS_NOTE\"},
-                        {\"name\":\"content\",  \"value\":\"Note content\"}
+                        {\"name\":\"content\",  \"value\":\"${JSONcontents}\"}
                     ]
                 }'
             "
             # echo "$CMD"
             RES=$(eval "$CMD")
             ERR=$(echo $RES | grep error | wc -l)
-            echo "$RES" | jq | sed -E 's/(.{80})/\1\n/g' | ./boxes.sh ${LightGreen}
+            # echo "$RES" | jq | sed -E 's/(.{80})/\1\n/g' | ./boxes.sh ${LightGreen}
+            echo "$RES" | jq | fold -w 75 | ./boxes.sh ${LightGreen}
             if (( ERR )) ; then
                 boxcenter ""
                 boxcenter "Some error has occured in the user creation!" ${LightRed}
