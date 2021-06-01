@@ -142,11 +142,12 @@ ARGS
 
     [-K]
     Skip the ``pl-lung_cnp`` node. In the Feed generation case, the default
-    operation is to create a ``pl-lung_cnp`` node and capture its contents.
-    These are then compared with any specified in the [-i <imageList>] to
-    provide some failsafe that images to compare possible images to process
-    with ones that have been pushed to swift. This check can be skipped with
-    this flag.
+    operation is to create a ``pl-lung_cnp`` node and capture a list of the
+    node contents. The elements of this list are compared with any in the
+    [-i <imageList>] to provide an added sanity check (basically check that
+    the image specified in the CLI is in a valid image of the ``pl-lung_cnp``
+    plugin). To skip this test (usually indicated in the -F case), use a
+    '-K'.
 
     [-N <email>]
     If specified, _create_ a new user on CUBE using the <user>:<passwd> and
