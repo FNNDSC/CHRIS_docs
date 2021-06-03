@@ -35,7 +35,7 @@ fi
 payload="$(
 cat << EOF
 {"template":
-  {"data":[{"name":"name","value":"Automatic Fetal Brain Reconstruction Pipeline"},
+  {"data":[{"name":"name","value":"Automatic Fetal Brain Reconstruction Pipeline v1.0.0"},
   {"name": "authors", "value": "Jennings Zhang <Jennings.Zhang@childrens.harvard.edu>"},
   {"name": "Category", "value": "MRI"},
   {"name": "description", "value":
