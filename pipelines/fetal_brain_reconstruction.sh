@@ -1,4 +1,13 @@
 #!/bin/bash -e
+# purpose: describe a pipeline to the ChRIS or ChRIS Store API.
+
+# Step 0. specify ChRIS user.
+
+CUBE_URL=${CUBE_URL:-http://localhost:8000/api/v1/}
+CHRIS_USER=${CUBE_USER:-chris:chris1234}
+
+# Step 1. Upload these plugins.
+# You probably have to do this step manually.
 
 plugins=(
   https://chrisstore.co/api/v1/plugins/71/
@@ -7,9 +16,21 @@ plugins=(
   https://chrisstore.co/api/v1/plugins/89/
 )
 
-for url in "${plugins[@]}"; do
-  docker exec chris python plugins/services/manager.py register host --pluginurl $url
-done
+# If using miniChRIS, we can handle it for you using docker exec
+
+CUBE_PORT="$(grep -Pom 1 '(?<=localhost:)[0-9].+(?=/api/v1/)' <<< "$CUBE_URL")"
+MINICHRIS_PORTS="$(docker ps --filter label=org.chrisproject.info=miniChRIS --format '{{ .Ports }}')"
+
+if [[ "$MINICHRIS_PORTS" = *"0.0.0.0:8000->"*"$CUBE_PORT/tcp"* ]]; then
+  >&2 printf "Registering plugins to miniChRIS"
+  for url in "${plugins[@]}"; do
+    docker exec chris python plugins/services/manager.py register host --pluginurl $url
+    >&2 printf .
+  done
+  >&2 echo
+fi
+
+# Step 2. POST the JSON representation to /api/v1/pipelines/
 
 payload="$(
 cat << EOF
@@ -30,7 +51,7 @@ cat << EOF
 EOF
 )"
 
-curl -u chris:chris1234 http://localhost:8000/api/v1/pipelines/ \
+curl -u "$CHRIS_USER" "${CUBE_URL}pipelines/" \
   -H 'Content-Type:application/vnd.collection+json' \
   -H 'Accept:application/vnd.collection+json' \
   --data "$(tr -d '\n' <<< "$payload")"
