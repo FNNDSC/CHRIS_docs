@@ -4,7 +4,7 @@
 # Step 0. specify ChRIS user.
 
 CUBE_URL=${CUBE_URL:-http://localhost:8000/api/v1/}
-CHRIS_USER=${CUBE_USER:-chris:chris1234}
+CUBE_USER=${CUBE_USER:-chris:chris1234}
 
 # Step 1. Upload these plugins.
 # You probably have to do this step manually.
@@ -21,7 +21,7 @@ plugins=(
 CUBE_PORT="$(grep -Pom 1 '(?<=localhost:)[0-9].+(?=/api/v1/)' <<< "$CUBE_URL")"
 MINICHRIS_PORTS="$(docker ps --filter label=org.chrisproject.info=miniChRIS --format '{{ .Ports }}')"
 
-if [[ "$MINICHRIS_PORTS" = *"0.0.0.0:8000->"*"$CUBE_PORT/tcp"* ]]; then
+if [ -n "$CUBE_PORT" ] && [[ "$MINICHRIS_PORTS" = *"0.0.0.0:8000->"*"$CUBE_PORT/tcp"* ]]; then
   >&2 printf "Registering plugins to miniChRIS"
   for url in "${plugins[@]}"; do
     docker exec chris python plugins/services/manager.py register host --pluginurl $url
@@ -51,7 +51,7 @@ cat << EOF
 EOF
 )"
 
-curl -u "$CHRIS_USER" "${CUBE_URL}pipelines/" \
+curl -u "$CUBE_USER" "${CUBE_URL}pipelines/" \
   -H 'Content-Type:application/vnd.collection+json' \
   -H 'Accept:application/vnd.collection+json' \
   --data "$(tr -d '\n' <<< "$payload")"
