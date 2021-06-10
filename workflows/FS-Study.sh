@@ -14,6 +14,8 @@ source ./ffe.sh
 # as well as the arguments to be passed to each. This is a WIP attempt
 # to templatize/describe feedflow structure.
 #
+
+
 declare -a a_WORKFLOWSPEC=(
 
     "0:0|
@@ -22,41 +24,37 @@ declare -a a_WORKFLOWSPEC=(
 
    
     "0:1|
-    fnndsc/pl-pfdicom_tagsub:  ARGS;
+    fnndsc/pl-pfdicom_tagsub:   ARGS;
                                 --extension=.dcm;
-                                --tagStruct='
-    						{
-        						""PatientName"":              ""%_name|patientID_PatientName"",
-        						""PatientID"":                ""%_md5|7_PatientID"",
-        						""AccessionNumber"":          ""%_md5|8_AccessionNumber"",
-        						""PatientBirthDate"":         ""%_strmsk|******01_PatientBirthDate"",
-        						""re:.*hysician"":            ""%_md5|4_#tag"",
-        						""re:.*stitution"":           ""#tag"",
-        						""re:.*ddress"":              ""#tag""
-   						 }
-    						' ;
+                                --tagStruct=@str;
                                 --title=Sub-tags;
                                 --previous_id=@prev_id"
 
-    "1:2|
+    "0:2|
     fnndsc/pl-pfdicom_tagextract: ARGS;
                                 --outputFileType=txt,scv,json,html;
-                                --outputFileStem=Post-Sub;
-                                --title=tag-Extract;
+                                --outputFileStem=Pre-Sub;
+                                --title=Pre-tag-Extract;
                                 --previous_id=@prev_id"
                                 
     "1:3|
-    fnndsc/pl-fshack:          ARGS;
-                                --dirFilter=@SUBJID;
-                                --i=0001-1.3.12.2.1107.5.2.19.45152.2013030808110258929186035.dcm;
-                                --o=recon-of-SAG-anon-dcm;
-                                --exec=recon-all;
-                                --args='ARGS: -all -notalairach'  
+    fnndsc/pl-pfdicom_tagextract: ARGS;
+                                --outputFileType=txt,scv,json,html;
+                                --outputFileStem=Post-Sub;
+                                --title=Post-tag-Extract;
+                                --previous_id=@prev_id"
+                                
+    "1:4|
+    fnndsc/pl-fshack:           ARGS;
+                                --inputFile='0001-1.3.12.2.1107.5.2.19.45152.2013030808110258929186035.dcm';
+                                --outputFile='recon-of-SAG-anon-dcm';
+                                --exec='recon-all';
+                                --args=@args; 
                                 --title=All-mgzs;
                                 --previous_id=@prev_id"
 
 
-    "3:4|
+    "4:5|
     fnndsc/pl-multipass:        ARGS;
                                 --splitExpr='++';
                                 --commonArgs=\'--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png\';
@@ -66,7 +64,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=mgz-slices;
                                 --previous_id=@prev_id"
 
-    "4:5|
+    "5:6|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=label-brainVolume;
                                 --fileFilter=png;
@@ -75,14 +73,14 @@ declare -a a_WORKFLOWSPEC=(
                                 %inputWorkingDir/%inputWorkingFile
                                 %inputWorkingDir/../../aseg.mgz/label-segVolume/%inputWorkingFile
                                 -alpha Set
-                                %outputWorkingDir/%inputWorkingFile\'';
+                                %outputWorkingDir/%inputWorkingFile\';
                                 --noJobLogging;
                                 --title=overlay-png;
                                 --previous_id=@prev_id"
                                 
-    "3:6|
+    "4:7|
     fnndsc/pl-mgz2lut_report:   ARGS;
-                                --fileName=recon-of-SAG-anon-dcm/mri/aseg.mgz;
+                                --file_name='recon-of-SAG-anon-dcm/mri/aseg.mgz';
                                 --report_types=txt,csv,json,html;
                                 --title=ASEG-report;
                                 --previous_id=@prev_id"
@@ -387,47 +385,46 @@ title -d 1 "Start constructing the Feed by POSTing the root FS node..."
     boxcenter "files created by the base FS plugin. This file list will be   "
     boxcenter "processed to create the actual list of dicoms to process      "
     boxcenter ""
-    windowBottom
+windowBottom
 
     #\\\\\\\\\\\\\\\\\\
     # Core logic here ||
+    
+    STR='"'"{'"PatientName"':'"anon"','"PatientID"':'"%_md5|7_PatientID"'}"'"'
     plugin_run          "0:0"   "a_WORKFLOWSPEC[@]"   "$CUBE"  ROOTID \
                         $sleepAfterPluginRun && id_check $ROOTID
     waitForNodeState    "$CUBE" "finishedSuccessfully" $ROOTID retState
    
     plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun \
-                    "@prev_id=$ROOTID;@SUBJID=$image" && id_check $ID1
+                "@prev_id=$ROOTID;@str=$STR" && id_check $ID1
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1"  \
-                    "a_WORKFLOWSPEC[@]"
+                "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun \
-                    "@prev_id=$ID1;@SUBJID=$image" && id_check $ID2
+                "@prev_id=$ID1;@SUBJID=$image" && id_check $ID2
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2"     \
-                    "a_WORKFLOWSPEC[@]"
+                "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun \
-                    "@prev_id=$ID1" && id_check $ID3
+                "@prev_id=$ID1;@args='ARGS:-all -notalairach'" && id_check $ID3
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":3;$ID3"     \
-                    "a_WORKFLOWSPEC[@]"
+                "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun \
-                    "@prev_id=$ID3" && id_check $ID4
+                "@prev_id=$ID3" && id_check $ID4
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4"     \
-                    "a_WORKFLOWSPEC[@]"
+                "a_WORKFLOWSPEC[@]"
     plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun \
-                    "@prev_id=$ID4" && id_check $ID5
+                "@prev_id=$ID4" && id_check $ID5
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5"     \
-                    "a_WORKFLOWSPEC[@]"
+                "a_WORKFLOWSPEC[@]"
     # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState 5 300
 
     plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun \
-                    "@prev_id=$ID3" && id_check $ID6
+                "@prev_id=$ID3" && id_check $ID6
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":6;$ID6"     \
-                    "a_WORKFLOWSPEC[@]"
-    plugin_run  ":7" "a_WORKFLOWSPEC[@]" "$CUBE" ID7 $sleepAfterPluginRun \
-                    "@prev_id=$ID6" && id_check $ID7
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":6;$ID6" ":7;$ID7"     \
-                    "a_WORKFLOWSPEC[@]"
+                "a_WORKFLOWSPEC[@]"
+ 
     # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID7 retState 5 300
 
    
