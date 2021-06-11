@@ -137,26 +137,26 @@ DESC
       ███                                    0:0   pl-mri_sag_anon_192
        ┼───┐                                       (Input dicoms)
        │   ↓
-       │   ███                               0:1   pl-pfdicom_tagextract
+       │   ███                               0:2   pl-pfdicom_tagextract
        │                                           (extract original tags)
        │ 
           ↓    
       ███                                    0:1   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
        ↓    │        
-    ███  │                                   1:2   pl-pfdicom_tagextract
+    ███  │                                   1:3   pl-pfdicom_tagextract
          │                                          (extract substituted tags)
              ↓                   
-        ███                                  1:3   pl-fshack
-                                                   (Run freesurfer)
+        ███                                  1:4   pl-fshack
+         │                                         (Run freesurfer)
          ┼───┬       
-         │  ███                              3:4   pl-multipass
+         │  ███                              4:5   pl-multipass
          │   │                                     (mgz2image)
          │   ↓ 
-         │  ███                              4:5   pl-pfdorun
+         │  ███                              5:6   pl-pfdorun
          │                                          (composite -dissolve)
              ↓              
-        ███                                  3:6   pl-mgz2lut_report
+        ███                                  4:7   pl-mgz2lut_report
                                                     (Report on aseg.mgz)
  
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
