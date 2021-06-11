@@ -26,7 +26,7 @@ declare -a a_WORKFLOWSPEC=(
     "0:1|
     fnndsc/pl-pfdicom_tagsub:   ARGS;
                                 --extension=.dcm;
-                                --tagStruct=@str;
+                                --tagInfo=@info;
                                 --title=Sub-tags;
                                 --previous_id=@prev_id"
 
@@ -35,6 +35,8 @@ declare -a a_WORKFLOWSPEC=(
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Pre-Sub;
                                 --title=Pre-tag-Extract;
+                                --imageFile=@image;
+                                --imageScale=@scale;
                                 --previous_id=@prev_id"
                                 
     "1:3|
@@ -42,6 +44,8 @@ declare -a a_WORKFLOWSPEC=(
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Post-Sub;
                                 --title=Post-tag-Extract;
+                                --imageFile=@image;
+                                --imageScale=@scale;
                                 --previous_id=@prev_id"
                                 
     "1:4|
@@ -130,23 +134,29 @@ DESC
   
   
   
-      ███                                     0:0   pl-mri_sag_anon_192
-       ┼                
-          ↓                      
-      ███                                     0:1   pl-pfdicom_tagsub
+      ███                                    0:0   pl-mri_sag_anon_192
+       ┼───┐                                       (Input dicoms)
+       │   ↓
+       │   ███                               0:1   pl-pfdicom_tagextract
+       │                                           (extract original tags)
+       │ 
+          ↓    
+      ███                                    0:1   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
        ↓    │        
-    ███  │                                    1:2   pl-pfdicom_tagExtract
-         │                                          (extract tags)
+    ███  │                                   1:2   pl-pfdicom_tagextract
+         │                                          (extract substituted tags)
              ↓                   
-        ███                                   1:3   pl-fshack
+        ███                                  1:3   pl-fshack
+                                                   (Run freesurfer)
          ┼───┬       
-         │  ███                               3:4   pl-multipass
-         │   ↓                                                        (mgz2image)
-         │  ███                               4:5   pl-pfdorun
+         │  ███                              3:4   pl-multipass
+         │   │                                     (mgz2image)
+         │   ↓ 
+         │  ███                              4:5   pl-pfdorun
          │                                          (composite -dissolve)
              ↓              
-        ███                                   3:6   pl-mgz2lut_report
+        ███                                  3:6   pl-mgz2lut_report
                                                     (Report on aseg.mgz)
  
     The FS plugin, ``pl-brainmgz``, generates an output directory containing
@@ -390,29 +400,34 @@ windowBottom
     #\\\\\\\\\\\\\\\\\\
     # Core logic here ||
     
-    STR='"'"{'"PatientName"':'"anon"','"PatientID"':'"%_md5|7_PatientID"'}"'"'
     plugin_run          "0:0"   "a_WORKFLOWSPEC[@]"   "$CUBE"  ROOTID \
                         $sleepAfterPluginRun && id_check $ROOTID
     waitForNodeState    "$CUBE" "finishedSuccessfully" $ROOTID retState
    
     plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun \
-                "@prev_id=$ROOTID;@str=$STR" && id_check $ID1
+                "@prev_id=$ROOTID;@info='PatientName:%_name|patientID_PatientName \
+                                   ++ PatientID:%_md5|7_PatientID \
+                                   ++ AccessionNumber:%_md5|8_AccessionNumber \
+                                   ++ PatientBirthDate:%_strmsk|******01_PatientBirthDate \
+                                   ++ re:.*hysician:%_md5|4_#tag \
+                                   ++ re:.*stitution:#tag \
+                                   ++ re:.*ddress:#tag'" && id_check $ID1
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1"  \
                 "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun \
-                "@prev_id=$ID1;@SUBJID=$image" && id_check $ID2
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2"     \
+                "@prev_id=$ROOTID;@image='m:%_nospc|-_ProtocolName.jpg';@scale=3:none" && id_check $ID2
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":2;$ID2"     \
                 "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun \
-                "@prev_id=$ID1;@args='ARGS:-all -notalairach'" && id_check $ID3
+                "@prev_id=$ID1;@image='m:%_nospc|-_ProtocolName.jpg';@scale=3:none" && id_check $ID3
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":3;$ID3"     \
                 "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun \
-                "@prev_id=$ID3" && id_check $ID4
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4"     \
+                "@prev_id=$ID1;@args='ARGS:-all -notalairach'" && id_check $ID4
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":4;$ID4"     \
                 "a_WORKFLOWSPEC[@]"
     plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun \
                 "@prev_id=$ID4" && id_check $ID5
@@ -421,11 +436,15 @@ windowBottom
     # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState 5 300
 
     plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun \
-                "@prev_id=$ID3" && id_check $ID6
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":6;$ID6"     \
+                "@prev_id=$ID5" && id_check $ID6
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":5;$ID5" ":6;$ID6"     \
+                "a_WORKFLOWSPEC[@]"
+                
+    plugin_run  ":7" "a_WORKFLOWSPEC[@]" "$CUBE" ID7 $sleepAfterPluginRun \
+                "@prev_id=$ID4" && id_check $ID7
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":7;$ID7"     \
                 "a_WORKFLOWSPEC[@]"
  
-    # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID7 retState 5 300
 
    
     if (( b_waitOnBranchFinish )) ; then
