@@ -27,6 +27,7 @@ declare -a a_WORKFLOWSPEC=(
     fnndsc/pl-pfdicom_tagsub:   ARGS;
                                 --extension=.dcm;
                                 --tagInfo=@info;
+                                --splitToken='++';
                                 --title=Sub-tags;
                                 --previous_id=@prev_id"
 
@@ -50,7 +51,7 @@ declare -a a_WORKFLOWSPEC=(
                                 
     "1:4|
     fnndsc/pl-fshack:           ARGS;
-                                --inputFile='0001-1.3.12.2.1107.5.2.19.45152.2013030808110258929186035.dcm';
+                                --inputFile='.dcm';
                                 --outputFile='recon-of-SAG-anon-dcm';
                                 --exec='recon-all';
                                 --args=@args; 
