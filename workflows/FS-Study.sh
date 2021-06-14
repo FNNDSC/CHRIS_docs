@@ -427,7 +427,7 @@ windowBottom
                 "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun \
-                "@prev_id=$ID1;@args='ARGS:-all -notalairach'" && id_check $ID4
+                "@prev_id=$ID1;@args='ARGS:-all'" && id_check $ID4
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":4;$ID4"     \
                 "a_WORKFLOWSPEC[@]"
     plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun \
