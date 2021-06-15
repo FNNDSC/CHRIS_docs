@@ -63,7 +63,7 @@ declare -a a_WORKFLOWSPEC=(
     fnndsc/pl-multipass:        ARGS;
                                 --splitExpr='++';
                                 --commonArgs=\'--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png\';
-                                --specificArgs=\'--inputFile recon-of-SAG-anon-dcm/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile recon-of-SAG-anon-dcm/mri/aseg.mgz --wholeVolume segVolume --lookupTable __fs__\';
+                                --specificArgs=\'--inputFile recon-of-SAG-anon-dcm/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile recon-of-SAG-anon-dcm/mri/aparc.a2009s+aseg.mgz --wholeVolume segVolume --lookupTable __fs__\';
                                 --exec=pfdo_mgz2image;
                                 --verbose=5;
                                 --title=mgz-slices;
@@ -76,7 +76,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --verbose=5;
                                 --exec=\'composite -dissolve 90 -gravity Center
                                 %inputWorkingDir/%inputWorkingFile
-                                %inputWorkingDir/../../aseg.mgz/label-segVolume/%inputWorkingFile
+                                %inputWorkingDir/../../aparc.a2009s+aseg.mgz/label-segVolume/%inputWorkingFile
                                 -alpha Set
                                 %outputWorkingDir/%inputWorkingFile\';
                                 --noJobLogging;
@@ -85,7 +85,7 @@ declare -a a_WORKFLOWSPEC=(
                                 
     "4:7|
     fnndsc/pl-mgz2lut_report:   ARGS;
-                                --file_name='recon-of-SAG-anon-dcm/mri/aseg.mgz';
+                                --file_name='recon-of-SAG-anon-dcm/mri/aparc.a2009s+aseg.mgz';
                                 --report_types=txt,csv,json,html;
                                 --title=ASEG-report;
                                 --previous_id=@prev_id"
