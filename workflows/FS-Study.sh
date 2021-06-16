@@ -28,14 +28,14 @@ declare -a a_WORKFLOWSPEC=(
                                 --extension=.dcm;
                                 --tagInfo=@info;
                                 --splitToken='++';
-                                --title=Sub-tags;
+                                --title=Substituted-Dicoms;
                                 --previous_id=@prev_id"
 
     "0:2|
     fnndsc/pl-pfdicom_tagextract: ARGS;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Pre-Sub;
-                                --title=Pre-tag-Extract;
+                                --title=Input-Tags;
                                 --imageFile=@image;
                                 --imageScale=@scale;
                                 --previous_id=@prev_id"
@@ -44,7 +44,7 @@ declare -a a_WORKFLOWSPEC=(
     fnndsc/pl-pfdicom_tagextract: ARGS;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Post-Sub;
-                                --title=Post-tag-Extract;
+                                --title=Substituted-Tags;
                                 --imageFile=@image;
                                 --imageScale=@scale;
                                 --previous_id=@prev_id"
@@ -55,7 +55,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --outputFile='recon-of-SAG-anon-dcm';
                                 --exec='recon-all';
                                 --args=@args; 
-                                --title=All-mgzs;
+                                --title=FreeSurfer-Results;
                                 --previous_id=@prev_id"
 
 
@@ -66,7 +66,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --specificArgs=\'--inputFile recon-of-SAG-anon-dcm/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile recon-of-SAG-anon-dcm/mri/aparc.a2009s+aseg.mgz --wholeVolume segVolume --lookupTable __fs__\';
                                 --exec=pfdo_mgz2image;
                                 --verbose=5;
-                                --title=mgz-slices;
+                                --title=PNG-Images;
                                 --previous_id=@prev_id"
 
     "5:6|
@@ -80,14 +80,14 @@ declare -a a_WORKFLOWSPEC=(
                                 -alpha Set
                                 %outputWorkingDir/%inputWorkingFile\';
                                 --noJobLogging;
-                                --title=overlay-png;
+                                --title=Overlay-PNG;
                                 --previous_id=@prev_id"
                                 
     "4:7|
     fnndsc/pl-mgz2lut_report:   ARGS;
                                 --file_name='recon-of-SAG-anon-dcm/mri/aparc.a2009s+aseg.mgz';
                                 --report_types=txt,csv,json,html;
-                                --title=ASEG-report;
+                                --title=Segmentation-Report;
                                 --previous_id=@prev_id"
                                                               
 
@@ -129,8 +129,8 @@ SYNPOSIS
                         [-J]                                \\
                         [-q]
 DESC
-  'fsfer-parallel.sh' posts a workflow based off running a segmentation
-  engine, ``pl-fastsurfer_inference`` and related machinery to CUBE:
+  'FS-Study.sh' posts a workflow based off running a FreeSurfer
+  application, ``pl-fshack`` and related machinery to CUBE:
   
   
   
@@ -158,14 +158,10 @@ DESC
          │                                          (composite -dissolve)
              ↓              
         ███                                  4:7   pl-mgz2lut_report
-                                                    (Report on aseg.mgz)
+                                                    (Report on aparc.a2009s+aseg.mgz)
  
-    The FS plugin, ``pl-brainmgz``, generates an output directory containing
-    data from several subject brain images. This workflow will process each
-    of those subjects, resulting in a fanned tree execution toplogy.
-    By specifying specific subject(s) in the [-i <listOfSubjectsToProcess>],
-    only those subject branches will be created, otherwise all subjects
-    will be processed.
+    The FS plugin, ``pl-mri_sag_anon_192``, generates an output directory
+     containing multiple dicoms of a subject. 
     Note, this does require some implicit knowledge since the user of
     this script would need to know which subjects exist. By running this
     script with a ``-q``, a hard coded list of available images to process
@@ -237,30 +233,21 @@ ARGS
       string 'localhost' can be problematic.
 EXAMPLES
     Typical execution:
-        $ ./fsfer-parallel.sh  -C '{
+        $ ./FS-Study.sh  -C '{
                    \"protocol\":     \"http\",
                    \"port\":         \"8000\",
-                   \"address\":      \"megalodon.local\",
+                   \"address\":      \"117.local\",
                    \"user\":         \"chris\",
                    \"password\":     \"chris1234\"
         }'
     or equivalently:
-        $ ./fsfer-parallel.sh -a megalodon.local
-TIMING CONSIDERATIONS
-    While this client script should ideally not concern itself with execution
-    concerns beyond the logical structure of a feedflow, some notes are
-    important:
-        * GPU resources might be such that only one node can use at a time;
-        * Too many apps POSTed in quick succession *might* overwhelm the
-          scheduler;
-    To mitigate against GPU clashes, for many parallel branches, execution
-    should wait for each branch to conclude before moving to the next.
-    This is enabled with a '-W' flag.
+        $ ./FS-Study.sh -a 117.local
+
     To not overwhelm the scheduler, it is a good idea to pause for a few
     seconds after POSTing each app to the backend with a '-s 3' (for 3s
     pause) flag.
     Thus,
-        $ ./fsfer-parallel.sh -a megalodon.local -W -s 3 -G feed
+        $ ./FS-Study.sh -a 117.local -W -s 3 -G feed
     where the '-G feed' also produces two graphviz dot files suitable for
     rendering with a graphviz viewer.
 "
@@ -284,7 +271,7 @@ GRAPHVIZHEADER='digraph G {
     subgraph cluster_0 {
         style=filled;
         color=lightgrey;
-        label = "ChRIS Parallel Segmentation Feedgraph";
+        label = "ChRIS FreeSurfer Study Feedgraph";
         node [style=filled,fillcolor=white,fontname="mono",fontsize=5];
         edge [fontname="mono", fontsize=5];
 '
@@ -434,7 +421,6 @@ windowBottom
                 "@prev_id=$ID4" && id_check $ID5
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5"     \
                 "a_WORKFLOWSPEC[@]"
-    # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState 5 300
 
     plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun \
                 "@prev_id=$ID5" && id_check $ID6
@@ -447,10 +433,6 @@ windowBottom
                 "a_WORKFLOWSPEC[@]"
  
 
-   
-    if (( b_waitOnBranchFinish )) ; then
-            waitForNodeState    "$CUBE" "finishedSuccessfully" $ID11 retState 5 300
-    fi
 
 windowBottom
 if (( b_respFail > 0 )) ; then exit 3 ; fi
