@@ -61,7 +61,7 @@ declare -a a_WORKFLOWSPEC=(
                                 
     "4:5|
     fnndsc/pl-fastsurfer_inference:ARGS;
-                                --subjectDir=recon-of-SAG-anon;
+                                --subjectDir=recon-of-SAG-anon-dcm;
                                 --subject=mri;
                                 --in_name=brainmask.mgz;
                                 --copyInputFiles=mgz; 
