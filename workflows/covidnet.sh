@@ -43,7 +43,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --previous_id=@prev_id"
 
     "2:3:l1|
-    fnndsc/pl-pdfgeneration:    ARGS;
+    fnndsc/pl-covidnet-pdfgeneration:    ARGS;
                                 --imagefile=sample.png;
                                 --patientId=@patientID;
                                 --title=report;
@@ -439,7 +439,7 @@ title -d 1 "Checking for plugin IDs on CUBE...."                            \
         windowBottom
         RESP=$(
             chrispl-search  --for id                            \
-                            --using name="$CONTAINER"           \
+                            --using name_exact="$CONTAINER"           \
                             --onCUBE "$CUBE"
         )
         opRet_feedback  "$?"                                    \

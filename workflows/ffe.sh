@@ -558,7 +558,7 @@ function plugin_run {
         windowBottom
         # Explicitly construct the command as a bash array
         a_cmd[0]="chrispl-run";     a_cmd[1]="--plugin"
-                                    a_cmd[2]="name=$CONTAINER"
+                                    a_cmd[2]="name_exact=$CONTAINER"
                                     a_cmd[3]="--args";   a_cmd[4]="\"$ARGSUB\""
                                     a_cmd[5]="--onCUBE"; a_cmd[6]="$CUBE"
         plugin_runFromFile "a_cmd" PLUGINRUN
