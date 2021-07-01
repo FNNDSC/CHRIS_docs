@@ -28,6 +28,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --extension=.dcm;
                                 --tagInfo=@info;
                                 --splitToken='++';
+                                --splitKeyValue=',';
                                 --title=Substituted-Dicoms;
                                 --previous_id=@prev_id"
 
@@ -393,13 +394,13 @@ windowBottom
     waitForNodeState    "$CUBE" "finishedSuccessfully" $ROOTID retState
    
     plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun \
-                "@prev_id=$ROOTID;@info='PatientName:%_name|patientID_PatientName \
-                                   ++ PatientID:%_md5|7_PatientID \
-                                   ++ AccessionNumber:%_md5|8_AccessionNumber \
-                                   ++ PatientBirthDate:%_strmsk|******01_PatientBirthDate \
-                                   ++ re:.*hysician:%_md5|4_#tag \
-                                   ++ re:.*stitution:#tag \
-                                   ++ re:.*ddress:#tag'" && id_check $ID1
+                "@prev_id=$ROOTID;@info='PatientName,%_name|patientID_PatientName \
+                                   ++ PatientID,%_md5|7_PatientID \
+                                   ++ AccessionNumber,%_md5|8_AccessionNumber \
+                                   ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate \
+                                   ++ re:.*hysician,%_md5|4_#tag \
+                                   ++ re:.*stitution,#tag \
+                                   ++ re:.*ddress,#tag'" && id_check $ID1
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1"  \
                 "a_WORKFLOWSPEC[@]"
 

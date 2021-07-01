@@ -38,6 +38,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --extension=.dcm;
                                 --tagInfo=@info;
                                 --splitToken='++';
+                                --splitKeyValue=',';
                                 --title=Sub-tags;
                                 --previous_id=@prev_id"                                
                                 
@@ -421,13 +422,13 @@ windowBottom
                 "a_WORKFLOWSPEC[@]"
    
     plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun \
-                "@prev_id=$ROOTID;@info='PatientName:%_name|patientID_PatientName \
-                                   ++ PatientID:%_md5|7_PatientID \
-                                   ++ AccessionNumber:%_md5|8_AccessionNumber \
-                                   ++ PatientBirthDate:%_strmsk|******01_PatientBirthDate \
-                                   ++ re:.*hysician:%_md5|4_#tag \
-                                   ++ re:.*stitution:#tag \
-                                   ++ re:.*ddress:#tag'" && id_check $ID2
+                "@prev_id=$ROOTID;@info='PatientName,%_name|patientID_PatientName \
+                                   ++ PatientID,%_md5|7_PatientID \
+                                   ++ AccessionNumber,%_md5|8_AccessionNumber \
+                                   ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate \
+                                   ++ re:.*hysician,%_md5|4_#tag \
+                                   ++ re:.*stitution,#tag \
+                                   ++ re:.*ddress,#tag'" && id_check $ID2
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":2;$ID2"  \
                 "a_WORKFLOWSPEC[@]"
 
