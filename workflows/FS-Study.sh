@@ -34,6 +34,7 @@ declare -a a_WORKFLOWSPEC=(
 
     "0:2|
     fnndsc/pl-pfdicom_tagextract: ARGS;
+                                --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Pre-Sub;
                                 --title=Input-Tags;
@@ -43,6 +44,7 @@ declare -a a_WORKFLOWSPEC=(
                                 
     "1:3|
     fnndsc/pl-pfdicom_tagextract: ARGS;
+                                --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Post-Sub;
                                 --title=Substituted-Tags;
