@@ -491,7 +491,7 @@ if (( b_imageList )) ; then
 fi
 
 if (( b_useAnalysisDates )) ; then
-    read -a a_analysisDate <<< $(echo "$ANALYSISDATES" | tr ',' ' ')
+    IFS=',' read -ra a_analysisDate <<< $(echo "$ANALYSISDATES")
 fi
 
 if (( b_imageList && ! b_skipFScheck )) ; then
@@ -607,7 +607,7 @@ title -d 1 "Building and Scheduling workflow..."
             if (( b_useAnalysisDates )) ; then
                 CREATIONDATE=${a_analysisDate[$idx]}
             fi
-            TIMESTAMP=$(date -d $CREATIONDATE +"%s%3N")
+            TIMESTAMP=$(date -d "$CREATIONDATE" +"%s%3N")
             JSONcontents=$(
                 jq --arg key0 'timestamp' --arg value0 $TIMESTAMP           \
                    --arg key1 'img'       --arg value1 "$JSONquery"         \
