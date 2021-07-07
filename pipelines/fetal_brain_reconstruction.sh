@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 # purpose: describe a pipeline to the ChRIS or ChRIS Store API.
 
 # Step 0. specify ChRIS user.
@@ -10,16 +10,18 @@ CUBE_USER=${CUBE_USER:-chris:chris1234}
 # You probably have to do this step manually.
 
 plugins=(
-  https://chrisstore.co/api/v1/plugins/71/
-  https://chrisstore.co/api/v1/plugins/77/
-  https://chrisstore.co/api/v1/plugins/81/
-  https://chrisstore.co/api/v1/plugins/89/
+  https://chrisstore.co/api/v1/plugins/32/
+  https://chrisstore.co/api/v1/plugins/3/
+  https://chrisstore.co/api/v1/plugins/34/
+  https://chrisstore.co/api/v1/plugins/4/
 )
 
 # If using miniChRIS, we can handle it for you using docker exec
 
 CUBE_PORT="$(grep -Pom 1 '(?<=localhost:)[0-9].+(?=/api/v1/)' <<< "$CUBE_URL")"
 MINICHRIS_PORTS="$(docker ps --filter label=org.chrisproject.info=miniChRIS --format '{{ .Ports }}')"
+
+set -e
 
 if [ -n "$CUBE_PORT" ] && [[ "$MINICHRIS_PORTS" = *"0.0.0.0:8000->"*"$CUBE_PORT/tcp"* ]]; then
   >&2 printf "Registering plugins to miniChRIS"
@@ -43,7 +45,7 @@ cat << EOF
   {"name":"locked","value":false},
   {"name":"plugin_tree","value":"[
     {\"plugin_name\":\"pl-fetal-brain-mask\"             ,\"plugin_version\":\"1.2.1\"    ,\"previous_index\":null},
-    {\"plugin_name\":\"pl-ants_n4biasfieldcorrection\"   ,\"plugin_version\":\"0.2.7.1\"  ,\"previous_index\":0,
+    {\"plugin_name\":\"pl-ANTs_N4BiasFieldCorrection\"   ,\"plugin_version\":\"0.2.7.1\"  ,\"previous_index\":0,
       \"plugin_parameter_defaults\":[{\"name\":\"inputPathFilter\",\"default\":\"extracted/0.0/*.nii\"}]},
     {\"plugin_name\":\"pl-fetal-brain-assessment\"       ,\"plugin_version\":\"1.3.0\"   ,\"previous_index\":1},
     {\"plugin_name\":\"pl-irtk-reconstruction\"          ,\"plugin_version\":\"1.0.3\"   ,\"previous_index\":2}
