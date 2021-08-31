@@ -1,0 +1,2 @@
+Grant permission to the namespace
+sandip@117:~$ oc adm policy add-scc-to-user privileged -z default -n test-moc
