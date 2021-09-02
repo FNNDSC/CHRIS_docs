@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-pod-9
+spec:
+  template:
+    
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: matrixmultiply
+        image:  ghcr.io/fnndsc/pl-fastsurfer_inference:1.0.17
+        command: ["python3","fastsurfer_inference.py","/tmp/key-jid001/incoming","/tmp/key-jid001/outgoing"]
+        resources:
+            limits:
+                nvidia.com/gpu : 1
+        env: 
+         - name : NUMBER_OF_WORKERS
+           value : 1
+         - name : CPU_LIMIT
+           value : 4000m
+         - name : MEMORY_LIMIT
+           value : 4000Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seLinuxOptions:
+            type: nvidia_container_t
+        volumeMounts:
+          - name: gluster-vol1
+            mountPath: /tmp/
+      volumes:
+        - name: gluster-vol1
+          persistentVolumeClaim:
+            claimName: gluster1
+      

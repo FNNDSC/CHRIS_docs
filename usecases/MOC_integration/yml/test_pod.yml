@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod03
+spec:
+  restartPolicy: OnFailure
+  containers: 
+  - name: pod1-ctr
+    image: ghcr.io/fnndsc/pl-gpu_test:0.1.2
+    command: ["python3","gpu_test.py","/tmp","/tmp"]
+    securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seLinuxOptions:
+            type: nvidia_container_t
