@@ -19,11 +19,18 @@ source ./ffe.sh
 declare -a a_WORKFLOWSPEC=(
 
     "0:0|
-    fnndsc/pl-mri_sag_anon_192: ARGS;
+    fnndsc/pl-dircopy:          ARGS;
                                 --title=Input-Dicoms"
-
-
+                                
     "0:1|
+    sandip117/pl-simpledsapp:      ARGS;
+                                --title=Input-Dicoms;
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
+                               
+
+
+    "1:2|
     fnndsc/pl-pfdicom_tagextract: ARGS;
                                 --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
@@ -31,19 +38,21 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=Pre-tag-Extract;
                                 --imageFile=@image;
                                 --imageScale=@scale;
-                                --previous_id=@prev_id"
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
                                 
    
-    "0:2|
+    "1:3|
     fnndsc/pl-pfdicom_tagsub:   ARGS;
                                 --extension=.dcm;
                                 --tagInfo=@info;
                                 --splitToken='++';
                                 --splitKeyValue=',';
                                 --title=Sub-tags;
-                                --previous_id=@prev_id"                                
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"                                
                                 
-    "2:3|
+    "3:4|
     fnndsc/pl-pfdicom_tagextract: ARGS;
                                 --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
@@ -51,29 +60,32 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=Post-tag-Extract;
                                 --imageFile=@image;
                                 --imageScale=@scale;
-                                --previous_id=@prev_id"
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
                                 
-    "2:4|
-    fnndsc/pl-fshack:           ARGS;
+    "3:5|
+    sandip117/pl-fshack:           ARGS;
                                 --inputFile='.dcm';
                                 --outputFile='recon-of-SAG-anon-dcm';
                                 --exec='recon-all';
                                 --args=@args; 
                                 --title=Dicom-MGZ;
-                                --previous_id=@prev_id"
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
                                 
-    "4:5|
+    "5:6|
     fnndsc/pl-fastsurfer_inference:ARGS;
                                 --subjectDir=recon-of-SAG-anon-dcm;
                                 --subject=mri;
                                 --in_name=brainmask.mgz;
                                 --copyInputFiles=mgz; 
                                 --title=CNN;
-                                --previous_id=@prev_id"
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
 
 
 
-    "5:6|
+    "6:7|
     fnndsc/pl-multipass:        ARGS;
                                 --splitExpr='++';
                                 --commonArgs=\'--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png\';
@@ -81,9 +93,10 @@ declare -a a_WORKFLOWSPEC=(
                                 --exec=pfdo_mgz2image;
                                 --verbose=5;
                                 --title=mgz-slices;
-                                --previous_id=@prev_id"
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
 
-    "6:7|
+    "7:8|
     fnndsc/pl-pfdorun:          ARGS;
                                 --dirFilter=label-brainVolume;
                                 --fileFilter=png;
@@ -95,14 +108,16 @@ declare -a a_WORKFLOWSPEC=(
                                 %outputWorkingDir/%inputWorkingFile\';
                                 --noJobLogging;
                                 --title=overlay-png;
-                                --previous_id=@prev_id"
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
                                 
-    "5:8|
+    "6:9|
     fnndsc/pl-mgz2lut_report:   ARGS;
                                 --file_name='mri/aparc.DKTatlas+aseg.deep.mgz';
                                 --report_types=txt,csv,json,html;
                                 --title=ASEG-report;
-                                --previous_id=@prev_id"
+                                --previous_id=@prev_id;
+                                --compute_resource_name=@env"
                                                               
 
    
@@ -318,7 +333,7 @@ declare -i b_saveCalls=0
 IMAGESTOPROCESS=""
 GRAPHVIZFILE=""
 
-while getopts "C:G:i:qxr:p:a:u:w:WRJs:S" opt; do
+while getopts "C:G:i:qxr:p:a:u:d:e:w:WRJs:S" opt; do
     case $opt in
         S) b_saveCalls=1                        ;;
         s) sleepAfterPluginRun=$OPTARG          ;;
@@ -337,6 +352,8 @@ while getopts "C:G:i:qxr:p:a:u:w:WRJs:S" opt; do
         r) PROTOCOL=$OPTARG                     ;;
         p) PORT=$OPTARG                         ;;
         a) ADDRESS=$OPTARG                      ;;
+        d) UPLOAD=$OPTARG                       ;;
+        e) COMPUTE=$OPTARG                      ;;
         u) USER=$OPTARG                         ;;
         w) PASSWD=$OPTARG                       ;;
         x) echo "$SYNOPSIS"; exit 0             ;;
@@ -347,6 +364,10 @@ done
 CUBE=$(printf "$CUBE_FMT" "$PROTOCOL" "$PORT" "$ADDRESS" "$USER" "$PASSWD")
 if (( b_CUBEjson )) ; then
     CUBE="$CUBEJSON"
+fi
+
+if [ -z $COMPUTE ]; then
+    COMPUTE='host'
 fi
 ADDRESS=$(echo $CUBE | jq -r .address)
 
@@ -360,7 +381,7 @@ title -d 1 "Checking on required dependencies..."
     boxcenter "not found, please install them according to the requirements of "
     boxcenter "your OS.                                                        "
     boxcenter ""
-    dep_check "jq,chrispl-search,chrispl-run,http"
+    dep_check "jq,chrispl-search,chrispl-run,http,caw"
 windowBottom
 if (( b_respFail > 0 )) ; then exit 4 ; fi
 
@@ -406,64 +427,69 @@ title -d 1 "Start constructing the Feed by POSTing the root FS node..."
     boxcenter "Run the root node and dynamically capture a list of output    "
     boxcenter "files created by the base FS plugin. This file list will be   "
     boxcenter "processed to create the actual list of dicoms to process      "
-    boxcenter ""
+    boxcenter "$COMPUTE"
 windowBottom
 
     #\\\\\\\\\\\\\\\\\\
     # Core logic here ||
     
-    plugin_run          "0:0"   "a_WORKFLOWSPEC[@]"   "$CUBE"  ROOTID \
-                        $sleepAfterPluginRun && id_check $ROOTID
+    resp=$(https -a chris:chris1234 "$(caw upload "$UPLOAD"/*)plugininstances/" accept:application/json | jq -r '.results[0].url')
+    ROOTID=$(echo $resp | awk -F \/ '{print $8}')
+    
     waitForNodeState    "$CUBE" "finishedSuccessfully" $ROOTID retState
     
     
-    
     plugin_run  ":1" "a_WORKFLOWSPEC[@]" "$CUBE" ID1 $sleepAfterPluginRun \
-                "@prev_id=$ROOTID;@image='m:%_nospc|-_ProtocolName.jpg';@scale=3:none" && id_check $ID1
+                "@prev_id=$ROOTID;@env=$COMPUTE" && id_check $ID1
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":1;$ID1"     \
                 "a_WORKFLOWSPEC[@]"
-   
+                
     plugin_run  ":2" "a_WORKFLOWSPEC[@]" "$CUBE" ID2 $sleepAfterPluginRun \
-                "@prev_id=$ROOTID;@info='PatientName,%_name|patientID_PatientName \
+                "@prev_id=$ID1;@env=$COMPUTE;@image='m:%_nospc|-_ProtocolName.jpg';@scale=3:none" && id_check $ID2
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":2;$ID2"     \
+                "a_WORKFLOWSPEC[@]"
+   
+    plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun \
+                "@prev_id=$ID1;@env=$COMPUTE;@info='PatientName,%_name|patientID_PatientName \
                                    ++ PatientID,%_md5|7_PatientID \
                                    ++ AccessionNumber,%_md5|8_AccessionNumber \
                                    ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate \
                                    ++ re:.*hysician,%_md5|4_#tag \
                                    ++ re:.*stitution,#tag \
-                                   ++ re:.*ddress,#tag'" && id_check $ID2
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":0;$ROOTID" ":2;$ID2"  \
-                "a_WORKFLOWSPEC[@]"
-
-    plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun \
-                "@prev_id=$ID2;@image='m:%_nospc|-_ProtocolName.jpg';@scale=3:none" && id_check $ID3
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":3;$ID3"     \
+                                   ++ re:.*ddress,#tag'" && id_check $ID3
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":1;$ID1" ":4;$ID4"  \
                 "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun \
-                "@prev_id=$ID2;@args='ARGS:-autorecon1'" && id_check $ID4
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":4;$ID4"     \
+                "@prev_id=$ID3;@env=$COMPUTE;@image='m:%_nospc|-_ProtocolName.jpg';@scale=3:none" && id_check $ID4
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4"     \
+                "a_WORKFLOWSPEC[@]"
+
+    plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun \
+                "@prev_id=$ID3;@env=$COMPUTE;@args='ARGS:-autorecon1'" && id_check $ID5
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":5;$ID5"     \
                 "a_WORKFLOWSPEC[@]"
                 
-    plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun \
-                "@prev_id=$ID4;@args='ARGS:-autorecon1'" && id_check $ID5
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":4;$ID4" ":5;$ID5"     \
+    plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun \
+                "@prev_id=$ID5;@env=$COMPUTE;@args='ARGS:-autorecon1'" && id_check $ID6
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":5;$ID5" ":6;$ID6"     \
                 "a_WORKFLOWSPEC[@]"
                          
                 
-    plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun \
-                "@prev_id=$ID5" && id_check $ID6
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":5;$ID5" ":6;$ID6"     \
+    plugin_run  ":7" "a_WORKFLOWSPEC[@]" "$CUBE" ID7 $sleepAfterPluginRun \
+                "@prev_id=$ID6;@env=$COMPUTE" && id_check $ID7
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":6;$ID6" ":7;$ID7"     \
                 "a_WORKFLOWSPEC[@]"
     # waitForNodeState    "$CUBE" "finishedSuccessfully" $ID5 retState 5 300
 
-    plugin_run  ":7" "a_WORKFLOWSPEC[@]" "$CUBE" ID7 $sleepAfterPluginRun \
-                "@prev_id=$ID6" && id_check $ID7
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":6;$ID6" ":7;$ID7"     \
+    plugin_run  ":8" "a_WORKFLOWSPEC[@]" "$CUBE" ID8 $sleepAfterPluginRun \
+                "@prev_id=$ID7;@env=$COMPUTE" && id_check $ID8
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":7;$ID7" ":8;$ID8"     \
                 "a_WORKFLOWSPEC[@]"
                 
-    plugin_run  ":8" "a_WORKFLOWSPEC[@]" "$CUBE" ID8 $sleepAfterPluginRun \
-                "@prev_id=$ID5" && id_check $ID8
-    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":5;$ID5" ":8;$ID8"     \
+    plugin_run  ":9" "a_WORKFLOWSPEC[@]" "$CUBE" ID9 $sleepAfterPluginRun \
+                "@prev_id=$ID6;@env=$COMPUTE" && id_check $ID9
+    digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":6;$ID6" ":9;$ID9"     \
                 "a_WORKFLOWSPEC[@]"
  
 
