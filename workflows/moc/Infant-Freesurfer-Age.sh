@@ -66,20 +66,16 @@ declare -a a_WORKFLOWSPEC=(
     "3:5|
     sandip117/pl-fshack:           ARGS;
                                 --inputFile='.dcm';
-                                --outputFile='recon-of-SAG-anon-dcm';
-                                --exec='recon-all';
-                                --args=@args; 
+                                --outputFile='image.nii.gz';
+                                --exec='mri_convert';
                                 --title=Dicom-MGZ;
                                 --previous_id=@prev_id;
                                 --compute_resource_name=@env"
                                 
     "5:6|
-    fnndsc/pl-fastsurfer_inference:ARGS;
-                                --subjectDir=recon-of-SAG-anon-dcm;
-                                --subject=mri;
-                                --in_name=brainmask.mgz;
-                                --copyInputFiles=mgz; 
-                                --title=CNN;
+    fnndsc/pl-infantfs:         ARGS;
+                                --age=@AGE;
+                                --title=NII;
                                 --previous_id=@prev_id;
                                 --compute_resource_name=@env"
 
@@ -178,9 +174,9 @@ DESC
          │                                          (extract substituted tags)
              ↓
         ███                                  3:5   pl-fshack
-         │                                          (Run freesurfer [ARGS: -autorecon1] only)
+         │                                          (Run freesurfer mri_convert only)
          │
-        ███                                  5:6   pl-fastsurfer_inference
+        ███                                  5:6   pl-infantfs
          ┼───┐                                       (CNN Segmentation)
          │  ███                              6:7   pl-multipass
          │   │                                     (mgz2image)
@@ -347,7 +343,7 @@ declare -i b_saveCalls=0
 IMAGESTOPROCESS=""
 GRAPHVIZFILE=""
 
-while getopts "C:G:i:qxr:p:a:u:d:e:n:w:WRJs:S" opt; do
+while getopts "C:G:i:qxr:p:a:u:d:e:n:g:w:WRJs:S" opt; do
     case $opt in
         S) b_saveCalls=1                        ;;
         s) sleepAfterPluginRun=$OPTARG          ;;
@@ -369,6 +365,7 @@ while getopts "C:G:i:qxr:p:a:u:d:e:n:w:WRJs:S" opt; do
         d) UPLOAD=$OPTARG                       ;;
         e) COMPUTE=$OPTARG                      ;;
         n) NAME=$OPTARG                         ;;
+        g) AGE=$OPTARG                         ;;
         u) USER=$OPTARG                         ;;
         w) PASSWD=$OPTARG                       ;;
         x) echo "$SYNOPSIS"; exit 0             ;;
@@ -481,12 +478,12 @@ windowBottom
                 "a_WORKFLOWSPEC[@]"
 
     plugin_run  ":5" "a_WORKFLOWSPEC[@]" "$CUBE" ID5 $sleepAfterPluginRun \
-                "@prev_id=$ID3;@env=$COMPUTE;@args='ARGS:-autorecon1'" && id_check $ID5
+                "@prev_id=$ID3;@env=$COMPUTE" && id_check $ID5
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":5;$ID5"     \
                 "a_WORKFLOWSPEC[@]"
                 
     plugin_run  ":6" "a_WORKFLOWSPEC[@]" "$CUBE" ID6 $sleepAfterPluginRun \
-                "@prev_id=$ID5;@env=$COMPUTE;@args='ARGS:-autorecon1'" && id_check $ID6
+                "@prev_id=$ID5;@AGE=$AGE;@env=$COMPUTE;@args='ARGS:-autorecon1'" && id_check $ID6
     digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":5;$ID5" ":6;$ID6"     \
                 "a_WORKFLOWSPEC[@]"
                          
