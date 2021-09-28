@@ -156,16 +156,16 @@ DESC
       ███                                    0:1   pl-mri_sag_anon_192
        ┼───┐                                       (Input dicoms)
        │   ↓
-       │  ███                               1:3   pl-pfdicom_tagextract
+       │  ███                                1:3   pl-pfdicom_tagextract
        │                                           (extract original tags)
        │ 
-       ↓    
+          ↓    
       ███                                    1:2   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
-     ↓   │        
+       ↓    │        
     ███  │                                   2:4   pl-pfdicom_tagextract
          │                                          (extract substituted tags)
-         ↓                   
+             ↓                   
         ███                                  2:5   pl-fshack
          │                                         (Run freesurfer)
          ┼───┬       
@@ -174,7 +174,7 @@ DESC
          │   ↓ 
          │  ███                              6:7   pl-pfdorun
          │                                          (composite -dissolve)
-         ↓              
+             ↓              
         ███                                  5:8   pl-mgz2lut_report
                                                     (Report on aparc.a2009s+aseg.mgz)
  
@@ -282,7 +282,7 @@ ARGS
       string 'localhost' can be problematic.
 EXAMPLES
     Typical execution:
-        $ ./FS-Study.sh  -C '{
+        $ ./Adult-Freesurfer.sh  -C '{
                    \"protocol\":     \"http\",
                    \"port\":         \"8000\",
                    \"address\":      \"117.local\",
@@ -290,13 +290,13 @@ EXAMPLES
                    \"password\":     \"chris1234\"
         }'
     or equivalently:
-        $ ./FS-Study.sh -a 117.local
+        $ ./Adult-Freesurfer.sh -a 117.local
 
     To not overwhelm the scheduler, it is a good idea to pause for a few
     seconds after POSTing each app to the backend with a '-s 3' (for 3s
     pause) flag.
     Thus,
-        $ ./FS-Study.sh -a 117.local -W -s 3 -G feed
+        $ ./Adult-Freesurfer.sh -a 117.local -W -s 3 -G feed
     where the '-G feed' also produces two graphviz dot files suitable for
     rendering with a graphviz viewer.
 "

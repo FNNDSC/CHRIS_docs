@@ -143,6 +143,10 @@ SYNPOSIS
                         [-r <protocol>]                     \\
                         [-p <port>]                         \\
                         [-a <cubeIP>]                       \\
+                        [-d <upload_directory_loc>]         \\
+                        [-e <compute_env>]                  \\
+                        [-n <workflow_name>]                \\
+                        [-g <age_in_number>]                \\
                         [-u <user>]                         \\
                         [-w <passwd>]                       \\
                         [-G <graphvizDotFile>]              \\
@@ -166,13 +170,13 @@ DESC
        │  ███                                1:2   pl-pfdicom_tagextract
        │                                           (extract original tags)
        │
-       ↓
+          ↓
       ███                                    1:3   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
-     ↓   │
+       ↓    │
     ███  │                                   3:4   pl-pfdicom_tagextract
          │                                          (extract substituted tags)
-         ↓
+             ↓
         ███                                  3:5   pl-fshack
          │                                          (Run freesurfer mri_convert only)
          │
@@ -183,7 +187,7 @@ DESC
          │   ↓
          │  ███                              7:8   pl-pfdorun
          │                                          (composite -dissolve)
-         ↓
+             ↓
         ███                                  6:9   pl-mgz2lut_report
                                                     (Report on DTKatlas....mgz)
  
@@ -246,6 +250,25 @@ ARGS
     
     [-a <cubeIP>]           (%HOSTIP)
     
+    [-d <upload_dir>] 
+
+    Specify the name of the upload directory in the host computer. If
+    you want to upload a list of DICOMs stored in /home/name/SAG-anon ,
+    then provide the name of the directory as : -d /home/name/SAG-anon.         
+
+    [-e <compute_env>]
+    By default this workflow will run on host. Suppose you have multiple
+    compute env registered to your chris instance, let this script know 
+    which compute environment do you want to use. specify your choice as
+    : -e moc         
+
+    [-n <name_of_workflow>]
+    Specify the name of this current workflow instance by using the -n param.
+    Ex. -n Adult-Freesurfer-Trial-2  
+    
+    [-g <age_in_number>]
+    Specify the age of the infant in number of months. Example: -g 6     
+    
     [-u <cubeUser>]         (chris)
     
     [-w <cubeUserPasswd>]   (chris1234)
@@ -273,7 +296,7 @@ ARGS
       string 'localhost' can be problematic.
 EXAMPLES
     Typical execution:
-        $ ./fsfer-parallel.sh  -C '{
+        $ ./Infant-Freesurfer.sh  -C '{
                    \"protocol\":     \"http\",
                    \"port\":         \"8000\",
                    \"address\":      \"megalodon.local\",
@@ -281,7 +304,7 @@ EXAMPLES
                    \"password\":     \"chris1234\"
         }'
     or equivalently:
-        $ ./fsfer-parallel.sh -a megalodon.local
+        $ ./Infant-Freesurfer.sh -a megalodon.local
 TIMING CONSIDERATIONS
     While this client script should ideally not concern itself with execution
     concerns beyond the logical structure of a feedflow, some notes are
@@ -296,7 +319,7 @@ TIMING CONSIDERATIONS
     seconds after POSTing each app to the backend with a '-s 3' (for 3s
     pause) flag.
     Thus,
-        $ ./fsfer-parallel.sh -a megalodon.local -W -s 3 -G feed
+        $ ./Infant-Freesurfer.sh -a megalodon.local -W -s 3 -G feed
     where the '-G feed' also produces two graphviz dot files suitable for
     rendering with a graphviz viewer.
 "
