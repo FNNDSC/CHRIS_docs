@@ -126,12 +126,15 @@ argArray_filterFromWorkflow     "a_WORKFLOWSPEC[@]" "a_ARGS"
 
 SYNOPSIS="
 NAME
-  fsfer.sh
+  Adult-Freesurfer.sh
 SYNPOSIS
-  Adult_freesurfer.sh   [-C <CUBEjsonDetails>]              \\
+  Adult-Freesurfer.sh   [-C <CUBEjsonDetails>]              \\
                         [-r <protocol>]                     \\
                         [-p <port>]                         \\
                         [-a <cubeIP>]                       \\
+                        [-d <upload_directory_loc>]         \\
+                        [-e <compute_env>]                  \\
+                        [-n <workflow_name>]                \\
                         [-u <user>]                         \\
                         [-w <passwd>]                       \\
                         [-G <graphvizDotFile>]              \\
@@ -143,7 +146,7 @@ SYNPOSIS
                         [-J]                                \\
                         [-q]
 DESC
-  'FS-Study.sh' posts a workflow based off running a FreeSurfer
+  'Adult-Freesurfer.sh' posts a workflow based off running a FreeSurfer
   application, ``pl-fshack`` and related machinery to CUBE:
   
   
@@ -153,16 +156,16 @@ DESC
       ███                                    0:1   pl-mri_sag_anon_192
        ┼───┐                                       (Input dicoms)
        │   ↓
-       │   ███                               1:3   pl-pfdicom_tagextract
+       │  ███                               1:3   pl-pfdicom_tagextract
        │                                           (extract original tags)
        │ 
-          ↓    
+       ↓    
       ███                                    1:2   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
-       ↓    │        
+     ↓   │        
     ███  │                                   2:4   pl-pfdicom_tagextract
          │                                          (extract substituted tags)
-             ↓                   
+         ↓                   
         ███                                  2:5   pl-fshack
          │                                         (Run freesurfer)
          ┼───┬       
@@ -171,7 +174,7 @@ DESC
          │   ↓ 
          │  ███                              6:7   pl-pfdorun
          │                                          (composite -dissolve)
-             ↓              
+         ↓              
         ███                                  5:8   pl-mgz2lut_report
                                                     (Report on aparc.a2009s+aseg.mgz)
  
@@ -235,7 +238,23 @@ ARGS
     [-p <port>]             (8000)
     
     [-a <cubeIP>]           (%HOSTIP)
-    
+
+    [-d <upload_dir>] 
+
+    Specify the name of the upload directory in the host computer. If
+    you want to upload a list of DICOMs stored in /home/name/SAG-anon ,
+    then provide the name of the directory as : -d /home/name/SAG-anon.         
+
+    [-e <compute_env>]
+    By default this workflow will run on host. Suppose you have multiple
+    compute env registered to your chris instance, let this script know 
+    which compute environment do you want to use. specify your choice as
+    : -e moc         
+
+    [-n <name_of_workflow>]
+    Specify the name of this current workflow instance by using the -n param.
+    Ex. -n Adult-Freesurfer-Trial-2         
+
     [-u <cubeUser>]         (chris)
     
     [-w <cubeUserPasswd>]   (chris1234)
