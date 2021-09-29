@@ -161,6 +161,12 @@ DESC
   'Fastsurfer-Workflow.sh' posts a workflow based off running a Freesurfer
   application, ``pl-infantfs`` and related machinery to CUBE:
   
+  TLDR;
+  To run this script on a local instance of CUBE
+  
+  $ caw --address http://localhost:8000/api/v1/ --username 'chris' login
+  $./Adult-Freesurfer.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name> -g <age>
+  
   
       ███                                    0:0   pl-dircopy
        │                                          (Input dicoms)

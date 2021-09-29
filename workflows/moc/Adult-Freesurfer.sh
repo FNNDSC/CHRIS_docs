@@ -149,6 +149,12 @@ DESC
   'Adult-Freesurfer.sh' posts a workflow based off running a FreeSurfer
   application, ``pl-fshack`` and related machinery to CUBE:
   
+  TLDR;
+  To run this script on a local instance of CUBE
+  
+  $ caw --address http://localhost:8000/api/v1/ --username 'chris' login
+  $./Adult-Freesurfer.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name>
+  
   
   
       ███                                    0:0   pl-dircopy
