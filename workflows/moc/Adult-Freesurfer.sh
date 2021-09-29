@@ -435,10 +435,10 @@ title -d 1 "Start constructing the Feed by POSTing the root FS node..."
 
     # Post the root node, wait for it to finish, and
     # collect a list of output files
-    boxcenter "Run the root node and dynamically capture a list of output    "
-    boxcenter "files created by the base FS plugin. This file list will be   "
-    boxcenter "processed to create the actual list of dicoms to process      "
-    boxcenter ""
+    boxcenter "Upload the list of Dicoms from the user input upload dir.    "
+    boxcenter "and run pl-dircopy as base FS plugin. This file list will be "
+    boxcenter "processed to create the actual list of dicoms to process     "
+    boxcenter "$COMPUTE"
 windowBottom
 
     #\\\\\\\\\\\\\\\\\\
