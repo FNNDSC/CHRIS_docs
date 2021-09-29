@@ -168,7 +168,7 @@ DESC
   To run this script on a local instance of CUBE
   
   $ caw --address http://localhost:8000/api/v1/ --username 'chris' login
-  $./Adult-Freesurfer.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name>
+  $./Fastsurfer-Workflow.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name>
   
   
       ███                                    0:0   pl-dircopy
@@ -179,13 +179,13 @@ DESC
        │  ███                                1:2   pl-pfdicom_tagextract
        │                                           (extract original tags)
        │
-          ↓
+       ↓
       ███                                    1:3   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
-       ↓    │
+     ↓   │
     ███  │                                   3:4   pl-pfdicom_tagextract
          │                                          (extract substituted tags)
-             ↓
+         ↓
         ███                                  3:5   pl-fshack
          │                                          (Run freesurfer [ARGS: -autorecon1] only)
          │
@@ -196,7 +196,7 @@ DESC
          │   ↓
          │  ███                              7:8   pl-pfdorun
          │                                          (composite -dissolve)
-             ↓
+         ↓
         ███                                  6:9   pl-mgz2lut_report
                                                     (Report on DTKatlas....mgz)
  

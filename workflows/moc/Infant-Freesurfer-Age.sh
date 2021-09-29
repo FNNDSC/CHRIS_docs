@@ -137,35 +137,35 @@ argArray_filterFromWorkflow     "a_WORKFLOWSPEC[@]" "a_ARGS"
 
 SYNOPSIS="
 NAME
-  Fastsurfer-Workflow.sh
+  Infant-Freesurfer-Age.sh
 SYNPOSIS
-  Fastsurfer-Workflow.sh     [-C <CUBEjsonDetails>]         \\
-                        [-r <protocol>]                     \\
-                        [-p <port>]                         \\
-                        [-a <cubeIP>]                       \\
-                        [-d <upload_directory_loc>]         \\
-                        [-e <compute_env>]                  \\
-                        [-n <workflow_name>]                \\
-                        [-g <age_in_number>]                \\
-                        [-u <user>]                         \\
-                        [-w <passwd>]                       \\
-                        [-G <graphvizDotFile>]              \\
-                        [-i <listOfSubjectsToProcess>]      \\
-                        [-s <sleepAfterPluginRun>]          \\
-                        [-S]                                \\
-                        [-W]                                \\
-                        [-R]                                \\
-                        [-J]                                \\
-                        [-q]
+  Infant-Freesurfer-Age.sh  [-C <CUBEjsonDetails>]              \\
+                            [-r <protocol>]                     \\
+                            [-p <port>]                         \\
+                            [-a <cubeIP>]                       \\
+                            [-d <upload_directory_loc>]         \\
+                            [-e <compute_env>]                  \\
+                            [-n <workflow_name>]                \\
+                            [-g <age_in_months>]                \\
+                            [-u <user>]                         \\
+                            [-w <passwd>]                       \\
+                            [-G <graphvizDotFile>]              \\
+                            [-i <listOfSubjectsToProcess>]      \\
+                            [-s <sleepAfterPluginRun>]          \\
+                            [-S]                                \\
+                            [-W]                                \\
+                            [-R]                                \\
+                            [-J]                                \\
+                            [-q]
 DESC
-  'Fastsurfer-Workflow.sh' posts a workflow based off running a Freesurfer
+  'Infant-Freesurfer-Age.sh' posts a workflow based off running a Freesurfer
   application, ``pl-infantfs`` and related machinery to CUBE:
   
   TLDR;
   To run this script on a local instance of CUBE
   
   $ caw --address http://localhost:8000/api/v1/ --username 'chris' login
-  $./Adult-Freesurfer.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name> -g <age>
+  $./Adult-Freesurfer.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name> -g <age_in_months>
   
   
       ███                                    0:0   pl-dircopy
@@ -176,13 +176,13 @@ DESC
        │  ███                                1:2   pl-pfdicom_tagextract
        │                                           (extract original tags)
        │
-          ↓
+       ↓
       ███                                    1:3   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
-       ↓    │
+     ↓   │
     ███  │                                   3:4   pl-pfdicom_tagextract
          │                                          (extract substituted tags)
-             ↓
+         ↓
         ███                                  3:5   pl-fshack
          │                                          (Run freesurfer mri_convert only)
          │
@@ -193,7 +193,7 @@ DESC
          │   ↓
          │  ███                              7:8   pl-pfdorun
          │                                          (composite -dissolve)
-             ↓
+         ↓
         ███                                  6:9   pl-mgz2lut_report
                                                     (Report on DTKatlas....mgz)
  
@@ -302,7 +302,7 @@ ARGS
       string 'localhost' can be problematic.
 EXAMPLES
     Typical execution:
-        $ ./Infant-Freesurfer.sh  -C '{
+        $ ./Infant-Freesurfer-Age.sh  -C '{
                    \"protocol\":     \"http\",
                    \"port\":         \"8000\",
                    \"address\":      \"megalodon.local\",
@@ -310,7 +310,7 @@ EXAMPLES
                    \"password\":     \"chris1234\"
         }'
     or equivalently:
-        $ ./Infant-Freesurfer.sh -a megalodon.local
+        $ ./Infant-Freesurfer-Age.sh -a megalodon.local
 TIMING CONSIDERATIONS
     While this client script should ideally not concern itself with execution
     concerns beyond the logical structure of a feedflow, some notes are

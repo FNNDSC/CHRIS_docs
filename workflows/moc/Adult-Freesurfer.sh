@@ -165,13 +165,13 @@ DESC
        │  ███                                1:3   pl-pfdicom_tagextract
        │                                           (extract original tags)
        │ 
-          ↓    
+       ↓    
       ███                                    1:2   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
-       ↓    │        
+     ↓   │        
     ███  │                                   2:4   pl-pfdicom_tagextract
          │                                          (extract substituted tags)
-             ↓                   
+         ↓                   
         ███                                  2:5   pl-fshack
          │                                         (Run freesurfer)
          ┼───┬       
@@ -180,12 +180,12 @@ DESC
          │   ↓ 
          │  ███                              6:7   pl-pfdorun
          │                                          (composite -dissolve)
-             ↓              
+         ↓              
         ███                                  5:8   pl-mgz2lut_report
                                                     (Report on aparc.a2009s+aseg.mgz)
  
-    The FS plugin, ``pl-mri_sag_anon_192``, generates an output directory
-     containing multiple dicoms of a subject. 
+    The user specifies the upload directory of a list of DICOMS and a 
+    pl-dircopy is run as base FS plugin in this feed. 
     Note, this does require some implicit knowledge since the user of
     this script would need to know which subjects exist. By running this
     script with a ``-q``, a hard coded list of available images to process
