@@ -1,7 +1,4 @@
-
-
-#!/bin/bash
-#
+#!/usr/bin/env bash
 
 source ./ffe.sh
 
@@ -310,7 +307,7 @@ EXAMPLES
                    \"password\":     \"chris1234\"
         }'
     or equivalently:
-        $ ./Fastsurfer-Workflow.sh -a megalodon.local
+        $ ./Fastsurfer-Workflow.sh -a megalodon.local -d <upload_dir> -e <compute_env> -n <workflow_name>
 TIMING CONSIDERATIONS
     While this client script should ideally not concern itself with execution
     concerns beyond the logical structure of a feedflow, some notes are
@@ -325,7 +322,7 @@ TIMING CONSIDERATIONS
     seconds after POSTing each app to the backend with a '-s 3' (for 3s
     pause) flag.
     Thus,
-        $ ./Fastsurfer-Workflow.sh -a megalodon.local -W -s 3 -G feed
+        $ ./Fastsurfer-Workflow.sh -a megalodon.local -d <upload_dir> -e <compute_env> -n <workflow_name> -W -s 3 -G feed
     where the '-G feed' also produces two graphviz dot files suitable for
     rendering with a graphviz viewer.
 "

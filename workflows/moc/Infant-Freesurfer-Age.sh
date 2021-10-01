@@ -1,6 +1,4 @@
-
-
-#!/bin/bash
+#!/usr/bin/env bash
 #
 
 source ./ffe.sh
@@ -310,7 +308,7 @@ EXAMPLES
                    \"password\":     \"chris1234\"
         }'
     or equivalently:
-        $ ./Infant-Freesurfer-Age.sh -a megalodon.local
+        $ ./Infant-Freesurfer-Age.sh -a megalodon.local -d <upload_dir> -e <compute_env> -n <workflow_name> -g <age_in_months>
 TIMING CONSIDERATIONS
     While this client script should ideally not concern itself with execution
     concerns beyond the logical structure of a feedflow, some notes are
@@ -325,7 +323,7 @@ TIMING CONSIDERATIONS
     seconds after POSTing each app to the backend with a '-s 3' (for 3s
     pause) flag.
     Thus,
-        $ ./Infant-Freesurfer.sh -a megalodon.local -W -s 3 -G feed
+        $ ./Infant-Freesurfer.sh -a megalodon.local -d <upload_dir> -e <compute_env> -n <workflow_name> -g <age_in_months> -W -s 3 -G feed
     where the '-G feed' also produces two graphviz dot files suitable for
     rendering with a graphviz viewer.
 "

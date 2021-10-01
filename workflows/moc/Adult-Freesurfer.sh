@@ -1,6 +1,4 @@
-
-
-#!/bin/bash
+#!/usr/bin/env bash
 #
 
 source ./ffe.sh
@@ -159,7 +157,7 @@ DESC
   
       ███                                    0:0   pl-dircopy
        │                                          (Input dicoms)
-      ███                                    0:1   pl-mri_sag_anon_192
+      ███                                    0:1   pl-simpledsapp
        ┼───┐                                       (Input dicoms)
        │   ↓
        │  ███                                1:3   pl-pfdicom_tagextract
@@ -296,13 +294,13 @@ EXAMPLES
                    \"password\":     \"chris1234\"
         }'
     or equivalently:
-        $ ./Adult-Freesurfer.sh -a 117.local
+        $ ./Adult-Freesurfer.sh -a 117.local -d <upload_dir> -e <compute_env> -n <workflow_name>
 
     To not overwhelm the scheduler, it is a good idea to pause for a few
     seconds after POSTing each app to the backend with a '-s 3' (for 3s
     pause) flag.
     Thus,
-        $ ./Adult-Freesurfer.sh -a 117.local -W -s 3 -G feed
+        $ ./Adult-Freesurfer.sh -a 117.local -d <upload_dir> -e <compute_env> -n <workflow_name> -W -s 3 -G feed
     where the '-G feed' also produces two graphviz dot files suitable for
     rendering with a graphviz viewer.
 "
