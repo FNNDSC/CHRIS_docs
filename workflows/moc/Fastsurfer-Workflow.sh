@@ -23,7 +23,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --title=Input-Dicoms"
                                 
     "0:1|
-    sandip117/pl-simpledsapp:      ARGS;
+    fnndsc/pl-simpledsapp:      ARGS;
                                 --title=Input-Dicoms;
                                 --previous_id=@prev_id;
                                 --compute_resource_name=@env"
@@ -64,7 +64,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --compute_resource_name=@env"
                                 
     "3:5|
-    sandip117/pl-fshack:           ARGS;
+    fnndsc/pl-fshack:           ARGS;
                                 --inputFile='.dcm';
                                 --outputFile='recon-of-SAG-anon-dcm';
                                 --exec='recon-all';

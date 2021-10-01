@@ -18,16 +18,16 @@
                     ghcr.io/fnndsc/pl-pfdorun:2.2.6,                                   \
                     ghcr.io/fnndsc/pl-mgz2lut_report:1.3.6,                            \
                     ghcr.io/fnndsc/pl-fastsurfer_inference:1.0.17,                     \
-                    ghcr.io/sandip117/pl-simpledsapp:2.0.2,                            \
-                    ghcr.io/sandip117/pl-fshack:1.2.0,                                 \
+                    ghcr.io/fnndsc/pl-simpledsapp:2.0.2,                               \
+                    ghcr.io/fnndsc/pl-fshack:1.2.2,                                    \
                     ghcr.io/fnndsc/pl-pfdicom_tagsub:3.2.1^moc,                        \
                     ghcr.io/fnndsc/pl-pfdicom_tagextract:3.1.3^moc,                    \
                     ghcr.io/fnndsc/pl-multipass:1.2.12^moc,                            \
                     ghcr.io/fnndsc/pl-pfdorun:2.2.6^moc,                               \
                     ghcr.io/fnndsc/pl-mgz2lut_report:1.3.6^moc,                        \
                     ghcr.io/fnndsc/pl-fastsurfer_inference:1.0.17^moc,                 \
-                    ghcr.io/sandip117/pl-simpledsapp:2.0.2^moc,                        \
-                    ghcr.io/sandip117/pl-fshack:1.2.0^moc                             
+                    ghcr.io/fnndsc/pl-simpledsapp:2.0.2^moc,                           \
+                    ghcr.io/fnndsc/pl-fshack:1.2.2^moc                             
 "
 
 #
