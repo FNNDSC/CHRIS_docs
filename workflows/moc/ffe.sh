@@ -196,12 +196,11 @@ function waitForNodeState {
 
     local pollCount=1
     local b_poll=1
-    local b_timeout=0
-    local b_waitTimedOut=0
+    local b_notimeout=0
     local totalTime=0
 
     if (( ! ${#pollIntervalSeconds} )) ; then pollIntervalSeconds=5;    fi
-    if (( ${#timeoutSeconds} )) ;        then b_timeout=1;              fi
+    if (( ! ${#timeoutSeconds} )) ;      then b_notimeout=1;            fi
 
     if [[ $plugininstanceID == "-1" ]] ; then
         criticalError_exit 10 \
@@ -230,13 +229,13 @@ function waitForNodeState {
                             "${status}"
         windowBottom
         if [[ "$status" == "$state" ]] ; then break ; fi
-        if (( b_timeout )) ; then
-            if (( pollCount * pollIntervalSeconds < timeoutSeconds )) ; then
+        if (( b_notimeout )) ; then
+            b_poll=1
+        else
+            if (( pollCount * pollIntervalSecodns < timeoutSeconds )) ; then
                 b_poll=1
             else
                 b_poll=0
-                b_waitTimedOut=1
-                status="timeout"
             fi
         fi
         sleep $pollIntervalSeconds
@@ -392,7 +391,6 @@ function plugin_runFromFile {
     # ARGS
     #       $1          command array to write file
     #       $2          return string from running file
-    #       $3          optional if specified, dump run output to file
     #
     # DESC
     #   Due to considerable difficulties in executing a command
@@ -405,7 +403,6 @@ function plugin_runFromFile {
     #
     typeset -n _a_cmd="$1"
     typeset -n _RUN="$2"
-    local logFile="$3"
     local plugin=$(echo ${_a_cmd[2]})
     plugin=${plugin#"name="}
     file=${plugin}-$(uuidgen).sh
@@ -415,16 +412,8 @@ function plugin_runFromFile {
     echo "chrispl-run \\" > $file
     echo -e "\t\t--plugin   ${_a_cmd[2]} \\"        >> $file
     echo -e "\t\t--args     \"$argStr\"  \\"        >> $file
-    if (( ${#3} )) ; then
-        echo -e "\t\t--onCUBE   '${_a_cmd[6]}' \\"  >> $file
-        echo -e "\t\t${_a_cmd[7]}"                  >> $file
-    else
-        echo -e "\t\t--onCUBE   '${_a_cmd[6]}'"     >> $file
-    fi
+    echo -e "\t\t--onCUBE   '${_a_cmd[6]}'"         >> $file
     _RUN=$(source $file)
-    if (( ${#3} )) ; then
-        echo "$_RUN" >> $file-${logFile}
-    fi
     if (( ! b_saveCalls )) ; then
         rm $file
     fi
@@ -536,6 +525,8 @@ function plugin_run {
     local PLUGINRUN
     local STATUSRUN
     local IFS
+    local name="test"
+
 
     echo -en "\033[2A\033[2K"
     pluginArray_filterFromWorkflow  "a_feedflow[@]" "a_plugin"
@@ -558,23 +549,20 @@ function plugin_run {
         windowBottom
         # Explicitly construct the command as a bash array
         a_cmd[0]="chrispl-run";     a_cmd[1]="--plugin"
-                                    a_cmd[2]="name_exact=$CONTAINER"
+                                    a_cmd[2]="name=$CONTAINER"
                                     a_cmd[3]="--args";   a_cmd[4]="\"$ARGSUB\""
                                     a_cmd[5]="--onCUBE"; a_cmd[6]="$CUBE"
         plugin_runFromFile "a_cmd" PLUGINRUN
-        ID=$(echo $PLUGINRUN | awk '{print $3}')
-        if [[ $ID == "failed" ]] ; then
-            STATUSRUN=1
-            # if failure, rerun the plugin to capture json return
-            a_cmd[7]=" --jsonReturn"
-            plugin_runFromFile "a_cmd" PLUGINRUN errToFile
+        STATUSRUN=$?
+        if (( STATUSRUN == 0 )) ; then
+            ID=$(echo $PLUGINRUN | awk '{print $3}')
         else
-            STATUSRUN=0
+            ID=-1
         fi
         opRet_feedback  "$STATUSRUN"                                    \
                         "$ADDRESS:$PORT" "::CUBE->$PLUGIN"              \
                         "result-->"                                     \
-                        "pinst: $ID"
+                        "pinst: $(echo $PLUGINRUN| awk '{print $3}')"
     else
         boxcenter "No matching plugin was found in the feedflow spec." ${Red}
         ID="-1"

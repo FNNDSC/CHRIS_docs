@@ -164,6 +164,7 @@ DESC
   TLDR;
   To run this script on a local instance of CUBE
   
+  $ caw logout
   $ caw --address http://localhost:8000/api/v1/ --username 'chris' login
   $./Fastsurfer-Workflow.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name>
   

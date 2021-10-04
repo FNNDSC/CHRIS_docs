@@ -70,12 +70,11 @@ WhiteBG='\033[1;47m'
 
 function boxcenter {
     color=$2
-    flag=$3
     termwidth=80
     padding="$(printf '%0.1s' ' '{1..500})"
     printf '%*.*s %s %*.*s\n' 0 "$(((termwidth-2-${#1})/2))"  \
               "$padding" "$1" 0 "$(((termwidth-1-${#1})/2))"  \
-              "$padding"                                      | ./boxes.sh "$3" $color
+              "$padding"                                      | ./boxes.sh $color
 }
 
 function center {
@@ -203,35 +202,8 @@ function title {
     printf "${NC}"
 }
 
-function windowTop {
-    if ((  ! ${#1} )) ; then
-        printf "${Yellow}┌─" ;  for c in $(seq 1 79); do printf "─" ; done ; printf "┐${Brown}\n"
-        printf "${NC}"
-    else
-        printf "┌─" ;  for c in $(seq 1 79); do printf "─" ; done ; printf "┐\n"
-        printf "${NC}"
-    fi
-}
-
-function windowLine {
-    if ((  ! ${#1} )) ; then
-        printf "${Yellow}├─" ;  for c in $(seq 1 79); do printf "─" ; done ; printf "┤${Brown}▒\n"
-        printf "${NC}"
-    else
-        printf "├─" ;  for c in $(seq 1 79); do printf "─" ; done ; printf "┤▒\n"
-        printf "${NC}"
-    fi
-}
-
 function windowBottom {
-    if ((  ! ${#1} )) ; then
-        printf "${Yellow}└─" ;  for c in $(seq 1 79); do printf "─" ; done ; printf "┘${Brown}▒\n"
-        printf "${Brown} ▒" ; for c in $(seq 1 81); do printf "▒" ; done ; printf "\n"
-        printf "${NC}"
-    else
-        printf "└─" ;  for c in $(seq 1 79); do printf "─" ; done ; printf "┘▒\n"
-        printf " ▒" ; for c in $(seq 1 81); do printf "▒" ; done ; printf "\n"
-        printf "${NC}"
-    fi
+    printf "${Yellow}└─" ;  for c in $(seq 1 79); do printf "─" ; done ; printf "┘${Brown}▒\n"
+    printf "${Brown} ▒" ; for c in $(seq 1 81); do printf "▒" ; done ; printf "\n"
+    printf "${NC}"
 }
-

@@ -2,18 +2,7 @@
 #
 # NAME
 #
-#   boxes.sh [-c] [-n] [<textColor>]
-#
-# ARGS
-#
-# [-c]
-#
-#	Move the cursor to the front of the line,
-#	and clear the current and previous lines.
-#
-# [-n]
-#
-#	Print decorations with no color.
+#   boxes.sh
 #
 # DESC
 #
@@ -30,12 +19,11 @@
 . ./decorate.sh
 let width=80
 let b_clear=0
-let b_noLineColor=0
 
-while getopts "cn" opt; do
+
+while getopts "c" opt; do
     case $opt in
         c) b_clear=1;;
-	n) b_noLineColor=1;;
 	esac
 done
 
@@ -62,9 +50,5 @@ while IFS= read line; do
 	if (( TRAILLEN > 0 )) ; then
 		PADDING=$(head -c $TRAILLEN < /dev/zero | tr '\0' ' ')
 	fi
-	if (( ! b_noLineColor )) ; then
-	    printf "${Yellow}│${lineColor}${line}${PADDING}${NC}${Yellow}│${Brown}▒${NC}\n"
-	else
-	    printf "│${line}${PADDING}${NC}│▒${NC}\n"
-	fi
+	printf "${Yellow}│${lineColor}${line}${PADDING}${NC}${Yellow}│${Brown}▒${NC}\n"
 done

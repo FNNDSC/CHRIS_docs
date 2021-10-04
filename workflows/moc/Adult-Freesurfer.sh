@@ -150,6 +150,7 @@ DESC
   TLDR;
   To run this script on a local instance of CUBE
   
+  $ caw logout
   $ caw --address http://localhost:8000/api/v1/ --username 'chris' login
   $./Adult-Freesurfer.sh -a localhost -d <upload_dir> -e <compute_env> -n <workflow_name>
   
@@ -396,7 +397,7 @@ title -d 1 "Checking on required dependencies..."
     boxcenter "not found, please install them according to the requirements of "
     boxcenter "your OS.                                                        "
     boxcenter ""
-    dep_check "jq,chrispl-search,chrispl-run,http"
+    dep_check "jq,chrispl-search,chrispl-run,http,caw"
 windowBottom
 if (( b_respFail > 0 )) ; then exit 4 ; fi
 
