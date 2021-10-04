@@ -30,9 +30,10 @@ Follow the below steps to create a local CUBE instance, register constituent plu
     caw --address http://localhost:8000/api/v1/ --username 'chris' login
     
     Then run any of the three segmentation workflow scripts by providing suitable arguments.
-    (See internal document of the scripts for more info about arguments)
+    (See internal documentation of the scripts for more info about arguments)
     
     Example:
+    cd CHRIS_docs/workflows/moc
     ./Fastsurfer-Workflow.sh -a localhost -d /home/sandip/SAG-anon -e moc -n fastsurfer-workflow-trial-1
     
 ### 5) View the feed in the ChRIS UI (Optional)
