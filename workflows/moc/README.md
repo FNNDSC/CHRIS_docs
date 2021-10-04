@@ -16,7 +16,7 @@ Follow the below steps to create a local CUBE instance, register constituent plu
     
     Run the following command to register the constituent plugins to CUBE.
     
-
+    cd ChRIS_ultron_backEnd
     ./add_fastsurfer_plugins.sh
     
     
@@ -28,6 +28,12 @@ Follow the below steps to create a local CUBE instance, register constituent plu
 
     caw logout
     caw --address http://localhost:8000/api/v1/ --username 'chris' login
+    
+    Then run any of the three segmentation workflow scripts by providing suitable arguments.
+    (See internal document of the scripts for more info about arguments)
+    
+    Example:
+    ./Fastsurfer-Workflow.sh -a localhost -d /home/sandip/SAG-anon -e moc -n fastsurfer-workflow-trial-1
     
 ### 5) View the feed in the ChRIS UI (Optional)
 
