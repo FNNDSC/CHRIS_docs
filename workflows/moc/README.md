@@ -12,11 +12,13 @@ Follow the below steps to create a local CUBE instance, register constituent plu
     Add compute environments to CUBE.
     
 ### 3) Register plugins to compute environment(s)
-    Now copy ``add_fastsurfer_plugins.sh`` to `ChRIS_ultron_backEnd` repo.
+
+    Clone the repo using the following command
+    git clone https://github.com/FNNDSC/CHRIS_docs
     
     Run the following command to register the constituent plugins to CUBE.
     
-    cd ChRIS_ultron_backEnd
+    cd CHRIS_docs/workflows/moc
     ./add_fastsurfer_plugins.sh
     
     
@@ -24,6 +26,8 @@ Follow the below steps to create a local CUBE instance, register constituent plu
 ### 4) Run CLI scripts to start a feed
     Since these scripts require `caw` to upload & register files to CUBE,
     we need to login to `caw` before running any of the segmentation scripts.
+    
+    Instructions on how to install `caw` is present here : https://github.com/FNNDSC/caw
     
 
     caw logout
