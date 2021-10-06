@@ -16,9 +16,14 @@ Follow the below steps to create a local CUBE instance, register constituent plu
     Clone the repo using the following command
     git clone https://github.com/FNNDSC/CHRIS_docs
     
+    Now copy `add_fastsurfer_plugins.sh` to ChRIS_ultron_backEnd
+    
+    cp CHRIS_docs/workflows/moc/add_fastsurfer_plugins.sh ChRIS_ultron_backEnd
+    
+    
     Run the following command to register the constituent plugins to CUBE.
     
-    cd CHRIS_docs/workflows/moc
+    cd ChRIS_ultron_backEnd
     ./add_fastsurfer_plugins.sh
     
     

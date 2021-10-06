@@ -29,7 +29,7 @@
                     ghcr.io/fnndsc/pl-fastsurfer_inference:1.0.17^moc,                 \
                     ghcr.io/fnndsc/pl-simpledsapp:2.0.2^moc,                           \
                     ghcr.io/fnndsc/pl-fshack:1.2.2^moc,                                \
-                    fnndsc/pl-infantfs:7.1.1.1-unlicensed^moc                          \                            
+                    fnndsc/pl-infantfs:7.1.1.1-unlicensed^moc                                                      
 "
 
 #
