@@ -127,24 +127,6 @@ The value for `"parameters"` should be a list of objects following the `PluginPa
 
 ===== Parameter Flag
 
-[#pluginmeta]
-== Plugin Meta
-
-_ChRIS_ plugin meta is an abstract association of a subset of
-_ChRIS_ plugin attributes. These attributes are:
-
-- <<name,name>>
-- <<public_repo,URL>>
-- title
-- authors
-- category
-- documentation
-- icon
-- license
-
-A _plugin meta_ defines a set of
-<<definition,_ChRIS_ plugins>> that have the same _plugin <<name,name>>_.
-
 [#usage]
 == Usage
 
@@ -237,6 +219,24 @@ This is how the `abstractmgr.py` or https://github.com/FNNDSC/pman[pman] version
 
 https://apptainer.org/[Apptainer] works a similar way by automatically mounting
 `$HOME` and `$PWD` into the container filesystem on their respective host paths.
+
+[#pluginmeta]
+== Plugin Meta
+
+_ChRIS_ plugin meta is an abstract association of a subset of
+_ChRIS_ plugin attributes. These attributes are:
+
+- <<name,name>>
+- <<public_repo,URL>>
+- title
+- authors
+- category
+- documentation
+- icon
+- license
+
+A _plugin meta_ defines a set of
+<<definition,_ChRIS_ plugins>> that have the same _plugin <<name,name>>_.
 
 [#Pipeline Specification]
 == Pipeline Specification
