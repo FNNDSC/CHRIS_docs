@@ -146,7 +146,7 @@ A _plugin meta_ defines a set of
 <<definition,_ChRIS_ plugins>> that have the same _plugin <<name,name>>_.
 
 [#usage]
-=== Usage 
+== Usage
 
 This section describes how the <<descriptor_file,representation>>
 of a _plugin_ should be interpreted by a container runtime
@@ -155,7 +155,7 @@ to execute an instance of the _program_ described by the _plugin_ given its
 and <<data-directories,data directories>>.
 
 [#executable]
-==== Executable
+=== Executable
 
 The _executable_ is a string which invokes the plugin's _program_.
 It is resolved from the plugin's
@@ -168,7 +168,7 @@ which are joined by the template:
 ----
 
 [#arguments]
-==== Arguments
+=== Arguments
 
 _Arguments_ are a set of string key-value pairs, separated by whitespace,
 in arbitrary order.
@@ -194,7 +194,7 @@ Let `data_directories` be a string with the values depending on the _plugin_'s
 |===
 
 [#invocation]
-==== Invocation
+=== Invocation
 
 The _plugin's_ _program_ is to be invoked by running a
 _container_ of its <<dock_image,image>> with a command resolved by the string template:
@@ -205,7 +205,7 @@ _container_ of its <<dock_image,image>> with a command resolved by the string te
 ----
 
 [#volumes]
-===== Volumes
+==== Volumes
 
 <<data-directories,`data_directories`>> are mount points for volumes
 where input files can be read from and output files can be written to.
@@ -220,13 +220,13 @@ If the mountpoints do not exist within the container filesystem,
 the container runtime is to create them.
 
 [#flexibility]
-===== Flexibility
+==== Flexibility
 
 While this spec standardizes the execution of ChRIS plugins, non-conformant
 implementations may work equally well. This section describes a common
 yet non-conformant pattern.
 
-====== Single Share Directory
+===== Single Share Directory
 
 A single volume is mounted *read-write* to `/share`.
 The volume contains subdirectories `./incoming` and `./outgoing`,
