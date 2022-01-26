@@ -60,7 +60,7 @@ https://github.com/opencontainers/distribution-spec/blob/main/spec.md[OCI image 
 A _ChRIS plugin_'s JSON representation describes its <<usage,usage>> as a JSON file
 with the following schema:
 
-[source,json]
+[source,javascript]
 ----
 {
   "type": "fs" | "ds" | "ts",
@@ -105,7 +105,7 @@ _Plugin parameters_ encode for <<arguments,arguments>>.
 
 The value for `"parameters"` should be a list of objects following the `PluginParameter` schema:
 
-[source,json]
+[source,javascript]
 ----
 {
   "name": "string",
