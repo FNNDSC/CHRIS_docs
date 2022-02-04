@@ -10,6 +10,8 @@ This directory contains a collection of JSON specified ChRIS pipelines that can 
 
 ## Available Pipelines
 
+See the `source` directory.
+
 ### `covidnet_simple.json` 
 
 A pipeline that accepts as input a single CT image and ultimately produces a report predicting the image to either
