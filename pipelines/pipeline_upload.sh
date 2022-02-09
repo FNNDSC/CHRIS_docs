@@ -237,10 +237,8 @@ function checkDeps {
             if (( ! VERBOSITY )) ; then
                 printf "Some required files were not found. Run with '-v 1' for more info."
             fi
-            exit 1
         fi
     done
-    exit 1
 }
 
 function preamble {
@@ -255,13 +253,13 @@ function curlH {
 function CURL {
     VERB=$1
     ROUTE=$2
-    JSON="$3"
+    JSONFILE="$3"
     NOPROXY=""
     if (( b_noproxy )) ; then
         NOPROXY="http_proxy= "
     fi
-    if (( ${#JSON} )) ; then
-        echo "$NOPROXY curl -s -X $VERB -u ${USER}:${PASSWD} ${URL}/api/v1/$ROUTE $(curlH) -d '"$JSON"'"
+    if (( ${#JSONFILE} )) ; then
+        echo "$NOPROXY curl -s -X $VERB -u ${USER}:${PASSWD} ${URL}/api/v1/$ROUTE $(curlH) -d @${JSONFILE}"
     else
         echo "$NOPROXY curl -s -X $VERB -u ${USER}:${PASSWD} ${URL}/api/v1/$ROUTE $(curlH)"
     fi
@@ -356,7 +354,6 @@ function pluginRegstered_handle {
 }
 
 checkDeps
-exit 1
 if (( ${#PIPELINEFILE} )) ; then
     if [[ -f $PIPELINEFILE ]] ; then
         # There are several implicit assumptions in the structure of the JSON file
@@ -386,16 +383,18 @@ if (( ${#PIPELINEFILE} )) ; then
         fi
     else
         eprint  \
-        "\nAn error has occured.\n\n\tThe file [$PIPELINEFILE] was not found" \
-        "Kindly verify that the correct file has been specified.\n\n" \
+        "\nAn error has occured!\n\tThe file [$PIPELINEFILE] was not found.\n"  \
+        "Kindly verify that the correct file has been specified.\n\n"           \
         1
     fi
     POSTJSON=$(cat $PIPELINEFILE | chripon --stdin --stdout --stringify plugin_tree | tr -d "\n")
+    echo "$POSTJSON" > post.json
     vprint "Payload to POST:" 1
     vprint "$POSTJSON" 1
-    cmd=$(CURL POST pipelines/ "$POSTJSON")
+    cmd=$(CURL POST pipelines/ post.json)
     vprint "$cmd" 1
-    eval $cmd | jq
+    eval "$cmd" | jq
+    rm post.json
 else
     eprint      "No pipeline file was specified." \
                 "Please make sure to indicate a JSON formatted file"
