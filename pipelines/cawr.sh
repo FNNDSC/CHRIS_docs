@@ -123,7 +123,9 @@ SYNOPSIS='
 
         ./cawr.sh -a 192.168.1.200                                          \
                                 --runPipeline "DICOM anon"                  \
-                                --upload -- <files>
+                                --feedName "Another DICOM anon"             \
+                                --feedDesc "Nothing really to see here..."   \
+                                --uploadData -- <files>
 
 '
 
