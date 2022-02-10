@@ -1,0 +1,28 @@
+{
+  "name": "tar_gunzip",
+  "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
+  "category": "Utilities",
+  "description": "Perform a tar gunzip of an archive tgz file in the parent output directory",
+  "locked":	true,
+  "plugin_tree": [
+    {
+      "plugin_name": "pl-pfdorun",
+      "plugin_version": "2.2.7",
+      "previous_index": null,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "fileFilter",
+            "default":      "tgz"
+        },
+        {
+            "name":         "exec",
+            "default":      "'tar xvfz %inputWorkingDir/%inputWorkingFile --strip-components=2 -C %outputDir'"
+        },
+        {
+            "name":         "verbose",
+            "default":      "5"
+        }
+      ]
+    }
+  ]
+}

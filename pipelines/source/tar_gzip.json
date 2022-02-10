@@ -1,0 +1,28 @@
+{
+  "name": "tar_gzip",
+  "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
+  "category": "Utilities",
+  "description": "Perform a tar gzip archive of the parent output directory",
+  "locked":	true,
+  "plugin_tree": [
+    {
+      "plugin_name": "pl-pfdorun",
+      "plugin_version": "2.2.7",
+      "previous_index": null,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "inputFile",
+            "default":      "input.meta.json"
+        },
+        {
+            "name":         "exec",
+            "default":      "'tar cvfz %outputDir/parent.tgz %inputDir'"
+        },
+        {
+            "name":         "verbose",
+            "default":      "5"
+        }
+      ]
+    }
+  ]
+}

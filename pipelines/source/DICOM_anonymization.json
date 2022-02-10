@@ -1,5 +1,5 @@
 {
-  "name": "DICOM anonymization4",
+  "name": "DICOM anonymization",
   "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
   "category": "Medical Imaging",
   "description": "Anonymize an input directory of DICOM files -- also create two branches side branches of extracted DICOM tag info.",
