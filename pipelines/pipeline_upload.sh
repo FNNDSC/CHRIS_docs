@@ -237,6 +237,10 @@ function checkDeps {
             if (( ! VERBOSITY )) ; then
                 printf "Some required files were not found. Run with '-v 1' for more info."
             fi
+            eprint  "\nThis script is missing a required dependency."  \
+                    ""    \
+                    5
+
         fi
     done
 }
