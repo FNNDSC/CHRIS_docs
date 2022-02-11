@@ -2,7 +2,7 @@
   "name": "FreeSurfer Post Report and Overlays",
   "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
   "category": "Medical Imaging",
-  "description": "Generate reports and overlay image files of a FreeSurfer analysis",
+  "description": "Once a FreeSurfer analysis is complete, this pipeline generates reports and also some reference overlay images of the segmentations superimposed on the original image. Attach this pipeline to a completed FreeSurfer analysis node.",
   "locked":	true,
   "plugin_tree": [
     {
