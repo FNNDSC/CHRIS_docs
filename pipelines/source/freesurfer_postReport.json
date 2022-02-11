@@ -52,7 +52,7 @@
         },
         {
             "name":         "exec",
-            "default":      "pfdo_mgzimage"
+            "default":      "pfdo_mgz2image"
         },
         {
             "name":         "noJobLogging",
