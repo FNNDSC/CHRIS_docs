@@ -1,0 +1,47 @@
+{
+    "authors": "Rudolph Pienaar (dev@fnndsc.org)",
+    "name": "COVIDnet",
+    "description": "Runs a single input lungCT through the COVIDnet analysis",
+    "category": "AI/ML",
+    "locked": "true",
+    "plugin_tree": [
+      {
+        "plugin_name": "pl-med2img",
+        "plugin_version": "1.1.12",
+        "previous_index": null,
+        "plugin_parameter_defaults": [
+          {
+            "name": "inputFileSubStr",
+            "default": "dcm"
+          },
+          {
+            "name": "sliceToConvert",
+            "default": "0"
+          }
+        ]
+      },
+      {
+        "plugin_name": "pl-covidnet",
+        "plugin_version": "0.2.4",
+        "previous_index": 0,
+        "plugin_parameter_defaults": [
+          {
+            "name": "imagefile",
+            "default": "sample.png"
+          }
+        ]
+      },
+      {
+        "plugin_name": "pl-covidnet-pdfgeneration",
+        "plugin_version": "0.2.1",
+        "previous_index": 1,
+        "plugin_parameter_defaults": [
+          {
+            "name": "imagefile",
+            "default": "sample.png"
+          }
+        ]
+      }
+    ]
+}
+
