@@ -1,0 +1,32 @@
+{
+  "name": "FreeSurfer_autorecon1",
+  "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
+  "category": "Medical Imaging",
+  "description": "Run FreeSurfer autorecon1 on an input data set -- this does the skull stripping and terminates",
+  "locked":	false,
+  "plugin_tree": [
+    {
+      "plugin_name": "pl-fshack",
+      "plugin_version": "1.2.0",
+      "previous_index": null,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "args",
+            "default":      "'ARGS:-autorecon1'"
+        },
+        {
+            "name":         "exec",
+            "default":      "recon-all"
+        },
+        {
+            "name":         "inputFile",
+            "default":      ".dcm"
+        },
+        {
+            "name":         "outputFile",
+            "default":      "FreeSurferAutorecon1"
+        }
+      ]
+    }       
+  ]
+}

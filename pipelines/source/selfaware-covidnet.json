@@ -1,0 +1,29 @@
+{
+    "authors": "Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>",
+    "name": "Self-aware-covidnet",
+    "description": "Dynamically build a complex compute tree",
+    "category": "Topology",
+    "locked": "true",
+    "plugin_tree": [
+      {
+        "plugin_name": "pl-dypi",
+        "plugin_version": "2.1.1",
+        "previous_index": null,
+        "plugin_parameter_defaults": [
+          {
+            "name": "filter",
+            "default": "'*.dcm'"
+          },
+          {
+            "name": "verbosity",
+            "default": "2"
+          },
+          {
+            "name": "pipeline",
+            "default": "COVIDnet-workflow"
+          }
+        ]
+      }
+    ]
+}
+

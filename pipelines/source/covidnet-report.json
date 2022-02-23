@@ -1,13 +1,13 @@
 {
     "authors": "Rudolph Pienaar (dev@fnndsc.org)",
-    "name": "COVIDnet",
-    "description": "Runs a single sample.png through the COVIDnet plugin",
+    "name": "COVIDnet report",
+    "description": "Reports on the results of a COVIDnet output",
     "category": "AI/ML",
     "locked": "true",
     "plugin_tree": [
       {
-        "plugin_name": "pl-covidnet",
-        "plugin_version": "0.2.4",
+        "plugin_name": "pl-covidnet-pdfgeneration",
+        "plugin_version": "0.2.1",
         "previous_index": null,
         "plugin_parameter_defaults": [
           {

@@ -1,0 +1,76 @@
+{
+  "name": "FastSurfer",
+  "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
+  "category": "Medical Imaging",
+  "description": "Run FastSurfer (a trained AI inference engine) on an input data set -- input filetype is a FreeSurfer mgz type file.",
+  "locked":	false,
+  "plugin_tree": [
+    {
+      "plugin_name": "pl-fastsurfer_inference",
+      "plugin_version": "1.0.15",
+      "previous_index": null,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "subjectDir",
+            "default":      "FreeSurferAutorecon1"
+        },
+        {
+            "name":         "iname",
+            "default":      "brainmask.mgz"
+        },
+        {
+            "name":         "oname",
+            "default":      "aparc.DKTatlas+aseg.deep.mgz"
+        },
+        {
+            "name":         "order",
+            "default":      "1"
+        },
+        {
+            "name":         "subject",
+            "default":      "mri"
+        },
+        {
+            "name":         "logfile",
+            "default":      "deep-seg.log"
+        },
+        {
+            "name":         "network_sagittal_path",
+            "default":      "../checkpoints/Sagittal_Weights_FastSurferCNN/ckpts/Epoch_30_training_state.pkl"
+        },
+        {
+            "name":         "network_coronal_path",
+            "default":      "../checkpoints/Coronal_Weights_FastSurferCNN/ckpts/Epoch_30_training_state.pkl"
+        },
+        {
+            "name":         "network_axial_path",
+            "default":      "../checkpoints/Axial_Weights_FastSurferCNN/ckpts/Epoch_30_training_state.pkl"
+        },
+        {
+            "name":         "cleanup",
+            "default":      true
+        },
+        {
+            "name":         "no_cuda",
+            "default":      false
+        },
+        {
+            "name":         "batch_size",
+            "default":      "8"
+        },
+        {
+            "name":         "simple_run",
+            "default":      false
+        },
+        {
+            "name":         "run_parallel",
+            "default":      false
+        },
+        {
+            "name":         "copyInputFiles",
+            "default":      "mgz"
+        }
+      ]
+    }       
+  ]
+}
