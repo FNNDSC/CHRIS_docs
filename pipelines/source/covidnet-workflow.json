@@ -1,6 +1,6 @@
 {
     "authors": "Rudolph Pienaar (dev@fnndsc.org)",
-    "name": "COVIDnet",
+    "name": "COVIDnet-workflow",
     "description": "Runs a single input lungCT through the COVIDnet analysis",
     "category": "AI/ML",
     "locked": "true",
@@ -33,7 +33,7 @@
       },
       {
         "plugin_name": "pl-covidnet-pdfgeneration",
-        "plugin_version": "0.2.1",
+        "plugin_version": "0.2.6",
         "previous_index": 1,
         "plugin_parameter_defaults": [
           {
