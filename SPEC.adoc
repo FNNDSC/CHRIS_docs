@@ -1,7 +1,17 @@
 = _ChRIS_ Plugin Specification
 FNNDSC <dev@babyMRI.org>
-:version: 1.0.0
+:version: incomplete draft
 :toc:
+
+////
+THIS DOCUMENT WAS WRITTEN RETROSPECTIVELY.
+
+It is a retrospective interpretation of what can be assumed to be the expected
+behavior of the "current" ChRIS components.
+
+Niche behavior which needs explanation are explained by a permalink to
+the block of code which implemented the behavior, preceeded by the string "// retrospection ".
+////
 
 Version {version}
 
@@ -124,6 +134,42 @@ The value for `"parameters"` should be a list of objects following the `PluginPa
 
 ===== Parameter Type
 
+A parameter type is one of:
+
+====== bool
+
+One of: `true`, `false`
+
+====== int
+
+Integers as described by
+https://datatracker.ietf.org/doc/html/rfc7159.html#section-6[RFC 7159 Section 6].
+
+====== float
+
+Numbers as described by
+https://datatracker.ietf.org/doc/html/rfc7159.html#section-6[RFC 7159 Section 6].
+
+[#param-type-str]
+====== str
+
+Strings as described by
+https://datatracker.ietf.org/doc/html/rfc7159.html#section-7[RFC 7159 Secion 7].
+
+[#param-type-path]
+====== path
+
+A <<param-type-str,str>> which is interpreted as a comma-separated
+list of path names into _ChRIS_ file storage.
+See section <<path-arguments>>.
+
+[#param-type-unextpath]
+====== unextpath
+
+A <<param-type-path,path>>.
+See section <<path-arguments>>.
+
+// retrospection https://github.com/FNNDSC/chrisapp/blob/fa9b0a68b78a4feeee2c96c61fbe04f5f296f301/chrisapp/base.py#L285-L306
 
 ===== Parameter Flag
 
@@ -152,8 +198,21 @@ which are joined by the template:
 [#arguments]
 === Arguments
 
-_Arguments_ are a set of string key-value pairs, separated by whitespace,
-in arbitrary order.
+_Arguments_ are a sequence of strings which correspond to
+<<plugin-parameters>> and user-specified values for those parameters.
+
+[#path-arguments]
+==== Path arguments
+
+At runtime, the string following a flag denoting
+<<param-type-path,path>> or <<param-type-unextpath,unextpath>> type arguments
+are to be replaced by the string `/share/incoming`.
+
+Data in _ChRIS_ object storage under the value given by a
+<<param-type-path,path>> argument should be copied to a <<volumes,volume>>
+mounted on `/share/incoming`.
+
+// retrospection https://github.com/FNNDSC/pman/blob/898b8a19593b0f16e1415442d4bfbdeddb7dd38b/pman/resources.py#L115-L130
 
 [#data-directories]
 ==== Data Directories
