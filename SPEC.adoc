@@ -212,6 +212,7 @@ Data in _ChRIS_ object storage under the value given by a
 <<param-type-path,path>> argument should be copied to a <<volumes,volume>>
 mounted on `/share/incoming`.
 
+// retrospection https://github.com/FNNDSC/python-pfconclient/tree/c36aafd17cceb126a303e1f55e0e1edab95f0db1#arguments-of-type-path-or-unextpath
 // retrospection https://github.com/FNNDSC/pman/blob/898b8a19593b0f16e1415442d4bfbdeddb7dd38b/pman/resources.py#L115-L130
 
 [#data-directories]
