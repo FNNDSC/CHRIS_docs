@@ -1,0 +1,20 @@
+name: "Automatic Fetal Brain Reconstruction Pipeline v1.0.0"
+authors: "Jennings Zhang <Jennings.Zhang@childrens.harvard.edu>"
+category: "MRI"
+description: "Automatic fetal brain reconstruction pipeline developed by Kiho's group at the FNNDSC. Features machine-learning based brain masking and quality assessment."
+locked: false
+plugin_tree:
+- title: "Brain Mask"
+  plugin: pl-fetal-brain-mask v1.2.1
+  previous: null
+- title: "N4 Bias Field Correction"
+  plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.1
+  previous: "N4 Bias Field Correction"
+  plugin_parameter_defaults:
+  - inputPathFilter: "extracted/0.0/*.nii"
+- title: "Automatic Fetal Brain Assessment"
+  plugin: pl-fetal-brain-assessment v1.3.0
+  previous: "N4 Bias Field Correction"
+- title: "IRTK Reconstruction"
+  plugin: pl-irtk-reconstruction v1.0.3
+  previous: "Automatic Fetal Brain Assessment"
