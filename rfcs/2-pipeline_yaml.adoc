@@ -155,12 +155,12 @@ category: "MRI"
 description: "Automatic fetal brain reconstruction pipeline developed by Kiho's group at the FNNDSC. Features machine-learning based brain masking and quality assessment."
 locked: false
 plugin_tree:
-- title: "Brain Mask"
+- title: "Brain Masking"
   plugin: pl-fetal-brain-mask v1.2.1
   previous: null
 - title: "N4 Bias Field Correction"
   plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.1
-  previous: "N4 Bias Field Correction"
+  previous: "Brain Masking"
   plugin_parameter_defaults:
   - inputPathFilter: "extracted/0.0/*.nii"
 - title: "Automatic Fetal Brain Assessment"
