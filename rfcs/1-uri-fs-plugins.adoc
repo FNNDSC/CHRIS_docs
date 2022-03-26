@@ -71,7 +71,7 @@ The plugin **should**:
 We plan to create the following _ChRIS_ plugins which will conform to the "URI Pull" convention:
 
 - `fs-pull-http` and `fs-pull-https` which does something like a `wget --recursive`
-- `fs-pull-git` for public git repositories, e.g. `git://github.com/FNNDSC/SAG-anon-nii`
+- `fs-pull-git` for public git repositories, e.g. `git://github.com/FNNDSC/SAG-anon-nii.git`
 - `fs-pull-ipfs`: see https://ipfs.io/, https://en.wikipedia.org/wiki/InterPlanetary_File_System
 - `fs-pull-datalad`: see https://www.datalad.org/
 
