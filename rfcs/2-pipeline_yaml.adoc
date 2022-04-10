@@ -101,31 +101,14 @@ NOTE: `title` is not (currently) included in the _ChRIS_ pipeline creation proto
 [#piping-plugin]
 === `plugin_tree[*].plugin`
 
-Type: Optional[string]
+Type: string
 
 Plugin which to create a plugin instance of.
 
-If `plugin` is a string, it will be interpreted as `plugin_name`.
-If `plugin` is a string and it matches the pattern `.*\s+v\d+(\.\d+)*`,
-then the substring after the right-most "v" in `plugin` is interpreted
+`plugin` is a string and it matches the pattern `.*\s+v\d+(\.\d+)*`,
+where the substring after the right-most "v" in `plugin` is interpreted
 as `plugin_version`, and the right-whitespace trimmed substring before
-the right-most "v" in `plugin` is interpreted as `plugin_version`.
-
-NOTE: either <<piping-plugin>> must be given, or both <<piping-plugin_name>> and <<piping-plugin_version>> must be given.
-
-[#piping-plugin_name]
-=== `plugin_tree[*].plugin_name`
-
-Type: Optional[string]
-
-Name of plugin.
-
-[#piping-plugin_version]
-=== `plugin_tree[*].plugin_version`
-
-Type: Optional[string]
-
-Version of plugin.
+the right-most "v" in `plugin` is interpreted as `plugin_name`.
 
 === `plugin_tree[*].plugin_parameter_defaults`
 
