@@ -8,13 +8,13 @@ plugin_tree:
   plugin: pl-fetal-brain-mask v1.2.1
   previous: null
 - title: "N4 Bias Field Correction"
-  plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.1
-  previous: "N4 Bias Field Correction"
+  plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.2
+  previous: "Brain Mask"
   plugin_parameter_defaults:
     inputPathFilter: "extracted/0.0/*.nii"
 - title: "Automatic Fetal Brain Assessment"
   plugin: pl-fetal-brain-assessment v1.3.0
   previous: "N4 Bias Field Correction"
 - title: "IRTK Reconstruction"
-  plugin: pl-irtk-reconstruction v1.0.3
+  plugin: pl-irtk-reconstruction v1.1.0
   previous: "Automatic Fetal Brain Assessment"
