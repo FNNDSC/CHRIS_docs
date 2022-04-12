@@ -41,7 +41,17 @@ This document defines a YAML schema which describes _ChRIS_ pipelines,
 and how to interpret the schema as JSON data which satisfies the
 protocol for creating a pipeline in _ChRIS_ via a POST request to `/api/v1/pipelines/`.
 
+== Schema
+
+Refer to xref:../specs/YAML_Pipelines.adoc[_ChRIS_ YAML Pipelines Schema]
+
 == Integration
 
 Client tools can be developed to parse this schema as an easier way to
 create _ChRIS_ pipelines from a file representation.
+
+=== Status
+
+https://github.com/FNNDSC/chrs/releases/tag/chrs%2F0.0.4[`chrs` version 0.0.4]
+added functionality for uploading "YAML Pipelines" to _ChRIS_ (`chrs pipeline-file add`) and converting between the previously described JSON file-represetnations
+to the new "YAML Pipelines" schema (`chrs pipeline-file convert`).
