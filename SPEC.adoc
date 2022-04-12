@@ -1,0 +1,304 @@
+= _ChRIS_ Plugin Specification
+FNNDSC <dev@babyMRI.org>
+:version: incomplete draft
+:toc:
+
+////
+THIS DOCUMENT WAS WRITTEN RETROSPECTIVELY.
+
+It is a retrospective interpretation of what can be assumed to be the expected
+behavior of the "current" ChRIS components.
+
+Niche behavior which needs explanation are explained by a permalink to
+the block of code which implemented the behavior, preceeded by the string "// retrospection ".
+////
+
+Version {version}
+
+== About this Specification
+
+This document, the _ChRIS Plugin Specification_ or sometimes referred to as
+the _spec_, provides the technical definition of a _ChRIS plugin_ within
+the context of _ChRIS_ components such as the
+https://github.com/FNNDSC/ChRIS_store[ChRIS Store],
+https://github.com/FNNDSC/ChRIS_ultron_backEnd[ChRIS backend],
+https://github.com/FNNDSC/ChRIS_ui[ChRIS user interface],
+and https://github.com/FNNDSC/pman[pman].
+
+This file originates from the Github repository https://github.com/FNNDSC/CHRIS_docs[FNNDSC/CHRIS_docs] by the filename https://github.com/FNNDSC/CHRIS_docs/blob/master/SPEC.adoc[SPEC.adoc]. Please check online for the latest version.
+
+A layman's explanation can be found here:
+https://github.com/FNNDSC/cookiecutter-chrisapp/wiki/About-Plugins
+
+=== State of the Specification
+
+This document was first drafted on 2022-01-26.
+
+== Introduction
+
+_ChRIS_ is an open-source web platform for computational workflows in scientific and medical applications. For more information on _ChRIS_, see https://chrisproject.org/ and https://github.com/FNNDSC/CHRIS_docs
+
+[#definition]
+== Definition of a _ChRIS_ Plugin
+
+A _ChRIS_ plugin is an abstract association between
+a <<name,Name>>, <<public_repo,URL>>, <<dock_image,Image>>, and a <<descriptor_file,JSON representation>>.
+
+[#name]
+=== _ChRIS_ Plugin Name
+
+The _name_ of a _ChRIS_ plugin is a string.
+Its purpose is to be a human-friendly identifier for
+its associated <<pluginmeta,_ChRIS_ plugin meta>>.
+
+[#public_repo]
+=== URL
+
+The _url_ of a _ChRIS_ plugin is an HTTPS
+https://www.w3.org/Addressing/URL/url-spec.txt[URL]
+denoting where the source code for the _ChRIS_ plugin can be found.
+
+[#dock_image]
+=== Image
+
+The _image_ of a _ChRIS_ plugin is the name of an
+https://github.com/opencontainers/distribution-spec/blob/main/spec.md[OCI image manifest tag].
+
+[#descriptor_file]
+=== JSON Representation
+
+A _ChRIS plugin_'s JSON representation describes its <<usage,usage>> as a JSON file
+with the following schema:
+
+[source,javascript]
+----
+{
+  "type": "fs" | "ds" | "ts",
+  "parameters": ParameterSpec[],
+  "icon": "string",
+  "authors": "string",
+  "title": "string",
+  "category": "string",
+  "description": "string",
+  "documentation": "string",
+  "license": "string",
+  "version": "string",
+  "selfpath": "string",
+  "selfexec": "string",
+  "execshell": "string",
+  "max_number_of_workers": int,
+  "min_number_of_workers": int,
+  "max_memory_limit": int,
+  "min_memory_limit": int,
+  "max_cpu_limit": int,
+  "min_cpu_limit": int,
+  "max_gpu_limit": int,
+  "min_gpu_limit": int
+}
+----
+
+[#plugin-type]
+==== Plugin Type
+
+Plugin type is one of:
+
+- fs
+- ds
+- ts
+
+These represent, respectively: _feed synthesis_, _data synthesis_, _topology synthesis_.
+
+[#plugin-parameters]
+==== Parameters
+
+_Plugin parameters_ encode for <<arguments,arguments>>.
+
+The value for `"parameters"` should be a list of objects following the `PluginParameter` schema:
+
+[source,javascript]
+----
+{
+  "name": "string",
+  "type": "bool" | "int" | "float" | "str" | "path" | "unextpath",
+  "optional": boolean,
+  "flag": "string",
+  "short_flag": "string",
+  "action": "store" | "store_true" | "store_false",
+  "help": "string",
+  "default": any | null,
+  "ui_exposed": boolean
+},
+----
+
+===== Parameter Name
+
+===== Parameter Type
+
+A parameter type is one of:
+
+====== bool
+
+One of: `true`, `false`
+
+====== int
+
+Integers as described by
+https://datatracker.ietf.org/doc/html/rfc7159.html#section-6[RFC 7159 Section 6].
+
+====== float
+
+Numbers as described by
+https://datatracker.ietf.org/doc/html/rfc7159.html#section-6[RFC 7159 Section 6].
+
+[#param-type-str]
+====== str
+
+Strings as described by
+https://datatracker.ietf.org/doc/html/rfc7159.html#section-7[RFC 7159 Secion 7].
+
+[#param-type-path]
+====== path
+
+A <<param-type-str,str>> which is interpreted as a comma-separated
+list of path names into _ChRIS_ file storage.
+See section <<path-arguments>>.
+
+[#param-type-unextpath]
+====== unextpath
+
+A <<param-type-path,path>>.
+See section <<path-arguments>>.
+
+// retrospection https://github.com/FNNDSC/chrisapp/blob/fa9b0a68b78a4feeee2c96c61fbe04f5f296f301/chrisapp/base.py#L285-L306
+
+===== Parameter Flag
+
+[#usage]
+== Usage
+
+This section describes how the <<descriptor_file,representation>>
+of a _plugin_ should be interpreted by a container runtime
+to execute an instance of the _program_ described by the _plugin_ given its 
+<<executable,executable>>, a set of <<arguments,arguments>>,
+and <<data-directories,data directories>>.
+
+[#executable]
+=== Executable
+
+The _executable_ is a string which invokes the plugin's _program_.
+It is resolved from the plugin's
+<<execshell,`execshell`>>, <<selfpath,`selfpath`>>, and <<selfexec,`selfexec`>>,
+which are joined by the template:
+
+[source]
+----
+{execshell} {selfpath}{selfexec}
+----
+
+[#arguments]
+=== Arguments
+
+_Arguments_ are a sequence of strings which correspond to
+<<plugin-parameters>> and user-specified values for those parameters.
+
+[#path-arguments]
+==== Path arguments
+
+At runtime, the string following a flag denoting
+<<param-type-path,path>> or <<param-type-unextpath,unextpath>> type arguments
+are to be replaced by the string `/share/incoming`.
+
+Data in _ChRIS_ object storage under the value given by a
+<<param-type-path,path>> argument should be copied to a <<volumes,volume>>
+mounted on `/share/incoming`.
+
+// retrospection https://github.com/FNNDSC/python-pfconclient/tree/c36aafd17cceb126a303e1f55e0e1edab95f0db1#arguments-of-type-path-or-unextpath
+// retrospection https://github.com/FNNDSC/pman/blob/898b8a19593b0f16e1415442d4bfbdeddb7dd38b/pman/resources.py#L115-L130
+
+[#data-directories]
+==== Data Directories
+
+Let `data_directories` be a string with the values depending on the _plugin_'s
+<<plugin-type,type>>:
+
+[cols="1,1"]
+|===
+|Plugin Type |Data directories
+
+|fs
+|`/outgoing`
+
+|ds
+|`/incoming /outgoing`
+
+|ts
+|`/incoming /outgoing`
+|===
+
+[#invocation]
+=== Invocation
+
+The _plugin's_ _program_ is to be invoked by running a
+_container_ of its <<dock_image,image>> with a command resolved by the string template:
+
+[source]
+----
+{executable} {arguments} {data_directories}
+----
+
+[#volumes]
+==== Volumes
+
+<<data-directories,`data_directories`>> are mount points for volumes
+where input files can be read from and output files can be written to.
+
+The volume mounted to `/incoming` contains input files
+and should be mounted *read-only*.
+
+The volume mounted to `/outgoing` contains output files
+and should be mounted *read-write*.
+
+If the mountpoints do not exist within the container filesystem,
+the container runtime is to create them.
+
+[#flexibility]
+==== Flexibility
+
+While this spec standardizes the execution of ChRIS plugins, non-conformant
+implementations may work equally well. This section describes a common
+yet non-conformant pattern.
+
+===== Single Share Directory
+
+A single volume is mounted *read-write* to `/share`.
+The volume contains subdirectories `./incoming` and `./outgoing`,
+and `data_directories` are defined as `/share/incoming /share/outgoing`, etc.
+This pattern is easy to design and implement.
+
+This is how the `abstractmgr.py` or https://github.com/FNNDSC/pman[pman] version `~=3` was designed.
+
+https://apptainer.org/[Apptainer] works a similar way by automatically mounting
+`$HOME` and `$PWD` into the container filesystem on their respective host paths.
+
+[#pluginmeta]
+== Plugin Meta
+
+_ChRIS_ plugin meta is an abstract association of a subset of
+_ChRIS_ plugin attributes. These attributes are:
+
+- <<name,name>>
+- <<public_repo,URL>>
+- title
+- authors
+- category
+- documentation
+- icon
+- license
+
+A _plugin meta_ defines a set of
+<<definition,_ChRIS_ plugins>> that have the same _plugin <<name,name>>_.
+
+[#Pipeline Specification]
+== Pipeline Specification
+
+TODO
