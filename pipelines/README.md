@@ -2,7 +2,7 @@
 
 ## Abstract
 
-The concept of a **ChRIS Pipeline** is a still evolving idea. At its core, a **Pipeline** is a structured description a program (or several programs) _and_ all parameters (and meta data) pertinent to using this program (or programs). 
+The concept of a **ChRIS Pipeline** is a still evolving idea. At its core, a **Pipeline** is a structured description of a program (or several programs) _and_ all parameters (and meta data) pertinent to using this program (or programs). 
 
 While the word *pipeline* might suggest a *collection* (i.e. _N > 1_) of compute elements (programs, or in the case of ChRIS _plugins_), a *pipeline* of just one plugin can still be a valid **ChRIS pipeline**. Why might a single plugin pipeline be useful? Simply because it can act as an _alias_ or describe fully one manner in which to use (and re-use) the plugin in an extremely simple fashion.
 
