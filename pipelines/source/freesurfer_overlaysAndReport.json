@@ -12,7 +12,7 @@
     },
     {
       "plugin_name": "pl-fshack",
-      "plugin_version": "1.2.2",
+      "plugin_version": "1.2.0",
       "previous_index": 0,
       "plugin_parameter_defaults": [
         {
