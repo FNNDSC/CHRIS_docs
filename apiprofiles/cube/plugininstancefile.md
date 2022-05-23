@@ -1,6 +1,8 @@
 # Plugin instance file
 
-API resource representing an output file created by a [plugin instance](plugininstance.md)
+API resource representing an output file created by a [plugin instance](plugininstance.md).
+
+
 ## Semantic descriptors
 
 * `id`: plugin instance file unique identifier

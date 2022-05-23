@@ -12,10 +12,10 @@ resource representations returned by the CUBE's Rest API.
 * [plugin](plugin.md)
 * [plugin instance](plugininstance.md)
 * [plugin instance file](plugininstancefile.md)
-* splits
+* [split](split.md)
 * [pipeline](pipeline.md)
-* plugin piping
-* workflow
+* [plugin piping](piping.md)
+* [workflow](workflow.md)
 * [feed](feed.md)
 * note
 * tag
