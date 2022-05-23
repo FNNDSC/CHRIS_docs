@@ -9,6 +9,7 @@ A plugin associated to a piping in a pipeline must be of type `ds`.
 ## Semantic descriptors
 
 * `id`: plugin piping unique identifier
+* `previous_id`: unique identifier of the previous/parent piping in the pipeline DAG
 * `plugin_id`: associated plugin's unique identifier
 * `plugin_name`: associated plugin's name
 * `plugin_version`: associated plugin's version
