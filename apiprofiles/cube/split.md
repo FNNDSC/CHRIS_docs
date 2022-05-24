@@ -1,11 +1,12 @@
-# Split
+# Plugin instance split
 
 API resource representing an abstract data entity that records the topological 
 operation of "splitting a plugin instance's output directory". This operation consists in 
 creating one or more pl-topologicalcopy plugin instances from the same input directory 
 which is the output directory of the split plugin instance. The output directory of each 
 newly created plugin instance contains the files in their input directory that match a 
-regular expression filter specified for each plugin instance during the split operation.
+regular expression filter pre-specified for each new plugin instance as a parameter of 
+the split operation.
 
 
 ## Semantic descriptors
