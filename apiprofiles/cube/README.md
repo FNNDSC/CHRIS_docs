@@ -20,11 +20,11 @@ resource representations returned by the CUBE's Rest API.
 * [feed note](note.md)
 * [feed tag](tag.md)
 * [feed tagging](tagging.md)
-* comment
-* uploaded file
-* PACS file
-* service file
-* file browser
+* [feed comment](comment.md)
+* [user uploaded file](uploadedfile.md)
+* [PACS file](pacsfile.md)
+* [service file](servicefile.md)
+* [file browser](filebrowser.md)
 * user
 * owner
 * admin
