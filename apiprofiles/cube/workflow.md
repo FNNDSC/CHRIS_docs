@@ -16,7 +16,7 @@ within the target [feed](feed.md).
 * `created_plugin_inst_ids`: string representing a comma-separated list of the IDs of the 
 plugin instances created by the workflow. The first ID in the list is the root of the 
 DAG formed by the plugin instances.
-* `owner_username`: username of the user that created the workflow
+* `owner_username`: username of the ChRIS user that created the workflow
 
 
 ## Link relations

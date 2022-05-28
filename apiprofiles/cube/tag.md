@@ -8,7 +8,7 @@ API resource representing a tag applied to a [feed](feed.md).
 * `id`: feed tag unique identifier
 * `name`: feed tag name
 * `color`: feed tag color
-* `owner_username`: username of the user that owns the tag
+* `owner_username`: username of the ChRIS user that owns the tag
 
 
 ## Link relations

@@ -14,4 +14,4 @@ API resource representing a file uploaded by a user to the ChRIS system.
 ## Link relations
 
 * `file_resource`: points to the file's contents
-* `owner`: points to the user that uploaded the file
+* `owner`: points to the ChRIS user that uploaded the file

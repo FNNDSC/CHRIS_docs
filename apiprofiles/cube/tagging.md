@@ -9,7 +9,7 @@ API resource representing an abstract data entity that records the operation of
 * `id`: feed tagging unique identifier
 * `tag_id`: associated tag's unique identifier
 * `feed_id`: associated feed's unique identifier
-* `owner_username`: username of the user that created the tagging
+* `owner_username`: username of the ChRIS user that created the tagging
 
 
 ## Link relations

@@ -4,7 +4,8 @@ API resource representing a containerized command line program.
 
 A ChRIS plugin is associated with one or more [compute resources](computeresource.md) 
 already registered with the CUBE instance by a ChRIS admin. 
-
+ChRIS plugins are of type `ds` (data synthesis), `fs` (feed synthesis) or `ts` 
+(topology synthesis). 
 
 ## Semantic descriptors
 

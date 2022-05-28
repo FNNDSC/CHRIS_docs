@@ -25,7 +25,5 @@ resource representations returned by the CUBE's Rest API.
 * [PACS file](pacsfile.md)
 * [service file](servicefile.md)
 * [file browser](filebrowser.md)
-* user
-* owner
-* admin
-* ChRIS instance
+* [ChRIS user](user.md)
+* [ChRIS instance](chrisinstance.md)

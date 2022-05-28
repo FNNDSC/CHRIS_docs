@@ -1,9 +1,11 @@
 # Plugin meta
 
-API resource representing meta data that applies to all versions of a plugin. 
+API resource representing meta data that applies to all versions of a [plugin](plugin.md). 
 
 A plugin meta resource is automatically created when a ChRIS admin registers the first 
-version of a plugin with a CUBE instance.
+version of a plugin with a CUBE instance. Then it's referenced by all subsequent 
+versions of the plugin. Some of the attributes of a plugin meta can be modified after 
+initial creation and the change is reflected across all the plugin versions.
 
 
 ## Semantic descriptors
@@ -26,4 +28,5 @@ version of a plugin with a CUBE instance.
 
 ## Link relations
 
-* `plugins`: points to the collection of related [plugins](plugin.md) (versions)  
+* `plugins`: points to the collection of related [plugins](plugin.md) (versions of the 
+  same plugin) 

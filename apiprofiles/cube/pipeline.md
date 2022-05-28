@@ -16,7 +16,7 @@ other than the owner
 * `category`: pipeline category
 * `authors`: string representing a comma separated list of author emails
 * `description`: pipeline description
-* `owner_username`: username of the user that created the pipeline
+* `owner_username`: username of the ChRIS user that created the pipeline
 
 
 ## Link relations

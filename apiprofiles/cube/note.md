@@ -1,6 +1,6 @@
 # Feed note
 
-API resource representing a text note for a [feed](feed.md). 
+API resource representing a text note associated to a [feed](feed.md). 
 
 
 ## Semantic descriptors
@@ -8,7 +8,6 @@ API resource representing a text note for a [feed](feed.md).
 * `id`: feed note unique identifier
 * `title`: feed note title
 * `content`: feed note text content
-* `name`: feed name
 
 
 ## Link relations
