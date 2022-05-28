@@ -6,7 +6,7 @@ executed.
 A compute resource is registered with a ChRIS instance by a ChRIS admin before ChRIS 
 users can use it to run plugins. It can range in size from a user's personal laptop to a 
 massive multi-host Kubernetes cluster. Typically a ChRIS instance includes a compute 
-resource called `host` by default. This compute resource represents the local host 
+resource named `host` by default. This compute resource represents the local host 
 where the ChRIS server instance is running. This is specially useful for 
 [plugins](plugin.md) of type `fs` that need to access ChRIS's internal (object) storage
 to produce their output. This is because ChRIS's internal storage is usually not 
