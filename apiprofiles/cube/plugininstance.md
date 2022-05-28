@@ -1,9 +1,11 @@
 # Plugin instance
 
-API resource representing a run of a [plugin](plugin.md) on the ChRIS platform. It is 
-scheduled as a one-off job on a [compute resource](computeresource.md) associated with the
-plugin by the ChRIS admin. A plugin instance of a [plugin](plugin.md) of type FS (feed 
-synthesis plugin) also creates a new [feed](feed.md) in the ChRIS system.
+API resource representing a runtime instance (execution) of a [plugin](plugin.md) on the 
+ChRIS platform. When users run a plugin within the ChRIS platform they create a new 
+plugin instance that is scheduled as a one-off job on a [compute resource](computeresource.md) 
+previously associated with the plugin by a ChRIS admin. A plugin instance of a 
+[plugin](plugin.md) of type `fs` (feed synthesis plugin) also creates a new [feed](feed.md) 
+in the ChRIS system.
 
 ## Semantic descriptors
 

@@ -1,6 +1,6 @@
 # ChRIS user
 
-API resource representing the ChRIS instance/server. 
+API resource representing a running instance of the ChRIS platform. 
 
 
 ## Semantic descriptors

@@ -1,7 +1,7 @@
 # Feed tagging
 
 API resource representing an abstract data entity that records the operation of 
-"tagging a feed" with an existing tag.
+"tagging a feed" with an existing [tag](tag.md).
 
 
 ## Semantic descriptors

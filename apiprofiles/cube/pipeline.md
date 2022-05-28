@@ -1,7 +1,7 @@
 # Pipeline
 
 API resource representing a set of ChRIS resources known as [plugin pipings](piping.md) 
-that are organized as nodes of a connected acyclic directed graph (DAG). 
+that are organized as nodes of a connected directed acyclic graph (DAG). 
 All the plugins associated to the pipings in the pipeline must be of type `ds`.
 
 

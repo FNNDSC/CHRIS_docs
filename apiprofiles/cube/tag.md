@@ -1,6 +1,6 @@
 # Feed tag
 
-API resource representing a tag applied to a [feed](feed.md). 
+API resource representing a colored tag applied to a [feed](feed.md). 
 
 
 ## Semantic descriptors

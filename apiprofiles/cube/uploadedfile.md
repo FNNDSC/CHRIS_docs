@@ -1,6 +1,6 @@
 # User uploaded file
 
-API resource representing a file uploaded by a user to the ChRIS system. 
+API resource representing a file uploaded by a ChRIS user to the ChRIS system. 
 
 
 ## Semantic descriptors

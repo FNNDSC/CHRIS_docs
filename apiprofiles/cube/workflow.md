@@ -1,10 +1,11 @@
 # Workflow
 
-API resource representing a runtime instance of a [pipeline](pipeline). When users run 
-a pipeline in ChRIS they create a new workflow instance of the pipeline. This in turn 
-creates a new plugin instance for each [plugin piping](piping.md) in the pipeline. 
-Thus the newly created plugin instances also form a connected acyclic directed graph (DAG)
-within the target [feed](feed.md).
+API resource representing a runtime instance (execution) of a [pipeline](pipeline). When 
+users run a pipeline within the ChRIS platform they create a new workflow instance of the 
+pipeline. This in turn creates a new [plugin instance](plugininstance.md) for each 
+[plugin piping](piping.md) in the pipeline's connected directed acyclic graph (DAG). 
+Thus the newly created plugin instances also form a connected DAG within the target 
+[feed](feed.md) with the same topology as the pipeline's DAG.
 
 
 ## Semantic descriptors

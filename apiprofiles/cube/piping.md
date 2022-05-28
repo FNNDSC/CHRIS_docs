@@ -1,8 +1,10 @@
 # Plugin piping
 
 API resource representing a node of the connected acyclic directed graph (DAG) that 
-composes a [pipeline](pipeline.md). Each node represents a [plugin](plugin.md) and its 
-location within the pipeline's DAG.
+composes a [pipeline](pipeline.md). Each node represents a ChRIS [plugin](plugin.md) and 
+its location within the pipeline's DAG. Note that the same plugin can show up in more 
+than one node in the pipeline's DAG (i.e. same plugin associated with more than one 
+piping).
 A plugin associated to a piping in a pipeline must be of type `ds`.
 
 

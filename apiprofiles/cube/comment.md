@@ -1,6 +1,6 @@
 # Feed comment
 
-API resource representing a user's comment on a [feed](feed.md). 
+API resource representing a ChRIS user's comment on a [feed](feed.md). 
 
 
 ## Semantic descriptors
