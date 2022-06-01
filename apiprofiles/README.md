@@ -1,5 +1,6 @@
 # Profile documents for ChRIS's Web APIs 
 
+
 ## Abstract
 
 These directories of the ChRIS docs contain profile documents for the ChRIS platform's 
@@ -10,8 +11,9 @@ of the application semantics of the resource representations provided by the par
 API. It's basically a free-form explanation of the real world entities and concepts that 
 the API's resources are modeling.
 
-Both CUBE and the ChRIS store APIs are hypermedia-based Rest APIs since they use the 
-[Collection+JSON](http://amundsen.com/media-types/collection/) standard and its
+Both the ChRIS web server (CUBE) and the ChRIS store web server's APIs are 
+hypermedia-based Rest APIs since they use the 
+[Collection+JSON](http://amundsen.com/media-types/collection/) standard and its 
 hypermedia capabilities to exchange resource representations with clients.
 
 All the resources provided by the APIs can be discovered by clients by making GET 
@@ -24,9 +26,12 @@ For a hypermedia-based API the semantics of the API can be divided into two cate
 2. link relations (string names attached to hypermedia controls such as the “href” 
    elements)
 
-## CUBE's Rest API profile
 
- [Available here](cube/README.md)
+## ChRIS web server (CUBE)'s Rest API profile
+
+[Available here](cube/README.md)
  
 
-## ChRIS store's Rest API profile
+## ChRIS store web server's Rest API profile
+
+[Available here](store/README.md)

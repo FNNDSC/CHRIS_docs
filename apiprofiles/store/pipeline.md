@@ -1,9 +1,9 @@
 # Pipeline
 
 API resource representing the definition of a computing pipeline of plugins. The 
-pipeline is defined as a set of ChRIS resources known as [plugin pipings](piping.md) 
-that are organized as nodes of a connected directed acyclic graph (DAG). A piping's 
-associated plugin must be of type `ds`.
+pipeline is defined as a set of ChRIS store resources known as 
+[plugin pipings](piping.md) that are organized as nodes of a connected directed 
+acyclic graph (DAG). A piping's associated plugin must be of type `ds`.
 
 
 ## Semantic descriptors
@@ -17,7 +17,7 @@ other than the owner
 * `category`: pipeline category
 * `authors`: string representing a comma separated list of author emails
 * `description`: pipeline description
-* `owner_username`: username of the ChRIS user that created the pipeline
+* `owner_username`: username of the ChRIS store user that created the pipeline
 
 
 ## Link relations
@@ -28,4 +28,3 @@ other than the owner
   pipeline's DAG
 * `default_parameters`: points to the collection of default command line parameter values 
 for the plugins associated to the pipings composing the pipeline's DAG
-* `workflows`: points to the collection of runtime workflows created from the pipeline

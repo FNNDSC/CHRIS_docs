@@ -2,20 +2,20 @@
 
 API resource representing meta data that applies to all versions of a [plugin](plugin.md). 
 
-A plugin meta resource is automatically created when a ChRIS admin registers the first 
-version of a plugin with a ChRIS instance. Then it's referenced by all subsequent 
-versions of the plugin. Some of the attributes of a plugin meta can be modified after 
-initial creation and the change is reflected across all the plugin versions.
+A plugin meta resource is automatically created when a ChRIS store's user uploads the 
+JSON representation of the first version of a plugin. Then it's referenced by all 
+subsequent versions of the plugin. Some of the attributes of a plugin meta can be modified
+after initial creation and the change is reflected across all the plugin versions.
 
 
 ## Semantic descriptors
 
 * `id`: plugin meta unique identifier
-* `creation_date`: creation/registration date
+* `creation_date`: creation/upload date
 * `modification_date`: modification date
 * `name`: plugin name
 * `title`: plugin title
-* `stars`: number of users that have made the plugin a favorite plugin in the ChRIS store 
+* `stars`: number of users that have made the plugin a favorite plugin 
 * `public_repo`: url of the source control repo for the plugin's source code 
 * `license`: plugin release license 
 * `type`: plugin type which can be one of `ds`, `fs` or `ts` 
@@ -30,3 +30,5 @@ initial creation and the change is reflected across all the plugin versions.
 
 * `plugins`: points to the collection of related [plugins](plugin.md) (versions of the 
   same plugin) 
+* `collaborators`: points to the collection of the plugin's 
+[collaborators](collaborator.md)

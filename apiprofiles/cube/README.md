@@ -1,9 +1,11 @@
-# CUBE's Rest API profile
+# ChRIS web server (CUBE)'s Rest API profile
+
 
 ## Abstract
 
 This API profile document provides an explanation of the application semantics of the 
 resource representations returned by the CUBE's Rest API.
+
 
 ## Resources
 
