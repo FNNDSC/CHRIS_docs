@@ -3,7 +3,7 @@
   "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
   "category": "Medical Imaging",
   "description": "Run FreeSurfer on an input data set, generate reports and overlay image files of segmentation on original scan data",
-  "locked":	false,
+  "locked": false,
   "plugin_tree": [
     {
       "plugin_name": "pl-simpledsapp",
@@ -84,7 +84,7 @@
             {
                 "name":         "verbose",
                 "default":      "1"
-            }        
+            }
         ]
     },
     {
@@ -115,7 +115,7 @@
             {
                 "name":         "verbose",
                 "default":      "5"
-            }        
+            }
         ]
     }
   ]
