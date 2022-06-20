@@ -226,8 +226,8 @@ function checkDeps {
             vprint "$CHECK [ OK ]"
         else 
             vprint "$CHECK [ not found ]"
-            vprint "\nPlease install this file or, if installed, make sure it is on your PATH."
-            vprint "Installtion is probably distro dependent.\n"
+            vprint "\nPlease install this file or, if installed, make sure it is on your \$PATH."
+            vprint "Installation is probably distro dependent.\n"
             if [[ $neededFile == "chripon" ]] ; then
                 vprint "\n\tchripon is a nodejs program. Install with\n"
                 vprint "\t\tnpm install -g chripon"
