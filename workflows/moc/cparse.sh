@@ -50,7 +50,7 @@
 #
 # EXAMPLE
 #
-#       cparse fnndsc/pl-pfdicom_tagextract repo container mmn env
+#       cparse fnndsc/pl-pfdicom_tagExtract repo container mmn env
 #       echo $repo $container $mmn $env
 #
 

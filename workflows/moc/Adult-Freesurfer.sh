@@ -36,7 +36,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --compute_resource_name=@env"
 
     "1:3|
-    fnndsc/pl-pfdicom_tagextract: ARGS;
+    fnndsc/pl-pfdicom_tagExtract: ARGS;
                                 --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Pre-Sub;
@@ -47,7 +47,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --compute_resource_name=@env"
                                 
     "2:4|
-    fnndsc/pl-pfdicom_tagextract: ARGS;
+    fnndsc/pl-pfdicom_tagExtract: ARGS;
                                 --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Post-Sub;
@@ -161,14 +161,14 @@ DESC
       ███                                    0:1   pl-simpledsapp
        ┼───┐                                       (Input dicoms)
        │   ↓
-       │  ███                                1:3   pl-pfdicom_tagextract
+       │  ███                                1:3   pl-pfdicom_tagExtract
        │                                           (extract original tags)
        │ 
        ↓    
       ███                                    1:2   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
      ↓   │        
-    ███  │                                   2:4   pl-pfdicom_tagextract
+    ███  │                                   2:4   pl-pfdicom_tagExtract
          │                                          (extract substituted tags)
          ↓                   
         ███                                  2:5   pl-fshack

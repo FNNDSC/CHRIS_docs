@@ -13,7 +13,7 @@
 
 ./plugin_add.sh  "\
                     ghcr.io/fnndsc/pl-pfdicom_tagsub:3.2.1,                            \
-                    ghcr.io/fnndsc/pl-pfdicom_tagextract:3.1.3,                        \
+                    ghcr.io/fnndsc/pl-pfdicom_tagExtract:3.1.3,                        \
                     ghcr.io/fnndsc/pl-multipass:1.2.12,                                \
                     ghcr.io/fnndsc/pl-pfdorun:2.2.6,                                   \
                     ghcr.io/fnndsc/pl-mgz2lut_report:1.3.6,                            \
@@ -22,7 +22,7 @@
                     ghcr.io/fnndsc/pl-fshack:1.2.2,                                    \
                     fnndsc/pl-infantfs:7.1.1.1-unlicensed,                             \
                     ghcr.io/fnndsc/pl-pfdicom_tagsub:3.2.1^moc,                        \
-                    ghcr.io/fnndsc/pl-pfdicom_tagextract:3.1.3^moc,                    \
+                    ghcr.io/fnndsc/pl-pfdicom_tagExtract:3.1.3^moc,                    \
                     ghcr.io/fnndsc/pl-multipass:1.2.12^moc,                            \
                     ghcr.io/fnndsc/pl-pfdorun:2.2.6^moc,                               \
                     ghcr.io/fnndsc/pl-mgz2lut_report:1.3.6^moc,                        \
