@@ -1,0 +1,47 @@
+{
+  "name": "DICOM tags",
+  "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
+  "category": "Medical Imaging",
+  "description": "Explicitly generated extracted DICOM tag info.",
+  "locked": true,
+  "plugin_tree": [
+    {
+      "plugin_name": "pl-simpledsapp",
+      "plugin_version": "2.1.0",
+      "previous_index": null,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "prefix",
+            "default":      "0-"
+        }
+      ]
+    },
+    {
+      "plugin_name": "pl-pfdicom_tagextract",
+      "plugin_version": "3.1.3",
+      "previous_index": 0,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "extension",
+            "default":      "dcm"
+        },
+        {
+            "name":         "outputFileStem",
+            "default":      "originalTags"
+        },
+        {
+            "name":         "imageFile",
+            "default":      "m:%_nospc|-_ProtocolName.jpg"
+        },
+        {
+            "name":         "imageScale",
+            "default":      "3:none"
+        },
+        {
+            "name":         "outputFileType",
+            "default":      "raw,html"
+        }
+      ]
+    }
+  ]
+}

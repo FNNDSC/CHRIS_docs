@@ -1,0 +1,43 @@
+{
+  "name": "DICOM anonymization simple",
+  "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
+  "category": "Medical Imaging",
+  "description": "Anonymize an input directory of DICOM files and nothing else",
+  "locked": true,
+  "plugin_tree": [
+    {
+      "plugin_name": "pl-simpledsapp",
+      "plugin_version": "2.1.0",
+      "previous_index": null,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "prefix",
+            "default":      "0-"
+        }
+      ]
+    },
+    {
+      "plugin_name": "pl-pfdicom_tagsub",
+      "plugin_version": "3.2.4",
+      "previous_index": 0,
+      "plugin_parameter_defaults": [
+        {
+            "name":         "extension",
+            "default":      ".dcm"
+        },
+        {
+            "name":         "tagInfo",
+            "default":      "'PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ AccessionNumber,%_md5|8_AccessionNumber ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate ++ re:.*hysician,%_md5|4_#tag ++ re:.*stitution,#tag ++ re:.*ddress,#tag'"
+        },
+        {
+            "name":         "splitToken",
+            "default":      "++"
+        },
+        {
+            "name":         "splitKeyValue",
+            "default":      ","
+        }
+      ]
+    }
+  ]
+}
