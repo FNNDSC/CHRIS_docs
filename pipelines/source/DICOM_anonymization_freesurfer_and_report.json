@@ -52,7 +52,7 @@
         ]
       },
     {
-      "plugin_name": "pl-pfdicom_tagextract",
+      "plugin_name": "pl-pfdicom_tagExtract",
       "plugin_version": "3.1.3",
       "previous_index": 0,
       "plugin_parameter_defaults": [
@@ -125,7 +125,7 @@
       ]
     },
     {
-        "plugin_name": "pl-pfdicom_tagextract",
+        "plugin_name": "pl-pfdicom_tagExtract",
         "plugin_version": "3.1.3",
         "previous_index": 3,
         "plugin_parameter_defaults": [

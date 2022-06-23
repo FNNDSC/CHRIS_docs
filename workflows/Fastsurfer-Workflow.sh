@@ -24,7 +24,7 @@ declare -a a_WORKFLOWSPEC=(
 
 
     "0:1|
-    fnndsc/pl-pfdicom_tagextract: ARGS;
+    fnndsc/pl-pfdicom_tagExtract: ARGS;
                                 --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Pre-Sub;
@@ -44,7 +44,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --previous_id=@prev_id"                                
                                 
     "2:3|
-    fnndsc/pl-pfdicom_tagextract: ARGS;
+    fnndsc/pl-pfdicom_tagExtract: ARGS;
                                 --extension=.dcm;
                                 --outputFileType=txt,scv,json,html;
                                 --outputFileStem=Post-Sub;
@@ -151,14 +151,14 @@ DESC
       ███                                    0:0   pl-mri_sag_anon_192
        ┼───┐                                       (Input dicoms)
        │   ↓
-       │   ███                               0:1   pl-pfdicom_tagextract
+       │   ███                               0:1   pl-pfdicom_tagExtract
        │                                           (extract original tags)
        │
           ↓
       ███                                    0:2   pl-pfdicom_tagsub
      ┌─┴─┐                                          (anonimize tags)
        ↓    │
-    ███  │                                   2:3   pl-pfdicom_tagextract
+    ███  │                                   2:3   pl-pfdicom_tagExtract
          │                                          (extract substituted tags)
              ↓
         ███                                  2:4   pl-fshack
