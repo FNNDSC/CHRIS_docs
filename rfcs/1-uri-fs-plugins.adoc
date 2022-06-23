@@ -9,7 +9,7 @@ Status: {status}
 This document describes a convention for
 _ChRIS_ _fs_-type plugins which can download files
 from network resources. Plugins conformant to this
-convention _must_ have the name `fs-pull-{SCHEME}`
+convention _must_ have the name `pull-{SCHEME}`
 and _must_ accept one required argument
 `--uri` which comes in the form `{SCHEME}://{RESOURCE}`.
 _ChRIS_ clients such as the
@@ -48,7 +48,7 @@ Here, the _"ChRIS URI 'Pull'"_ plugin convention is defined.
 A plugin conformant to the "URI Pull" convention **must**:
 
 - be a _fs_-type plugin
-- have the plugin name `fs-pull-{SCHEME}`
+- have the plugin name `pull-{SCHEME}`
 - have a required argument `{"name": "uri", "long_flag": "--uri"}`
 - have the category "Pull"
 
@@ -70,10 +70,10 @@ The plugin **should**:
 
 We plan to create the following _ChRIS_ plugins which will conform to the "URI Pull" convention:
 
-- `fs-pull-http` and `fs-pull-https` which does something like a `wget --recursive`
-- `fs-pull-git` for public git repositories, e.g. `git://github.com/FNNDSC/SAG-anon-nii.git`
-- `fs-pull-ipfs`: see https://ipfs.io/, https://en.wikipedia.org/wiki/InterPlanetary_File_System
-- `fs-pull-datalad`: see https://www.datalad.org/
+- `pull-http` and `pull-https` which does something like a `wget --recursive`
+- `pull-git` for public git repositories, e.g. `git://github.com/FNNDSC/SAG-anon-nii.git`
+- `pull-ipfs`: see https://ipfs.io/, https://en.wikipedia.org/wiki/InterPlanetary_File_System
+- `pull-datalad`: see https://www.datalad.org/
 
 === Clients
 
@@ -85,7 +85,7 @@ a feature where feeds can be created given a dataset URI.
 == Issues
 
 What's a better way to support clients which support multiple protocols?
-For instance, we would only want to create one `fs-pull-http` which
+For instance, we would only want to create one `pull-http` which
 supports both `http://` and `https://`.
 
 One option is to have a single code base registered with two different plugin names.
