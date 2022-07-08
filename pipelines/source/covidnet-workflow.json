@@ -6,40 +6,40 @@
     "locked": "true",
     "plugin_tree": [
       {
-        "plugin_name": "pl-med2img",
-        "plugin_version": "1.1.12",
+        "plugin_name": "pl-pfdo_med2img",
+        "plugin_version": "1.1.8",
         "previous_index": null,
         "plugin_parameter_defaults": [
           {
-            "name": "inputFileSubStr",
+            "name": "fileFilter",
             "default": "dcm"
           },
           {
-            "name": "sliceToConvert",
-            "default": "0"
-          }
+            "name": "outputFileType",
+            "default": "jpg"
+          },
+	  {
+            "name": "convertOnlySingleDICOM",
+	    "default": true
+	  },
+	  {
+	    "name": "preserveDICOMinputName",
+	    "default": true
+	  }
         ]
       },
       {
         "plugin_name": "pl-covidnet",
-        "plugin_version": "0.2.4",
+        "plugin_version": "0.3.0",
         "previous_index": 0,
         "plugin_parameter_defaults": [
-          {
-            "name": "imagefile",
-            "default": "sample.png"
-          }
         ]
       },
       {
         "plugin_name": "pl-covidnet-pdfgeneration",
-        "plugin_version": "0.2.6",
+        "plugin_version": "0.3.0",
         "previous_index": 1,
         "plugin_parameter_defaults": [
-          {
-            "name": "imagefile",
-            "default": "sample.png"
-          }
         ]
       }
     ]
