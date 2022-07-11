@@ -1,9 +1,9 @@
 {
     "authors": "Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>",
-    "name": "med2img",
-    "description": "Convert DICOM images to PNG",
+    "name": "All DICOM to JPG (series, reslice)",
+    "description": "Convert all input DICOMs across all input directories to JPG (per series organization), reslicing into x/y/z",
     "category": "Imaging",
-    "locked": "true",
+    "locked": true,
     "plugin_tree": [
       {
         "plugin_name": "pl-pfdo_med2img",
@@ -13,10 +13,6 @@
             {
               "name": "fileFilter",
               "default": "dcm"
-            },
-            {
-              "name": "analyzeFileIndex",
-              "default": "f"
             },
             {
               "name": "verbose",
@@ -34,6 +30,10 @@
               "name": "rot",
               "default": "000"
             },
+	    {
+	      "name": "analyzeFileIndex",
+	      "default": "f" 
+	    },
             {
               "name": "preserveDICOMinputName",
               "default": true

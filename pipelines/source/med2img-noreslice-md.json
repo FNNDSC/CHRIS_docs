@@ -1,0 +1,45 @@
+{
+    "authors": "Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>",
+    "name": "All DICOM to JPG (no series, no reslice)",
+    "description": "Convert all input DICOMs across all input directories to JPG (no per series organization), no reslicing into x/y/z",
+    "category": "Imaging",
+    "locked": true,
+    "plugin_tree": [
+      {
+        "plugin_name": "pl-pfdo_med2img",
+        "plugin_version": "1.1.8",
+        "previous_index": null,
+        "plugin_parameter_defaults": [
+            {
+              "name": "fileFilter",
+              "default": "dcm"
+            },
+            {
+              "name": "verbose",
+              "default": "1"
+            },
+            {
+              "name": "outputFileType",
+              "default": "jpg"
+            },
+            {
+              "name": "reslice",
+              "default": false
+            },
+            {
+              "name": "rot",
+              "default": "000"
+            },
+	    {
+	      "name": "convertOnlySingleDICOM",
+	      "default": true
+	    },
+            {
+              "name": "preserveDICOMinputName",
+              "default": true
+            }
+        ]
+      }
+    ]
+}
+
