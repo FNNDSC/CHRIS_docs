@@ -108,7 +108,7 @@
       "plugin_parameter_defaults": [
         {
             "name":         "args",
-            "default":      "'ARGS: -all'"
+            "default":      "ARGS: -all"
         },
         {
             "name":         "exec",
