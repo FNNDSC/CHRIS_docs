@@ -2,17 +2,17 @@
   "name": "FreeSurfer_autorecon1",
   "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
   "category": "Medical Imaging",
-  "description": "Run FreeSurfer autorecon1 on an input data set -- this does the skull stripping and terminates",
+  "description": "Run FreeSurfer autorecon1 on an input data set -- this does only the skull stripping and then terminates",
   "locked":	false,
   "plugin_tree": [
     {
       "plugin_name": "pl-fshack",
-      "plugin_version": "1.2.0",
+      "plugin_version": "1.3.0",
       "previous_index": null,
       "plugin_parameter_defaults": [
         {
             "name":         "args",
-            "default":      "'ARGS:-autorecon1'"
+            "default":      "ARGS: -autorecon1"
         },
         {
             "name":         "exec",
