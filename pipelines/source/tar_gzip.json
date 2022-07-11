@@ -7,7 +7,7 @@
   "plugin_tree": [
     {
       "plugin_name": "pl-pfdorun",
-      "plugin_version": "2.2.7",
+      "plugin_version": "2.2.8",
       "previous_index": null,
       "plugin_parameter_defaults": [
         {
@@ -16,7 +16,7 @@
         },
         {
             "name":         "exec",
-            "default":      "'tar cvfz %outputDir/parent.tgz %inputDir'"
+            "default":      "tar cvfz %outputDir/parent.tgz %inputDir"
         },
         {
             "name":         "verbose",
