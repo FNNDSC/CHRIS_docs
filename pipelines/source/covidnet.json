@@ -1,19 +1,15 @@
 {
     "authors": "Rudolph Pienaar (dev@fnndsc.org)",
     "name": "COVIDnet",
-    "description": "Runs a single sample.png through the COVIDnet plugin",
+    "description": "Runs an in-plugin parallelization across an input image space hrough the COVIDnet plugin",
     "category": "AI/ML",
     "locked": "true",
     "plugin_tree": [
       {
         "plugin_name": "pl-covidnet",
-        "plugin_version": "0.2.4",
+        "plugin_version": "0.3.0",
         "previous_index": null,
         "plugin_parameter_defaults": [
-          {
-            "name": "imagefile",
-            "default": "sample.png"
-          }
         ]
       }
     ]

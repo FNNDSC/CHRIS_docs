@@ -7,13 +7,9 @@
     "plugin_tree": [
       {
         "plugin_name": "pl-covidnet-pdfgeneration",
-        "plugin_version": "0.2.1",
+        "plugin_version": "0.3.0",
         "previous_index": null,
         "plugin_parameter_defaults": [
-          {
-            "name": "imagefile",
-            "default": "sample.png"
-          }
         ]
       }
     ]
