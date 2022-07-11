@@ -2,7 +2,7 @@
   "name": "FreeSurfer",
   "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
   "category": "Medical Imaging",
-  "description": "Run FreeSurfer on an input data set -- no mess, no fuss",
+  "description": "Run FreeSurfer (recon -all) across an input data space (can be multidir) -- no mess, no fuss",
   "locked":	false,
   "plugin_tree": [
     {
@@ -12,7 +12,7 @@
       "plugin_parameter_defaults": [
         {
             "name":         "args",
-            "default":      "'ARGS: -all'"
+            "default":      "ARGS: -all"
         },
         {
             "name":         "exec",
