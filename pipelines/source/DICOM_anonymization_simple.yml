@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: DICOM anonymization simple
-description: Anonymize an input directory of DICOM files and nothing else
+description: Anonymize all DICOM files in a parent node and nothing else. No mess no fuss.
 category: Medical Imaging
 locked: true
 plugin_tree:

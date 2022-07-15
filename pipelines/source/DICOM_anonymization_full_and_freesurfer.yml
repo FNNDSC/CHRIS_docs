@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: "DICOM anonymization, extract, image conversion, FreeSufer"
-description: Anonymize an input directory of DICOM files -- also create two branches side branches of extracted DICOM tag info and image conversion, and run FreeSurfer (notalairach)
+description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well as image conversion (JPG and NIfTI), and a separate sub branch for FreeSurfer (no reporting nor overlays).
 category: Medical Imaging
 locked: true
 plugin_tree:
@@ -14,6 +14,7 @@ plugin_tree:
     plugin: pl-dcm2niix v0.1.0
     previous: root-group-copy
     plugin_parameter_defaults:
+      d: 9
   - title: dicom-to-jpg
     plugin: pl-pfdo_med2img v1.1.9
     previous: root-group-copy
