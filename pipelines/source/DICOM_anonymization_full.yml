@@ -1,0 +1,53 @@
+---
+authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
+name: "DICOM anonymization, extract, image conversion"
+description: Anonymize an input directory of DICOM files -- also create two branches side branches of extracted DICOM tag info and image conversion.
+category: Medical Imaging
+locked: true
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.0
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: 0-
+  - title: dicom-to-nifti
+    plugin: pl-dcm2niix v0.1.0
+    previous: root-group-copy
+    plugin_parameter_defaults:
+  - title: dicom-to-jpg
+    plugin: pl-pfdo_med2img v1.1.9
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      verbose: "1"
+      rot: "000"
+      outputFileType: jpg
+      preserveDICOMinputName: true
+      reslice: true
+      fileFilter: dcm
+      analyzeFileIndex: f
+  - title: tags-on-original-dicom
+    plugin: pl-pfdicom_tagExtract v3.1.3
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      outputFileType: "raw,html"
+      imageScale: "3:none"
+      extension: dcm
+      outputFileStem: originalTags
+      imageFile: "m:%_nospc|-_ProtocolName.jpg"
+  - title: dicom-anonymize
+    plugin: pl-pfdicom_tagsub v3.2.4
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      extension: ".dcm"
+      tagInfo: "'PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ AccessionNumber,%_md5|8_AccessionNumber ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate ++ re:.*hysician,%_md5|4_#tag ++ re:.*stitution,#tag ++ re:.*ddress,#tag'"
+      splitToken: ++
+      splitKeyValue: ","
+  - title: tags-on-anon-dicom
+    plugin: pl-pfdicom_tagExtract v3.1.3
+    previous: dicom-anonymize
+    plugin_parameter_defaults:
+      extension: dcm
+      outputFileStem: anonymizedTags
+      imageScale: "3:none"
+      outputFileType: "raw,json,html,dict,col,csv"
+      imageFile: "m:%_nospc|-_ProtocolName.jpg"

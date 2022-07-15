@@ -1,0 +1,20 @@
+---
+authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
+name: DICOM anonymization simple
+description: Anonymize an input directory of DICOM files and nothing else
+category: Medical Imaging
+locked: true
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.0
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: 0-
+  - title: dicom-anonymization
+    plugin: pl-pfdicom_tagsub v3.2.4
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      extension: ".dcm"
+      splitToken: ++
+      splitKeyValue: ","
+      tagInfo: "'PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ AccessionNumber,%_md5|8_AccessionNumber ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate ++ re:.*hysician,%_md5|4_#tag ++ re:.*stitution,#tag ++ re:.*ddress,#tag'"
