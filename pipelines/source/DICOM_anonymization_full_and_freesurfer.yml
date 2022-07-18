@@ -3,7 +3,7 @@ authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: "DICOM anonymization, extract, image conversion, FreeSufer"
 description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well as image conversion (JPG and NIfTI), and a separate sub branch for FreeSurfer (no reporting nor overlays).
 category: Medical Imaging
-locked: true
+locked: false
 plugin_tree:
   - title: root-group-copy
     plugin: pl-simpledsapp v2.1.0
@@ -53,7 +53,7 @@ plugin_tree:
       outputFileType: "raw,json,html,dict,col,csv"
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
   - title: FreeSurfer-v7
-    plugin: pl-fshack v1.3.0
+    plugin: pl-fshack v1.4.1
     previous: dicom-anonymize
     plugin_parameter_defaults:
       exec: recon-all
