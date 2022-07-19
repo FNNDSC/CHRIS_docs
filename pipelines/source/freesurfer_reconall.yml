@@ -1,0 +1,15 @@
+---
+authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
+name: FreeSurfer
+description: "Run FreeSurfer (recon -all) across an input data space (can be multidir) -- no mess, no fuss"
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: pl-fshack-0
+    plugin: pl-fshack v1.4.1
+    previous: ~
+    plugin_parameter_defaults:
+      outputFile: FreeSurferRecon
+      inputFile: ".dcm"
+      args: "ARGS: -all"
+      exec: recon-all
