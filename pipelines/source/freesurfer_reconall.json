@@ -7,7 +7,7 @@
   "plugin_tree": [
     {
       "plugin_name": "pl-fshack",
-      "plugin_version": "1.3.0",
+      "plugin_version": "1.4.1",
       "previous_index": null,
       "plugin_parameter_defaults": [
         {
