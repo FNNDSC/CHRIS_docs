@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: "DICOM anonymization, extract, image conversion, FreeSufer, report and overlay"
-description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer followed by a report and overlay images.
+description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer followed by a report and overlay images. Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
 plugin_tree:
@@ -64,6 +64,7 @@ plugin_tree:
       exec: recon-all
       inputFile: ".dcm"
       args: "ARGS: -all"
+      threads: 2
   - title: FreeSurfer-report
     plugin: pl-freesurfer_simplereport v1.1.2
     previous: FreeSurfer-v7
