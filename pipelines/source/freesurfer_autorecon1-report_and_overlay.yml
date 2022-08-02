@@ -1,0 +1,41 @@
+---
+authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
+name: FreeSurfer Only Skull Stripping
+description: Run FreeSurfer autorecon1 (recon-all -autorecon1) on an input data set (can be multidir, limited to 2 simultaneous threads for portability) -- this does only the skull stripping and then terminates, and postprocess with a simple report and also overlay imaging.
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: FreeSurfer-v7 
+    plugin: pl-fshack v1.4.1
+    previous: ~
+    plugin_parameter_defaults:
+      inputFile: ".dcm"
+      exec: recon-all
+      outputFile: FreeSurferAutorecon1
+      args: "ARGS: -autorecon1"
+  - title: FreeSurfer-report
+    plugin: pl-freesurfer_simplereport v1.1.2
+    previous: FreeSurfer-v7
+    plugin_parameter_defaults:
+      verbosity: "1"
+  - title: segmentation-vols-to-jpg
+    plugin: pl-multipass v1.3.0
+    previous: FreeSurfer-v7
+    plugin_parameter_defaults:
+      commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
+      noJobLogging: true
+      splitExpr: ++
+      exec: pfdo_mgz2image
+      verbose: "1"
+      specificArgs: "--inputFile FreeSurferRecon/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile FreeSurferRecon/mri/aparc.a2009s+aseg.mgz --wholeVolume segVolume --lookupTable    __fs__"
+  - title: overlay-jpgs
+    plugin: pl-pfdorun v2.2.8
+    previous: segmentation-vols-to-jpg
+    plugin_parameter_defaults:
+      analyzeFileIndex: "-1"
+      fileFilter: png
+      exec: composite -dissolve 90 -gravity Center %inputWorkingDir/%inputWorkingFile %inputWorkingDir/../../aparc.a2009s+aseg.mgz/label-segVolume/%inputWorkingFile -alpha Set                %outputWorkingDir/%inputWorkingFile
+      noJobLogging: true
+      dirFilter: label-brainVolume
+      verbose: "5"
+      
