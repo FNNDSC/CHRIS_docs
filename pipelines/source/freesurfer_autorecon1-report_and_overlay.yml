@@ -5,22 +5,23 @@ description: Run FreeSurfer autorecon1 (recon-all -autorecon1) on an input data 
 category: Medical Imaging
 locked: false
 plugin_tree:
-  - title: FreeSurfer-v7 
-    plugin: pl-fshack v1.4.1
+  - title: FreeSurfer-v7.3.1 
+    plugin: pl-fshack v1.4.2
     previous: ~
     plugin_parameter_defaults:
       inputFile: ".dcm"
       exec: recon-all
       outputFile: FreeSurferAutorecon1
       args: "ARGS: -autorecon1"
+      threads: 2
   - title: FreeSurfer-report
     plugin: pl-freesurfer_simplereport v1.1.2
-    previous: FreeSurfer-v7
+    previous: FreeSurfer-v7.3.1
     plugin_parameter_defaults:
       verbosity: "1"
   - title: segmentation-vols-to-jpg
     plugin: pl-multipass v1.3.0
-    previous: FreeSurfer-v7
+    previous: FreeSurfer-v7.3.1
     plugin_parameter_defaults:
       commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
       noJobLogging: true
