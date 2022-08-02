@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: FreeSurfer Only Skull Stripping
-description: Run FreeSurfer autorecon1 on an input data set -- this does only the skull stripping and then terminates.
+description: Run FreeSurfer autorecon1 on an input data set -- this does only the skull stripping and then terminates. Limited to two in-node parallel jobs.
 category: Medical Imaging
 locked: false
 plugin_tree:
@@ -13,3 +13,4 @@ plugin_tree:
       exec: recon-all
       outputFile: FreeSurferAutorecon1
       args: "ARGS: -autorecon1"
+      threads: 2
