@@ -3,23 +3,12 @@
   "authors": "Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu",
   "category": "Medical Imaging",
   "description": "Explicitly generated extracted DICOM tag info.",
-  "locked": true,
+  "locked": false,
   "plugin_tree": [
-    {
-      "plugin_name": "pl-simpledsapp",
-      "plugin_version": "2.1.0",
-      "previous_index": null,
-      "plugin_parameter_defaults": [
-        {
-            "name":         "prefix",
-            "default":      "0-"
-        }
-      ]
-    },
     {
       "plugin_name": "pl-pfdicom_tagExtract",
       "plugin_version": "3.1.3",
-      "previous_index": 0,
+      "previous_index": null,
       "plugin_parameter_defaults": [
         {
             "name":         "extension",
