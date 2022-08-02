@@ -1,0 +1,43 @@
+---
+authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
+name: FreeSurfer and reporting
+description: "Run FreeSurfer (recon-all -all) across an input data space (can be multidir) -- and postprocess with a simple report and also overlay imaging. Limited to two in-node parallel threads."
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: FreeSurfer-v7.3.1
+    plugin: pl-fshack v1.4.2
+    previous: ~
+    plugin_parameter_defaults:
+      outputFile: FreeSurferRecon
+      inputFile: ".dcm"
+      args: "ARGS: -all"
+      exec: recon-all
+      threads: 2
+  - title: FreeSurfer-report
+    plugin: pl-freesurfer_simplereport v1.1.2
+    previous: FreeSurfer-v7.3.1
+    plugin_parameter_defaults:
+      verbosity: "1"
+  - title: segmentation-vols-to-jpg
+    plugin: pl-multipass v1.3.0
+    previous: FreeSurfer-v7
+    plugin_parameter_defaults:
+      commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
+      noJobLogging: true
+      splitExpr: ++
+      exec: pfdo_mgz2image
+      verbose: "1"
+      specificArgs: "--inputFile FreeSurferRecon/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile FreeSurferRecon/mri/aparc.a2009s+aseg.mgz --wholeVolume segVolume --lookupTable    __fs__"
+  - title: overlay-jpgs
+    plugin: pl-pfdorun v2.2.8
+    previous: segmentation-vols-to-jpg
+    plugin_parameter_defaults:
+      analyzeFileIndex: "-1"
+      fileFilter: png
+      exec: composite -dissolve 90 -gravity Center %inputWorkingDir/%inputWorkingFile %inputWorkingDir/../../aparc.a2009s+aseg.mgz/label-segVolume/%inputWorkingFile -alpha Set                %outputWorkingDir/%inputWorkingFile
+      noJobLogging: true
+      dirFilter: label-brainVolume
+      verbose: "5"
+            
+        
