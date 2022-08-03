@@ -1,5 +1,5 @@
 ---
-authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
+authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
 name: DICOM anonymization simple and extract tag info
 description: Anonymize all DICOM files in a parent node and add a child node with the anonymized tag information as a report.
 category: Medical Imaging
