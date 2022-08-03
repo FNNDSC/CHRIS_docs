@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: FreeSurfer and reporting
-description: "Run FreeSurfer (recon-all -all) across an input data space (can be multidir) -- and postprocess with a simple report and also overlay imaging. Limited to two in-node parallel threads."
+description: "Run FreeSurfer v7.3.1 (recon-all -all) across an input data space (can be multidir) -- and postprocess with a simple report and also overlay imaging. Limited to two in-node parallel threads."
 category: Medical Imaging
 locked: false
 plugin_tree:

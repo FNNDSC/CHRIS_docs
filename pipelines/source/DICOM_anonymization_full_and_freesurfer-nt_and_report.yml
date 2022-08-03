@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: "DICOM anonymization, extract, image conversion, FreeSufer (no talairach), report and overlay"
-description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer (notalairach) followed by a report and overlay images. Limit to 2 in-node FS threads.
+description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer v7.3.1 (notalairach) followed by a report and overlay images. Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
 plugin_tree:

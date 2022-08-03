@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
 name: FreeSurfer Only Skull Stripping
-description: Run FreeSurfer autorecon1 (recon-all -autorecon1) on an input data set (can be multidir, limited to 2 simultaneous threads for portability) -- this does only the skull stripping and then terminates, and postprocess with a simple report and also overlay imaging.
+description: Run FreeSurfer v7.3.1 autorecon1 (recon-all -autorecon1) on an input data set (can be multidir, limited to 2 simultaneous threads for portability) -- this does only the skull stripping and then terminates, and postprocess with a simple report and also overlay imaging.
 category: Medical Imaging
 locked: false
 plugin_tree:
