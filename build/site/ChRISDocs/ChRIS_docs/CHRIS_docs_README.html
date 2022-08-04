@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ChRIS :: Antora Docs</title>
+    <meta name="generator" content="Antora 3.0.3">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../..">Antora Docs</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ChRISDocs" data-version="ChRIS_docs">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-explore is-active" data-panel="explore">
+  <div class="context">
+    <span class="title">Antora docs</span>
+    <span class="version">ChRIS_docs</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="CHRIS_docs_README.html">Antora docs</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="CHRIS_docs_README.html">ChRIS_docs</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="CHRIS_docs_README.html" class="home-link is-current"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/Mfonn/CHRIS_docs/edit/antora/modules/ROOT/pages/CHRIS_docs_README.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">ChRIS</h1>
+<div class="sect1">
+<h2 id="_abstract"><a class="anchor" href="#_abstract"></a>Abstract</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This page presents a quick overview of ChRIS, followed by some links to more resources, papers, and talks.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/PACSPull_Output.png" alt="PACS Pull Output">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ChRIS (<strong>Ch</strong>RIS <strong>R</strong>esearch <strong>I</strong>ntegration <strong>S</strong>ervice) is an opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments.
+Originally developed for medical image analysis in the Fetal-Neonatal Neuroimaging and Developmental Science Center at Boston Children&#8217;s Hospital, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments&#8201;&#8212;&#8201;from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.</p>
+</div>
+<div class="paragraph">
+<p>ChRIS is designed to manage the execution and data needs of a specific class of computational applications often used in research (and in particular medical image research) settings.
+<strong>These are applications that require no user interaction once started</strong>, have runtime specifications typically passed in command line arguments, and collect all output in files.</p>
+</div>
+<div class="paragraph">
+<p>While ChRIS itself has a web-based user interface, the applications that perform the computations are containerized, Linux-based applications.
+Since these apps run "in the woodwork" so to speak, they are called <em>plugins</em> in ChRIS parlance, since they plug-into the ChRIS backend and are accessible from a suitable frontend.</p>
+</div>
+<div class="paragraph">
+<p>ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends.
+The system is designed to make it as <em>easy</em> as possible for a developer to get his/her app running <em>anywhere</em> (by which is meant <em>any computing environment</em> that can run linux containers).
+By conforming to a reasonable command-line specification or contract for ChRIS applications, ChRIS makes it easy to containerize and run the research software, collect results, visualize data, and share/collaborate.
+<span class="image unresolved"><img src="chris_architecture_overview.png" alt="Chris Architecture"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_need"><a class="anchor" href="#_need"></a>Need</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Computational research in scientific (as opposed to industry) medical-related fields faces many obstacles, including (but not limited to):</p>
+</div>
+<div class="sect2">
+<h3 id="_data_sharing"><a class="anchor" href="#_data_sharing"></a>data sharing</h3>
+<div class="paragraph">
+<p>Within the ChRIS framework, data is managed and shared using services such as <code>Swift/Ceph</code> between various users of the system.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_protection"><a class="anchor" href="#_data_protection"></a>data protection</h3>
+<div class="paragraph">
+<p>Data is protected on various levels by utilizing the isolation technologies of OpenShift including network isolation, container isolation utilizing namespaces and SELinux, and role level isolation that keep image plugins from escaping outside their linux container.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_visualization"><a class="anchor" href="#_data_visualization"></a>data visualization</h3>
+<div class="paragraph">
+<p>Powerful javascript libraries are available for viewing and interacting with medical image data formats.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_algorithmprogram_sharing"><a class="anchor" href="#_algorithmprogram_sharing"></a>algorithm/program sharing</h3>
+<div class="paragraph">
+<p>ChRIS is built on the idea of using containerized components that perform the actual analysis and processing.
+This standardizes application development and deployment for reuse.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_re_use_of_existing_programs_in_different_environment"><a class="anchor" href="#_re_use_of_existing_programs_in_different_environment"></a>re-use of existing programs in different environment</h3>
+<div class="paragraph">
+<p>The pervasive use of container images allows for the easy re-use of analysis in many environments.
+The same container image that is run on a local laptop can be deployed out to a cloud resource.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_access_to_powerful_hardware"><a class="anchor" href="#_access_to_powerful_hardware"></a>access to powerful hardware</h3>
+<div class="paragraph">
+<p>ChRIS is currently deployed to the Mass Open Cloud (MOC) and provides access to powerful resources including high-end GPUs.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_realtime_collaboration"><a class="anchor" href="#_realtime_collaboration"></a>realtime collaboration</h3>
+<div class="paragraph">
+<p>The front end to ChRIS provides a powerful real time collaboration tool.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deeper_dive_into_how_chris_works"><a class="anchor" href="#_deeper_dive_into_how_chris_works"></a>Deeper dive into how ChRIS works</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To run medical image processing on ChRIS, a medical researcher/programmer encodes the algorithm that needs to be executed in the form of "plugin".
+The researcher/programmer then makes the plugin available via the ChRIS store.
+An administration of a ChRIS installation then makes the plugin available through their ChRIS installation.
+Once registered, users of the ChRIS system can use a plugin within their image analysis pipeline.
+Once execution of a plugin starts, pfcon, running at BCH datacenter, sends the data via pfioh and the algorithm to be applied on the data to pman.
+Pman and pfioh can run in a different datacenter (Ex: The MOC running OpenShift on top of OpenStack).
+Pman then translates the algorithm programmed in the plugin as Kubernetes job.
+To add scale to medical image processing, pman divides the job amongst several Kubernetes job pods that run in parallel.
+OpenShift provides the container platform for seamless orchestration and resource management on the cluster.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="chris_architecture_detailed.png" alt="Chris Architecture">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_multi_party_computation_with_chris"><a class="anchor" href="#_example_multi_party_computation_with_chris"></a>Example: Multi-Party Computation with ChRIS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To understand ChRIS better, an example might help.
+You can learn more about this example from <a href="https://youtu.be/FUu4kMc0PL8?t=3802">Dr.
+Ellen Grant&#8217;s talk at Red Hat Summit 2019</a></p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/Feed-Detail-Screencapture-PACS-selected.png" alt="PACSPull Plugin">
+</div>
+</div>
+<div class="paragraph">
+<p>The above tree illustrates how a typical workflow looks in ChRIS.
+The nodes are various plugins that will be executed in ChRIS in the order of their hierarchy.
+The first node is for &#8220;PACS Pull&#8221; plugin.
+It pulls the MRI scan data for the workflow from BCH database into the computing environment, the MOC in this case.
+The output of this plugin is the input to the whole operation represented in the tree structure, a patient&#8217;s brain MRI.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/PACSPull_Output.png" alt="PACS Pull Output">
+</div>
+</div>
+<div class="paragraph">
+<p>Next in chain is &#8220;FreeSurfer&#8221; plugin.
+It performs volume and surface based analysis of the MRI data and facilitates the visualization of the functional regions of the highly folded cerebral cortex.</p>
+</div>
+<div class="paragraph">
+<p><span class="image unresolved"><img src="/images/mpc/Freesurfer-2D-image.png" alt="Free Surfer Plugin 2D Output"></span> This is the 2D image output of FreeSurfer plugin.
+The colored regions depict various segments in the gray matter of the brain.</p>
+</div>
+<div class="paragraph">
+<p><span class="image unresolved"><img src="/images/mpc/Freesurfer-3D-Screencpature.png" alt="Free Surfer Plugin 3D Output"></span> This is the 3D image output of FreeSurfer plugin.
+The colored regions depict various segments in the gray matter of the brain.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/Freesurfer-data-table.png" alt="Free Surfer Plugin Data table">
+</div>
+</div>
+<div class="paragraph">
+<p>FreeSurfer plugin also gives output in the format of a datatable.
+The first column consists of various segments in the cerebral cortex.
+The following columns gives Surface Area, Volume and Thickness of left and right hemispheres of the brain.</p>
+</div>
+<div class="paragraph">
+<p>So what is MPC and how does it fit in &#8220;Brain Analysis&#8221;?
+Multiparty Computation (MPC) allows computation on encrypted values without sharing data entirely.
+Understanding rare diseases might require several hospitals to contribute their data toward image processing, and sharing patient data in the clear is restricted by privacy laws and hospital standard practices.
+Augmenting ChRIS with cryptographically secure multi-party computation allows multiple hospitals to jointly analyze data that they cannot observe individually.
+As a consequence, each hospital need not entrust other hospitals or the cloud vendor with its patient data.
+This MPC plugin compares a patient&#8217;s brain volume with the population data collected from two different hospitals.
+To achieve this ChRIS interacts with another open source project <a href="https://github.com/cici-conclave/conclave-web">Conclave Cloud Dataverse or C2D</a>.
+C2D uses OpenShift to provide isolated computing environment for MPC job pods.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/Volumet-screencapture-grids.png" alt="MPC output">
+</div>
+</div>
+<div class="paragraph">
+<p>The above graph extrapolates the patient&#8217;s data (who is 10 years old) against the population mean for the segment &#8220;G_and_S_frontomargin&#8221; for various age groups.
+The blue line is for left hemisphere and the orange line is for right hemisphere.
+We can infer from the graph that the patient&#8217;s brain volume for both hemispheres is lower than the population mean volume for 10 years olds.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/Segment-screencapture-grids.png" alt="MPC output">
+</div>
+</div>
+<div class="paragraph">
+<p>It is also interesting to know which segments have significant deviation from the population mean in terms of brain volume for the same age group.
+From this graph one can find that for this patient there are 4 segments which have conspicuous deviation when compared to other 10 year olds.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/zscore-screen_capture.png" alt="MPC output">
+</div>
+</div>
+<div class="paragraph">
+<p>This view represents the raw data that made up the previous bar chart.
+It allows the radiologist/researcher to easily see how every brain segment compares to the population mean with helpful color coding for the largest deviations.</p>
+</div>
+<div class="paragraph">
+<p>The last plugin &#8220;z2LabelMap&#8221; takes the zscore, output of MPC plugin, and creates a heat map by projecting the zscore as highlighted areas in the actual brain image.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="/images/mpc/z-score-2D-image-with-legend.png" alt="MPC output">
+</div>
+</div>
+<div class="paragraph">
+<p>This image shows segments with the most conspicuous deviation from population mean.
+Blue regions depicts negative deviation and red ones positive deviation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_history"><a class="anchor" href="#_history"></a>History</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ChRIS has had several historical epochs:</p>
+</div>
+<div class="sect2">
+<h3 id="_bash_shell_scripts"><a class="anchor" href="#_bash_shell_scripts"></a><code>bash</code> shell scripts</h3>
+<div class="paragraph">
+<p>The earliest versions of what would coalesce into ChRIS were collections of <code>bash</code> shell scripts that coordinated various types of analysis programs.
+This was prior to 2009/2010.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chris_v1"><a class="anchor" href="#_chris_v1"></a>ChRIS v1</h3>
+<div class="paragraph">
+<p>The first version of what would become ChRIS was created in 2010 and was built using <strong>Wt</strong> (web toolkit) from Emweb.
+It was geared to replacing the interface to the previous <code>bash</code> scripted system and interfaced with an in-house HPC for analysis.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chris_v2"><a class="anchor" href="#_chris_v2"></a>ChRIS v2</h3>
+<div class="paragraph">
+<p>The second version of ChRIS, released around 2013, replaced <strong>Wt</strong> with a cleaner, twitter-inspired interface built around the concept of <em>feeds</em> and <em>plugins</em>.
+This version of ChRIS interfaced primarily with HPC clusters.
+It is still in production use today.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chris_v3"><a class="anchor" href="#_chris_v3"></a>ChRIS v3</h3>
+<div class="paragraph">
+<p>The current development version of ChRIS features a complete redesign and shift to using REST-based services for distributed computing, and dockerized containers for data processing.
+In some contexts, this version of ChRIS is also called <em>CHIPS</em>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recent_papers"><a class="anchor" href="#_recent_papers"></a>Recent Papers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some papers and conference proceedings on ChRIS&#8201;&#8212;&#8201;please note in some papers the system is called <em>CHIPS</em> as the internal name for ChRIS v3:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Rudolph Pienaar, Ata Turk, Jorge L.
+Bernal-Rusiel, Nicolas Rannou, Daniel.
+Haehn, Steve Pieper, Patricia E.
+Grant, and Orran Krieger.
+&#8220;<a href="https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/LNCS_VLDB_Healthcare.pdf">CHIPS&#8201;&#8212;&#8201;A Service for Collecting, Organizing, Processing, and Sharing Medical Image Data in the Cloud.</a>&#8221; In: Lecture Notes in Computer Science, Vol.
+10494, pp.
+29&#8212;&#8203;35, 2017.</p>
+</li>
+<li>
+<p>Rudolph Pienaar, Jorge L.
+Bernal-Rusiel, Nicolas Rannou, Daniel Haehn, Patricia E.
+Grant, Ata Turk, and Orran Krieger.
+&#8220;<a href="https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/FTC_2017_IEEE_Conference.pdf">Architecting and Building the Future of Healthcare Informatics: Cloud, Containers, Big Data and CHIPS.</a>&#8221; In: IEEE Future Technologies, 2017.</p>
+</li>
+<li>
+<p>Bernal-Rusiel, Jorge L., Nicolas Rannou, Randy L.
+Gollub, Steve Pieper, Shawn Murphy, Richard Robertson, Patricia E.
+Grant, and Rudolph Pienaar.
+&#8220;<a href="https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/fninf-11-00032.pdf">Reusable Client-Side JavaScript Modules for Immersive Web-Based Real-Time Collaborative Neuroimage Visualization.</a>&#8221; In: Frontiers in neuroinformatics 11, p.
+32, 2017.</p>
+</li>
+<li>
+<p>R Pienaar, N Rannou, J Bernal-Rusiel, D Haehn, and P E Grant.
+&#8220;<a href="https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/EMBS_ChRIS_IEEE_Conference.pdf">ChRIS&#8201;&#8212;&#8201;A Web-Based NeuroImaging and Informatics System for Collecting, Organizing, Processing, Visualizing, and Sharing of Medical Data</a>&#8221;.
+In: IEEE Engineering in Medicine and Biology Magazine.</p>
+</li>
+<li>
+<p>Nicolas Rannou, Jorge Luis Bernal-Rusiel, Daniel Haehn, Patricia Ellen Grant, Rudolph Pienaar, "<a href="https://github.com/FNNDSC/CHRIS_docs/blob/master/papers/esmrmb2017.7403b23.NORMAL.pdf">Medical imaging in the browser with the A* Medical Imaging (AMI) toolkit.</a>", European Society for Magnetic Resonance in Medicine and Biology 2017.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recent_talks"><a class="anchor" href="#_recent_talks"></a>Recent Talks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some recent talks on ChRIS (please note there is much recycling on content below!
+I&#8217;ve added a quick note to the time length as a partial guide):</p>
+</div>
+<div class="paragraph">
+<p><a href="https://youtu.be/FUu4kMc0PL8?t=3802">Red Hat Summit, &#8220;ChRIS and Multi-Party Compute&#8221; May 2019 (11 minutes)</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.youtube.com/watch?v=p1Y9wlPSgt4">Red Hat Summit, "Medical Image Processing with OpenShift and OpenStack" May 2018 (50 minutes)</a></p>
+</div>
+<div class="paragraph">
+<p><a href="http://slides.com/debio/deck-6-7-8-12-13-19-22">National Alliance for Medical Computing, NA-MIC, Jan 2018 Project week talk (30 minutues)</a></p>
+</div>
+<div class="paragraph">
+<p><a href="http://slides.com/debio/deck-6-7-8-12-13-19">Massachusetts Open Cloud (5 minutes)</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_programming_links"><a class="anchor" href="#_programming_links"></a>Programming Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Links to ChRIS components:</p>
+</div>
+<div class="paragraph">
+<p>Main ChRIS engine:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/FNNDSC/ChRIS_ultron_backEnd">ChRIS Ultron BackEnd (CUBE)</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ancillary ChRIS services:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/FNNDSC/pfcon">process-and-file controller (pfcon)</a>: Main coordinating service.</p>
+</li>
+<li>
+<p><a href="https://github.com/FNNDSC/pfioh">process-and-file IO handler (pfioh)</a>: Transfer data to and from different compute environments.</p>
+</li>
+<li>
+<p><a href="https://github.com/FNNDSC/pman">process manager (pman)</a>: Handles processes on compute environments.</p>
+</li>
+<li>
+<p><a href="https://github.com/FNNDSC/pfurl">process-and-file url (pfurl)</a>: A curl-based client tailored for use in the system.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>ChRIS plugin app store</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/FNNDSC/ChRIS_store">ChRIS_store</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>ChRIS Frontend</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/FNNDSC/ChRIS_ui">ChRIS Frontend</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
