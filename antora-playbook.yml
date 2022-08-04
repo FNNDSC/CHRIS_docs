@@ -1,0 +1,12 @@
+site:
+  title: Antora Docs
+  start_page: ChRISDocs::CHRIS_docs_README.adoc
+content:
+  sources:
+  - url: https://github.com/Mfonn/CHRIS_docs.git
+    branches: antora
+
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
