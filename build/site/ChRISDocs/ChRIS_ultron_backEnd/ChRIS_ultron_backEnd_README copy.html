@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title> ChRIS_ultron_backEnd :: Antora Docs</title>
+    <meta name="generator" content="Antora 3.0.3">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../..">Antora Docs</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ChRISDocs" data-version="ChRIS_ultron_backEnd">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-explore is-active" data-panel="explore">
+  <div class="context">
+    <span class="title">Antora docs</span>
+    <span class="version">ChRIS_ultron_backEnd</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../pman/pman_README.html">Antora docs</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../pman/pman_README.html">pman</a>
+        </li>
+        <li class="version is-current">
+          <a href="index.html">ChRIS_ultron_backEnd</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_ui/ChRIS_ui_README.html">ChRIS_ui</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_store_ui/ChRIS_store_ui_README.html">ChRIS_store_ui</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_store/index.html">ChRIS_store</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_docs/CHRIS_docs_README.html">ChRIS_docs</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">ChRIS_ultron_backEnd</button>
+  <div class="version-menu">
+    <a class="version is-missing" href="../pman/pman_README.html">pman</a>
+    <a class="version is-current" href="ChRIS_ultron_backEnd_README%20copy.html">ChRIS_ultron_backEnd</a>
+    <a class="version is-missing" href="../ChRIS_ui/ChRIS_ui_README.html">ChRIS_ui</a>
+    <a class="version is-missing" href="../ChRIS_store_ui/ChRIS_store_ui_README.html">ChRIS_store_ui</a>
+    <a class="version is-missing" href="../ChRIS_store/index.html">ChRIS_store</a>
+    <a class="version is-missing" href="../ChRIS_docs/CHRIS_docs_README.html">ChRIS_docs</a>
+  </div>
+</div>
+  <div class="edit-this-page"><a href="https://github.com/Mfonn/ChRIS_ultron_backEnd/edit/antora/modules/ROOT/pages/ChRIS_ultron_backEnd_README%20copy.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page"><span class="image"><img src="https://github.com/FNNDSC/ChRIS_ultron_backEnd/blob/master/docs/assets/logo_chris.png" alt="ChRIS logo"></span> ChRIS_ultron_backEnd</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><a class="image" href="https://github.com/FNNDSC/ChRIS_ultron_backEnd/actions/workflows/ci.yml"><img src="https://github.com/FNNDSC/ChRIS_ultron_backEnd/actions/workflows/ci.yml/badge.svg" alt="Build"></a></span><span class="image"><img src="https://img.shields.io/github/license/fnndsc/ChRIS_ultron_backEnd.svg" alt="License"></span> <span class="image"><img src="https://img.shields.io/github/last-commit/fnndsc/ChRIS_ultron_backEnd.svg" alt="Last Commit"></span></p>
+</div>
+<div class="paragraph">
+<p>The core backend service for the ChRIS distributed software platform, also known by the anacronym <em>CUBE</em>.
+Internally the service is implemented as a Django-PostgreSQL project offering a <a href="http://amundsen.com/media-types/collection/">collection+json</a> REST API.
+Important ancillary components include the <code>pfcon</code> and <code>pman</code> file transfer and remote process management microservices.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_chris_development_testing_and_deployment"><a class="anchor" href="#_chris_development_testing_and_deployment"></a>ChRIS development, testing and deployment</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_abstract"><a class="anchor" href="#_abstract"></a>Abstract</h3>
+<div class="paragraph">
+<p><em>ChRIS Ultron Back End</em> (sometimes also <em>ChRIS Underlying Back End</em>) or simply <em>CUBE</em> is the main core of the ChRIS system.
+<em>CUBE</em> provides the main REST API to the ChRIS system, as well as maintaining an internal database of users, files, pipelines, and plugins.
+Currently <em>CUBE</em> has two separate compute paradigms depending on deployment context.
+In the case of <em>development</em> all components of <em>CUBE</em> use <code>docker</code> and <code>docker swarm</code> technologies.
+In the case of <em>production</em> technologies such as <code>openshift</code> and <code>kubernetes</code> are also supported.</p>
+</div>
+<div class="paragraph">
+<p>Consult this page for instructions on starting <em>CUBE</em> in either <em>development</em> or <em>production</em> contexts.
+For documentation/overview/background, please see the <a href="https://github.com/FNNDSC/ChRIS_docs">documention</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_preconditions"><a class="anchor" href="#_preconditions"></a>Preconditions</h3>
+<div class="sect3">
+<h4 id="_operating_system_supportplease_read"><a class="anchor" href="#_operating_system_supportplease_read"></a>Operating system support&#8201;&#8212;&#8201;please read</h4>
+<div class="sect4">
+<h5 id="_linux"><a class="anchor" href="#_linux"></a>Linux</h5>
+<div class="paragraph">
+<p>Linux is the first class host platform for all things <em>CUBE</em> related.
+Linux distributions used by various core developers include Ubuntu, Arch, and Fedora.
+The development team is happy to provide help to folks trying / struggling to run <em>CUBE</em> on most any Linux distribution.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_macos"><a class="anchor" href="#_macos"></a>macOS</h5>
+<div class="paragraph">
+<p>macOS is fully supported as a host platform for <em>CUBE</em>.
+Please note that you <strong>must update/tweak some things first</strong>.
+Most importantly, macOS is distributed with a deprecated version of the <code>bash</code> shell <strong>that will not work with our Makefile</strong>.
+If you want to host <em>CUBE</em> on macOS, you <strong>must</strong> update <code>bash</code> to a current version.
+Instructions are out of scope of this document, but we recommend <a href="https://brew.sh">homebrew</a> as your friend here.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_windows"><a class="anchor" href="#_windows"></a>Windows</h5>
+<div class="paragraph">
+<p>In a word, <strong>don&#8217;t</strong> (ok, that&#8217;s technically two words).
+<em>CUBE</em> is ideally meant to be deployed on Linux/<strong>nix systems.
+*Windows is not officially supported nor recommended as the host environment</strong>.
+If you insist on trying on Windows you can consult some unmaintained documentation on attempts to deploy <em>CUBE</em> using the Windows Subsystem for Linux (WSL) <a href="https://github.com/FNNDSC/CHRIS_docs/blob/master/workflows/ChRIS_on_WSL.asciidoc">here</a>.
+This probably will break.
+Note that currently no one on the core development uses Windows in much of any capacity so interest or knowledge to help questions about Windows support is low.
+Nonetheless, we would welcome any brave soul though who has the time and inclination to fully investigate <em>CUBE</em> on Windows deployment.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_install_latest_docker_and_docker_compose"><a class="anchor" href="#_install_latest_docker_and_docker_compose"></a>Install latest Docker and Docker Compose.</h4>
+<div class="paragraph">
+<p>Currently tested platforms:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Docker 18.06.0+</code></p>
+</li>
+<li>
+<p><code>Docker Compose 1.27.0+</code></p>
+</li>
+<li>
+<p><code>Ubuntu 18.04+ and MAC OS X 10.14+</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_on_a_linux_machine_make_sure_to_add_your_computer_user_to_the_docker_group"><a class="anchor" href="#_on_a_linux_machine_make_sure_to_add_your_computer_user_to_the_docker_group"></a>On a Linux machine make sure to add your computer user to the <code>docker</code> group</h4>
+<div class="paragraph">
+<p>Consult this page <a href="https://docs.docker.com/engine/install/linux-postinstall/" class="bare">https://docs.docker.com/engine/install/linux-postinstall/</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tldr"><a class="anchor" href="#_tldr"></a>TL;DR</h3>
+<div class="sect3">
+<h4 id="_if_you_read_nothing_else_on_this_page_and_just_want_to_get_an_instance_of_the_chris_backend_services_up_and_running_with_no_mess_no_fuss"><a class="anchor" href="#_if_you_read_nothing_else_on_this_page_and_just_want_to_get_an_instance_of_the_chris_backend_services_up_and_running_with_no_mess_no_fuss"></a>If you read nothing else on this page, and just want to get an instance of the ChRIS backend services up and running with no mess, no fuss:</h4>
+<div class="sect4">
+<h5 id="_the_real_tldr"><a class="anchor" href="#_the_real_tldr"></a>The real TL;DR</h5>
+<div class="paragraph">
+<p>The all in one copy/paste line to drop into your terminal (assuming of course you are in the repo directory and have the preconditions met):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker swarm leave --force &amp;&amp; docker swarm init --advertise-addr 127.0.0.1 &amp;&amp;  \
+./unmake.sh &amp;&amp; sudo rm -fr CHRIS_REMOTE_FS &amp;&amp; rm -fr CHRIS_REMOTE_FS &amp;&amp;        \
+./make.sh -U -I -i</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will start a <strong>bare bones</strong> <em>CUBE</em>.
+This <em>CUBE</em> will <strong>NOT</strong> have any plugins installed.
+To install a set of plugins, do</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./postscript.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_slightly_longer_but_still_short_tldr"><a class="anchor" href="#_slightly_longer_but_still_short_tldr"></a>Slightly longer but still short TL;DR</h5>
+<div class="paragraph">
+<p>Start a local Docker Swarm cluster if not already started:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker swarm init --advertise-addr 127.0.0.1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Get the source code from CUBE repo:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/FNNDSC/ChRIS_ultron_backend
+cd ChRIS_ultron_backend</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run full CUBE instantiation with tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./unmake.sh ; sudo rm -fr CHRIS_REMOTE_FS; rm -fr CHRIS_REMOTE_FS; ./make.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or skip unit and integration tests and the intro:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./unmake.sh ; sudo rm -fr CHRIS_REMOTE_FS; rm -fr CHRIS_REMOTE_FS; ./make.sh -U -I -s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the system is "up" you can add more compute plugins to the ecosystem:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./postscript.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting CUBE instance uses the default Django development server and therefore is not suitable for production.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_production_deployments"><a class="anchor" href="#_production_deployments"></a>Production deployments</h3>
+<div class="paragraph">
+<p>For convenience a <code>deploy.sh</code> bash script is provided as part of the Github repo&#8217;s source code.
+Internally the script uses the <code>docker stack</code> or <code>Kustomize</code> tools to deploy on a Swarm or Kubernetes cluster respectively.</p>
+</div>
+<div class="sect3">
+<h4 id="_fetch_the_repos_source_code"><a class="anchor" href="#_fetch_the_repos_source_code"></a>Fetch the repo&#8217;s source code:</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/FNNDSC/ChRIS_ultron_backend
+cd ChRIS_ultron_backend</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deploy_on_a_single_machine_docker_swarm_cluster"><a class="anchor" href="#_deploy_on_a_single_machine_docker_swarm_cluster"></a>Deploy on a single-machine Docker Swarm cluster:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Create appropriate <code>secrets</code> subdirectory:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir swarm/prod/secrets</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Copy all the required secret configuration files into the <code>secrets</code> directory, please take a look at  <a href="https://github.com/FNNDSC/ChRIS_ultron_backEnd/wiki/ChRIS-backend-production-services-secret-configuration-files">this</a>  wiki page to learn more about these files.</p>
+</li>
+<li>
+<p>Deploy CUBE backend containers:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./deploy.sh up</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Tear down and remove CUBE backend containers:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ChRIS_ultron_backend
+./deploy.sh down</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deploy_on_a_kubernetes_cluster"><a class="anchor" href="#_deploy_on_a_kubernetes_cluster"></a>Deploy on a Kubernetes cluster:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Create appropriate <code>secrets</code> subdirectory:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir kubernetes/prod/secrets</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Copy all the required secret configuration files into the <code>secrets</code> directory, please take a look at  <a href="https://github.com/FNNDSC/ChRIS_ultron_backEnd/wiki/ChRIS-backend-production-services-secret-configuration-files">this</a>  wiki page to learn more about these files.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_single_machine_deployment"><a class="anchor" href="#_single_machine_deployment"></a>Single-machine deployment:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Deploy CUBE backend containers:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./deploy.sh -O kubernetes up</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Tear down and remove CUBE backend containers:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ChRIS_ultron_backend
+./deploy.sh -O kubernetes down</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_multi_machine_deployment_with_nfs_based_persistent_storage"><a class="anchor" href="#_multi_machine_deployment_with_nfs_based_persistent_storage"></a>Multi-machine deployment (with NFS-based persistent storage):</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Deploy CUBE backend containers:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./deploy.sh -O kubernetes -T nfs -P &lt;nfs_server_ip&gt; -S &lt;storeBase&gt; -D &lt;storageBase&gt; up</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Both <code>storeBase</code> and <code>storageBase</code> are explained in the header documentation of the <code>deploy.sh</code> script.</p>
+</li>
+<li>
+<p>Tear down and remove CUBE backend containers:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ChRIS_ultron_backend
+./deploy.sh -O kubernetes -T nfs -P &lt;nfs_server_ip&gt; down</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_development"><a class="anchor" href="#_development"></a>Development</h3>
+<div class="sect3">
+<h4 id="_docker_swarm_based_development_environment"><a class="anchor" href="#_docker_swarm_based_development_environment"></a>Docker Swarm-based development environment:</h4>
+<div class="paragraph">
+<p>Start a local Docker Swarm cluster if not already started:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker swarm init --advertise-addr 127.0.0.1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Start CUBE from the repository source directory by running the make bash script</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/FNNDSC/ChRIS_ultron_backEnd.git
+cd ChRIS_ultron_backEnd
+./make.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All the steps performed by the above script are properly documented in the script itself.
+After running this script all the automated tests should have successfully run and a Django development server should be running in interactive mode in this terminal.</p>
+</div>
+<div class="paragraph">
+<p>Later you can stop and remove CUBE services and storage space by running the following bash script from the repository source directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./unmake.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then remove the local Docker Swarm cluster if desired:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker swarm leave --force</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kubernetes_based_development_environment"><a class="anchor" href="#_kubernetes_based_development_environment"></a>Kubernetes-based development environment:</h4>
+<div class="paragraph">
+<p>Install single-node Kubernetes cluster.
+On MAC OS Docker Desktop includes a standalone Kubernetes server and client.
+Consult this page <a href="https://docs.docker.com/desktop/kubernetes/" class="bare">https://docs.docker.com/desktop/kubernetes/</a>.
+On Linux there is a simple MicroK8s installation.
+Consult this page <a href="https://microk8s.io" class="bare">https://microk8s.io</a>.
+Then create the required alias:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">snap alias microk8s.kubectl kubectl
+microk8s.kubectl config view --raw &gt; $HOME/.kube/config</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Start the Kubernetes cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">microk8s start</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Start CUBE from the repository source directory by running the make bash script</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/FNNDSC/ChRIS_ultron_backEnd.git
+cd ChRIS_ultron_backEnd
+export HOSTIP=&lt;IP address of this machine&gt;
+./make.sh -O kubernetes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Later you can stop and remove CUBE services and storage space by running the following bash script from the repository source directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./unmake.sh -O kubernetes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Stop the Kubernetes cluster if desired:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">microk8s stop</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rerun_automated_tests_after_modifying_source_code"><a class="anchor" href="#_rerun_automated_tests_after_modifying_source_code"></a>Rerun automated tests after modifying source code</h4>
+<div class="paragraph">
+<p>Open another terminal and run the Unit and Integration tests within the container running the Django server:</p>
+</div>
+<div class="paragraph">
+<p>To run only the Unit tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ChRIS_ultron_backEnd
+docker-compose -f docker-compose_dev.yml exec chris_dev python manage.py test --exclude-tag integration</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run only the Integration tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose -f docker-compose_dev.yml exec chris_dev python manage.py test --tag integration</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run all the tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose -f docker-compose_dev.yml exec chris_dev python manage.py test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After running the Integration tests the <code>./CHRIS_REMOTE_FS</code> directory <strong>must</strong> be empty otherwise it means some error has occurred and you should manually empty it.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_check_code_coverage_of_the_automated_tests"><a class="anchor" href="#_check_code_coverage_of_the_automated_tests"></a>Check code coverage of the automated tests</h4>
+<div class="paragraph">
+<p>Make sure the <code>chris_backend/</code> dir is world writable.
+Then type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose -f docker-compose_dev.yml exec chris_dev coverage run --source=feeds,plugins,uploadedfiles,users manage.py test
+docker-compose -f docker-compose_dev.yml exec chris_dev coverage report</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_httpie_client_to_play_with_the_rest_api"><a class="anchor" href="#_using_httpie_client_to_play_with_the_rest_api"></a>Using <a href="https://httpie.org/">HTTPie</a> client to play with the REST API</h4>
+<div class="paragraph">
+<p>A simple GET request to retrieve the user-specific list of feeds:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http -a cube:cube1234 http://localhost:8000/api/v1/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A simple POST request to run the plugin with id 1:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http -a cube:cube1234 POST http://localhost:8000/api/v1/plugins/1/instances/ Content-Type:application/vnd.collection+json Accept:application/vnd.collection+json template:='{"data":[{"name":"dir","value":"cube/"}]}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then keep making the following GET request until the <code>"status"</code> descriptor in the response becomes <code>"finishedSuccessfully"</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http -a cube:cube1234 http://localhost:8000/api/v1/plugins/instances/1/</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_swift_client_to_list_files_in_the_users_bucket"><a class="anchor" href="#_using_swift_client_to_list_files_in_the_users_bucket"></a>Using swift client to list files in the users bucket</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">swift -A http://127.0.0.1:8080/auth/v1.0 -U chris:chris1234 -K testing list users</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_documentation"><a class="anchor" href="#_documentation"></a>Documentation</h3>
+<div class="sect3">
+<h4 id="_rest_api_reference"><a class="anchor" href="#_rest_api_reference"></a>REST API reference</h4>
+<div class="paragraph">
+<p>Available <a href="https://fnndsc.github.io/ChRIS_ultron_backEnd">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Install Sphinx and the http extension (useful to document the REST API)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">pip install Sphinx
+pip install sphinxcontrib-httpdomain</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the html documentation</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">cd docs/
+make html</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_chris_rest_api_design"><a class="anchor" href="#_chris_rest_api_design"></a>ChRIS REST API design.</h4>
+<div class="paragraph">
+<p>Available <a href="https://github.com/FNNDSC/ChRIS_ultron_backEnd/wiki/ChRIS-REST-API-design">here</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_chris_backend_database_design"><a class="anchor" href="#_chris_backend_database_design"></a>ChRIS backend database design.</h4>
+<div class="paragraph">
+<p>Available <a href="https://github.com/FNNDSC/ChRIS_ultron_backEnd/wiki/ChRIS-backend-database-design">here</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_wiki"><a class="anchor" href="#_wiki"></a>Wiki.</h4>
+<div class="paragraph">
+<p>Available <a href="https://github.com/FNNDSC/ChRIS_ultron_backEnd/wiki">here</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_learn_more"><a class="anchor" href="#_learn_more"></a>Learn More</h3>
+<div class="paragraph">
+<p>If you are interested in contributing or joining us, Check <a href="http://chrisproject.org/join-us">here</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

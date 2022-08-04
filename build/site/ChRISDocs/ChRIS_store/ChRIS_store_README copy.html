@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title> ChRIS_store :: Antora Docs</title>
+    <meta name="generator" content="Antora 3.0.3">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../..">Antora Docs</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ChRISDocs" data-version="ChRIS_store">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-explore is-active" data-panel="explore">
+  <div class="context">
+    <span class="title">Antora docs</span>
+    <span class="version">ChRIS_store</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../pman/pman_README.html">Antora docs</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../pman/pman_README.html">pman</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_ultron_backEnd/ChRIS_ultron_backEnd_README.html">ChRIS_ultron_backEnd</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_ui/ChRIS_ui_README.html">ChRIS_ui</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_store_ui/ChRIS_store_ui_README.html">ChRIS_store_ui</a>
+        </li>
+        <li class="version is-current">
+          <a href="index.html">ChRIS_store</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_docs/CHRIS_docs_README.html">ChRIS_docs</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">ChRIS_store</button>
+  <div class="version-menu">
+    <a class="version is-missing" href="../pman/pman_README.html">pman</a>
+    <a class="version is-missing" href="../ChRIS_ultron_backEnd/ChRIS_ultron_backEnd_README.html">ChRIS_ultron_backEnd</a>
+    <a class="version is-missing" href="../ChRIS_ui/ChRIS_ui_README.html">ChRIS_ui</a>
+    <a class="version is-missing" href="../ChRIS_store_ui/ChRIS_store_ui_README.html">ChRIS_store_ui</a>
+    <a class="version is-current" href="ChRIS_store_README%20copy.html">ChRIS_store</a>
+    <a class="version is-missing" href="../ChRIS_docs/CHRIS_docs_README.html">ChRIS_docs</a>
+  </div>
+</div>
+  <div class="edit-this-page"><a href="https://github.com/Mfonn/ChRIS_store/edit/antora/modules/ROOT/pages/ChRIS_store_README%20copy.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page"><span class="image"><img src="https://github.com/FNNDSC/ChRIS_store/blob/master/docs/assets/logo_chris.png" alt="ChRIS logo"></span> ChRIS_store</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><a class="image" href="https://travis-ci.org/FNNDSC/ChRIS_store"><img src="https://travis-ci.org/FNNDSC/ChRIS_store.svg?branch=master" alt="Build Status"></a></span> <span class="image"><img src="https://img.shields.io/github/license/fnndsc/chris_store.svg" alt="License"></span> <span class="image"><img src="https://img.shields.io/github/last-commit/fnndsc/chris_store.svg" alt="Last Commit"></span></p>
+</div>
+<div class="paragraph">
+<p>Backend for the ChRIS store.
+This is a Django-PostgreSQL project that houses descriptions of ChRIS plugin-apps and workflows for registering to a ChRIS CUBE instance.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_chris_store_development_testing_and_deployment"><a class="anchor" href="#_chris_store_development_testing_and_deployment"></a>ChRIS store development, testing and deployment</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_abstract"><a class="anchor" href="#_abstract"></a>Abstract</h3>
+<div class="paragraph">
+<p>This page describes how to quickly get the set of services comprising the backend up and running for development and how to run the automated tests.
+A production deployment of the ChRIS store backend services is also explained.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_preconditions"><a class="anchor" href="#_preconditions"></a>Preconditions</h3>
+<div class="sect3">
+<h4 id="_install_latest_docker_and_docker_compose"><a class="anchor" href="#_install_latest_docker_and_docker_compose"></a>Install latest Docker and Docker Compose</h4>
+<div class="paragraph">
+<p>Currently tested platforms:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Ubuntu 18.04+ and MAC OS X 10.14+ and Fedora 31+</code> (<a href="https://github.com/mairin/ChRIS_store/wiki/Getting-the-ChRIS-Store-to-work-on-Fedora">Additional instructions for Fedora</a>)</p>
+</li>
+<li>
+<p><code>Docker 18.06.0+</code></p>
+</li>
+<li>
+<p><code>Docker Compose 1.27.0+</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_on_a_linux_machine_make_sure_to_add_your_computer_user_to_the_docker_group"><a class="anchor" href="#_on_a_linux_machine_make_sure_to_add_your_computer_user_to_the_docker_group"></a>On a Linux machine make sure to add your computer user to the <code>docker</code> group</h4>
+<div class="paragraph">
+<p>Consult this page: <a href="https://docs.docker.com/engine/install/linux-postinstall/" class="bare">https://docs.docker.com/engine/install/linux-postinstall/</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tldr"><a class="anchor" href="#_tldr"></a>TL;DR</h3>
+<div class="paragraph">
+<p>If you read nothing else on this page, and just want to get an instance of the ChRIS store backend services up and  running with no mess, no fuss:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/FNNDSC/ChRIS_store
+cd ChRIS_store
+./make.sh down ; ./make.sh up</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting instance uses the default Django development server and therefore is not suitable for production.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_production_deployment_on_a_single_machine_docker_swarm_cluster"><a class="anchor" href="#_production_deployment_on_a_single_machine_docker_swarm_cluster"></a>Production deployment on a single-machine Docker Swarm cluster</h3>
+<div class="sect3">
+<h4 id="_to_get_the_production_system_up"><a class="anchor" href="#_to_get_the_production_system_up"></a>To get the production system up:</h4>
+<div class="paragraph">
+<p>Start a local Docker Swarm cluster if not already started:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker swarm init --advertise-addr 127.0.0.1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fetch source code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/FNNDSC/ChRIS_store
+cd ChRIS_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create <code>secrets</code> directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir swarm/prod/secrets</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now copy all the required secret configuration files into the <code>secrets</code> directory, please take a look at  <a href="https://github.com/FNNDSC/ChRIS_store/wiki/ChRIS-store-backend-production-services-secret-configuration-files">this</a>  wiki page to learn more about these files</p>
+</div>
+<div class="paragraph">
+<p>Deploy ChRIS store backend containers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./deploy.sh up</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_to_tear_down"><a class="anchor" href="#_to_tear_down"></a>To tear down:</h4>
+<div class="paragraph">
+<p>Remove ChRIS store backend containers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ChRIS_store
+./deploy.sh down</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Remove the local Docker Swarm cluster if desired:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker swarm leave --force</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_development"><a class="anchor" href="#_development"></a>Development</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_instantiate_chris_store_dev_environment"><a class="anchor" href="#_instantiate_chris_store_dev_environment"></a>Instantiate ChRIS Store dev environment</h3>
+<div class="paragraph">
+<p>Start ChRIS Store services by running the make bash script from the repository source directory</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/FNNDSC/ChRIS_store.git
+./make.sh up</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All the steps performed by the above script are properly documented in the script itself.</p>
+</div>
+<div class="paragraph">
+<p>After running this script all the automated tests should have successfully run and a Django development server should be running in interactive mode in this terminal.</p>
+</div>
+<div class="sect3">
+<h4 id="_rerun_automated_tests_after_modifying_source_code"><a class="anchor" href="#_rerun_automated_tests_after_modifying_source_code"></a>Rerun automated tests after modifying source code</h4>
+<div class="paragraph">
+<p>Open another terminal and run the Unit and Integration tests within the container running the Django server:</p>
+</div>
+<div class="paragraph">
+<p>To run only the Unit tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ChRIS_store
+docker-compose -f docker-compose_dev.yml exec chris_store_dev python manage.py test --exclude-tag integration</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run only the Integration tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose -f docker-compose_dev.yml exec chris_store_dev python manage.py test --tag integration</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run all the tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose -f docker-compose_dev.yml exec chris_store_dev python manage.py test</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_check_code_coverage_of_the_automated_tests"><a class="anchor" href="#_check_code_coverage_of_the_automated_tests"></a>Check code coverage of the automated tests</h4>
+<div class="paragraph">
+<p>Make sure the <code>store_backend/</code> dir is world writable.
+Then type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose -f docker-compose_dev.yml exec chris_store_dev coverage run --source=plugins,pipelines,users manage.py test
+docker-compose -f docker-compose_dev.yml exec chris_store_dev coverage report</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_httpie_to_play_with_the_rest_api"><a class="anchor" href="#_using_httpie_to_play_with_the_rest_api"></a>Using <a href="https://httpie.org/">HTTPie</a> to play with the REST API</h3>
+<div class="sect3">
+<h4 id="_a_simple_get_request"><a class="anchor" href="#_a_simple_get_request"></a>A simple GET request:</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http http://localhost:8010/api/v1/</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_a_simple_post_request_to_register_a_new_plugin_app_in_the_store"><a class="anchor" href="#_a_simple_post_request_to_register_a_new_plugin_app_in_the_store"></a>A simple POST request to register a new plugin app in the store:</h4>
+<div class="paragraph">
+<p>First save the plugin representation json file by running the plugin with the <code>--savejson</code> flag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run --rm -v /tmp/json:/json fnndsc/pl-simplefsapp simplefsapp --savejson /json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then upload the plugin representation json file to the ChRIS Store as part of the <code>POST</code> request:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http -a cubeadmin:cubeadmin1234 -f POST http://localhost:8010/api/v1/plugins/ dock_image=fnndsc/pl-simplefsapp descriptor_file@/tmp/json/SimpleFSApp.json public_repo=https://github.com/FNNDSC/pl-simplefsapp name=pl-simplefsapp</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_an_unauthenticated_post_request_to_create_a_new_chris_store_user_account"><a class="anchor" href="#_an_unauthenticated_post_request_to_create_a_new_chris_store_user_account"></a>An unauthenticated POST request to create a new ChRIS store user account:</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http POST http://localhost:8010/api/v1/users/ Content-Type:application/vnd.collection+json Accept:application/vnd.collection+json template:='{"data":[{"name":"email","value":"developer@babymri.org"}, {"name":"password","value":"newstoreuser1234"}, {"name":"username","value":"newstoreuser"}]}'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_destroy_chris_store_dev_environment"><a class="anchor" href="#_destroy_chris_store_dev_environment"></a>Destroy ChRIS Store dev environment</h3>
+<div class="paragraph">
+<p>Stop and remove ChRIS Store services by running the make bash script from the repository source directory</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./make.sh down</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rest_api_documentation"><a class="anchor" href="#_rest_api_documentation"></a>REST API Documentation</h3>
+<div class="paragraph">
+<p>Available <a href="https://fnndsc.github.io/ChRIS_store">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Install Sphinx and the http extension (useful to document the REST API)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">pip install Sphinx
+pip install sphinxcontrib-httpdomain</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the html documentation</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">cd docs/
+make html</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_learn_more"><a class="anchor" href="#_learn_more"></a>Learn More</h3>
+<div class="paragraph">
+<p>If you are interested in contributing or joining us, Check <a href="http://chrisproject.org/join-us">here</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

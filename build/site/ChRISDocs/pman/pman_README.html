@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title> pman :: Antora Docs</title>
+    <meta name="generator" content="Antora 3.0.3">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../..">Antora Docs</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ChRISDocs" data-version="pman">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-explore is-active" data-panel="explore">
+  <div class="context">
+    <span class="title">Antora docs</span>
+    <span class="version">pman</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="pman_README.html">Antora docs</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="pman_README.html">pman</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_ultron_backEnd/ChRIS_ultron_backEnd_README.html">ChRIS_ultron_backEnd</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_ui/ChRIS_ui_README.html">ChRIS_ui</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_store_ui/ChRIS_store_ui_README.html">ChRIS_store_ui</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_store/index.html">ChRIS_store</a>
+        </li>
+        <li class="version">
+          <a href="../ChRIS_docs/CHRIS_docs_README.html">ChRIS_docs</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">pman</button>
+  <div class="version-menu">
+    <a class="version is-current" href="pman_README.html">pman</a>
+    <a class="version is-missing" href="../ChRIS_ultron_backEnd/ChRIS_ultron_backEnd_README.html">ChRIS_ultron_backEnd</a>
+    <a class="version is-missing" href="../ChRIS_ui/ChRIS_ui_README.html">ChRIS_ui</a>
+    <a class="version is-missing" href="../ChRIS_store_ui/ChRIS_store_ui_README.html">ChRIS_store_ui</a>
+    <a class="version is-missing" href="../ChRIS_store/index.html">ChRIS_store</a>
+    <a class="version is-missing" href="../ChRIS_docs/CHRIS_docs_README.html">ChRIS_docs</a>
+  </div>
+</div>
+  <div class="edit-this-page"><a href="https://github.com/Mfonn/pman/edit/antora/modules/ROOT/pages/pman_README.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page"><span class="image"><img src="https://github.com/FNNDSC/ChRIS_ultron_backEnd/blob/master/docs/assets/logo_chris.png" alt="ChRIS logo"></span> pman</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><a class="image" href="https://hub.docker.com/r/fnndsc/pman"><img src="https://img.shields.io/docker/v/fnndsc/pman?sort=semver" alt="Version"></a></span> <a href="LICENSE"><span class="image"><img src="https://img.shields.io/github/license/fnndsc/pman" alt="MIT License</a>"></span> <span class="image"><a class="image" href="https://github.com/FNNDSC/pman/actions/workflows/ci.yml"><img src="https://github.com/FNNDSC/pman/actions/workflows/ci.yml/badge.svg" alt="ci"></a></span></p>
+</div>
+<div class="paragraph">
+<p><em>pman</em>, which once stood for <strong>p</strong>rocess <strong>man</strong>ager, is a <a href="https://flask-restful.readthedocs.io/">Flask</a> application providing an API for creating jobs with various schedulers e.g.
+Kubernetes, Docker Swarm, and SLURM.
+It basically translates its own JSON interface to requests for the various supported backends.</p>
+</div>
+<div class="paragraph">
+<p><em>pman</em> is tightly-coupled to <a href="https://github.com/FNNDSC/pfcon"><em>pfcon</em></a>.
+<em>pman</em> and <em>pfcon</em> are typially deployed as a pair, providing the <em>pfcon</em> service.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_development"><a class="anchor" href="#_development"></a>Development</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section describes how to set up a local instance of <em>pman</em> working against swarm.</p>
+</div>
+<div class="sect2">
+<h3 id="_using_docker_compose"><a class="anchor" href="#_using_docker_compose"></a>Using Docker Compose</h3>
+<div class="paragraph">
+<p>The easiest way to run a code hot-reloading server for development is using docker-compose.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker swarm init --advertise-addr 127.0.0.1
+docker compose up -d</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_docker_swarm"><a class="anchor" href="#_using_docker_swarm"></a>Using Docker Swarm</h3>
+<div class="paragraph">
+<p>To run a full test using <code>docker stack deploy</code>, run the test harness <code>test_swarm.sh</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./test_swarm.sh</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>pman</em> is configured by environment variables.
+Refer to the source code in <a href="pman/config.py">pman/config.py</a> for exactly how it works.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Environment Variable</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SECRET_KEY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://flask.palletsprojects.com/en/2.1.x/config/#SECRET_KEY">Flask secret key</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CONTAINER_ENV</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">one of: "swarm", "kubernetes", "cromwell"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STORAGE_TYPE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">one of: "host", "nfs"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STOREBASE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">where job data is stored, <a href="#STOREBASE">see below</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NFS_SERVER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NFS server address, required when <code>STORAGE_TYPE=nfs</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB_LOGS_TAIL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(int) maximum size of job logs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>REMOVE_JOBS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If set to "no" then pman will not delete jobs (debug)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_storebase"><a class="anchor" href="#_storebase"></a><code>STOREBASE</code></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>If <code>STORAGE_TYPE=host</code>, then <code>STOREBASE</code> represents the path on the container host.</p>
+</li>
+<li>
+<p>If <code>STORAGE_TYPE=nfs</code>, then <code>STOREBASE</code> should be an exported NFS share</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kubernetes_specific_options"><a class="anchor" href="#_kubernetes_specific_options"></a>Kubernetes-Specific Options</h3>
+<div class="paragraph">
+<p>Applicable when <code>CONTAINER_ENV=kubernetes</code></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Environment Variable</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB_NAMESPACE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes namespace for created jobs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SECURITYCONTEXT_RUN_AS_USER</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job container UID (NFS permissions workaround)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SECURITYCONTEXT_RUN_AS_GROUP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job container GID  (NFS permissions workaround)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_slurm_specific_options"><a class="anchor" href="#_slurm_specific_options"></a>SLURM-Specific Options</h3>
+<div class="paragraph">
+<p>Applicable when <code>CONTAINER_ENV=cromwell</code></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Environment Variable</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CROMWELL_URL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cromwell URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TIMELIMIT_MINUTES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SLURM job time limit</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For how it works, see <a href="https://github.com/FNNDSC/pman/wiki/Cromwell" class="bare">https://github.com/FNNDSC/pman/wiki/Cromwell</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_limitations"><a class="anchor" href="#_limitations"></a>Limitations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The system administrator is expected to have an existing solution for having a "shared volume" visible on the same path to every node in the cluster (which is typically how NFS is used).
+The path on each host to this share should be provided as the value for <code>STOREBASE</code>.</p>
+</div>
+<div class="paragraph">
+<p>Currently, only HostPath and NFS volumes are supported.
+<em>pfcon</em> and <em>pman</em> do not support (using nor creating) other kinds of PVCs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_todo"><a class="anchor" href="#_todo"></a>TODO</h2>
+<div class="sectionbody">
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><i class="fa fa-square-o"></i> Example for how to interact with <em>pman</em> directly (w/o <em>pfcon</em>)</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Dev environment and testing for Kubernetes and SLURM.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

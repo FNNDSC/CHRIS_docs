@@ -5,6 +5,17 @@ content:
   sources:
   - url: https://github.com/Mfonn/CHRIS_docs.git
     branches: antora
+  - url: https://github.com/Mfonn/ChRIS_ui.git
+    branches: antora
+  - url: https://github.com/Mfonn/ChRIS_store.git
+    branches: antora
+  - url: https://github.com/Mfonn/ChRIS_ultron_backEnd.git
+    branches: antora
+  - url: https://github.com/Mfonn/pman.git
+    branches: antora
+  - url: https://github.com/Mfonn/ChRIS_store_ui.git
+    branches: antora_css
+
 
 ui:
   bundle:
