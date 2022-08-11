@@ -8,6 +8,7 @@ image::/images/mpc/PACSPull_Output.png[PACS Pull Output]
 
 == Overview
 
+
 ChRIS (**Ch**RIS **R**esearch **I**ntegration **S**ervice) is an opensource distributed software platform designed to manage and coordinate computation and data on a multitude of computing environments.
 Originally developed for medical image analysis in the Fetal-Neonatal Neuroimaging and Developmental Science Center at Boston Children's Hospital, ChRIS has evolved into a general-purpose compute/data platform making it easy to deploy analysis on a heterogenous mix of compute environments -- from laptops to loosely connected groups of workstations, to high performance compute clusters, to public clouds.
 
