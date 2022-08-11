@@ -4,7 +4,7 @@ site:
 content:
   sources:
   - url: https://github.com/Mfonn/CHRIS_docs.git
-    branches: antora
+    branches: 0.1, 0.2 
   - url: https://github.com/Mfonn/ChRIS_ui.git
     branches: antora
   - url: https://github.com/Mfonn/ChRIS_store.git
