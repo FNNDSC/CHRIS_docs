@@ -1,5 +1,5 @@
 site:
-  title: Antora Docs
+  title: ChRIS Docs
   start_page: ChRISDocs::CHRIS_docs_README.adoc
 content:
   sources:
