@@ -1,6 +1,7 @@
 name: ChRISDocs
 title: Antora docs
-version: ChRIS_docs
+version: '0.1'
+title: ChRIS_docs
 start_page: ROOT:CHRIS_docs_README.adoc
 asciidoc:
   attributes:
