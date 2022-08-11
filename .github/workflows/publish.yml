@@ -14,6 +14,7 @@ jobs:
         node-version: '16'
     - name: Install Antora
       run: npm i antora
+      
     - name: Generate Site
       run: npx antora antora-playbook.yml
     - name: Publish to GitHub Pages
