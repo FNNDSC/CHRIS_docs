@@ -1,6 +1,6 @@
 ---
-authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
-name: "DICOM anonymization, extract, image conversion"
+authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
+name: "DICOM anonymization, extract, image conversion v20220812-1"
 description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well as image conversion (JPG and NIfTI).
 category: Medical Imaging
 locked: false

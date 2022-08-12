@@ -1,6 +1,6 @@
 ---
-authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
-name: FreeSurfer no reporting
+authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
+name: FreeSurfer (recon-all -all) with no reporting, no overlays, no mess, no fuss v20220803-1
 description: "Run FreeSurfer v7.3.1 (recon-all -all) across an input data space (can be multidir, limited to 2 simultaneous threads for portability) -- no mess, no fuss, no report."
 category: Medical Imaging
 locked: false

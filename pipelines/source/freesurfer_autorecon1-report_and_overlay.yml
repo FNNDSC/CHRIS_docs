@@ -1,6 +1,6 @@
 ---
-authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
-name: FreeSurfer Only Skull Stripping
+authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
+name: FreeSurfer Only Skull Stripping with report and overlay v20220804-1
 description: Run FreeSurfer v7.3.1 autorecon1 (recon-all -autorecon1) on an input data set (can be multidir, limited to 2 simultaneous threads for portability) -- this does only the skull stripping and then terminates, and postprocess with a simple report and also overlay imaging.
 category: Medical Imaging
 locked: false
@@ -15,7 +15,7 @@ plugin_tree:
       args: "ARGS: -autorecon1"
       threads: 2
   - title: FreeSurfer-report
-    plugin: pl-freesurfer_simplereport v1.1.2
+    plugin: pl-freesurfer_simplereport v1.1.12
     previous: FreeSurfer-v7.3.1
     plugin_parameter_defaults:
       verbosity: "1"

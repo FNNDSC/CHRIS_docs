@@ -1,7 +1,7 @@
 ---
-authors: Rudolph Pienaar<rudolph.pienaar@childrens.harvard.edu
-name: DICOM anonymization and original-vs-anon tag report
-description: Anonymize an input directory of DICOM files -- also create two branches side branches of extracted DICOM tag info.
+authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
+name: DICOM anonymization and original-vs-anon tag report v20220804-2
+description: Anonymize an input directory of DICOM files -- create two branches where one branch has tag report on original data, the other branch has anon images and tag report.
 category: Medical Imaging
 locked: false
 plugin_tree:
@@ -20,7 +20,7 @@ plugin_tree:
       outputFileType: "raw,html"
   - title: dicom-anonymization
     plugin: pl-pfdicom_tagsub v3.2.4
-    previous: ~
+    previous: root-node-copy 
     plugin_parameter_defaults:
       extension: ".dcm"
       splitToken: ","

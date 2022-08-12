@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: DICOM anonymization simple
+name: DICOM anonymization simple v20220803-1
 description: Anonymize all DICOM files in a parent node and nothing else. No mess no fuss.
 category: Medical Imaging
 locked: false

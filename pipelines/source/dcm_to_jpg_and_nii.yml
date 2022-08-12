@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: "All DCM to JPG (reslice) and NIfTI"
+name: "All DCM to JPG (reslice) and NIfTI (dcm2niix) v20220804-1"
 description: "Convert all input DICOMs in parent node to JPG (per series organization), reslicing into x/y/z and also convert to NIfTI"
 category: Imaging
 locked: false
