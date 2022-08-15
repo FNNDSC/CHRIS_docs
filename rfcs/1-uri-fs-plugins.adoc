@@ -1,6 +1,6 @@
 = URI PULL _ChRIS_ _fs_ Plugin Convention
 Jennings <Jennings.Zhang@childrens.harvard.edu>
-:status: draft
+:status: stale (rejected)
 
 Status: {status}
 
