@@ -1,6 +1,6 @@
 = YAML File-Representations of _ChRIS_ Pipelines
 Jennings <Jennings.Zhang@childrens.harvard.edu>
-:status: experimental
+:status: accepted
 
 Status: {status}
 
