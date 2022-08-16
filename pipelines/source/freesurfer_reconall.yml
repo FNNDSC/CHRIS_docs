@@ -1,13 +1,25 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: FreeSurfer (recon-all -all) with no reporting, no overlays, no mess, no fuss v20220803-1
-description: "Run FreeSurfer v7.3.1 (recon-all -all) across an input data space (can be multidir, limited to 2 simultaneous threads for portability) -- no mess, no fuss, no report."
+name: FreeSurfer (recon-all -all) with no reporting, no overlays, no mess, no fuss v20220816-1
+description: "Run FreeSurfer v7.3.2 (recon-all -all) across an input data space (can be multidir, limited to 2 simultaneous threads for portability) -- no mess, no fuss, no report. Parent input space is bulk-renamed to reduce long directory paths."
 category: Medical Imaging
 locked: false
 plugin_tree:
-  - title: FreeSurfer v7.3.1
-    plugin: pl-fshack v1.4.2
+  - title: bulk-rename
+    # This bulk-rename shortens the long directory path names that ChRIS 
+    # typically generates. Too-long names run the risk of exceeding the 
+    # Linux FS 255 char limit. Also, some FS apps hit a buffer-overflow 
+    # error when attemtping to read too-long filenames.
+    # See https://github.com/FNNDSC/ChRIS_ultron_backEnd/issues/418
+    plugin: pl-bulk-rename v0.1.2
     previous: ~
+    plugin_parameter_defaults:
+      filter: ^.*\.dcm$
+      expression: .*/(.*/.*)
+      replacement: $1
+  - title: FreeSurfer v7.3.2
+    plugin: pl-fshack v1.4.4
+    previous: bulk-rename
     plugin_parameter_defaults:
       outputFile: FreeSurferRecon
       inputFile: ".dcm"

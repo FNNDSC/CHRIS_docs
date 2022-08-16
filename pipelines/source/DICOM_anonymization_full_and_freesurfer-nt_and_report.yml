@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: "DICOM anon, tag info, image conversion, FreeSurfer (no talairach), report and overlay v20220804-1"
-description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer v7.3.1 (notalairach) followed by a report and overlay images. Limit to 2 in-node FS threads.
+name: "DICOM anon, tag info, image conversion, FreeSurfer (no talairach), report and overlay v20220816-1"
+description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer v7.3.2 (notalairach) followed by a report and overlay images. Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
 plugin_tree:
@@ -58,9 +58,21 @@ plugin_tree:
       imageScale: "3:none"
       outputFileType: "raw,json,html,dict,col,csv"
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
-  - title: FreeSurfer-v7.3.1
-    plugin: pl-fshack v1.4.2
+  - title: bulk-rename
+    # This bulk-rename shortens the long directory path names that ChRIS 
+    # typically generates. Too-long names run the risk of exceeding the 
+    # Linux FS 255 char limit. Also, some FS apps hit a buffer-overflow 
+    # error when attemtping to read too-long filenames.
+    # See https://github.com/FNNDSC/ChRIS_ultron_backEnd/issues/418
+    plugin: pl-bulk-rename v0.1.2
     previous: dicom-anonymize
+    plugin_parameter_defaults:
+      filter: ^.*\.dcm$
+      expression: .*/(.*/.*)
+      replacement: $1
+  - title: FreeSurfer-v7.3.2
+    plugin: pl-fshack v1.4.4
+    previous: bulk-rename
     plugin_parameter_defaults:
       exec: recon-all
       inputFile: ".dcm"
@@ -68,12 +80,12 @@ plugin_tree:
       threads: 2
   - title: FreeSurfer-report
     plugin: pl-freesurfer_simplereport v1.1.12
-    previous: FreeSurfer-v7.3.1
+    previous: FreeSurfer-v7.3.2
     plugin_parameter_defaults:
       verbosity: "1"
   - title: segmentation-vols-to-jpg
     plugin: pl-multipass v1.3.0
-    previous: FreeSurfer-v7.3.1
+    previous: FreeSurfer-v7.3.2
     plugin_parameter_defaults:
       commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
       noJobLogging: true

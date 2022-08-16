@@ -1,7 +1,7 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: "DICOM anonymization, tag extract, image conversion, FreeSurfer (simple) v20220803-1"
-description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well as image conversion (JPG and NIfTI), and a separate sub branch for FreeSurfer v7.3.1 (no reporting nor overlays). Limit to 2 in-node FS threads.
+name: "DICOM anonymization, tag extract, image conversion, FreeSurfer (simple) v20220816-1"
+description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well as image conversion (JPG and NIfTI), and a separate sub branch for FreeSurfer v7.3.2 (no reporting nor overlays). Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
 plugin_tree:
@@ -58,9 +58,21 @@ plugin_tree:
       imageScale: "3:none"
       outputFileType: "raw,json,html,dict,col,csv"
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
-  - title: FreeSurfer-v7.3.1
-    plugin: pl-fshack v1.4.2
+  - title: bulk-rename
+    # This bulk-rename shortens the long directory path names that ChRIS 
+    # typically generates. Too-long names run the risk of exceeding the 
+    # Linux FS 255 char limit. Also, some FS apps hit a buffer-overflow 
+    # error when attemtping to read too-long filenames.
+    # See https://github.com/FNNDSC/ChRIS_ultron_backEnd/issues/418
+    plugin: pl-bulk-rename v0.1.2
     previous: dicom-anonymize
+    plugin_parameter_defaults:
+      filter: ^.*\.dcm$
+      expression: .*/(.*/.*)
+      replacement: $1
+  - title: FreeSurfer-v7.3.2
+    plugin: pl-fshack v1.4.4
+    previous: bulk-rename 
     plugin_parameter_defaults:
       exec: recon-all
       inputFile: ".dcm"

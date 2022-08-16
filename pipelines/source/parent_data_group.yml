@@ -1,0 +1,15 @@
+---
+authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
+name: "Shorten a parent node's directory data space v20220816-1"
+description: "Directory data in ChRIS nodes can be be deeply nested. This pipeline will grab any files <file.ext> that end with an extension anywhere in a parent tree and copy them to an output pattern of <dir>/<file.ext> where <dir> is the immediate containing directory."
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: bulk-rename
+    plugin: pl-bulk-rename v0.1.2
+    previous: ~
+    plugin_parameter_defaults:
+      filter: ^.*\.[a-z]*$
+      expression: .*/(.*/.*)
+      replacement: $1
+

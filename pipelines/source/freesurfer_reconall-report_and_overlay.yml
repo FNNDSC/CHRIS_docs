@@ -1,13 +1,25 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu
-name: FreeSurfer (recon-all -all) with report and overlay v20220804-1
-description: "Run FreeSurfer v7.3.1 (recon-all -all) across an input data space (can be multidir) -- and postprocess with a simple report and also overlay imaging. Limited to two in-node parallel threads."
+name: FreeSurfer (recon-all -all) with report and overlay v20220816-1
+description: "Run FreeSurfer v7.3.2 (recon-all -all) across an input data space (can be multidir) -- and postprocess with a simple report and also overlay imaging. Limited to two in-node parallel threads. Parent input space is bulk-renamed to reduce long directory paths."
 category: Medical Imaging
 locked: false
 plugin_tree:
-  - title: FreeSurfer-v7.3.1
-    plugin: pl-fshack v1.4.2
-    previous: ~
+  - title: bulk-rename
+    # This bulk-rename shortens the long directory path names that ChRIS 
+    # typically generates. Too-long names run the risk of exceeding the 
+    # Linux FS 255 char limit. Also, some FS apps hit a buffer-overflow 
+    # error when attemtping to read too-long filenames.
+    # See https://github.com/FNNDSC/ChRIS_ultron_backEnd/issues/418
+    plugin: pl-bulk-rename v0.1.2
+    previous: ~ 
+    plugin_parameter_defaults:
+      filter: ^.*\.dcm$
+      expression: .*/(.*/.*)
+      replacement: $1
+  - title: FreeSurfer-v7.3.2
+    plugin: pl-fshack v1.4.4
+    previous: bulk-rename 
     plugin_parameter_defaults:
       outputFile: FreeSurferRecon
       inputFile: ".dcm"
@@ -16,12 +28,12 @@ plugin_tree:
       threads: 2
   - title: FreeSurfer-report
     plugin: pl-freesurfer_simplereport v1.1.12
-    previous: FreeSurfer-v7.3.1
+    previous: FreeSurfer-v7.3.2
     plugin_parameter_defaults:
       verbosity: "1"
   - title: segmentation-vols-to-jpg
     plugin: pl-multipass v1.3.0
-    previous: FreeSurfer-v7.3.1
+    previous: FreeSurfer-v7.3.2
     plugin_parameter_defaults:
       commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
       noJobLogging: true

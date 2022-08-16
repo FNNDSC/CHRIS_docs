@@ -1,13 +1,25 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: FreeSurfer Only Skull Stripping v20220803-2
-description: Run FreeSurfer v7.3.1 autorecon1 on an input data set -- this does only the skull stripping and then terminates. Limited to two in-node parallel jobs.
+name: FreeSurfer Only Skull Stripping v20220816-1
+description: "Run FreeSurfer v7.3.2 autorecon1 on an input data set -- this does only the skull stripping and then terminates. Limited to two in-node parallel jobs. Parent input space is bulk-renamed to reduce long directory paths."
 category: Medical Imaging
 locked: false
 plugin_tree:
-  - title: FreeSurfer v7.3.1 
-    plugin: pl-fshack v1.4.2
+  - title: bulk-rename
+    # This bulk-rename shortens the long directory path names that ChRIS 
+    # typically generates. Too-long names run the risk of exceeding the 
+    # Linux FS 255 char limit. Also, some FS apps hit a buffer-overflow 
+    # error when attemtping to read too-long filenames.
+    # See https://github.com/FNNDSC/ChRIS_ultron_backEnd/issues/418
+    plugin: pl-bulk-rename v0.1.2
     previous: ~
+    plugin_parameter_defaults:
+      filter: ^.*\.dcm$
+      expression: .*/(.*/.*)
+      replacement: $1
+  - title: FreeSurfer v7.3.2 
+    plugin: pl-fshack v1.4.4
+    previous: bulk-rename
     plugin_parameter_defaults:
       inputFile: ".dcm"
       exec: recon-all
