@@ -1,0 +1,49 @@
+= Passing CUBE Environment Variables to Remote Compute
+
+== Abstract
+
+Currently, remote compute in the ChRIS platform operates without any knowledge of the CUBE backend itself. For most compute cases this is satisfactory as compute plugins are largely designed to be platform unaware/agnostic. This division also helps silo any compute away from concerns about how or where it is run. In a small minority of very impactful cases, however, compute plugins that are more deeply _aware_ of the CUBE that is spawning them would be able to model certain very useful large scale compute problems -- specifically, by being able to process both data and environment, such plugins could shape the environment accordingly and create general adaptive compute.
+
+This RFC is part of the Explicit Parallelization of DAGs, Pipeline/Workflow component addressing, and Dynamic Pipelines.
+
+== Current
+
+No environment information pertinent to CUBE is passed down to `pfcon` and hence `pman`.
+
+== What?
+
+This RFC proposes a spec for sending some environmental information from CUBE to the remote compute. A JSON `environment` payload of this nature could be as simple as:
+
+```json
+{
+    "jobenv": {
+        "parentjobid":  idOfParentNodeOfPlugin,
+        "jobid":        idOfCurrentExecutingNode
+    }
+}
+```
+
+To be _generically_ useful, the `environment` should also incude some addressing pertinent to CUBE itself, possibly:
+
+```json
+{
+    "CUBE" : {
+        "address":  URLofCUBE
+    }
+}
+```
+
+== Why?
+
+Compute jobs having knowledge of their larger execution environment has prior precedent. Jobs on UNIX systems are able to access their own process id, their parent process id, username, groupname, etc. This RFC is some ways an extension of this precedent. Standard UNIX shell jobs that need to operate on their environment are manifold. Similarly, a certain class of ChRIS plugins that want to interact with ChRIS itself would need similar information.
+
+Other than a philosophical equivalence, the practical need is for dynamic pipeline/processing support, where an executing plugin can itself decide what plugin/pipeline to call next.
+
+== Limitations / Issues
+
+While knowledge of a plugin's job id as well as its parent's job id is useful, a core limitation/issue/question is, _"How can the plugin authenticate itself to a CUBE to use this information?"_. In the simplest case, the plugin could accept/injest this information, incluing authentication information, from its CLI.
+
+== Effort / Reward
+
+The *effort* involved in passing environmental information along to `pfcon` and hence to `pman` is not deemed prohibitive, but not trivial. This is probably _medium_ effort. The *reward* offers the potential to unlock new avenues of adaptive and dynamic compute, and is deemed _high_. Compared to a more rigorous (but not mutually exclusive) implementation of CUBE internal handling of dynamic workflows, this effort is deemed much less work.
+

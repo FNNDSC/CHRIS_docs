@@ -1,0 +1,112 @@
+= Compute Flow Additions for Observability and Specificity
+
+== Abstract
+
+The Directed Acyclic Graph (DAG) structure in CUBE can be described by two related specifications: a _pipeline_ and a _workflow_. Together these can be considered _compute graphs_ or _CG_ since they relate together in a graph the computational elements that constitute an analysis (all the plugins, how they connect, what their run time arguments might be, etc). 
+
+A CG describes this plugin relationship textually in a `plugin_tree`. In some respects, a _workflow_ relates to a _pipeline_ in the same way that the _instantiation_ of an executing object in some computer language might relate to a its class _definition_. A _workflow_ has additional contextual run-time specific elements specific to the CUBE in which it executes -- most notably the actual compute environment of plugin execution.
+
+When represented in the ChRIS UI, the plugin/workflow tree labels nodes in the DAG with their plugin names. This can be limiting and this RFC proposes that an additional plugin node _title_ be supported that if specified will be the label of the node in the UI. Furthermore, it would be extremely useful from a specificity perspective if the plugin job instance for a given plugin in a _pipeline_ or _workflow_ was easily retrievable from CUBE.
+
+== Current
+
+The ChRIS `plugin_tree` spec can be represented as:
+
+```yml
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.0
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: 0-
+  - title: dicom-to-nifti
+    plugin: pl-dcm2niix v0.1.0
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      d: 9
+  - title: dicom-to-jpg
+    plugin: pl-pfdo_med2img v1.1.9
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      verbose: "1"
+      rot: "000"
+      outputFileType: jpg
+      preserveDICOMinputName: true
+      reslice: true
+      fileFilter: dcm
+      analyzeFileIndex: f
+```
+
+which, when rendered by the UI is shown as:
+
+```
+┌──────────────────┐           
+│pl-simpledsapp    │           
+└┬────────────────┬┘           
+ │                │
+ │                │
+┌▼──────────────┐┌▼───────────────┐
+│pl-dcm2niix    ││pl-pfdo_med2img │
+└───────────────┘└────────────────┘
+```
+
+The `title` field in the `yml` representation has no meaning to CUBE, and is only useful to the client program (`chrs`) that itself speaks to CUBE to construct the DAG.
+
+== What?
+
+It would be more expressive, if the DAG were rendered by the ChRIS UI via CUBE as:
+
+```
+┌──────────────────┐           
+│root-group-copy   │           
+└┬────────────────┬┘           
+ │                │
+ │                │
+┌▼──────────────┐┌▼────────────┐
+│dicom-to-nifti ││dicom-to-jpg │
+└───────────────┘└─────────────┘
+```
+
+Furthermore, when executed by ChRIS, each `pipeline` will have a unique `pipelineinstance_id`, and further, so too each plugin within that pipeline will have a unique `plugininstance_id`. This could be, for example:
+
+```
+
+pipelineinstance_id: 45
+
+┌────────────────────────────────────────┐           
+│pl-simpledsapp (pluginstance_id: 784)   │           
+└┬──────────────────────────────────────┬┘           
+ │                                      │
+ │                                      │
+┌▼──────────────────────────────────┐  ┌▼────────────────────────────────────────┐
+│pl-dcm2niix (plugininstance_id:785)│  │pl-pfdo_med2img (plugininstance_id: 801) │
+└───────────────────────────────────┘  └─────────────────────────────────────────┘
+```
+
+
+
+It is relatively obvious that the first representation is more expressive than the second. This improves representational observability.
+
+Secondly, it would be extremely useful to have a _simple_ ability to, for a `pipelineinstance_id`, interrogate and retrieve the `plugininstance_id` for a `title`:
+
+```python
+# For instance, from some client a call such as:
+
+id_dcm2niix = pluginIDinPipeline(pipeline_id = 45, plugin_title = 'pl-pfdo_med2img')
+
+# Here id_dcm2nixx = 785
+```
+
+== Why?
+
+The more expressive representation is self evident. 
+
+Being able to _easily_ determine the CUBE job id's for a given compute flow from the plugin `titles` unlocks extremely powerful scripting, for instance in dynamic plugins and other client side scripts.
+
+== Limitations / Issues
+
+The ability for a client program to easily determine the `plugininstance_id` of an executed plugin in a compute flow is only really useful for dynamic plugins or other client side programs that wish to perform highly sophisticated operations on a compute flows programmatically. These are considered advanced topics of interest to a minority of possible users/developers.
+
+== Effort / Reward
+
+The *effort* involved in supporting `titles` in `pipelines` and `workflows` in CUBE for rendering in the ChRIS UI is considered _medium_. The reward is _high_. The *effort* involved in supporting easy mapping of `titles` to plugin job ids is considered _medium-to-hard_ with _medium_ reward currently, but projected much higher reward as more powerful client-side and plugin interaction with CUBE develops.
