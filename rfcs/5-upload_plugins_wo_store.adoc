@@ -1,0 +1,30 @@
+= Upload plugins without needing a ChRIS store
+
+== Abstract
+
+ChRIS plugins are represented as small JSON objects that are catalogued in an entity called the ChRIS Store. The process by which a plugin can be added to a CUBE instance is multifold: first the plugin JSON representation is uploaded to a (any) ChRIS Store instance, and then CUBE requests this JSON description from the relevant ChRIS Store. This process is called "registering" a plugin to a CUBE instance.
+
+This RFC proposes to bypass this ChRIS Store requirement and allow the direct uploading/registering of a plugin representation from the ChRIS UI without needing a ChRIS store. Note this is _not_ a replacement for the ChRIS Store -- merely an additional behaviour.
+
+== Current
+
+The "official" method for adding plugin representations to a CUBE instance are from a ChRIS Store. Plugins are mostly added during startup of a CUBE instance using setup/startup scripts. While largely automated, the process still relies on the existence of ChRIS Store from which to pull plugin representations (which itself presupposes that relevant plugin representations have been _a priori_ uploaded a ChRIS Store).
+
+An alternate method is available via the CUBE administration interface that allows for direct uploading of a suitable plugin JSON file. This method however requires a separate administration login and is a completely different UI experience to the ChRIS UI. The administration login credentials are also different that those of the `chris` "super user" which necessitates keeping track of a different admin-only login.
+
+== What?
+
+Similarly to what is currently possible in the ChRIS UI for adding a `pipeline`, the proposal here is to add a button for uploading a `plugin` from the ChRIS UI.
+
+== Why?
+
+Daily use of ChRIS, especially during setup, testing, experimentation, has shown the need for a simple and streamlined mechanism to register plugins directly. This can be especially useful in settings such as hack-a-thons and training.
+
+== Limitations / Issues
+
+Simplifying the mechanism of uploading plugins could represent a security risk. This might entail/require some expansion to the ChRIS UI of allowing adminstrator `sudo`.
+
+== Effort / Reward
+
+Since the ChRIS UI already offers registering `pipelines` from the UI, adding `plugins` should not be tremendous work. This might entail, however, the development of a separate (JS?) module for administrating a CUBE instance, which could grow in to _medium_ to _high_ effort. The reward of such a module is also deemed _high_, while the reward of only uploading `plugins` is deemed _medium_.
+

@@ -1,0 +1,29 @@
+= Incorportating elements of the ChRIS store UI into the ChRIS UI
+
+== Abstract
+
+The ChRIS store is a browsable repository of ChRIS computational assets -- typically `plugins`. The user interface provides a rich experience with dynamic rendering of a plugin repository `README.md`, versioning, etc. The ChRIS UI in turn also provides the means to browse `plugins` that are registered to a given CUBE. This viewer however is independent to the ChRIS Store and is considerably less polished.
+
+This RFC proposes revamping/modularizing the ChRIS Store and UI `plugin` browsing pages and unifying the experience across both sites.
+
+== Current
+
+The `Plugins and Workflows` page of the ChRIS UI provides a very simple card-based list of installed `plugins` that provides plugin name, version, author and title information.
+
+== What?
+
+Incorporate the much richer plugin experience from the ChRIS Store into the ChRIS UI.
+
+== Why?
+
+The ChRIS Store plugin experience is richer and fuller. Also, duplication of these assets in different websites is unecessary and possibly wasteful.
+
+== Limitations / Issues
+
+The ChRIS Store currently does not support `pipelines`. This might be necessary for full incorporation.
+
+== Effort / Reward
+
+The effort of re-using/modularizing the `plugin` pages of the ChRIS Store and reusing in the ChRIS UI is deemed _medium_ effort but the payoff in visual experience and unification of code bases is _high_.
+
+

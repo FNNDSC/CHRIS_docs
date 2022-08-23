@@ -1,0 +1,132 @@
+= Scaling and refactoring `pfdcm` 
+
+== Abstract
+
+ChRIS uses a separate service called `pfdcm` to interact with a Picture Archive and Communications System (PACS). In its turn, `pfdcm` uses a lower set of modules called `pypx` to perform various functions. Typically `pfdcm` is deployed as a _single_ non-replicated service to provide PACS features to a CUBE instance. 
+
+This RFC proposes:
+
+* Improve incoming DICOM file repacking performance by consolidating per-file repacking to be bulk orientated.
+* Redesign the "database" that `pfdcm` uses to be an actual database as opposed to loose confederation of JSON state files.
+* Save information relating to the communicating PACS to file and not within `pfdcm` active memory -- in this way allow `pfdcm` to be fully stateless.
+* Allow for per-request scaling of `pfdcm` -- essentially spawn a new instance for every PACS related request and so doing provide for isolated parallelism in behaviour.
+
+to allow for replicating `pfdcm` to service PACS interactivity in parallel, and also to improve several of the core behaviours.
+
+== Current
+
+=== `px-repack`
+
+When `pfdcm` requests files from a PACS, individual DICOM files [represented in square brackets] are rapidly streamed/packed to a holding directory by an `xinetd` managed service called `storescp`. Each packed file, is then parsed by its own instance of `px-repack` to ultimatley pack the file in a meta-tag organized hierarchy.
+
+```
+┌────┐                                                                              
+│PACS│                                                                              
+└┬───┘                                                                              
+┌O────┐                                                                             
+│pfdcm│                                                                             
+└┬────┘                                                                             
+┌O───────────────────────────────────────────────────────────────┐                  
+│storescp                                                        │                  
+└┬────────┬────────┬────────┬───────────┬───────────┬───────────┬┘                  
+┌O──────┐┌O──────┐┌O──────┐┌O─────────┐┌O─────────┐┌O─────────┐┌O─────────┐         
+│[file1]││[file2]││[file3]││[file4]   ││[file5]   ││[..]      ││[fileN]   │         
+└┬──────┘└───┬───┘└──────┬┘└─────────┬┘└─────────┬┘└─────────┬┘└─────────┬┘         
+┌O─────────┐┌O─────────┐┌O─────────┐┌O─────────┐┌O─────────┐┌O─────────┐┌O─────────┐
+│px-repack1││px-repack2││px-repack3││px-repack4││px-repack5││pxrepack..││px-repackN│
+└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
+
+```
+
+=== File database
+
+`pfdcm` stores its database in `/home/dicom/log`, organized by `patientData`, `studyData`, and `seriesData`
+
+```
+┌─────┐                                   
+│pfdcm│                                   
+└┬────┘                                   
+┌O────────────────────────────┐           
+│[/home/dicom/log]            │           
+└┬──────────────┬────────────┬┘           
+┌O────────────┐┌O──────────┐┌O───────────┐
+│[patientData]││[studyData]││[seriesData]│
+└─────────────┘└───────────┘└────────────┘
+
+```
+
+The `patientData` contains a list of JSON files, one each for every MRN that has been pulled. This file contains a link to studies in `studyData`
+
+```
+┌─────────────────────────────────────────┐            
+│[patientData]                            │            
+└┬──────────────┬──────────────┬─────────┬┘            
+┌O────────────┐┌O────────────┐┌O───────┐┌O────────────┐
+│[<MRN1>.json]││[<MRN2>.json]││[..json]││[<MRNn>.json]│
+└─────────────┘└─────────────┘└────────┘└─────────────┘
+
+```
+
+The `studyData` contains a single descriptive `<StudyInstanceUID>-meta.json` file for each study, and then in a directory `<StudyInstanceUID>-series` for each series of the study a correpsonding `<SeriesInstanceUID>-meta.json` file.
+
+```
+┌─────────────────────────────────┐                                                                    
+│[studyData]                      │                                                                    
+└┬───────────────────────────────┬┘                                                                    
+┌O─────────────────────────────┐┌O─────────────────────────────────────┐                               
+│[<StudyInstanceUID>-meta.json]││[<StudyInstanceUID>-series.json]      │                               
+└──────────────────────────────┘└┬──┬─────────────────────────────────┬┘                               
+┌────────────────────────────────O┐┌O───────────────────────────────┐┌O───────────────────────────────┐
+│[<SeriesInstanceUID1>-meta.json] ││[<SeriesInstanceUID2>-meta.json]││[<SeriesInstanceUID3>-meta.json]│
+└─────────────────────────────────┘└────────────────────────────────┘└────────────────────────────────┘
+
+```
+
+Finally, the `seriesData` directory container for each `SeriesInstanceUID` a `meta` file, as well as files for status information on each step of the `retrieve`, `pack`, `push`, and `register` stages.
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────────────────┐                 
+│[seriesData]                                                                                        │                 
+└┬──────────────────────────────┬───────────────┬───────────────────┬───────────────┬───────────────┬┘                 
+┌O────────────────────────────┐┌O─────────────┐┌O─────────────────┐┌O─────────────┐┌O─────────────┐┌O─────────────────┐
+│[<>-img.json]                ││[<>-meta.json]││[<>-retrieve.json]││[<>-pack.json]││[<>-push.json]││[<>-register.json]│
+└┬───────────────────────────┬┘└──────────────┘└──────────────────┘└──────────────┘└──────────────┘└──────────────────┘
+┌O─────────────────────────┐┌O─────────────────────────┐                                                               
+│[0001-<SeriesID>.dcm.json]││[000n-<SeriesID>.dcm.json]│                                                               
+└──────────────────────────┘└──────────────────────────┘                                                               
+
+```
+
+The `<>-img.json` directory contains, for each DICOM file, a corresponding JSON representation.
+
+== What?
+
+=== Repack
+
+The current repack regime poses severe bottlenecks with large transmissions
+
+=== Database
+
+The file-based data base is inefficient
+
+=== RESTfullness
+
+`pfdcm` stores its entire data state in the JSON files in the `/home/dicom/log` directory, while information on CUBE and swift storage is stored in `/home/dicom/services`. Information on the PACS instance with which `pfdcm` communicates is currently stored in active memory of `pfdcm` -- saving this information to disk in the `services` directory should achieve full statelessness for `pfdcm`.
+
+=== Per request scaling
+
+Once full RESTfullness has been achieved, it would be possible to investigate scaling instances of `pfdcm` -- one for each incoming request
+
+== Why?
+
+These improvements will result in a much more responsive and scalable `pfdcm` service. Given that PACS integration is a key feature of ChRIS, a fast and responsive service is deemed highly desirable.
+
+== Limitations / Issues
+
+Some of the work proposed here might entail deep rewrite. Moreover, currently the PACS is considered the canonical source of truth and _all_ `pfdcm` requests start with an implicit `find` to a PACS. Hence a status request first executes a `find` to the PACS to determine the truthful list of studies and series, and then `pfdcm` examines its internal database for status information. If the PACS response is delayed, the entire chain of events suffers. Also, since the `find` is a blocking operation, the single event queue of the fastAPI innards of `pfdcm` can suffer, even with appropriate `async` code definitions.
+
+== Effort / Reward
+
+The effort of this RFC is considered _high_ and accordingly the reward is also considered _high_.
+
+

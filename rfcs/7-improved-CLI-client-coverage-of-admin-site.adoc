@@ -1,0 +1,31 @@
+= Coverage of the CUBE admin pages from CLI or other client app
+
+== Abstract
+
+CUBE offers an administration interface allowing an administrator to configure details such as users, periodic tasks, plugin management, etc. This administration user is disconnected from the CUBE users (for instance, the CUBE "super user" is _not_ an administrative user), and the management UI is a stock dJango interface.
+
+This RFC proposes a command line (or other client) interface to these administrative tasks.
+
+
+== Current
+
+The CUBE adminstation interface is accessible on a CUBE instance at `/chris-admin`. This provides administration for elements such as CUBE tokens, Users (adding/passwords/etc), ChRIS job prefices, various periodic tasks, and plugin management.
+
+== What?
+
+Provide a set of client-side modules (in Javascript or Python or some additional client) to effect some administration functionality. Optionally also provide a CLI driver for these modules. Initial proposal is to cover plugin addition/deletion and compute resource coverage.
+
+== Why?
+
+By providing some client side ability to administer a CUBE programmatically additional functionality in managing a CUBE instance can be enabled.
+
+== Limitations / Issues
+
+No limitations or issues are anticipated.
+
+== Effort / Reward
+
+Effort is judged _low_ to _medium_, with effort scaling in the space of features to cover. Reward is considered _medium_ to _high_.
+
+
+
