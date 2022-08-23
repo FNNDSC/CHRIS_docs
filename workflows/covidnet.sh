@@ -50,7 +50,7 @@ declare -a a_WORKFLOWSPEC=(
                                 --previous_id=@prev_id"
 
     "3:4:l1|
-    fnndsc/pl-covidnet-meta@1.0.8:    ARGS;
+    fnndsc/pl-covidnet-meta@1.0.10:    ARGS;
                                 --imagefile=sample.png;
                                 --title=Meta;
                                 --previous_id=@prev_id"
