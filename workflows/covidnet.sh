@@ -26,28 +26,35 @@ declare -a a_WORKFLOWSPECALT=(
 declare -a a_WORKFLOWSPEC=(
 
     "0:0|
-    fnndsc/pl-lung_cnp:         ARGS;
+    fnndsc/pl-lung_cnp@1.1.0:         ARGS;
                                 --title=COVIDNET_lung_CT_subjects"
 
     "0:1:l1|
-    fnndsc/pl-med2img:          ARGS;
+    fnndsc/pl-med2img@1.1.12:          ARGS;
                                 --inputFile=@image[_n];
                                 --convertOnlySingleDICOM;
                                 --title=@image[_n];
                                 --previous_id=@prev_id"
 
     "1:2:l1|
-    fnndsc/pl-covidnet:         ARGS;
+    fnndsc/pl-covidnet@0.2.3:         ARGS;
                                 --imagefile=sample.png;
                                 --title=COVIDNET;
                                 --previous_id=@prev_id"
 
     "2:3:l1|
-    fnndsc/pl-covidnet-pdfgeneration:    ARGS;
+    fnndsc/pl-covidnet-pdfgeneration@0.3.0:    ARGS;
                                 --imagefile=sample.png;
                                 --patientId=@patientID;
                                 --title=report;
                                 --previous_id=@prev_id"
+
+    "3:4:l1|
+    fnndsc/pl-covidnet-meta@1.0.8:    ARGS;
+                                --imagefile=sample.png;
+                                --title=Meta;
+                                --previous_id=@prev_id"
+
 )
 
 declare -a a_PLUGINS=()
@@ -432,14 +439,16 @@ title -d 1 "Checking for plugin IDs on CUBE...."                            \
     boxcenter "Verify that all the plugins that constitute this workflow are    "
     boxcenter "registered to the CUBE instance with which we are communicating."
     boxcenter ""
-    for plugin in "${a_PLUGINS[@]}" ; do
+    for plugin_ver in "${a_PLUGINS[@]}" ; do
+        plugin=$(echo $plugin_ver | awk -F\@ '{print $1}')
+        version=$(echo $plugin_ver | awk -F\@ '{print $2}')
         cparse $plugin "REPO" "CONTAINER" "MMN" "ENV"
         opBlink_feedback "$ADDRESS:$PORT" "::CUBE->$plugin"     \
                          "op-->" "search"
         windowBottom
         RESP=$(
-            chrispl-search  --for id                            \
-                            --using name_exact="$CONTAINER"           \
+            chrispl-search  --for id                                          \
+                            --using name_exact="$CONTAINER",version="$version"\
                             --onCUBE "$CUBE"
         )
         opRet_feedback  "$?"                                    \
@@ -689,6 +698,11 @@ title -d 1 "Building and Scheduling workflow..."
         plugin_run  ":3" "a_WORKFLOWSPEC[@]" "$CUBE" ID3 $sleepAfterPluginRun \
                     "@prev_id=$ID2;@patientID=$ID1-12345" && id_check $ID3
         digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":2;$ID2" ":3;$ID3" \
+                    "a_WORKFLOWSPEC[@]"
+
+        plugin_run  ":4" "a_WORKFLOWSPEC[@]" "$CUBE" ID4 $sleepAfterPluginRun \
+                    "@prev_id=$ID3" && id_check $ID4
+        digraph_add "GRAPHVIZBODY" "GRAPHVIZBODYARGS" ":3;$ID3" ":4;$ID4" \
                     "a_WORKFLOWSPEC[@]"
 
         if (( b_waitOnBranchFinish )) ; then

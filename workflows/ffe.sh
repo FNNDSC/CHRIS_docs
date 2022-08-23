@@ -545,7 +545,9 @@ function plugin_run {
     pluginName_filterFromWorkflow "a_feedflow[@]" "$SEARCH" "pluginName"
     if [[ "$pidx" != "-1" ]] ; then
         # pidx=$(a_index $pluginName "a_plugin[@]")
-        PLUGIN=${a_plugin[$pidx]}
+        PLUGINVER=${a_plugin[$pidx]}
+        PLUGIN=$(echo $PLUGINVER | awk -F\@ '{print $1}')
+        VER=$(echo $PLUGINVER | awk -F\@ '{print $2}')
         ARGS=${a_arg[$pidx]}
         if (( ${#SUB} )) ; then
             plugin_argsSub "$ARGS" "$SUB" ARGSUB
@@ -558,7 +560,7 @@ function plugin_run {
         windowBottom
         # Explicitly construct the command as a bash array
         a_cmd[0]="chrispl-run";     a_cmd[1]="--plugin"
-                                    a_cmd[2]="name_exact=$CONTAINER"
+                                    a_cmd[2]="name_exact=$CONTAINER,version=$VER"
                                     a_cmd[3]="--args";   a_cmd[4]="\"$ARGSUB\""
                                     a_cmd[5]="--onCUBE"; a_cmd[6]="$CUBE"
         plugin_runFromFile "a_cmd" PLUGINRUN
