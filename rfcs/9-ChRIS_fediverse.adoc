@@ -1,0 +1,37 @@
+= ChRIS Fediverses
+
+== Abstract
+
+ChRIS instances are largely independent entities. Currently there is no direct ChRIS-to-ChRIS communication of any kind. While there are theoretical mechanisms for one ChRIS to communicate with another ChRIS (through an appropriate plugin, for instance) these are informal.
+
+This RFC proposes exploring a more formal mechanism by which a ChRIS can communicate with another ChRIS -- this includes data "sharing", compute "dispatching", even plugin and pipeline sharing.
+
+== Current
+
+Historically, the concept of ChRIS always included a multiplicity of CUBE instances. Any ChRIS could connect to any ChRIS Store, and any pair of remote compute management services could be used by multiple, independent CUBE backends. The ChRIS Store was initially seen as a loose connector from which many CUBE backends could install ``plugins`` and ``pipelines``.
+
+Similarly, the dyad remote compute and data management services pair, ``pman`` and ``pfcon`` that define a compute env are not "owned" by a single CUBE backend, but could be used my multiple CUBEs.
+
+Finally, data that exists in one CUBE could be transmitted/shared with another CUBE through appropriate (but not yet created) ``plugins``, and one CUBE could (again with an appropriate ``plugin``) control another CUBE.
+
+Observing this, it is clear that the _idea_ of federated ChRIS exists, but has not been formalized.
+
+== What is the issue?
+
+In a nutshell, the issue is that isolating ChRIS instances from each other limits (or complicates) the potential for meaningful multiparty compute on the ChRIS platform. Moreover, allowing ChRIS-to-ChRIS communication would create powerful collaboration and sharing opportunities that are not currently available. Imagine computation on privileged data (for instance patient images) that result in products that are not privileged (for instance a model or group statistics). By formalizing ChRIS-to-ChRIS communication, such results could easily be shared amongst collaborating ChRIS instances.
+
+One ChRIS that has data but not sufficient computing environments to process this data could communicate and share with another ChRIS that does. A user of one ChRIS and who observes say patient data presenting clinical issues, could easily anonymize and share that data with a colleague on another ChRIS who can provide an additional opinion.
+
+To be clear, such connectivity is currently possible, but is very user/human dependent, not scalable nor easily automated.
+
+== Why should this be done?
+
+By formalizing ChRIS-to-ChRIS communication (i.e. at a platform level), and thus reducing the collaboration complexity significantly, the barrier to innovation is significantly reduced. This should allow for easier sharing of data, sharing of compute resources, and also sharing of plugins/pipelines.
+
+== Limitations / Issues
+
+Developing a platform-to-platform communications protocol is complex. Currently, external interfacing to a ChRIS instance is _per user_ authenticated, while ChRIS-to-``pfcon`` (compute) interfacing is _platform_ authenticated. While the most logical starting point to consider ChRIS-to-ChRIS communication might be to start/expand on ChRIS-to-``pfcon`` communication, this effort remains largely unknown and requires more planning/thinking.
+
+== Effort / Reward
+
+This effort is considered *very high* since it might require deep redesign of some existing core assumptions in the ChRIS API. However, the reward is accordingly considered to be *very high* (potentially) since this would open an avenue for scientific collaboration not currently served by any other comparable platform.
