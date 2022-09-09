@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "FPMMID on Nifti from DCM v20220907_v1"
+name: "FPMMID on Nifti from DCM v20220909_v2"
 description: "Convert all input DICOMs in parent node to JPG (per series organization), reslicing into x/y/z and also convert to NIfTI and run FPMMID to do a semantic segmentation"
 category: Imaging
 locked: false
@@ -27,7 +27,8 @@ plugin_tree:
     plugin_parameter_defaults:
       d: 9
   - title: nifti-to-segmented-nifi
-    plugin: pl-fpmmid v1.1.6
+    plugin: pl-fpmmid v1.1.8
     previous: dicom-to-nifti
     plugin_parameter_defaults:
       inputFileFilter: "**/*.nii"
+      preserveInputNames: True
