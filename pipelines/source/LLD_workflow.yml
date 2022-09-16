@@ -1,0 +1,27 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "LLD on DCM leg xrays v20220916_v1"
+description: "Convert all input dicoms to `.mha` files, run `lld-inference` on them, and finally convert the output back to dicoms"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.0
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: 0-
+  - title: dcm-to-mha
+    plugin: pl-dcm2mha_cnvtr v1.0.0
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.dcm"
+  - title: mha-to-heatmap-mha
+    plugin: pl-lld_inference v1.0.1
+    previous: dcm-to-mha
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.mha"
+  - title: mha-to-dcm
+    plugin: pl-dcm2mha_cnvtr v1.0.0
+    previous: mha-to-heatmap-mha
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.mha"
