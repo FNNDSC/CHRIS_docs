@@ -10,9 +10,9 @@ This RFC proposes a case for pervasive modularization specifically to aid CLI de
 
 == Current
 
-Speaking to CUBE is effected via a `collection+json` REST API. While logical and self-discoverable, the API is cumbersome to use directly in client applications. To solve this, a companion CUBE javascript (JS) library is available. This library is more of an _interface_ to the CUBE API, and offers more programmatically convenient methods to use API features. It can be considered a _low level_ API that simplifies communication, but offers little in the way of aggregate functionality. These API calls need to be assembled into larger, more useful higher level methods.
+Speaking to CUBE is effected via a `collection+json` REST API. While logical and self-discoverable, the API is cumbersome to use directly in client applications. To solve this, a companion CUBE javascript (JS) library is available. This library is more of an _interface_ to the CUBE API, and offers more programmatically convenient methods to use API features. It can be considered a _low level_ API that simplifies communication, but offers little in the way of aggregate functionality. These API calls need to be assembled into larger, more useful higher level methods. Single _logical_ operations (such as "how many nodes are currently executing in feed XYZ") require an assemblage of multiple low level library API calls.
 
-As such the _functionality distance_ between the existing JS library and useful high level methods is large. The ChRIS UI during its development historically made little effort to modularize functional parts, nor to buffer or isolate _logic_ from _implementation_. As a result various pages of the UI have functionality _baked directly_ into the visual presentation of a page. For example, the UI currently offers at least three different means to present or view the CUBE storage. None of these are interchangeable nor can any be reused without significant work in other parts of the UI.
+As such the _functionality distance_ between the existing JS library and useful high level methods is large. The ChRIS UI during its development historically made little effort to modularize functional parts, nor to buffer or isolate _logic_ from _implementation_. As a result various pages of the UI have functionality _baked directly_ into the visual presentation of a page. Useful behavior is locked within a specific page even if the behavior being required is generic and has little to do with the specifics of the page or widget in which the code is executing. For example, the UI currently offers at least three different means to present or view the CUBE storage. None of these are interchangeable nor can any be reused in other parts of the UI without significant rework.
 
 == What?
 
@@ -24,9 +24,9 @@ The COVIDnet UI is an instructive example. This UI is a workflow built to runnin
 
 == Why?
 
-Alluding to the introduction of this RFC, an accelerant to ChRIS/CUBE adoption is the development of a rich CLI interface. While the Rust-based `chrs` project currently fills this role and represents a clean-room implementation of a client, the java/type-script code in the UI dwarfs `chrs` by a considerable margin. Moreover, Rust is simply not as widely used as java/typescript. Creating new web GUIs _and_ CLI tools in javascript (with nodejs) can be greatly facilitated by modularization.
+Alluding to the introduction of this RFC, an accelerant to ChRIS/CUBE adoption is the development of a rich CLI interface. While the Rust-based `chrs` project currently fills this role and represents a clean-room implementation of a client, the java/type-script code in the UI dwarfs `chrs` by a considerable margin. Moreover, Rust is simply not as widely used as java/typescript so the potential contributor base for building out the client is arguably smaller than in javascript. Finally, a compelling javascript library/client can be used in both CLI and web GUI settings. New web GUIs _and_ CLI tools in javascript (with nodejs) can be greatly facilitated by modularization.
 
-Consider the following hypothetical workflow. Imagine a CLI client called `kruis` that uses a new shared library called `kubuis` (these names are a play on the Dutch "cross" and "cuboid"). the `kubuis` library houses _logic_ functionality for a large range/space of CUBE related features. In this hypothetical setup, let's assume also that a research has a large set of data to analyze in a directory `~/data/5yroldbrains`. A CLI workflow could proceed as:
+Consider the following hypothetical workflow. Imagine a CLI client called `kruis` that uses a new shared library called `kubuis` (these names are a play on the Dutch "cross" and "cuboid"). The `kubuis` library houses _logic_ functionality for a large range/space of CUBE related features. In this hypothetical setup, let's assume also that a research has a large set of data to analyze in a directory `~/data/5yroldbrains`. A CLI workflow could proceed as:
 
 [source, bash]
 ----
@@ -60,13 +60,25 @@ Pipelines registered to CUBE:
  31  │ DICOM to image
  42  │ COVIDnet analysis
 ─────┴───────────────────────────────────────────────────────
+----
 
+Let's only get pipelines with the string "FreeSurfer" in their names:
+
+
+[source, bash]
+----
 $> kruis pipelines ls *Freesurfer*
 
 I found no pipelines with substring 'Freesurfer' in their names. Please check
 your spelling and note that searches are case sensitive. Use '--nocase' to
 disable this.
+----
 
+Oops. The search seems case sensitive. No worries, try again with the suggested flag:
+
+
+[source, bash]
+----
 $> kruis pipelines ls --nocase *Freesurfer*
 
 Pipelines registered to CUBE with case insensitive substring 'Freesurfer':
@@ -77,7 +89,12 @@ Pipelines registered to CUBE with case insensitive substring 'Freesurfer':
  18  │ FreeSurfer full with reports and overlays
  11  │ FreeSurfer with --notalairach
 ─────┴───────────────────────────────────────────────────────
+----
 
+Much better. Ok, these are just names. How about some more information on a pipeline:
+
+[source, bash]
+----
 $> kruis pipelines info "FreeSurfer no mess no fuss"
 
 Name: FreeSurfer full with reports and overlays
@@ -87,7 +104,12 @@ URL: cube-next.tch.harvard.edu/pipelines/18
 This pipeline runs FreeSurfer version 7.3.2 on an input parent directory that
 itself can contain multiple subjects. FreeSurfer is run on each subject in
 parallel.
+----
 
+That is a pretty long string to type. Try again with just the pipeline `id`:
+
+[source, bash]
+----
 $> kruis pipelines info 17
 
 Name: FreeSurfer full with reports and overlays
@@ -97,7 +119,12 @@ URL: cube-next.tch.harvard.edu/pipelines/17
 This pipeline runs FreeSurfer version 7.3.2 on an input parent directory that
 itself can contain multiple subjects. FreeSurfer is run on each subject in
 parallel.
+----
 
+How about pipeline `18`?
+
+[source, bash]
+----
 $> kruis pipelines info 18
 
 Name: FreeSurfer full with reports and overlays
@@ -108,8 +135,12 @@ This pipeline runs FreeSurfer version 7.3.2 on an input parent directory that
 itself can contain multiple subjects. FreeSurfer is run on each subject in
 parallel. In addition, this pipeline also extracts reports and generates png
 overlays of segmentations on the original data.
+----
 
+That seems better. What does this pipeline "look" like?
 
+[source, bash]
+----
 $> kruis pipelines structure 18
 
 Name: FreeSurfer full with reports and overlays
@@ -127,7 +158,7 @@ URL: cube-next.tch.harvard.edu/pipelines/piping/254
 
 ----
 
-Ok, so I want to run that pipeline. I also want to copy the resultant data from the FreeSurfer plugin to my local filesystem. I note that is piping-id `pid 2` in the structure table.
+Ah, the plugin title is shown as well as the piping id and the parent piping id. I want to run that pipeline. I also want to copy the resultant data from the FreeSurfer plugin to my local filesystem. I note that is piping-id `pid 2` in the structure table.
 
 [source, bash]
 ----
@@ -135,6 +166,12 @@ $> cd ~/data
 ~/data$> kruis analyze --readDataFrom ./5yroldbrains                            \
                        --usePipeline 18 --onCompute e2-12hr                     \
                        --pullResultsFromPiping 2 --saveDataTo ./5yroldbrain_FS
+----
+
+So the flags might be a bit verbose, but they convey their meaning within a certain grammar quite clearly and need little explanation. That single command now fires off a whole set of operations.
+
+[source, bash]
+----
 
 Analysis started.
 Uploading all data from './5yroldbrains' to CUBE: <progress>
@@ -143,7 +180,7 @@ Creating a new analysis root node from this data: <progress>
 Attaching and running workflow
 "FreeSurfer full with reports and overlays"
 
-All workflow plugins successfully scheduled.
+All workflow plugins successfully scheduled and set to run on compute environment 'e2-12hr'.
 
  pid:ppid   │ plugin title
 ────────────┼───────────────────────────────────────────────────────
