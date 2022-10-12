@@ -1,0 +1,189 @@
+= The Case for UI (javascript) Modularization as a Means to Accelerate CLI Client Development
+
+== Abstract
+
+Most research uses of the ChRIS platform lend themselves to Command Line Interface (CLI) use. These use cases typically require running a _fixed_ analysis over a large set of input data sets and then integrating the results. A closely related use case is exploring a parameterized condition set during analysis (for example, the _same_ analysis but with slightly different parameters). In these (and similar) cases, a manual GUI driven workflow simply does not scale and these are best addressed in some CLI scripted fashion.
+
+The current ChRIS UI represents the single largest code base of _client_ facing code, and it is written in typescript. This UI provides a rich and deep set of functionality to an end user. At the moment, the UI is largely a single monolothic and un-modularized code base. Not only does this impede development with increased technical/future debt, it also means that most of its useful functionality is not usable by any other client.
+
+This RFC proposes a case for pervasive modularization specifically to aid CLI development.
+
+== Current
+
+Speaking to CUBE is effected via a `collection+json` REST API. While logical and self-discoverable, the API is cumbersome to use directly in client applications. To solve this, a companion CUBE javascript (JS) library is available. This library is more of an _interface_ to the CUBE API, and offers more programmatically convenient methods to use API features. It can be considered a _low level_ API that simplifies communication, but offers little in the way of aggregate functionality. These API calls need to be assembled into larger, more useful higher level methods.
+
+As such the _functionality distance_ between the existing JS library and useful high level methods is large. The ChRIS UI during its development historically made little effort to modularize functional parts, nor to buffer or isolate _logic_ from _implementation_. As a result various pages of the UI have functionality _baked directly_ into the visual presentation of a page. For example, the UI currently offers at least three different means to present or view the CUBE storage. None of these are interchangeable nor can any be reused without significant work in other parts of the UI.
+
+== What?
+
+The initial conceptualization of the UI involved some ideas of reusability. Ideally speaking, the UI code would have no _logic_ but only implementation of features within a DOM for visual representation. Methods such as "return a list of plugins" or "find a plugin with this search pattern" or "what is the execution state of this workflow" should all be assembled and abstracted into a separate library and the UI would merely call these abstracted methods and manipulate the results to present to the user. This is not the current case.
+
+The lack of such a libary has hampered non-ChRIS UI development. CUBE has always supported the full and clean separation of back-end from front-end and in fact the idea of multiple different UIs, some specific to given workflows has always been a design goal. At the moment, however, no new UI can benefit from the years of work and effort into the main ChRIS UI and is doomed to re-invent the proverbial wheel each time.
+
+The COVIDnet UI is an instructive example. This UI is a workflow built to running a specific analysis and presenting results of that analysis. It was created by "hacking" a fork of the existing UI and has since stagnated down an evolutionary dead end.
+
+== Why?
+
+Alluding to the introduction of this RFC, an accelerant to ChRIS/CUBE adoption is the development of a rich CLI interface. While the Rust-based `chrs` project currently fills this role and represents a clean-room implementation of a client, the java/type-script code in the UI dwarfs `chrs` by a considerable margin. Moreover, Rust is simply not as widely used as java/typescript. Creating new web GUIs _and_ CLI tools in javascript (with nodejs) can be greatly facilitated by modularization.
+
+Consider the following hypothetical workflow. Imagine a CLI client called `kruis` that uses a new shared library called `kubuis` (these names are a play on the Dutch "cross" and "cuboid"). the `kubuis` library houses _logic_ functionality for a large range/space of CUBE related features. In this hypothetical setup, let's assume also that a research has a large set of data to analyze in a directory `~/data/5yroldbrains`. A CLI workflow could proceed as:
+
+[source, bash]
+----
+# log into CUBE
+$> kruis login https://cube-next.tch.harvard.edu
+
+Welcome to CUBE!
+name: rudolphpienaar
+password: XXXXXX
+
+Login successful. Hello, Rudolph.
+You currently have no active processes running.
+----
+
+Now, I want to run a new analysis (workflow) on my data. First, let's find a pipeline to use:
+
+[source, bash]
+----
+$> kruis pipelines ls
+
+Pipelines registered to CUBE:
+
+ id  │ name
+─────┼───────────────────────────────────────────────────────
+ 17  │ FreeSurfer no mess no fuss
+ 18  │ FreeSurfer full with reports and overlays
+ 19  │ DICOM tag extract and anonymize
+ 20  │ DICOM tag extract and anonymize and simple FreeSurfer
+ 22  │ DICOM tag extract and anonymize with full FreeSurfer
+ 11  │ FreeSurfer with --notalairach
+ 31  │ DICOM to image
+ 42  │ COVIDnet analysis
+─────┴───────────────────────────────────────────────────────
+
+$> kruis pipelines ls *Freesurfer*
+
+I found no pipelines with substring 'Freesurfer' in their names. Please check
+your spelling and note that searches are case sensitive. Use '--nocase' to
+disable this.
+
+$> kruis pipelines ls --nocase *Freesurfer*
+
+Pipelines registered to CUBE with case insensitive substring 'Freesurfer':
+
+ id  │ name
+─────┼───────────────────────────────────────────────────────
+ 17  │ FreeSurfer no mess no fuss
+ 18  │ FreeSurfer full with reports and overlays
+ 11  │ FreeSurfer with --notalairach
+─────┴───────────────────────────────────────────────────────
+
+$> kruis pipelines info "FreeSurfer no mess no fuss"
+
+Name: FreeSurfer full with reports and overlays
+ID: 18
+URL: cube-next.tch.harvard.edu/pipelines/18
+
+This pipeline runs FreeSurfer version 7.3.2 on an input parent directory that
+itself can contain multiple subjects. FreeSurfer is run on each subject in
+parallel.
+
+$> kruis pipelines info 17
+
+Name: FreeSurfer full with reports and overlays
+ID: 18
+URL: cube-next.tch.harvard.edu/pipelines/17
+
+This pipeline runs FreeSurfer version 7.3.2 on an input parent directory that
+itself can contain multiple subjects. FreeSurfer is run on each subject in
+parallel.
+
+$> kruis pipelines info 18
+
+Name: FreeSurfer full with reports and overlays
+ID: 18
+URL: cube-next.tch.harvard.edu/pipelines/detail/134
+
+This pipeline runs FreeSurfer version 7.3.2 on an input parent directory that
+itself can contain multiple subjects. FreeSurfer is run on each subject in
+parallel. In addition, this pipeline also extracts reports and generates png
+overlays of segmentations on the original data.
+
+
+$> kruis pipelines structure 18
+
+Name: FreeSurfer full with reports and overlays
+ID: 18
+URL: cube-next.tch.harvard.edu/pipelines/piping/254
+
+ pid:ppid │ plugin title
+──────────┼───────────────────────────────────────────────────────
+  1:~     │ root-dir-copy
+  2:1     │ FreeSurfer v7.3.2
+  3:2     │ Image conversion
+  4:2     │ Segmentation to image
+  5:2     │ Text report on segmentations
+──────────┴───────────────────────────────────────────────────────
+
+----
+
+Ok, so I want to run that pipeline. I also want to copy the resultant data from the FreeSurfer plugin to my local filesystem. I note that is piping-id `pid 2` in the structure table.
+
+[source, bash]
+----
+$> cd ~/data
+~/data$> kruis analyze --readDataFrom ./5yroldbrains                            \
+                       --usePipeline 18 --onCompute e2-12hr                     \
+                       --pullResultsFromPiping 2 --saveDataTo ./5yroldbrain_FS
+
+Analysis started.
+Uploading all data from './5yroldbrains' to CUBE: <progress>
+Creating a new analysis root node from this data: <progress>
+
+Attaching and running workflow
+"FreeSurfer full with reports and overlays"
+
+All workflow plugins successfully scheduled.
+
+ pid:ppid   │ plugin title
+────────────┼───────────────────────────────────────────────────────
+  1449:~    │ root-dir-copy
+  1450:1449 │ FreeSurfer v7.3.2
+  1451:1450 │ Image conversion
+  1452:1450 │ Segmentation to image
+  1453:1450 │ Text report on segmentations
+────────────┴───────────────────────────────────────────────────────
+
+Attaching new plugin 'neuro-fs-push' with targetdir '5yroldbrain_FS' to plugin 1450
+
+Plugins scheduled
+
+ pid:ppid   │ plugin title
+────────────┼───────────────────────────────────────────────────────
+  1449:~    │ root-dir-copy
+  1450:1449 │ FreeSurfer v7.3.2
+  1451:1450 │ Image conversion
+  1452:1450 │ Segmentation to image
+  1453:1450 │ Text report on segmentations
+  1454:1450 │ neuro-fs-push
+────────────┴───────────────────────────────────────────────────────
+
+Your analysis has been successfully created and scheduled! Data will appear in
+the local direcory './5yroldbrain_FS' as it is available. On final completion
+of this whole analysis you will receive an email. Please note that the analysis
+can be monitored in real-time in ChRIS itself using the ChRIS UI at this URL:
+
+    https://chris-next.tch.harvard.edu/feeds/5435
+
+~/data$>
+----
+
+== Limitations/Issues
+
+Given the size of the UI codebase, a wholescale rewrite is a significant issue. It is proposed however, to approach this somewhat piecemeal -- create the `kubus.js` library and start adding new features / methods to this as UI development continues, and specifically with the view to the suggested CLI workflow presented here.
+
+== Effort/Reward
+
+The effort is projected to be high, but complexity should plateau out relatively quickly. It is in anticipated that the most effort would be initially in simply incorporating a logic-only `kubus.js` library and abstracting functionality within that library. Once a library has been established that can serve both browser and nodejs clients, it is anticipated that development will become simpler with time.
+
+The reward is deemed high.
