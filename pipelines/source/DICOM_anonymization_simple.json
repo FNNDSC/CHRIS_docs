@@ -6,6 +6,7 @@
   "locked": true,
   "plugin_tree": [
     {
+      "title": "pl-simpledsapp1",
       "plugin_name": "pl-simpledsapp",
       "plugin_version": "2.1.0",
       "previous_index": null,
@@ -17,6 +18,7 @@
       ]
     },
     {
+      "title": "pl-pfdicom_tagsub1",
       "plugin_name": "pl-pfdicom_tagsub",
       "plugin_version": "3.2.4",
       "previous_index": 0,
