@@ -2,6 +2,8 @@
 
 == Abstract
 
+TEST
+
 This document describes the steps that are required to get ChRIS with `pfcon` and `pman` up and running on the MOC. The intended audience is ChRIS developers.
 
 . xref:#registering-to-mass-open-cloud[Registering to Mass Open Cloud]
