@@ -40,7 +40,7 @@ image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack
 
 Use your `SSO` credentials to login to https://console-openshift-console.apps.ocp-prod.massopen.cloud to view your project in Openshift. (See the image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.png[Openshift Project]
+image::https://github.com/Jinzhou511/CHRIS_docs-fork/tree/master/images/mpc/Openshift-project.png[Openshift Project]
 
 You can create a project manually in the Openshift UI or by using a terminal command:
 
