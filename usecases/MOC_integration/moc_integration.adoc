@@ -187,7 +187,7 @@ After downloading it, enter the subdirectory `openshift`:
 cd pman/openshift
 ....
 
-*Note:* The current version that supports `flask` is `fnndsc/pman:flask`. There is one place in the template where you need to change your project name. Look for a field saying `OPENSHIFTMGR_PROJECT`
+*Note:* The current version that supports `flask` is `ghcr.io/sandip117/pman:flask`. There is one place in the template where you need to change your project name. Look for a field saying `OPENSHIFTMGR_PROJECT`
 
 Now edit the `pman-openshift-template.json` with your OPENSHIFT project name and updated pman docker image (See image below)
 
