@@ -2,7 +2,7 @@
 
 == Abstract
 
-The content of this repo is under Openshift 3.x, now it is under the process to be updated to version 4.x
+The content of this repo is under Openshift 3.x, now it is under the process to be updated to version 4.x.
 
 This document describes the steps that are required to get ChRIS with `pfcon` and `pman` up and running on the MOC. The intended audience is ChRIS developers.
 
