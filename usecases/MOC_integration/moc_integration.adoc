@@ -37,7 +37,7 @@ If the projects are created, you should be able to login and view the projects.
 
 Use your `SSO` credentials to login to https://console-openshift-console.apps.ocp-prod.massopen.cloud to view your project in Openshift. (See the image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.jpg[Openshift Project]
+image::https://github.com/Jinzhou511/CHRIS_docs/blob/master/images/mpc/Openshift-project.jpg[Openshift Project]
 
 You can create a project manually in the Openshift UI or by using a terminal command:
 
@@ -213,7 +213,7 @@ Note: if you already have a deployed pman running on OpenShift, you will receive
 
 After deploying `pman`, you can see it deployed and running on Openshift. (See image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-Overview.jpg[Pman Overview]
+image::https://github.com/Jinzhou511/CHRIS_docs/blob/master/images/mpc/Pman-Overview.jpg[Pman Overview]
 
 To delete `pman`
 
@@ -263,7 +263,7 @@ Note: if you already have a deployed pfcon running on OpenShift, you will receiv
 
 After deploying `pfcon`, you can see it deployed and running on Openshift. (See image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Overview.png[Pfcon Overview]
+image::https://github.com/Jinzhou511/CHRIS_docs/blob/master/images/mpc/Pfcon-Overview.png[Pfcon Overview]
 
 To delete `pfcon`
 
