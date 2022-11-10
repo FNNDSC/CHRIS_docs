@@ -37,7 +37,7 @@ If the projects are created, you should be able to login and view the projects.
 
 Use your `SSO` credentials to login to https://console-openshift-console.apps.ocp-prod.massopen.cloud to view your project in Openshift. (See the image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.png[Openshift Project]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.jpg[Openshift Project]
 
 You can create a project manually in the Openshift UI or by using a terminal command:
 
@@ -72,7 +72,7 @@ After succesfully installing Openshift CLI Tool, you can login to Opeshift using
 
 First go to https://console-openshift-console.apps.ocp-prod.massopen.cloud[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-login.png[Openshift Login]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-login.jpg[Openshift Login]
 
 Open a terminal and paste the login command. (Your token will differ from the example)
 
@@ -213,7 +213,7 @@ Note: if you already have a deployed pman running on OpenShift, you will receive
 
 After deploying `pman`, you can see it deployed and running on Openshift. (See image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-Overview.png[Pman Overview]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-Overview.jpg[Pman Overview]
 
 To delete `pman`
 
@@ -242,7 +242,7 @@ Now update the `COMPUTE_SERVICE_URL` in `pfcon-openshift-template.json` with you
 oc get route
 ....
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-template.png[Pfcon Template]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-template.jpg[Pfcon Template]
 
 For deploying `pfcon` to Openshift:
 
