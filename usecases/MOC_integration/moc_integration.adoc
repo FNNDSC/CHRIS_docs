@@ -18,7 +18,7 @@ This document describes the steps that are required to get ChRIS with `pfcon` an
 == Registering to Mass Open Cloud
 
 * In order to create an account, you should submit a request to MOC. It usually takes 2-3 business days to get approved. + 
-Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]
+Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]. The information provided in the previous link is ambiguous. Note that only OpenStack has been moved to NERC, OpenShift function is still on MOC and the registration should be working.
 
 * Learn more about adding users to your OpenShift project. Follow this link -> https://docs.openshift.com/container-platform/3.11/admin_guide/manage_users.html[Add Users to OpenShift Projects]
 
