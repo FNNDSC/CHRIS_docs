@@ -2,49 +2,49 @@
 
 == Abstract
 
+The content of this repo is under Openshift 3.x, now it is under the process to be updated to version 4.x.
+
 This document describes the steps that are required to get ChRIS with `pfcon` and `pman` up and running on the MOC. The intended audience is ChRIS developers.
 
 . xref:#registering-to-mass-open-cloud[Registering to Mass Open Cloud]
-. xref:#adding-projects-to-openshift-and-openstack[Adding Projects to Openshift and Openstack]
+. xref:#adding-projects-to-openshift[Adding Projects to Openshift]
 . xref:#installing-openshift-cli-tool[Installing Openshift CLI Tool]
 . xref:#creating-secrets-on-openshift-using-cli-tool[Creating Secrets on Openshift Using CLI Tool]
 . xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
 . xref:#deploying-pfcon-on-openshift[Deploying pfcon on Openshift]
-. xref:#running-test-scripts-on-openshift[Running Test Scripts on Openshift]
 . xref:#additional-step-building-a-local-openshift-cluster-via-crc[(Additional Step) Building a Local Openshift Cluster via CRC]
-. xref:#alternative-way-building-a-local-openshift-cluster-via-openshift-origin[(Alternative Way) Building a Local Openshift Cluster via OpenShift Origin]
+
 
 == Registering to Mass Open Cloud
 
 * In order to create an account, you should submit a request to MOC. It usually takes 2-3 business days to get approved. + 
-Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]
+Follow this link -> https://massopen.cloud/request-an-account/[Request Account on MOC]. The information provided in the previous link is ambiguous. Note that only OpenStack has been moved to NERC, OpenShift function is still on MOC and the registration should be working.
 
-* Learn more about adding users to your Openstack project. Follow this link -> https://support.massopen.cloud/kb/faq.php?id=22[Add Users to Openstack Project]
+* Learn more about adding users to your OpenShift project. Follow this link -> https://docs.openshift.com/container-platform/3.11/admin_guide/manage_users.html[Add Users to OpenShift Projects]
 
-* If your access is approved, Follow these links to login to the Openshift and Openstack platforms -> https://k-openshift.osh.massopen.cloud:8443/[Openshift] | http://kaizen.massopen.cloud/[Openstack]
+* If your access is approved, Follow the link to login to the Openshift -> https://console-openshift-console.apps.ocp-prod.massopen.cloud[Openshift]
 
 You should be able to login to these platforms by using your `SSO` credentials.
 
 
-== Adding Projects to Openshift and Openstack
+== Adding Projects to Openshift
 
-In order to create new projects on Openshift and Openstack you can create a ticket here -> https://osticket.massopen.cloud/[Create a Ticket]
+Note: If your account does not have administrative authority, you will not be able to create new projects but you can work on the project that you are invited in.
+
+In order to create new projects on Openshift you can create a ticket here -> https://osticket.massopen.cloud/[Create a Ticket]
 
 If the projects are created, you should be able to login and view the projects.
 
-Use your `SSO` credentials to login to https://kaizen.massopen.cloud to view your project in Openstack. (See the image below)
+Use your `SSO` credentials to login to https://console-openshift-console.apps.ocp-prod.massopen.cloud to view your project in Openshift. (See the image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openstack-project.png[Openstack Project]
-
-Use your `SSO` credentials to login to https://k-openshift.osh.massopen.cloud:8443 to view your project in Openshift. (See the image below)
-
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-project.png[Openshift Project]
+image::https://github.com/Jinzhou511/CHRIS_docs-fork/blob/master/images/mpc/Openshift-project.jpg[Openshift Project]
 
 You can create a project manually in the Openshift UI or by using a terminal command:
 
+....You can create a project manually in the Openshift UI or by using a terminal comma
 ....
-$ oc new-project cs6620-sp2021-integrated-med-ai --display-name="CS6620 Spring 2021 \
-Integrating Medical AI Compute CPU/GPU worklows on the MOC -- PowerPC and x86-64 -- Using OpenShift"
+$ oc new-project ec528-fall2022-cloud-computing --display-name="EC528 Fall 2022 \
+Cloud Computing -- Bring ChRIS to OpenShift and Kubernetes -- Using OpenShift"
 ....
 
 Note: Make sure that you have OC libraries installed on your system. (See xref:#installing-openshift-cli-tool[Installing Openshift CLI Tool]
@@ -52,7 +52,7 @@ Note: Make sure that you have OC libraries installed on your system. (See xref:#
 
 == Installing Openshift CLI Tool
 
-It is recommended to install the Openshift CLI Tool on your system to ease the next steps working on MOC platform smoothly.
+With the OpenShift command-line interface (CLI), the oc command, you can create applications and manage OpenShift Container Platform projects from a terminal. It is recommended to install the Openshift CLI Tool on your system to ease the next steps working on MOC platform smoothly.
 
 === Recommended Method
 
@@ -60,22 +60,24 @@ In order to download the Openshift CLI Tool, you will have to create/open a RedH
 
 Follow this link to get information on how to download and install the Openshift CLI Tool -> https://docs.openshift.com/container-platform/4.6/cli_reference/openshift_cli/getting-started-cli.html[Download Openshift CLI Tool]
 
-=== Alternative Method (Deprecated)
+After unzipping the downloaded file, add the binary file oc to your path.
 
-If you do not wish to create a RedHat account, you can download the packages from this GitHub repo: https://github.com/openshift/origin/releases
+....
+export PATH=$PATH:<your oc path>
+....
 
 == Creating Secrets on Openshift Using CLI Tool
 
 After succesfully installing Openshift CLI Tool, you can login to Opeshift using CLI commands.
 
-First go to https://k-openshift.osh.massopen.cloud:8443/[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
+First go to https://console-openshift-console.apps.ocp-prod.massopen.cloud[Openshift] and login using `SSO` credentials. After that click `Copy Login Command` as seen from the image below. 
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Openshift-login.png[Openshift Login]
+image::https://github.com/Jinzhou511/CHRIS_docs-fork/blob/master/images/mpc/Openshift-login.jpg[Openshift Login]
 
 Open a terminal and paste the login command. (Your token will differ from the example)
 
 ....
-$ oc login https://k-openshift.osh.massopen.cloud:8443 --token=MQCsXU6Gs1DWNE0zk67eYA0A7eCmH0-cM576qZooRFY
+oc login --token=sha256~_Cvg-z7mBjmT9d-a78Nar6ba-vPxPnZprXJYzB0_nVw --server=https://api.ocp-prod.massopen.cloud:6443
 ....
 
 === Creating Secrets
@@ -98,7 +100,7 @@ token = password
 ....
 
 ["loweralpha", start=2]
-. Convert the configuration to base64 & copy the base64 encoded results with the following command:
+. Convert the authorized token to base64 & copy the base64 encoded results with the following command:
 
 ....
 cat example-config.cfg | base64
@@ -185,7 +187,7 @@ After downloading it, enter the subdirectory `openshift`:
 cd pman/openshift
 ....
 
-*Note:* The current version that supports `flask` is `fnndsc/pman:flask`. There is one place in the template where you need to change your project name. Look for a field saying `OPENSHIFTMGR_PROJECT`
+*Note:* The current version that supports `flask` is `ghcr.io/sandip117/pman:flask`. There is one place in the template where you need to change your project name. Look for a field saying `OPENSHIFTMGR_PROJECT`
 
 Now edit the `pman-openshift-template.json` with your OPENSHIFT project name and updated pman docker image (See image below)
 
@@ -199,9 +201,19 @@ For deploying `pman` to Openshift:
 oc new-app pman-openshift-template.json
 ....
 
+Note: if you already have a deployed pman running on OpenShift, you will receive the following error message:
+
+....
+--> Creating resources ...
+    error: deploymentconfigs.apps.openshift.io "pman" already exists
+    error: services "pman" already exists
+    error: routes.route.openshift.io "pman" already exists
+--> Failed
+....
+
 After deploying `pman`, you can see it deployed and running on Openshift. (See image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pman-Overview.png[Pman Overview]
+image::https://github.com/Jinzhou511/CHRIS_docs-fork/blob/master/images/mpc/Pman-Overview.jpg[Pman Overview]
 
 To delete `pman`
 
@@ -230,7 +242,7 @@ Now update the `COMPUTE_SERVICE_URL` in `pfcon-openshift-template.json` with you
 oc get route
 ....
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-template.png[Pfcon Template]
+image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-template.jpg[Pfcon Template]
 
 For deploying `pfcon` to Openshift:
 
@@ -238,9 +250,20 @@ For deploying `pfcon` to Openshift:
 oc new-app pfcon-openshift-template.json
 ....
 
+Note: if you already have a deployed pfcon running on OpenShift, you will receive the following error message:
+
+....
+--> Creating resources ...
+    error: deploymentconfigs.apps.openshift.io "pfcon" already exists
+    error: services "pfcon" already exists
+    error: routes.route.openshift.io "pfcon" already exists
+--> Failed
+....
+
+
 After deploying `pfcon`, you can see it deployed and running on Openshift. (See image below)
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Overview.png[Pfcon Overview]
+image::https://github.com/Jinzhou511/CHRIS_docs-fork/blob/master/images/mpc/Pfcon-Overview.jpg[Pfcon Overview]
 
 To delete `pfcon`
 
@@ -249,196 +272,196 @@ oc delete all -l app=pfcon
 oc delete route pfcon
 ....
 
-== Running Test Scripts on Openshift
+// == Running Test Scripts on Openshift
 
-There are a couple of prerequisites that we have to satisfy before running any plugins on Openshift.
+// There are a couple of prerequisites that we have to satisfy before running any plugins on Openshift.
 
-* xref:#create-a-python-virtual-environment[Create a Python Virtual Environment]
+// * xref:#create-a-python-virtual-environment[Create a Python Virtual Environment]
 
-* xref:#install-pfconclient[Install pfconclient]
+// * xref:#install-pfconclient[Install pfconclient]
 
-* xref:#install-httpie[Install httpie]
+// * xref:#install-httpie[Install httpie]
 
-* xref:#download-test-scripts[Download test scripts]
+// * xref:#download-test-scripts[Download test scripts]
 
-=== Create a Python Virtual Environment
+// === Create a Python Virtual Environment
 
-["arabic", start=1]
-. Install the Python virtual environment creator
+// ["arabic", start=1]
+// . Install the Python virtual environment creator
 
-* For Fedora -> `sudo dnf install python3-virtualenv`
+// * For Fedora -> `sudo dnf install python3-virtualenv`
 
-* For Ubuntu -> `sudo apt install virtualenv virtualenvwrapper python3-tk`
+// * For Ubuntu -> `sudo apt install virtualenv virtualenvwrapper python3-tk`
 
-["arabic", start=2]
-. Create a directory for your virtual environments
+// ["arabic", start=2]
+// . Create a directory for your virtual environments
 
-....
-mkdir ~/python-envs
-....
+// ....
+// mkdir ~/python-envs
+// ....
 
-["arabic", start=3]
-. Add these two lines to your .bashrc file
+// ["arabic", start=3]
+// . Add these two lines to your .bashrc file
 
-....
-export WORKON_HOME=~/python-envs
-source /usr/local/bin/virtualenvwrapper.sh
-....
+// ....
+// export WORKON_HOME=~/python-envs
+// source /usr/local/bin/virtualenvwrapper.sh
+// ....
 
-["arabic", start=4]
-. Source your .bashrc and create a new Python3 virtual env
+// ["arabic", start=4]
+// . Source your .bashrc and create a new Python3 virtual env
 
-....
-source .bashrc
-mkvirtualenv --python=python3 chris_env
-....
+// ....
+// source .bashrc
+// mkvirtualenv --python=python3 chris_env
+// ....
 
-["arabic", start=5]
-. Activate your virtual environment
+// ["arabic", start=5]
+// . Activate your virtual environment
 
-....
-workon chris_env
-....
+// ....
+// workon chris_env
+// ....
 
-*Note:* To deactivate the virtual environment you can use `deactivate` command on the terminal
+// *Note:* To deactivate the virtual environment you can use `deactivate` command on the terminal
 
-=== Install pfconclient
+// === Install pfconclient
 
-If you cretad the python virtual environment succesfully, you can install pfconclient:
+// If you cretad the python virtual environment succesfully, you can install pfconclient:
 
-....
-pip install -U python-pfconclient
-....
+// ....
+// pip install -U python-pfconclient
+// ....
 
-You can learn more about pfconclient: https://github.com/FNNDSC/python-pfconclient
+// You can learn more about pfconclient: https://github.com/FNNDSC/python-pfconclient
 
-=== Install httpie
+// === Install httpie
 
-For some of the scripts, you might need to install httpie:
+// For some of the scripts, you might need to install httpie:
 
-....
-pip install httpie
-....
+// ....
+// pip install httpie
+// ....
 
-=== Download Test Scripts
+// === Download Test Scripts
 
-You can download the test scripts from https://github.com/FNNDSC/ChRIS-E2E
+// You can download the test scripts from https://github.com/FNNDSC/ChRIS-E2E
 
-*Note:* Sometimes, you can get an invalid response like 502 or 401 error when you execute the scripts. You have to recreate the secret `kubecfg` every time you log in. More information xref:#http-401-unauthorized[Troubleshoot]
+// *Note:* Sometimes, you can get an invalid response like 502 or 401 error when you execute the scripts. You have to recreate the secret `kubecfg` every time you log in. More information xref:#http-401-unauthorized[Troubleshoot]
 
-=== Running the Scripts
+// === Running the Scripts
 
-If you've succesfully completed all the prerequisites, you can start running the test scripts. First off, you need the routes of the services you deployed to run the scripts. 
+// If you've succesfully completed all the prerequisites, you can start running the test scripts. First off, you need the routes of the services you deployed to run the scripts. 
 
-....
-(chris_env) [cyoruk@localhost scripts]$ oc get routes
-NAME    HOST/PORT                                     PATH   SERVICES   PORT       TERMINATION   WILDCARD
-pfcon   pfcon-flask-chris.k-apps.osh.massopen.cloud          pfcon      5005-tcp                 None
-pman    pman-flask-chris.k-apps.osh.massopen.cloud           pman       5010-tcp                 None
-....
+// ....
+// (chris_env) [cyoruk@localhost scripts]$ oc get routes
+// NAME    HOST/PORT                                     PATH   SERVICES   PORT       TERMINATION   WILDCARD
+// pfcon   pfcon-flask-chris.k-apps.osh.massopen.cloud          pfcon      5005-tcp                 None
+// pman    pman-flask-chris.k-apps.osh.massopen.cloud           pman       5010-tcp                 None
+// ....
 
-["arabic", start=1]
-. Test `pman`
-....
-# $ http <pman-route>/api/v1/hello/
-
-
-(chris_env) [cyoruk@localhost scripts]$ http pman-flask-chris.k-apps.osh.massopen.cloud/api/v1/hello/
-HTTP/1.0 200 OK
-Cache-control: private
-Connection: keep-alive
-Content-Length: 1171
-Content-Type: application/json
-Date: Mon, 19 Apr 2021 17:52:14 GMT
-Server: Werkzeug/1.0.1 Python/3.8.5
-Set-Cookie: 8f72863408ccaf75ef5904d263aa663f=6b2c25e4b707fd5a818643eecefe12d7; path=/; HttpOnly
-
-{
-    "d_ret": {
-        "message": "pman says hello from openshift 😃",
-        "sysinfo": {
-            "cpu_percent": 1.2,
-            "cpucount": 56,
-            "hostname": "pman-1-45hv5",
-            "inet": "10.128.9.19",
-            "loadavg": [
-                0.39,
-                0.67,
-                0.51
-            ],
-            "machine": "x86_64",
-            "memory": [
-                115996803072,
-                105224880128,
-                9.3,
-                10000596992,
-                63990882304,
-                28992512000,
-                17136709632,
-                2138112,
-                42003185664,
-                14237696,
-                4056023040
-            ],
-            "platform": "Linux-3.10.0-1127.el7.x86_64-x86_64-with-glibc2.29",
-            "system": "Linux",
-            "uname": [
-                "Linux",
-                "pman-1-45hv5",
-                "3.10.0-1127.el7.x86_64",
-                "#1 SMP Tue Feb 18 16:39:12 EST 2020",
-                "x86_64",
-                "x86_64"
-            ],
-            "version": "#1 SMP Tue Feb 18 16:39:12 EST 2020"
-        }
-    },
-    "status": true
-}
+// ["arabic", start=1]
+// . Test `pman`
+// ....
+// # $ http <pman-route>/api/v1/hello/
 
 
-....
+// (chris_env) [cyoruk@localhost scripts]$ http pman-flask-chris.k-apps.osh.massopen.cloud/api/v1/hello/
+// HTTP/1.0 200 OK
+// Cache-control: private
+// Connection: keep-alive
+// Content-Length: 1171
+// Content-Type: application/json
+// Date: Mon, 19 Apr 2021 17:52:14 GMT
+// Server: Werkzeug/1.0.1 Python/3.8.5
+// Set-Cookie: 8f72863408ccaf75ef5904d263aa663f=6b2c25e4b707fd5a818643eecefe12d7; path=/; HttpOnly
 
-["arabic", start=2]
-. Test `pfcon`
+// {
+//     "d_ret": {
+//         "message": "pman says hello from openshift 😃",
+//         "sysinfo": {
+//             "cpu_percent": 1.2,
+//             "cpucount": 56,
+//             "hostname": "pman-1-45hv5",
+//             "inet": "10.128.9.19",
+//             "loadavg": [
+//                 0.39,
+//                 0.67,
+//                 0.51
+//             ],
+//             "machine": "x86_64",
+//             "memory": [
+//                 115996803072,
+//                 105224880128,
+//                 9.3,
+//                 10000596992,
+//                 63990882304,
+//                 28992512000,
+//                 17136709632,
+//                 2138112,
+//                 42003185664,
+//                 14237696,
+//                 4056023040
+//             ],
+//             "platform": "Linux-3.10.0-1127.el7.x86_64-x86_64-with-glibc2.29",
+//             "system": "Linux",
+//             "uname": [
+//                 "Linux",
+//                 "pman-1-45hv5",
+//                 "3.10.0-1127.el7.x86_64",
+//                 "#1 SMP Tue Feb 18 16:39:12 EST 2020",
+//                 "x86_64",
+//                 "x86_64"
+//             ],
+//             "version": "#1 SMP Tue Feb 18 16:39:12 EST 2020"
+//         }
+//     },
+//     "status": true
+// }
 
-Create a folder /tmp/small & add some files above 100KB to that folder first. Then run the below script to run a job.
 
-....
-# $ ./post_pfcon_ds <pfcon-route> <job-id>
+// ....
+
+// ["arabic", start=2]
+// . Test `pfcon`
+
+// Create a folder /tmp/small & add some files above 100KB to that folder first. Then run the below script to run a job.
+
+// ....
+// # $ ./post_pfcon_ds <pfcon-route> <job-id>
 
 
-(chris_env) [cyoruk@localhost scripts]$ ./post_pfcon_ds pfcon-flask-chris.k-apps.osh.massopen.cloud jid04201513
+// (chris_env) [cyoruk@localhost scripts]$ ./post_pfcon_ds pfcon-flask-chris.k-apps.osh.massopen.cloud jid04201513
 
-Submitting job jid04201513 to pfcon service at -->http://pfcon-flask-chris.k-apps.osh.massopen.cloud/api/v1/<--...
-Waiting for 2s before next polling for job status ...
+// Submitting job jid04201513 to pfcon service at -->http://pfcon-flask-chris.k-apps.osh.massopen.cloud/api/v1/<--...
+// Waiting for 2s before next polling for job status ...
 
-Polling job jid04201513 status, poll number: 1
-Job jid04201513 status: ['started']
-Waiting for 4s before next polling for job status ...
+// Polling job jid04201513 status, poll number: 1
+// Job jid04201513 status: ['started']
+// Waiting for 4s before next polling for job status ...
 
-Polling job jid04201513 status, poll number: 2
-Job jid04201513 status: ['started']
-Waiting for 8s before next polling for job status ...
+// Polling job jid04201513 status, poll number: 2
+// Job jid04201513 status: ['started']
+// Waiting for 8s before next polling for job status ...
 
-Polling job jid04201513 status, poll number: 3
-Job jid04201513 status: ['started']
-Waiting for 16s before next polling for job status ...
+// Polling job jid04201513 status, poll number: 3
+// Job jid04201513 status: ['started']
+// Waiting for 16s before next polling for job status ...
 
-Polling job jid04201513 status, poll number: 4
-Job jid04201513 status: finishedSuccessfully
+// Polling job jid04201513 status, poll number: 4
+// Job jid04201513 status: finishedSuccessfully
 
-Downloading and unpacking job jid04201513 files...
-Number of files to decompress at /tmp/jid04201513: 29
-Done
+// Downloading and unpacking job jid04201513 files...
+// Number of files to decompress at /tmp/jid04201513: 29
+// Done
 
-Deleting job jid04201513 data from the remote...
-Done
-....
+// Deleting job jid04201513 data from the remote...
+// Done
+// ....
 
-We can see that the containers are created in the `Openstack` environment.
+// We can see that the containers are created in the `Openstack` environment.
 
-image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Output.png[Pfcon Output]
+// image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Output.png[Pfcon Output]
 
 
 
@@ -446,7 +469,6 @@ image::https://github.com/Cagriyoruk/CHRIS_docs/blob/master/images/mpc/Pfcon-Out
 
 Note: This step is focused on bringing a minimal `OpenShift 4.x` cluster to your local laptop or desktop computer. If you are looking for a solution for running `OpenShift 3.x` , you will need tools such as https://www.okd.io/[OpenShift Origin], https://github.com/minishift/minishift[Minishift] or https://developers.redhat.com/products/cdk/overview[CDK]. The step below provides an example for running OpenShift 3.x.
 
-xref:#additional-step-building-a-local-openshift-cluster-via-openshfit-origin[(Additional Step) Building a Local Openshift Cluster via OpenShift Origin]
 
 This additional step is helpful for people who build ChRIS plugins/services to test/debug applications locally before testing it on the cloud environment.
 
@@ -515,149 +537,6 @@ oc new-project local-chris
 * xref:#deploying-pfcon-on-openshift[Deploying pfcon on Openshift]
 
 * xref:#deploying-pman-on-openshift[Deploying pman on Openshift]
-
-== (Alternative Way) Building a Local Openshift Cluster via OpenShift Origin
-
-This additional step is helpful for people who build ChRIS plugins/services to test/debug applications locally before testing it on the cloud environment, especially for people that require a local OpenShift cluster that has the same version as the MOC (3.11 at the time of writing). This step uses Ubuntu 20.04 LTS.
-
-* xref:#prerequisite[Prerequisite]
-
-* xref:#download-openshift-origin[Download OpenShift Origin]
-
-* xref:#run-openshift-origin[Run OpenShift Origin]
-
-* xref:#issue-resolution[Issue Resolution]
-
-=== Prerequisite
-
-You need to have Docker CE installed. See Docker's document for detailed steps. Make sure you add your user to the docker group after installation.
-
-https://docs.docker.com/engine/install/ubuntu/[Install Docker Engine on Ubuntu]
-
-https://docs.docker.com/engine/install/linux-postinstall/[Post-installation steps for Linux]
-
-=== Download OpenShift Origin
-
-At the time of writing, the newest version available is 3.11. Find all releases https://github.com/openshift/origin/releases[here].
-
-Download OpenShift Origin, extract it and place the executable in your `$PATH` (You can check your `$PATH` with `$ echo $PATH`):
-
-....
-$ wget https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
-$ tar xvzf openshift*.tar.gz
-$ cd openshift-origin-client-tools*/
-$ mv oc kubectl $PATH (Place the executable in one of your $PATH)
-....
-
-At this point you should be able to call `oc` to check version:
-
-....
-$ oc version
-oc v3.11.0+0cbc58b
-kubernetes v1.11.0+d4cacc0
-features: Basic-Auth GSSAPI Kerberos SPNEGO
-
-Server https://127.0.0.1:8443
-kubernetes v1.11.0+d4cacc0
-....
-
-=== Run OpenShift Origin
-
-Before bringing up the cluster, configure the Docker daemon so it can use an insecure registry:
-
-....
-$ cat << EOF | sudo tee /etc/docker/daemon.json
-{
-    "insecure-registries" : [ "172.30.0.0/16" ]
-}
-EOF
-....
-
-Then restart docker service:
-
-....
-$ sudo systemctl restart docker
-....
-
-If you have a public hostname or IP address, you can specify that so OpenShift Origin will use that address. If not, use your local network IP address (find it with `$ ifconfig`), or just use localhost (not specifying `public_hostname`; discouraged as it may cause other issues):
-
-....
-$ oc cluster up --public-hostname=<your hostname or IP>
-....
-
-Access the web portal at:
-
-....
-https://<server>:8443/console
-....
-
-Login as a user:
-
-....
-$ oc login -u developer <hostname>:8443
-....
-
-Login as kube admin (for debugging):
-
-....
-$ oc login -u system:admin <hostname>:8443
-....
-
-=== Issue Resolution
-
-With OpenShift Origin, there can be some obscure issues with IP config and name resolution. Here are some tips.
-
-==== Restarting helps
-
-Sometimes the configuration needs to be overwritten and the updates are not in place until it runs again. Run `oc cluster down` then `oc cluster up <args>` to apply these changes.
-
-==== Specify what IP the server uses
-
-If not, sometimes it defaults to 127.0.0.1 which could cause other problems. You could use your local network IP (find it with `$ ifconfig`).
-
-==== Redirection problem
-
-If the cluster constantly redirects from the server address you specified to 127.0.0.1, there are two solutions:
-
-1) Check this file under the dir you ran `oc cluster up`:
-
-....
-$ sudo vim ./openshift.local.clusterup/openshift-controller-manager/openshift-master.kubeconfig
-....
-
-Search for this line:
-
-....
-server: https://127.0.0.1:8443
-....
-
-Replace with:
-
-....
-server: https://<host_ip>:8443
-....
-
-Then run `oc cluster up --public-hostname=<host_ip>`.
-
-2) A workaround is to setup a tunnel:
-
-....
-$ sudo ssh -L 8443:localhost:8443 -f -N <username>@<host_ip>
-....
-
-==== Name resolution problem
-
-If docker pull works fine (check this in pod's events section) but processes in pods cannot resolve names...
-
-Try restarting first. (`oc cluster down` then `oc cluster up <args>`)
-
-If the problem persists, bring down the cluster, find the name resolution file inside the dir created by running `oc cluster up`:
-
-....
-$ sudo vim ./openshift.local.clusterup/kubedns/resolv.conf
-....
-
-Find the nameserver line, and change it to `8.8.8.8` (Google's DNS server). Start the cluster.
 
 
 == Troubleshoot Errors
