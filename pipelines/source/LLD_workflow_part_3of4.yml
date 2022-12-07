@@ -1,0 +1,16 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "LLD on DCM leg xrays part 3 of 4"
+description: "Plot points & lines on the input PNGs using the info available in the input JSON"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: mark-image
+    plugin: pl-markimg v1.1.2
+    previous: ~
+    plugin_parameter_defaults:
+      inputImageName: "inputWithHeatmaps.jpg"
+      pointMarker: "."
+      pointSize: 10
+      linewidth: 0.5
+      lineGap: 70

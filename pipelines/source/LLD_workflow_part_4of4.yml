@@ -1,0 +1,20 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "LLD on DCM leg xrays part 4 of 4"
+description: "Convert all input PNGs to `.dcm` files, run `pl-orthanc_push` on them"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: png-to-dcm
+    plugin: pl-img2dcm v1.0.1
+    previous: ~
+    plugin_parameter_defaults:
+      inputImageFilter: "**/*.png"
+  - title: dicom-push
+    plugin: pl-orthanc_push v1.0.1
+    previous: png-to-dcm
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.dcm"
+      orthancUrl: http://192.168.0.128:8042
+      username: "orthanc"
+      password: "orthanc"
