@@ -15,6 +15,6 @@ plugin_tree:
     previous: png-to-dcm
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
-      orthancUrl: http://192.168.0.128:8042
+      orthancUrl: http://172.18.214.156:8042
       username: "orthanc"
       password: "orthanc"
