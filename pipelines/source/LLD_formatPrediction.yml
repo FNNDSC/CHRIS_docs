@@ -1,0 +1,14 @@
+---
+authors: Rudolph Pienaar <dev@babymri.org>
+name: "Leg Length Discrepency prediction formatter v20221212-2"
+description: "Generate JSON description of prediction output"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: landmarks-to-json 
+    plugin: pl-csv2json v0.1.5
+    previous: ~
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.csv"
+      outputFileStem: "prediction"
+      addTags: "PatientID,PatientName,PatientAge,StudyDate"

@@ -1,0 +1,16 @@
+---
+authors: Rudolph Pienaar <dev@babymri.org>
+name: "Leg Length Discrepency measurements on image v20221212-1"
+description: "Given a JSON prediction description and input leg xray images, calculate, plot, and summarize lengths of leg segments"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: measure-leg-segments 
+    plugin: pl-markimg v1.1.3
+    previous: ~
+    plugin_parameter_defaults:
+      inputImageName: "inputWithHeatmaps.jpg"
+      pointMarker: "."
+      pointSize: 10
+      linewidth: 0.5
+      lineGap: 70
