@@ -11,10 +11,10 @@ plugin_tree:
     plugin_parameter_defaults:
       inputImageFilter: "**/*.png"
   - title: pacs-push
-    plugin: pl-orthanc_push v1.0.1
+    plugin: pl-orthanc_push v1.0.2
     previous: image-to-DICOM
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
-      orthancUrl: http://172.18.214.156:8042
+      orthancUrl: http://192.168.1.200:8042
       username: "orthanc"
       password: "orthanc"
