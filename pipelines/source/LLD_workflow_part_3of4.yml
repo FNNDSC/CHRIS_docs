@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: mark-image
-    plugin: pl-markimg v1.1.3
+    plugin: pl-markimg v1.1.4
     previous: ~
     plugin_parameter_defaults:
       inputImageName: "inputWithHeatmaps.jpg"

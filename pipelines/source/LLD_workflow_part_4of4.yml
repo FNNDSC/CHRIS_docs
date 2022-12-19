@@ -11,7 +11,7 @@ plugin_tree:
     plugin_parameter_defaults:
       inputImageFilter: "**/*.png"
   - title: dicom-push
-    plugin: pl-orthanc_push v1.0.1
+    plugin: pl-orthanc_push v1.0.2
     previous: png-to-dcm
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
