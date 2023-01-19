@@ -41,7 +41,7 @@ _ChRIS_ is an open-source web platform for computational workflows in scientific
 [#definition]
 == Definition of a _ChRIS_ Plugin
 
-A _ChRIS_ plugin is an abstract association between
+A _ChRIS_ plugin is an association between
 a <<name,Name>>, <<public_repo,URL>>, <<dock_image,Image>>, and a <<descriptor_file,JSON representation>>.
 
 [#name]
@@ -73,6 +73,10 @@ with the following schema:
 [source,javascript]
 ----
 {
+  "name": "string",
+  "dock_image": "string",
+  "public_repo": "string",
+
   "type": "fs" | "ds" | "ts",
   "parameters": ParameterSpec[],
   "icon": "string",
@@ -96,6 +100,9 @@ with the following schema:
   "min_gpu_limit": int
 }
 ----
+
+The keys `name`, `dock_image`, and `public_repo` are required when uploading a plugin to _CUBE_.
+They must be left out when uploading a plugin to a _ChRIS Store_.
 
 [#plugin-type]
 ==== Plugin Type
