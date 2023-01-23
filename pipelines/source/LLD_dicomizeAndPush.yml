@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: image-to-DICOM 
-    plugin: pl-img2dcm v1.0.1
+    plugin: pl-img2dcm v1.0.3
     previous: ~
     plugin_parameter_defaults:
       inputImageFilter: "**/*.png"
