@@ -1,17 +1,17 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "PNG-to-DICOM and push to PACS v20221212-2"
+name: "PNG-to-DICOM and push to PACS v20230315-1"
 description: "Convert all input PNGs to `.dcm` files, push to a PACS via orthanc"
 category: Imaging
 locked: false
 plugin_tree:
   - title: image-to-DICOM 
-    plugin: pl-img2dcm v1.0.3
+    plugin: pl-img2dcm v1.0.10
     previous: ~
     plugin_parameter_defaults:
       inputImageFilter: "**/*.png"
   - title: pacs-push
-    plugin: pl-orthanc_push v1.0.2
+    plugin: pl-orthanc_push v1.0.16
     previous: image-to-DICOM
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
