@@ -1,12 +1,12 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "Leg Length Discrepency inference on DICOM inputs v20230324 using CPU"
+name: "Leg Length Discrepency inference on DICOM inputs v20230324-1 using CPU"
 description: "Convert input leg X-Ray DICOMS first to `.mha` files and then process with `lld-inference`"
 category: Imaging
 locked: false
 plugin_tree:
   - title: dcm-to-mha
-    plugin: pl-dcm2mha_cnvtr v1.1.20
+    plugin: pl-dcm2mha_cnvtr v1.2.22
     previous: ~
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
