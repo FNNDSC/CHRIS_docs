@@ -161,3 +161,17 @@ ChRIS plugin app store
 
 ChRIS Frontend
 * [ChRIS Frontend](https://github.com/FNNDSC/ChRIS_ui)
+
+## Related Projects
+
+Many projects simialr to _ChRIS_ exist and have existed. They are called many things:
+Wikipedia calls them
+[Scientific workflow systems](https://en.wikipedia.org/wiki/Scientific_workflow_system) or
+[science gateways](https://en.wikipedia.org/wiki/Science_gateway).
+Our documentation will often use the term "platform" or "compute platform."
+
+We have an ever-outdated, hopefully-unbiased table of related projects here:
+
+https://eminent-shirt-8f9.notion.site/3f3e69007196418c8d8e11753bd7e929?v=0a5a8a0a0ebc443b9e600111d9e72b1b
+
+Old page (outdated info): https://github.com/FNNDSC/CHRIS_docs/wiki/Competitors/2542293b1f1a2436af9aa8f09aa62a5bcdf738ce
