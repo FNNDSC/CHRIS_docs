@@ -1,0 +1,72 @@
+---
+authors: Rudolph Pienaar <dev@babymri.org>
+name: "Leg Length Discrepency Full Workflow v20230328"
+description: "Perform the full leg lenght workflow, including joins"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: dcm-to-mha
+    plugin: pl-dcm2mha_cnvtr v1.1.18
+    previous: ~
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.dcm"
+      rotate: 90
+  - title: generate-landmark-heatmaps
+    plugin: pl-lld_inference v2.2.8
+    previous: dcm-to-mha
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.mha"
+
+  - title: heatmaps-join-root
+    plugin: pl-topologicalcopy v0.2
+    previous: generate-landmark-heatmaps
+    plugin_parameter_defaults:
+      plugininstances: 2,0
+      filter: \.dcm$,\.csv$
+
+  - title: landmarks-to-json
+    plugin: pl-csv2json v1.2.0
+    previous: heatmaps-join-root
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.csv"
+      outputFileStem: "prediction"
+      addTags: "PatientID,PatientName,PatientAge,StudyDate"
+
+  - title: heatmaps-join-json
+    plugin: pl-topologicalcopy v0.2
+    previous: landmarks-to-json
+    plugin_parameter_defaults:
+      plugininstances: 2,0
+      filter: \.jpg$,\.json$
+
+  - title: measure-leg-segments
+    plugin: pl-markimg v1.2.28
+    previous: heatmaps-join-json
+    plugin_parameter_defaults:
+      inputImageName: "inputWithHeatmaps.jpg"
+      pointMarker: "."
+      pointSize: 10
+      linewidth: 0.5
+      lineGap: 70
+
+  - title: measurement-join-dicom
+    plugin: pl-topologicalcopy v0.2
+    previous: measure-leg-segments
+    plugin_parameter_defaults:
+      plugininstances: 2,0
+      filter: \.dcm$,\.png$
+
+
+  - title: image-to-DICOM
+    plugin: pl-img2dcm v1.2.0
+    previous: measurement-join-dicom
+    plugin_parameter_defaults:
+      inputImageFilter: "**/*.png"
+  - title: pacs-push
+    plugin: pl-orthanc_push v1.2.0
+    previous: image-to-DICOM
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.dcm"
+      orthancUrl: http://192.168.1.200:8042
+      username: "orthanc"
+      password: "orthanc"
