@@ -6,10 +6,11 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: image-to-DICOM 
-    plugin: pl-img2dcm v1.2.2
+    plugin: pl-dicommake v2.2.2
     previous: ~
     plugin_parameter_defaults:
-      inputImageFilter: "**/*.png"
+      outputSubDir: "data"
+      thread: true
   - title: pacs-push
     plugin: pl-orthanc_push v1.2.2
     previous: image-to-DICOM
