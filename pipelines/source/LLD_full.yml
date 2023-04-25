@@ -1,47 +1,70 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "Leg Length Discrepency Full Workflow v20230328"
-description: "Perform the full leg lenght workflow, including joins"
+name: "Leg Length Discrepency Full Workflow v20230425"
+description: "Perform the full leg length workflow, including joins"
 category: Imaging
 locked: false
 plugin_tree:
-  - title: dcm-to-mha
-    plugin: pl-dcm2mha_cnvtr v1.1.18
+  # The root of the pipeline is a copy of its parent node.
+  # This copy is needed since the two branches stem off the
+  # core node. The root node should contain one or more
+  # DICOM files to process
+  - title: root-0
+    plugin: pl-simpledsapp v2.1.0
     previous: ~
+
+  # On the left branch, we first convert the DICOM(s) in the root
+  # to mha (MetaImage Medical Format) which is used by the
+  # Simple Image Toolkit (sitk) library in the inference node
+  - title: dcm-to-mha-1
+    plugin: pl-dcm2mha_cnvtr v1.2.22
+    previous: root-0
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
       rotate: 90
-  - title: generate-landmark-heatmaps
-    plugin: pl-lld_inference v2.2.8
-    previous: dcm-to-mha
+  
+  # The inference node reads data as mha format (one subject per mha image)
+  # and determines the heatmap locations of relevant landmarks    
+  - title: generate-landmark-heatmaps-2
+    plugin: pl-lld_inference v2.2.10
+    previous: dcm-to-mha-1
     plugin_parameter_defaults:
       inputFileFilter: "**/*.mha"
 
-  - title: heatmaps-join-root
-    plugin: pl-topologicalcopy v0.2
-    previous: generate-landmark-heatmaps
+  # Now back up to the top, and we create a new branch off the root
+  # that combines the original node DICOM with the csv output of the
+  # inference
+  - title: heatmaps-join-root-3
+    plugin: pl-topologicalcopy v0.2.6
+    previous: generate-landmark-heatmaps-2
     plugin_parameter_defaults:
-      plugininstances: 2,0
+      plugininstances: root-0,generate-landmark-heatmaps-2
       filter: \.dcm$,\.csv$
 
-  - title: landmarks-to-json
-    plugin: pl-csv2json v1.2.0
-    previous: heatmaps-join-root
+  # And directly off this join, we convert the csv file of the inference
+  # to a json
+  - title: landmarks-to-json-4
+    plugin: pl-csv2json v1.2.2
+    previous: heatmaps-join-root-3
     plugin_parameter_defaults:
       inputFileFilter: "**/*.csv"
       outputFileStem: "prediction"
       addTags: "PatientID,PatientName,PatientAge,StudyDate"
 
-  - title: heatmaps-join-json
-    plugin: pl-topologicalcopy v0.2
-    previous: landmarks-to-json
+  # Now we combine the inference images and the json inference file
+  # with a join...
+  - title: heatmaps-join-json-5
+    plugin: pl-topologicalcopy v0.2.6
+    previous: landmarks-to-json-4
     plugin_parameter_defaults:
-      plugininstances: 2,0
+      plugininstances: generate-landmark-heatmaps-2,landmarks-to-json-4
       filter: \.jpg$,\.json$
 
-  - title: measure-leg-segments
-    plugin: pl-markimg v1.2.28
-    previous: heatmaps-join-json
+  # Working off that join we now measure lengths and generate a
+  # report (burned directly into the image, and also saved as a json)
+  - title: measure-leg-segments-6
+    plugin: pl-markimg v1.2.30
+    previous: heatmaps-join-json-5
     plugin_parameter_defaults:
       inputImageName: "inputWithHeatmaps.jpg"
       pointMarker: "."
@@ -49,24 +72,33 @@ plugin_tree:
       linewidth: 0.5
       lineGap: 70
 
-  - title: measurement-join-dicom
-    plugin: pl-topologicalcopy v0.2
-    previous: measure-leg-segments
+  # As we get ready to convert the above image to DICOM, we join the generated
+  # image with the DICOM join to collect all the info needed to create
+  # a DICOM off this image
+  - title: measurement-join-dicom-7
+    plugin: pl-topologicalcopy v0.2.6
+    previous: measure-leg-segments-6
     plugin_parameter_defaults:
-      plugininstances: 2,0
+      plugininstances: heatmaps-join-root-3,measure-leg-segments-6
       filter: \.dcm$,\.png$
 
-
-  - title: image-to-DICOM
-    plugin: pl-img2dcm v1.2.0
-    previous: measurement-join-dicom
+  # With the join containing all the necessary information, we can now
+  # generate new DICOMs
+  - title: image-to-DICOM-8
+    plugin: pl-dicommake v2.2.2
+    previous: measurement-join-dicom-7
     plugin_parameter_defaults:
-      inputImageFilter: "**/*.png"
-  - title: pacs-push
-    plugin: pl-orthanc_push v1.2.0
-    previous: image-to-DICOM
+      filterIMG: "**/*.png"
+      outputSubDir: data
+      thread: true
+
+  # And finally, we push the DICOMs to a destination PACS resource
+  - title: pacs-push-9
+    plugin: pl-orthanc_push v1.2.2
+    previous: image-to-DICOM-8
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
       orthancUrl: http://192.168.1.200:8042
       username: "orthanc"
       password: "orthanc"
+
