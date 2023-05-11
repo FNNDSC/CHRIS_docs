@@ -1,0 +1,185 @@
+{
+  "authors": "Rudolph Pienaar <dev@babymri.org>",
+  "name": "Leg Length Discrepency Full Workflow v34",
+  "description": "Perform the full leg length workflow, including joins",
+  "category": "Imaging",
+  "locked": false,
+  "plugin_tree": [
+    {
+      "title": "root-0",
+      "plugin_name": "pl-simpledsapp",
+      "plugin_version": "2.1.0",
+      "previous": null
+    },
+    {
+      "title": "dcm-to-mha-1",
+      "plugin_name": "pl-dcm2mha_cnvtr",
+      "plugin_version": "1.2.22",
+      "previous": "root-0",
+      "plugin_parameter_defaults": [
+        {
+          "name": "rotate",
+          "default": 90
+        },
+        {
+          "name": "inputFileFilter",
+          "default": "**/*.dcm"
+        }
+      ]
+    },
+    {
+      "title": "heatmaps-join-root-3",
+      "plugin_name": "pl-topologicalcopy",
+      "plugin_version": "0.2.6",
+      "previous": "root-0",
+      "plugin_parameter_defaults": [
+        {
+          "name": "plugininstances",
+          "default": "root-0,generate-landmark-heatmaps-2"
+        },
+        {
+          "name": "filter",
+          "default": "\\.dcm$,\\.csv$"
+        }
+      ]
+    },
+    {
+      "title": "generate-landmark-heatmaps-2",
+      "plugin_name": "pl-lld_inference",
+      "plugin_version": "2.2.10",
+      "previous": "dcm-to-mha-1",
+      "plugin_parameter_defaults": [
+        {
+          "name": "inputFileFilter",
+          "default": "**/*.mha"
+        }
+      ]
+    },
+    {
+      "title": "landmarks-to-json-4",
+      "plugin_name": "pl-csv2json",
+      "plugin_version": "1.2.2",
+      "previous": "heatmaps-join-root-3",
+      "plugin_parameter_defaults": [
+        {
+          "name": "outputFileStem",
+          "default": "prediction"
+        },
+        {
+          "name": "addTags",
+          "default": "PatientID,PatientName,PatientAge,StudyDate"
+        },
+        {
+          "name": "inputFileFilter",
+          "default": "**/*.csv"
+        }
+      ]
+    },
+
+    {
+      "title": "measurement-join-dicom-7",
+      "plugin_name": "pl-topologicalcopy",
+      "plugin_version": "0.2.6",
+      "previous": "heatmaps-join-root-3",
+      "plugin_parameter_defaults": [
+        {
+          "name": "plugininstances",
+          "default": "heatmaps-join-root-3,measure-leg-segments-6"
+        },
+        {
+          "name": "filter",
+          "default": "\\.dcm$,\\.png$"
+        }
+      ]
+    },
+
+    {
+      "title": "heatmaps-join-json-5",
+      "plugin_name": "pl-topologicalcopy",
+      "plugin_version": "0.2.6",
+      "previous": "landmarks-to-json-4",
+      "plugin_parameter_defaults": [
+        {
+          "name": "plugininstances",
+          "default": "generate-landmark-heatmaps-2,landmarks-to-json-4"
+        },
+        {
+          "name": "filter",
+          "default": "\\.jpg$,\\.json$"
+        }
+      ]
+    },
+    {
+      "title": "measure-leg-segments-6",
+      "plugin_name": "pl-markimg",
+      "plugin_version": "1.2.30",
+      "previous": "heatmaps-join-json-5",
+      "plugin_parameter_defaults": [
+        {
+          "name": "pointMarker",
+          "default": "."
+        },
+        {
+          "name": "lineGap",
+          "default": 70
+        },
+        {
+          "name": "inputImageName",
+          "default": "inputWithHeatmaps.jpg"
+        },
+        {
+          "name": "pointSize",
+          "default": 10
+        },
+        {
+          "name": "linewidth",
+          "default": 0.5
+        }
+      ]
+    },
+    {
+      "title": "image-to-DICOM-8",
+      "plugin_name": "pl-dicommake",
+      "plugin_version": "2.2.2",
+      "previous": "measurement-join-dicom-7",
+      "plugin_parameter_defaults": [
+        {
+          "name": "filterIMG",
+          "default": "**/*.png"
+        },
+        {
+          "name": "outputSubDir",
+          "default": "data"
+        },
+        {
+          "name": "thread",
+          "default": true
+        }
+      ]
+    },
+    {
+      "title": "pacs-push-9",
+      "plugin_name": "pl-orthanc_push",
+      "plugin_version": "1.2.2",
+      "previous": "image-to-DICOM-8",
+      "plugin_parameter_defaults": [
+        {
+          "name": "username",
+          "default": "orthanc"
+        },
+        {
+          "name": "orthancUrl",
+          "default": "http://192.168.1.200:8042"
+        },
+        {
+          "name": "inputFileFilter",
+          "default": "**/*.dcm"
+        },
+        {
+          "name": "password",
+          "default": "orthanc"
+        }
+      ]
+    }
+  ]
+}
