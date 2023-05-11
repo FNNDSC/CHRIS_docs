@@ -36,7 +36,7 @@ plugin_tree:
   # inference
   - title: heatmaps-join-root-3
     plugin: pl-topologicalcopy v0.2.6
-    previous: generate-landmark-heatmaps-2
+    previous: root-0
     plugin_parameter_defaults:
       plugininstances: root-0,generate-landmark-heatmaps-2
       filter: \.dcm$,\.csv$
@@ -77,7 +77,7 @@ plugin_tree:
   # a DICOM off this image
   - title: measurement-join-dicom-7
     plugin: pl-topologicalcopy v0.2.6
-    previous: measure-leg-segments-6
+    previous: heatmaps-join-root-3
     plugin_parameter_defaults:
       plugininstances: heatmaps-join-root-3,measure-leg-segments-6
       filter: \.dcm$,\.png$
