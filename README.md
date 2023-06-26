@@ -13,8 +13,8 @@ ChRIS is designed to manage the execution and data needs of a specific class of 
 While ChRIS itself has a web-based user interface, the applications that perform the computations are containerized, Linux-based applications. Since these apps run "in the woodwork" so to speak, they are called _plugins_ in ChRIS parlance, since they plug-into the ChRIS backend and are accessible from a suitable frontend.
 
 ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (by which is meant *any computing environment* that can run linux containers). By conforming to a reasonable command-line specification or contract for ChRIS applications, ChRIS makes it easy to containerize and run the research software, collect results, visualize data, and share/collaborate.
-![Chris Architecture](chris_architecture_overview.png)
 
+![Chris Architecture](./images/ChRIS%20architecture.svg)
 
 ## Need
 
