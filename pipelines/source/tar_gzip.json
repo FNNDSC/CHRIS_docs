@@ -5,7 +5,8 @@
   "description": "Perform a tar gzip archive of the parent output directory",
   "locked":	true,
   "plugin_tree": [
-    {
+    { 
+      "title": "file-to-tar",
       "plugin_name": "pl-pfdorun",
       "plugin_version": "2.2.8",
       "previous_index": null,

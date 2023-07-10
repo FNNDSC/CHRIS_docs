@@ -13,8 +13,6 @@ ChRIS is designed to manage the execution and data needs of a specific class of 
 While ChRIS itself has a web-based user interface, the applications that perform the computations are containerized, Linux-based applications. Since these apps run "in the woodwork" so to speak, they are called _plugins_ in ChRIS parlance, since they plug-into the ChRIS backend and are accessible from a suitable frontend.
 
 ChRIS comprises a collection of REST-based web services, backend web apps, and various client-facing web front ends. The system is designed to make it as *easy* as possible for a developer to get his/her app running *anywhere* (by which is meant *any computing environment* that can run linux containers). By conforming to a reasonable command-line specification or contract for ChRIS applications, ChRIS makes it easy to containerize and run the research software, collect results, visualize data, and share/collaborate.
-![Chris Architecture](chris_architecture_overview.png)
-
 
 ## Need
 
@@ -53,8 +51,17 @@ The front end to ChRIS provides a powerful real time collaboration tool.
 
 To run medical image processing on ChRIS, a medical researcher/programmer encodes the algorithm that needs to be executed in the form of "plugin". The researcher/programmer then makes the plugin available via the ChRIS store. An administration of a ChRIS installation then makes the plugin available through their ChRIS installation. Once registered, users of the ChRIS system can use a plugin within their image analysis pipeline. Once execution of a plugin starts, pfcon, running at BCH datacenter, sends the data via pfioh and the algorithm to be applied on the data to pman. Pman and pfioh can run in a different datacenter (Ex: The MOC running OpenShift on top of OpenStack). Pman then translates the algorithm programmed in the plugin as Kubernetes job. To add scale to medical image processing, pman divides the job amongst several Kubernetes job pods that run in parallel. OpenShift provides the container platform for seamless orchestration and resource management on the cluster.
 
-![Chris Architecture](chris_architecture_detailed.png)
 
+## Architecture
+
+![Chris Architecture](./images/ChRIS%20architecture.svg)
+
+A simplied, technical description of the components:
+
+- [ChRIS_ui](https://github.com/FNNDSC/ChRIS_ui), the user interface
+- [CUBE](https://github.com/FNNDSC/ChRIS_ultron_backEnd), the backend: manages user accounts, login, files, and data.
+- [pfdcm](https://github.com/FNNDSC/pfdcm) connects CUBE to PACS servers.
+- A compute cluster is communicated to from _CUBE_ via [pfcon](https://github.com/FNNDSC/pfcon) and [pman](https://github.com/FNNDSC/pman).
 
 ## Example: Multi-Party Computation with ChRIS
 

@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "LLD on DCM leg xrays part 1 of 4"
+name: "LLD-Generate-Heatmaps"
 description: "Convert all input dicoms to `.mha` files, run `lld-inference` on them"
 category: Imaging
 locked: false

@@ -9,7 +9,7 @@ plugin_tree:
     plugin: pl-markimg v1.2.30
     previous: ~
     plugin_parameter_defaults:
-      inputImageName: "inputWithHeatmaps.jpg"
+      inputImageName: "input.jpg"
       pointMarker: "."
       pointSize: 10
       linewidth: 0.5
