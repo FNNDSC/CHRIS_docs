@@ -1,0 +1,52 @@
+# _ChRIS_ 2023 -- Evolved Requirements
+
+## Abstract
+
+"ChRIS" is an umbrella term for a platform that provides various operations on (typically medical image) data. The original design was focused on managing "compute" while the management of "data" was secondary to compute needs. As a result, several different contextual-specific views and management of "data". Moreover, due to an evolutionary tight coupling of storage with data representation (each _copy_ of a file in _ChRIS_ is an actual copy, and not a reference) several fundamental inefficiencies exist. Consequently, its current design has accumulated technical debt that mitigates easily servicing user needs in 2023. This document lists the client/user-facing requirements for _data_ within _ChRIS_ and also discusses ideas for better servicing _data_ sharing and transmission.
+
+## Introduction
+
+As discussed elsewhere, a fundamental but extremely subtle friction exists at how _ChRIS2016_  **presents itself** and how it **organizes itself**. From a client perspective (client is taken to mean human and/or software agent that is consuming the _CUBE_ API), _ChRIS2016_ presents data universally organized into _directories_ that contain files. Internally, however, _ChRIS2016_ has no concept of _directories_ as an organizing principle, but only tracks (or _registers_ **files**).
+
+Since of course, _CUBE_ models the experience as _directories_, it relies on other abstractions to infer a directory-type tree structure for file organization. In the original design, this core organizing template was a _Feed_, or a directory-like grouping of graph represented compute elements. In this view, a _Feed_ could be examined to determined the graph structure of its compute, and each compute could be examined to determine the _files_ it created. This set of inter-relationships allowed for a _directory_-analog to be inferred _as a computed construct_. One could not simply "read a directory for its files", rather one had to infer/compute a directory as an artifact of retrofitting an organizing schema on a set of files.
+
+While this approach suited the requirements of the original design, subsequent needs arose. A considerably more conventional (albeit extremely limited) _directory_/_file_ service needed to be implemented to allow agents to "upload" their own data (organized into directories) for analysis in _Feeds_.
+
+A similar extension arose for injecting/accessing highly structured data, such as medical image files that contain meta data.
+
+This has led to three different APIs that a client agent needs to consume to simply be able to access different files in different parts of the _CUBE_ data verse. From a client perspective, since these are all universally presented as _directories_ containing _files_, there is no logical reason why certain features/operations work in some places and not others. Unifying behaviour across this leads to considerable technical debt.
+
+Here, we propose a simpler, universal data management model built **explicitly** around the concept of a modeled _directory_ element that _contains_ files as an organizing principle.
+
+## Methods
+
+### Specifications on _universal_ data experiences
+
+This proposal, at its heart, simply argues that the _CUBE_ dataverse should strive and aspire to act like a universal/conventional UNIX filesystem. This means that at the very least across the entire _CUBE_ dataverse, **all** data (_directories_ and _files_) should act similarly and provide the following features. Specifically, both _directories_ and _files_ should:
+
+* be modifiable, i.e.
+
+   ** be renamable
+   ** be deletable
+
+* be arbitrarily creatable _anywhere_
+
+In addition, to the above behaviours, _directories_ additionally should:
+
+* be shareable
+
+### Modeling implications
+
+While the above requirements seem at first blush simple, there are some profound implications:
+
+#### In the database, _directories_ not _files_ should be tracked (i.e. registered)
+
+The current CUBE tracks/registers _files_ and attempts to inconsistently **infer** _directory_ relationships.
+
+In this proposal, we argue that CUBE should _track_ directories and **infer** the files contained
+
+## Implementation
+
+The above requirements are easily addressable by a no-SQL database such as MongoDB and a prototypical work in progress is currently being explored. In this design, the database **keys** are simply named directory strings, and the document at the key is a meta document list of the files in that location.
+
+
