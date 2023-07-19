@@ -1,0 +1,164 @@
+# _ChRIS_ FileSystem
+
+## Abstract
+
+_ChRIS_ does not have a defined "filesystem" specification akin to the "Linux Standard Base". This document proposes a CSB, or _ChRIS Standard Base_.
+
+## Introduction
+
+The _ChRIS2016_ "filesystem" (or the organization of file data within _ChRIS_) is a relatively simple nested-directory structure, very loosely akin to a multi-user filesystem in its hierarchy. Directories denoting _users_ exist at the apparent root of the filesystem, along with some "special" system type folders.
+
+As _ChRIS_ evolves, this simple hierarchy needs a more formal definition, especially for future proofing.
+
+Observationally, _ChRIS_ has multiple users. _ChRIS_ has system-level directories. _ChRIS_ has compute it needs to execute. Is _ChRIS_ not essentially a typical OS in function? If so, could we as designers not look to a typical OS filesystem in layout and simply "emulate"?
+
+## Philosophical Design Considerations
+
+In examining the problem, an obvious question arises: should _ChRIS_ emulate a Linux-type FileSystem or create its own hierarchy? An immediate response could be, "_ChRIS_ is not a Linux system, nor should it emulate a Linux filesystem." While this is true, perhaps a more accurate statement is, "_ChRIS_ is not **currently** a Linux system, but could it become one? Or could it _become_ something akin to a Linux system?" And if so, does emulating a Linux filesystem right now introduce any burdensome load? The case of Android can be seen as an example of how had Android emulated a typical Linux LSB from its beginning, it might be better positioned to transparently offer mobile and standard Linux apps seamlessly at this juncture of its evolution.
+
+### The curious case of Android
+
+Perhaps a related and instructive example is Android. Android can be described as a _compute_ system that executes code on data stored in files organized into directories (the fact of it being a "mobile" OS is irrelevant here). Originally Android was seen to be a _new_ take on computing -- all programs were (and still are) written in Java (a design choice that made sense in the 2000s especially since the lineage of prior mobile-based compute was overwhelming Java).
+
+Android (IMHO) was at its creation limited by its creators' imagination who, again given the lineage of the 1990s and 2000s, did not imagine Android to ever be run on actual computer hardware or thought of as a desktop OS. For expediency, Android used a Linux kernel, and hence a ``libc`` rewrite called ``bionic``, but it dispensed with many Linux OS considerations, including the LSB.
+
+As a result Android divides its filesystem into several root level directories clearly based on an idea of "if we were to design a filesystem for say a mobile OS in the 2000s what would it look like?":
+
+[source, console]
+----
+boot
+system <-- all "OS" apps live here
+data <-- all installed apps live here
+cache
+misc
+sdcard
+----
+
+### The limitations of not thinking big
+
+Currently of course, Android is quite capable of being a desktop OS. Its Linux kernel and ``libc`` drop-in replacement, both borne out of expediency, enables it _in theory_ to run any Linux type desktop apps. However, _in practice_ considerable effort needs now be expended to retrofit LSB assumptions onto a non-LSB system.
+
+It can be argued that had the Android filesystem layout simply adopted more Linux-LSB layout from the beginning (at no additional cost at the time other than somewhat artificial concepts of how to think of data) it could now be much easier positioned to grow into domains its creators did not foresee.
+
+### The irony of macOS/iOS
+
+In contrast to Android, Apple decided to make its mobile OS essentially a lightly re-thought but fundamentally unchanged version of its consumer computer OS, macOS. As a result, iOS is really a custom macOS with a restrictive desktop metaphor. The point is that the impedance mismatch between desktop macOS and mobile macOS (aka iOS) is considerably much lower than between Linux/Android. As a result, iOS apps on ARM require almost no additional effort _in theory_ to run on desktop macOS. By having iOS essentially be macOS _from the beginning_  future proofed iOS in a way that Android is not (even if using a desktop OS filesystem layout in a mobile OS seemed to be unecessary and not contextual at the time).
+
+## Current Hierarchy
+
+Similar to Android in as much as creating a new layout largely for expediency, the current _ChRIS_ has a filesystem concept that has all users organized directly off the root, with currently two system level folders located in the root as well.
+
+### What exists
+
+The current hierarchy consists of user names off the _root_, as well as two "special" directories ``SERVICES`` and ``PIPELINES``. Within each user directory, are two folders, ``uploads`` and ``feeds``, with the latter simply containing a set of subdirectories, one per feed-analysis:
+
+[source, console]
+----
+/SERVICES
+/PIPELINES
+/chris/uploads
+/chris/feeds/feed_1
+/chris/feeds/feed_2
+...
+/chris/feeds/feed_N
+----
+
+The current _ChRIS_ offered a considerably constrained user data experience, particularly with creating _ad-hoc_ directories. User feeds were **always** saved to the ``<user>/feeds/feed_N_`` location and the only directory to which users could inject new data was the ``<user>/uploads`` directory.
+
+### Drawbacks
+
+Current proposals for _ChRIS_ expand the ability of users to offer _directory_ based operations more similar to a conventional filesystem. Users will be able to create new directories, move data, create sub directories, delete data, browser the larger filesystem, etc. In light of these expansions, the existing structure, with all users immediately off the apparent root in conjunction with other system directories is arguably too disorganzied.
+
+## Proposed Hierarchy
+
+Based largely on the above somewhat philosophical case of Android limitations 20 years after its release, this document ultimately proposes to adopt a LSB-friendly filesystem layout for _ChRIS_.
+
+Core changes are a ``/home`` directory from which all user's branch. Each user home contains a pseudo mandatory ``feeds`` directory as well as an ``uploads`` directory. Other than that, users are free to create any number of ad hoc directories in their homes as they please. The ability of users to delete any of their directories does result in edge cases -- for example, what if a user deletes their whole ``feeds`` directory?
+
+Currently, a ``SERVICES`` tree exists off the root to store service-specific hierarchies of files, and a ``PIPELINES`` tree that simply contains uploaded "pipeline" files.
+
+Compute within _ChRIS_ is maintained as a purely database concept. However, what if there were a "file system" reflection of the compute? Is this possible? Is this meaningful or useful?
+
+To this end, finally thus, the following initial root level layout concept is proposed:
+
+[source, console]
+----
+/etc <-- store ChRIS-wide system config/operational "data"
+/bin <-- store file system "analogs" of ChRIS plugins?
+/home <-- all users live here
+/var <-- possible location of files to which the system writes data
+----
+
+### home
+
+Within ``/home`` are all the system users' home directories. These by default contain ``uploads`` and ``feeds`` denoting a user's upload data and directory for all their _ChRIS_ feeds:
+
+[source, console]
+----
+/home/chris/uploads
+/home/chris/feeds
+----
+
+Users are free to create any number of other directories off their respective homes
+
+### etc
+
+While currently not used, a proposal for ``/etc`` could include any _ChRIS_ data, configuation, etc useful for its operation. For instance, currently the _ChRIS_ ancillary service ``pfdcm`` uses several `json` files for its setup and operation. Perhaps these could in future live here for ease of system profiling, replication, etc. Similarly, _ChRIS_ is typically started with a set of environment variables. Having these explicitly "listed" here as "files" could be extremely useful and intuitive.
+
+### bin
+
+Similarly, ``/bin`` could become a location wherein internal elements of the _ChRIS_ database (specifically the ``plugins``) are exposed/reflected in filesystem storage.
+
+### var
+
+System-context specific file hierarchies could be housed here. Specifically the ``SERVICES`` tree, but using more LSB naming conventions i.e. ``/var/services``. Similarly the current ``PIPELINES``, ``/var/pipelines``.
+
+## Summary
+
+At the moment, the proposal would create a basic filesystem hierarchy as:
+
+[source, console]
+----
+/etc <-- store ChRIS-wide system config/operational "data"?
+/bin <-- store file system "analogs" of ChRIS plugins?
+/home <-- all users live here
+/home/chris/uploads
+/home/chris/feeds
+/var <-- possible location of files to which the system writes data
+/var/pipelines
+/var/services
+----
+
+## Coda 1
+
+A final comment. Central to _ChRIS_ has always been the concept of its _feeds_. A global feed counter increases with each feed, such that the space of feeds, irrespective of user, is a monotonic increasing "named" set: `feed_1, feed_2, ... feed_N_`. Given new concepts of directories and also possible hard linking concepts, perhaps all feeds should be "stored" in ``/var/feeds`` while only user-owned feeds are linked to a `/home/<user>/feeds` directory. This protects/buffers the system from accidental user deletion of a `feeds` directory.
+
+## Coda 2
+
+As implied in other RFCs, the concept of "filesystem" in _ChRISnx_ is rather amorphorous. Structure to the "filesystem" including links, etc are defined in the database which presents a filesystem-like view of the data space. The actual files in actual storage space is not necessarily reflective of this. So the `/bin` directory and its "plugins" might be a database reflection of plugins when a user navigates to what seems to be a `/bin` directory while in actual storage there might not be a _real_ `/bin` directory.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
