@@ -2,13 +2,13 @@
 
 ## Abstract
 
-_ChRIS_ does not have a defined "filesystem" specification akin to the "Linux Standard Base". This document proposes a CSB, or _ChRIS Standard Base_.
+_ChRIS_ does not have a defined "filesystem" specification akin to the "Linux Standard Base". This document proposes a CSB, or _ChRIS Standard Base_. The core idea is twofold: (1) create a Linux-like directory hierarchy for _ChRIS_; and (2) map internal database and operational concerns to files in this hierarchy.
 
 ## Introduction
 
-The _ChRIS2016_ "filesystem" (or the organization of file data within _ChRIS_) is a relatively simple nested-directory structure, very loosely akin to a multi-user filesystem in its hierarchy. Directories denoting _users_ exist at the apparent root of the filesystem, along with some "special" system type folders.
+The _ChRIS2016_ "filesystem" (or the organization of file data within _ChRIS_) is a relatively simple nested-directory structure, very loosely akin to a multi-user filesystem in its hierarchy. Directories denoting _users_ exist at the apparent root of the filesystem, along with some "special" system type folders. There is a direct one-to-one mapping from `swift` storage to this tree, and there is no concept of any "advanced" filesystem concepts such as links, references, or process mapping.
 
-As _ChRIS_ evolves, this simple hierarchy needs a more formal definition, especially for future proofing.
+As _ChRIS_ evolves, this simple hierarchy needs a more formal definition, especially for future proofing, and allowing for much richer features.
 
 Observationally, _ChRIS_ has multiple users. _ChRIS_ has system-level directories. _ChRIS_ has compute it needs to execute. Is _ChRIS_ not essentially a typical OS in function? If so, could we as designers not look to a typical OS filesystem in layout and simply "emulate"?
 
@@ -16,22 +16,28 @@ Observationally, _ChRIS_ has multiple users. _ChRIS_ has system-level directorie
 
 In examining the problem, an obvious question arises: should _ChRIS_ emulate a Linux-type FileSystem or create its own hierarchy? An immediate response could be, "_ChRIS_ is not a Linux system, nor should it emulate a Linux filesystem." While this is true, perhaps a more accurate statement is, "_ChRIS_ is not **currently** a Linux system, but could it become one? Or could it _become_ something akin to a Linux system?" And if so, does emulating a Linux filesystem right now introduce any burdensome load? The case of Android can be seen as an example of how had Android emulated a typical Linux LSB from its beginning, it might be better positioned to transparently offer mobile and standard Linux apps seamlessly at this juncture of its evolution.
 
-### The curious case of Android
+### It's not just about "files" -- it's about the UNIX way
 
-Perhaps a related and instructive example is Android. Android can be described as a _compute_ system that executes code on data stored in files organized into directories (the fact of it being a "mobile" OS is irrelevant here). Originally Android was seen to be a _new_ take on computing -- all programs were (and still are) written in Java (a design choice that made sense in the 2000s especially since the lineage of prior mobile-based compute was overwhelming Java).
+Arguably one of the most powerful and most underappreciated contributions of the "UNIX way" is its ability to "show everything as a file" analog. UNIX maps complex operational internals to file metaphors, and allows these "files" to be manipulated as if they were files. This underpins not only the whole "pipeline" concept in UNIX, but more so also the ability to map memory and processes to "files" _even though they are not_.
 
-Android (IMHO) was at its creation limited by its creators' imagination who, again given the lineage of the 1990s and 2000s, did not imagine Android to ever be run on actual computer hardware or thought of as a desktop OS. For expediency, Android used a Linux kernel, and hence a ``libc`` rewrite called ``bionic``, but it dispensed with many Linux OS considerations, including the LSB.
+_ChRIS_, via its CUBE API offers extremely rich and powerful features. However, it suffers from a core weakness: some powerful concepts simply do not map easily to a REST model with http verbs, at least not intuitively, and much important "internal" information is not accessible without considerable expertise. This begs the question: why not emulate this, too? Have specific components of _ChRIS_ be mapped to a "filesystem" (even if not real files) such that accessing these "files" allows for deep and rich information from the backend to be available? The most obvious mapping could be "logs", "processes", "memory", "environment settings/variables", etc.
+
+### The curious case of Android -- and not following the LSB
+
+Perhaps a related and instructive example is Android. Android can be described as a _compute_ system that executes code on data stored in files organized into directories (the fact of it being a "mobile" OS is irrelevant here). Originally Android was seen to be a _new_ take on computing -- all user-space programs were (and still are) written in Java (a design choice that made sense in the 2000s especially since the lineage of prior mobile-based compute was overwhelming Java), while of course the core applications are compiled (probably C) programs specific to the underlying hardware architecture.
+
+Android (IMHO) was at its creation limited by its creators' imagination who, again given the lineage of the 1990s and 2000s, did not imagine Android to ever be run on actual computer hardware or thought of as a desktop OS. For expediency, Android used a Linux kernel, and hence a ``libc`` rewrite called ``bionic``, but it dispensed with many Linux OS considerations, including the LSB. To this day, there is an interesting debate on whether or not Android can be considered a Linux distribution, with informed opinion mostly divided.
 
 As a result Android divides its filesystem into several root level directories clearly based on an idea of "if we were to design a filesystem for say a mobile OS in the 2000s what would it look like?":
 
 [source, console]
 ----
-boot
-system <-- all "OS" apps live here
-data <-- all installed apps live here
-cache
-misc
-sdcard
+/boot
+/system <-- all "OS" apps live here
+/data <-- all installed apps live here
+/cache
+/misc
+/sdcard
 ----
 
 ### The limitations of not thinking big
@@ -42,7 +48,7 @@ It can be argued that had the Android filesystem layout simply adopted more Linu
 
 ### The irony of macOS/iOS
 
-In contrast to Android, Apple decided to make its mobile OS essentially a lightly re-thought but fundamentally unchanged version of its consumer computer OS, macOS. As a result, iOS is really a custom macOS with a restrictive desktop metaphor. The point is that the impedance mismatch between desktop macOS and mobile macOS (aka iOS) is considerably much lower than between Linux/Android. As a result, iOS apps on ARM require almost no additional effort _in theory_ to run on desktop macOS. By having iOS essentially be macOS _from the beginning_  future proofed iOS in a way that Android is not (even if using a desktop OS filesystem layout in a mobile OS seemed to be unecessary and not contextual at the time).
+In contrast to Android, Apple decided to make its mobile OS essentially a lightly re-thought but fundamentally unchanged version of its consumer computer OS, macOS. As a result, iOS is really a custom macOS with a restrictive desktop metaphor. The point is that the impedance mismatch between desktop macOS and mobile macOS (aka iOS) is considerably much lower than between Linux/Android. As a result, iOS apps on ARM require almost no additional effort _in theory_ to run on desktop macOS. By having iOS essentially be macOS _from the beginning_  future proofed iOS in a way that Android is not (even if using a desktop OS filesystem layout in a mobile OS seemed to be unnecessary and not contextual at the time).
 
 ## Current Hierarchy
 
@@ -67,7 +73,7 @@ The current _ChRIS_ offered a considerably constrained user data experience, par
 
 ### Drawbacks
 
-Current proposals for _ChRIS_ expand the ability of users to offer _directory_ based operations more similar to a conventional filesystem. Users will be able to create new directories, move data, create sub directories, delete data, browser the larger filesystem, etc. In light of these expansions, the existing structure, with all users immediately off the apparent root in conjunction with other system directories is arguably too disorganzied.
+Current proposals for _ChRIS_ expand the ability of users to offer _directory_ based operations more similar to a conventional filesystem. Users will be able to create new directories, move data, create sub directories, delete data, browser the larger filesystem, etc. In light of these expansions, the existing structure, with all users immediately off the apparent root in conjunction with other system directories is arguably too disorganized.
 
 ## Proposed Hierarchy
 
@@ -83,15 +89,19 @@ To this end, finally thus, the following initial root level layout concept is pr
 
 [source, console]
 ----
-/etc <-- store ChRIS-wide system config/operational "data"
-/bin <-- store file system "analogs" of ChRIS plugins?
+/etc <-- represent ChRIS-wide system config/operational "data"
+/bin <-- groupd "reference" ChRIS-aware CLI apps
 /home <-- all users live here
-/var <-- possible location of files to which the system writes data
+/usr <-- group "plugins"
+/var <-- possible location of files to which the system writes data, logs, more
+/proc <-- possible mappings of "process" concepts to the filesystem
 ----
 
-### home
+### /home
 
-Within ``/home`` are all the system users' home directories. These by default contain ``uploads`` and ``feeds`` denoting a user's upload data and directory for all their _ChRIS_ feeds:
+This is the "easiest" and not especially different from the current system, except by grouping all users within a `/home` subdirectory as opposed to directly off the root. Within ``/home`` are all the system users' home directories.
+
+User home directories in ChRIS should contain by default ``uploads`` and ``feeds`` denoting a user's upload data and directory for all their _ChRIS_ feeds (similarly to how common Linux desktops populate a user's home directory with `Downloads`, `Documents`, `Pictures`, etc.). Perhaps a `.config` directory to contain user-specific configuration information? This also alludes to the currently unspecified problem of user ids and file/directory permissions (discussed elsewhere).
 
 [source, console]
 ----
@@ -99,34 +109,62 @@ Within ``/home`` are all the system users' home directories. These by default co
 /home/chris/feeds
 ----
 
-Users are free to create any number of other directories off their respective homes
+Users are free to create any number of other directories (and directory trees) off their respective homes.
 
-### etc
+### /etc
 
-While currently not used, a proposal for ``/etc`` could include any _ChRIS_ data, configuation, etc useful for its operation. For instance, currently the _ChRIS_ ancillary service ``pfdcm`` uses several `json` files for its setup and operation. Perhaps these could in future live here for ease of system profiling, replication, etc. Similarly, _ChRIS_ is typically started with a set of environment variables. Having these explicitly "listed" here as "files" could be extremely useful and intuitive.
+While currently not used, a proposal for ``/etc`` could include any _ChRIS_ data, configuration, etc useful for its operation. For instance, currently the _ChRIS_ ancillary service ``pfdcm`` uses several `json` files for its setup and operation. Perhaps these could in future live here for ease of system profiling, replication, etc? Similarly, _ChRIS_ is typically started with a set of environment variables. Having these explicitly "listed" here as "files" could be extremely useful and intuitive.
 
-### bin
+### /bin
 
-Similarly, ``/bin`` could become a location wherein internal elements of the _ChRIS_ database (specifically the ``plugins``) are exposed/reflected in filesystem storage.
+The ChRIS API (and access libraries) provide a rich set of function calls from which to construct powerful and useful companion applications. For the most part, these applications as they might exist in 2023 are not consolidated and haphazardly used. The proposal is to represent a set of "approved" ChRIS cli type applications here. This also alludes to the concept of a ChRIS shell which is a separate RFC.
 
-### var
+Typical `/bin` contents could be CLI-type apps that mimic conventional command line applications, `ls`, `cd`, `mkdir`, `mkfd` (make feed), `imp` (import from CLI), etc that operate on the ChRIS filesystem in a manner suggested by the `cfs` prototype (discussed elsewhere).
 
-System-context specific file hierarchies could be housed here. Specifically the ``SERVICES`` tree, but using more LSB naming conventions i.e. ``/var/services``. Similarly the current ``PIPELINES``, ``/var/pipelines``.
+More complex, but extremely useful admin applications such as adding new host environments, new users, etc all could and should have command line interfaces that are listed here.
+
+### /usr/bin
+
+Similarly, ``/usr/bin`` could become a location wherein internal elements of the _ChRIS_ database (specifically the ``plugins``) are exposed/reflected in filesystem storage. For instance, a ChRIS "shell" command, ``ls /usr/bin`` could return a list of installed plugins.
+
+
+### /var
+
+System-context specific file hierarchies could be housed here, including all feeds and services. The current ``SERVICES`` tree should become``/var/services``. Similarly the current ``PIPELINES``, ``/var/pipelines``. This also alludes to a `/var/log` directory that could contain system logs, or at least "shadows" of system logs. So, for example a ChRIS shell command:
+
+[source, console]
+----
+cat /var/log/worker.log
+----
+
+if not returning the actual log, could return a command the user could execute to read the actual logs, or some related help text.
+
 
 ## Summary
 
-At the moment, the proposal would create a basic filesystem hierarchy as:
+Using familiar metaphors can greatly enhance adoption. This document proposes that the ChRIS/CUBE internal file hierarchy:
+
+* shift to a more Linux-like file system layout
+* provide internal tools to add value to this layout
+* provide mappings from internal database concepts to "files"
+* implement database managed file system features such as linking
+
+The basic proposed filesystem hierarchy:
 
 [source, console]
 ----
 /etc <-- store ChRIS-wide system config/operational "data"?
-/bin <-- store file system "analogs" of ChRIS plugins?
+/bin <-- store ChRIS "shell" apps
 /home <-- all users live here
 /home/chris/uploads
 /home/chris/feeds
+/home/chris/.config <--- user-specific configs?
+/usr/bin <-- store ChRIS "plugins"
 /var <-- possible location of files to which the system writes data
 /var/pipelines
 /var/services
+/var/logs
+/proc <-- map "running" processes here
 ----
 
 ## Coda 1
@@ -135,7 +173,7 @@ A final comment. Central to _ChRIS_ has always been the concept of its _feeds_. 
 
 ## Coda 2
 
-As implied in other RFCs, the concept of "filesystem" in _ChRISnx_ is rather amorphorous. Structure to the "filesystem" including links, etc are defined in the database which presents a filesystem-like view of the data space. The actual files in actual storage space is not necessarily reflective of this. So the `/bin` directory and its "plugins" might be a database reflection of plugins when a user navigates to what seems to be a `/bin` directory while in actual storage there might not be a _real_ `/bin` directory.
+As implied in other RFCs, the concept of "filesystem" in _ChRISnx_ is rather amorphorous. Structure to the "filesystem" including links, etc are defined in the database which presents a filesystem-like view of the data space. The actual files in actual storage space is not necessarily reflective of this. Thus, the `/bin` directory and its contents do not need to be _actual real files_ but could be a database reflection. Similarly the `/usr/bin/` in storage does not contain actual plugins, but the ChRIS system presents the list of plugins if the user seeks to "list" this directory.
 
 
 

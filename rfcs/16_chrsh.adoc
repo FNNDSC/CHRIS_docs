@@ -1,0 +1,73 @@
+# _ChRIS_ Shell -- `chrsh`
+
+## Abstract
+
+This document proposes initial thinking/conceptualization about what a _ChRIS_ shell concept could be, why it might be necessary, and how it could be realized.
+
+## Introduction
+
+Barriers to entry are a complex concern for any new system, especially in a complex and distributed system such as _ChRIS_. Multiple other research derived platforms exist (such as LONI, CBRAINS, TRENDS) that from a completely new user perspective all offer largely the same value proposition as _ChRIS_. In some respects, the choice of one over the other is less about a careful analysis of pros and cons of each platform, and simply more about what has been prescribed by a lab/institution.
+
+Arguably each platform presents almost the same barrier of entry to new users -- specifically platform specific APIs and tools. For most "new" users each platform seems equidistant in a practical sense. Here, _practical_ is taken to mean simply the answer to the question, "I want to analyze data with my code -- how do I do this?"
+
+_ChRIS_ is an umbrella term for a multitude of services (including `CUBE`, `pfdcm`, `pfbridge`, `swift`, `pfcon`, `pman`, `ChRIS_UI`) each of which can also function semi-independently with its own set of configuration and environment. At the heart, though, is `CUBE` which offers a rich API. The `CUBE` API offers a mostly complete surface interface over the other services. Importantly, not all internal `CUBE` functionality is exposed by its API (such as logging or various administrative operations).
+
+Nonetheless, several language-specific libraries and bindings are available to provide a less "low level" interface to `CUBE` services. These can be used to provide functionality covering most of the space of user needs: getting data into `CUBE`, processing data, and getting data out of `CUBE`.
+
+Many of these APIs have yet to be woven together into useful programs. There are no _reference_ programs or apps to help/assist in performing many useful or administrative functions. In fact, considerable fracturing has occurred in the proto-typical tool space, with different ChRIS developers often building out their own tools to service their own (somewhat idiosyncratic) needs: `python-chrisclient`, `chrs`, `plugin2cube`, `pipeline2cube` to name but a few.
+
+While there is an undisputed _reference_ way, i.e. the CUBE-API, this is low-level -- meaning a user would need to operate from a full and extensive model of CUBE and its services to be efficient.
+
+## Philosophical Viewpoints
+
+Regardless of this lack of reference utilities and the fracturization of the tools that exist, a larger problem remains -- the lack of single, uniform `CUBE`-way. _ChRIS_ is a _distributed platform_ providing services. It is _not_ an "operating system" with a clear operating philosophy, rather a collection or federation of applications providing services. The time to become productive on CUBE without the UI can be long and intimidating. Users often need to learn new concepts that are removed from their standard computing experience.
+
+Of course, one solution is to provide programs or services that perform certain functions -- for instance `plugin2cube` that uses `chrs` and offers a mechanism to "register" a plugin to a _ChRIS_ instance. Yet, given the lack of an overarching _ChRIS_ metaphor, these services simply perpetuate the seemingly confusing set of utilities and programs that exist in the CUBE ecosystem.
+
+## What exists
+
+This problem is not unique to _ChRIS_. It exists in different forms with every other similar and related _platform_ -- from `kubernetes` to `LONI` to `AWS`. To become proficient one needs to learn a set of commands / abilities / way-of-thinking almost _from scratch_. Each has a core set of functionality that is defined in APIs and "low-level" commands that a user needs to learn _de novo_.
+
+Still, from a certain viewpoint, all of these _platforms_ exist to provide ways to run "compute" on "data". In the most simplest sense, they could be seem to analogous to "operating systems". Continuing the OS metaphor, many of these platforms seem to be akin to a "kernel" with a "standard library" (`libc`) that provides an API for services, and nothing/little else.
+
+This then begs the question: _Why not make them act more like an operating system?_
+
+And more specifically in the context of _ChRIS_, given that in the scientific domain in which it operates is pervasively Linux-based, and given that the core research community of users of _ChRIS_ will/should by default be coming from Linux, why not make _ChRIS_ itself more "Linux-like" in its parts of its user experience.
+
+## The Power of Reward
+
+Most users anecdotally do not seem to like to learn new things -- especially in science/computation where users are primarily concerned with one domain (running experiments and getting data) and less so in the mechanics of how it is done. In the FNNDSC, the center has "decreed" that Linux desktops are what users need to access and they are "forced" to learn/use this. No doubt, had this not been the case, users would have used Windows or possibly macOS. Interestingly, users at the FNNDSC have no choice in the matter, and hence Linux proliferates. Users have a _choice_ in using _ChRIS_ and its usage is far from universal.
+
+Regardless, most users have some knowledge of Linux. The hypothesis underpinning this proposal is that by having _ChRIS_ "act" like a Linux system with Linux metaphors, existing users are immediately empowered to use their existing knowledge to _immediately_ feel to be productive on _ChRIS_. While perhaps not all of _ChRIS_ advanced features can be mapped to a such a metaphor, we speculate that _enough_ can to satisfy more users' needs and also, emboldened by early reward, inspire other users who want more "advanced" features to dive deeper.
+
+## A ChRIS shell
+
+Ultimately, the "feel" of Linux system (from a command-line perspective) is its "shell". We propose thus a _ChRIS_ shell (say `chrsh`) that maps a familiar Linux type look-n-feel to using _ChRIS_.
+
+### Interactive and non-interactive shell
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -34,6 +34,9 @@ This proposal, at its heart, simply argues that the _CUBE_ dataverse should stri
 In addition, to the above behaviours, _directories_ additionally should:
 
 * be shareable
+* be _processable_
+
+By being _processable_ is simply meant that any directory can be used as input to a ChRIS plugin
 
 ### Modeling implications
 

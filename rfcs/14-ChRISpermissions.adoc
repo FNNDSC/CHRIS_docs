@@ -1,52 +1,110 @@
-# _ChRIS_ 2023 -- Evolved Requirements
+# _ChRIS_ 2023 -- User IDs and file permission model
 
 ## Abstract
 
-"ChRIS" is an umbrella term for a platform that provides various operations on (typically medical image) data. The original design was focused on managing "compute" while the management of "data" was secondary to compute needs. As a result, several different contextual-specific views and management of "data". Moreover, due to an evolutionary tight coupling of storage with data representation (each _copy_ of a file in _ChRIS_ is an actual copy, and not a reference) several fundamental inefficiencies exist. Consequently, its current design has accumulated technical debt that mitigates easily servicing user needs in 2023. This document lists the client/user-facing requirements for _data_ within _ChRIS_ and also discusses ideas for better servicing _data_ sharing and transmission.
+_ChRIS2016_ has no real concept of user ids and there is no file permission model. A hard coded user called "chris" is assumed to be a "superuser" and has undefined and undiscoverable permissions and access. Similarly, "ordinary" users have less permissions, but the exact enumeration and meaning of what permissions exist is not defined.
 
 ## Introduction
 
-As discussed elsewhere, a fundamental but extremely subtle friction exists at how _ChRIS2016_  **presents itself** and how it **organizes itself**. From a client perspective (client is taken to mean human and/or software agent that is consuming the _CUBE_ API), _ChRIS2016_ presents data universally organized into _directories_ that contain files. Internally, however, _ChRIS2016_ has no concept of _directories_ as an organizing principle, but only tracks (or _registers_ **files**).
+The lack of any concept of explicit permissions on files and object in CUBE in _ChRIS2016_ has reached its end-of-life. In order for ChRIS to develop further, a pervasive and robust permission model needs to be defined and clear to users of the system.
 
-Since of course, _CUBE_ models the experience as _directories_, it relies on other abstractions to infer a directory-type tree structure for file organization. In the original design, this core organizing template was a _Feed_, or a directory-like grouping of graph represented compute elements. In this view, a _Feed_ could be examined to determined the graph structure of its compute, and each compute could be examined to determine the _files_ it created. This set of inter-relationships allowed for a _directory_-analog to be inferred _as a computed construct_. One could not simply "read a directory for its files", rather one had to infer/compute a directory as an artifact of retrofitting an organizing schema on a set of files.
+Similarly, _ChRIS2016_ has a hard coded super user called `chris`. The permissions such as they currently exist in _ChRIS2016_ simply provide elevated access to this user.
 
-While this approach suited the requirements of the original design, subsequent needs arose. A considerably more conventional (albeit extremely limited) _directory_/_file_ service needed to be implemented to allow agents to "upload" their own data (organized into directories) for analysis in _Feeds_.
+## What currently exists
 
-A similar extension arose for injecting/accessing highly structured data, such as medical image files that contain meta data.
+Pretty much very little. Files, plugins, directories -- any and all objects in ChRIS have no embedded permissions. Moreover, there is no concept of user ids, which means that a special named user (by convention called `chris`) has special powers simply by virtue of having this special name.
 
-This has led to three different APIs that a client agent needs to consume to simply be able to access different files in different parts of the _CUBE_ data verse. From a client perspective, since these are all universally presented as _directories_ containing _files_, there is no logical reason why certain features/operations work in some places and not others. Unifying behaviour across this leads to considerable technical debt.
+## Proposal
 
-Here, we propose a simpler, universal data management model built **explicitly** around the concept of a modeled _directory_ element that _contains_ files as an organizing principle.
+### User IDs
 
-## Methods
+We propose to simply adopt a simplified POSIX user id scheme:
 
-### Specifications on _universal_ data experiences
+* all users have numerical ids in addition to their string names
+* a "root" user exists that has a user id of 0.
+* ownership is specified by user id, which is mapped back to a string name
 
-This proposal, at its heart, simply argues that the _CUBE_ dataverse should strive and aspire to act like a universal/conventional UNIX filesystem. This means that at the very least across the entire _CUBE_ dataverse, **all** data (_directories_ and _files_) should act similarly and provide the following features. Specifically, both _directories_ and _files_ should:
+### No groups
 
-* be modifiable, i.e.
+We propose to not have a concept of groups. This simplifies some sharing considerations, but has downstream implications that need to be carefully enumerated (see later).
 
-   ** be renamable
-   ** be deletable
+### Permission model
 
-* be arbitrarily creatable _anywhere_
+Similarly the proposal is for a simplified and generalized model of the standard POSIX permission concept or `rwx` (read/write/execute) for every "listable" object in ChRIS filesystem space. The semantics of each of the read/write/execute need to be carefully specified.
 
-In addition, to the above behaviours, _directories_ additionally should:
+### Object permission example
 
-* be shareable
+The proposed simplification from POSIX is simply that the three tuple concept of `owner,group,other` is reduced to `owner`, but retains the `[df]rwx` bits:
 
-### Modeling implications
+[options="header"]
+|==============================================
+| type | name      | owner
+| dir  | Pictures  | rudolph:rwx,jack:r,jill:rwx
+| file | image.dcm | rudolph:rwx,ellen:r,jack:rwx
+| file | filter    | rudolph:rwx
+|==============================================
 
-While the above requirements seem at first blush simple, there are some profound implications:
+Importantly and a generalization of the POSIX model, the above model simply breaks the standard 3 tuple and explicitly associates ownership permissions directly with a user, resulting in the idea of multiple, specific _owners_.
 
-#### In the database, _directories_ not _files_ should be tracked (i.e. registered)
+By convention, the first "owner" is considered the primary owner.
 
-The current CUBE tracks/registers _files_ and attempts to inconsistently **infer** _directory_ relationships.
+Moreover, since the POSIX model tuple users `group,other` to define sharing, we propose to explicitly set sharing permissions as `<username>:<bitpermission>`. So, in the above the file `image.dcm` is shared read-only with the `ellen` user, and read-write-execute with the `jack` user. Thus, if `ellen` were to
 
-In this proposal, we argue that CUBE should _track_ directories and **infer** the files contained
+[source,console]
+----
+(ellen) $ cd /home/rudolph
+(ellen) /home/rudolph$ ls
+image.dcm
+----
 
-## Implementation
+But the `jack` user would see:
 
-The above requirements are easily addressable by a no-SQL database such as MongoDB and a prototypical work in progress is currently being explored. In this design, the database **keys** are simply named directory strings, and the document at the key is a meta document list of the files in that location.
+[source,console]
+----
+(jack) $ cd /home/rudolph
+(jack) /home/rudolph$ ls
+Pictures
+image.dcm
+----
+
+and `jill` would see
+
+[source,console]
+----
+(jill) $ cd /home/rudolph
+(jill) /home/rudolph$ ls
+Pictures
+----
+
+## Implications
+
+Group user aliases could be defined (which according to RFC 13-ChRISFS.adoc could live under `/etc`) to allow for group-based sharing. An important alias is `all` which denotes "all" users, thus if `rudolph` has a feed, it would could be made "public" with:
+
+|============================================
+| type | name      | owner
+| dir  | feed_123  | rudolph:rwx, all:r
+|============================================
+
+In this model, for public browsing, a public user is the `all` user and could only "see" objects that have an `all` owner with at least a `read` bit set.
+
+## Permission meanings
+
+TBD.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
