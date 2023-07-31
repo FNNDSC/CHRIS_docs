@@ -1,0 +1,59 @@
+# _ChRIS_ users
+
+## Abstract
+
+This RFC proposes a user and group model for _ChRIS_.
+
+## Introduction
+
+As alluded to in `14-ChRISpermissions.adoc` _ChRIS_ needs a more formally defined user concept. It is argued that a better permission model (including more formalized users concept) can lead to considerable simplifications in conceptualizing the multi-user nature of _ChRIS_.
+
+## What exists
+
+_ChRIS_ currently supports two classes of users -- a "normal" user and an elevated pseudo "root" user. The permissions and roles of these users is not strictly defined and has been implemented largely ad-hoc.
+
+## Proposed
+
+The concept of _users_ is closely allied to the implementation of a file/directory permission model. By defining access, usage, and visibility criteria for files and associating these with a _user_ or a list of users, we allow _ChRIS_ to be more secure going forward, provide more sane sharing features, and act more consistently with established and existing practices.
+
+### Users and ``uid``
+
+Each user in _ChRIS_ shall have a corresponding `uid` (user-id) that uniquely identifies the user. This `uid` can be associated with a string user name.
+
+* The `root` user shall have a `uid` of 0.
+* A default user called `all` exists and every user of the system can by default "see" the objects owned by `all`.
+
+### "Groups" are just users, too!
+
+To allow for better sharing, we propose handling the idea of user "groups". In a slight departure from conventional UNIX norms, we propose that "groups" are simply "users" from a functional perspective -- in other words the system only knows "users". A client (human or software) user of the system, however, can be one of many "users", depending on role or context.
+
+* any user can "become" any group by simply knowing the group name and password
+* file/directory object ownership is simply a list of "users", thus a generalization of the standard UNIX 3-tuple to an _N_-tuple.
+
+The deeper practical implications of this concept would need to be more fully explored.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
