@@ -26,7 +26,7 @@ We propose to simply adopt a simplified POSIX user id scheme:
 
 ### No groups
 
-We propose to not have a concept of groups. This simplifies some sharing considerations, but has downstream implications that need to be carefully enumerated (see later).
+We propose to not have a concept of groups. This simplifies some sharing considerations, but has downstream implications that need to be carefully enumerated (see later). In this new system, "groups" are simply "users".
 
 ### Permission model
 
@@ -39,9 +39,9 @@ The proposed simplification from POSIX is simply that the three tuple concept of
 [options="header"]
 |==============================================
 | type | name      | owner
-| dir  | Pictures  | rudolph:rwx,jack:r,jill:rwx
-| file | image.dcm | rudolph:rwx,ellen:r,jack:rwx
-| file | filter    | rudolph:rwx
+| dir  | Pictures  | `rudolph:rwx,jack:r--,jill:rwx`
+| file | image.dcm | `rudolph:rwx,ellen:r--,jack:rwx`
+| file | filter    | `rudolph:rwx`
 |==============================================
 
 Importantly and a generalization of the POSIX model, the above model simply breaks the standard 3 tuple and explicitly associates ownership permissions directly with a user, resulting in the idea of multiple, specific _owners_.
@@ -78,11 +78,11 @@ Pictures
 
 ## Implications
 
-Group user aliases could be defined (which according to RFC 13-ChRISFS.adoc could live under `/etc`) to allow for group-based sharing. An important alias is `all` which denotes "all" users, thus if `rudolph` has a feed, it would could be made "public" with:
+Groups are proposed to be just other "users" and could be defined (which according to RFC 13-ChRISFS.adoc could live under `/etc`) to allow for group-based sharing. An important alias is `all` which denotes "all" users, thus if `rudolph` has a feed, it would could be made "public" with:
 
 |============================================
 | type | name      | owner
-| dir  | feed_123  | rudolph:rwx, all:r
+| dir  | feed_123  | `rudolph:rwx, all:r--`
 |============================================
 
 In this model, for public browsing, a public user is the `all` user and could only "see" objects that have an `all` owner with at least a `read` bit set.
