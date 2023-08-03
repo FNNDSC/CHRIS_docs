@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: FreeSurfer Only Skull Stripping with report and overlay v20220816-1
+name: FreeSurfer Only Skull Stripping with report and overlay v20230803
 description: "Run FreeSurfer v7.3.2 autorecon1 (recon-all -autorecon1) across an input data space (can be multidir) -- and postprocess with a simple report and also overlay imaging. Limited to two in-node parallel threads. Parent input space is bulk-renamed to reduce long directory paths."
 category: Medical Imaging
 locked: false
