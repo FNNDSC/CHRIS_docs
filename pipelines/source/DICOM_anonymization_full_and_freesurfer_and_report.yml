@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: "DICOM anon, tag info, image conversion, FreeSurfer, report and overlay v20230803"
+name: "DICOM anon, tag info, image conversion, FreeSurfer, report and overlay v20230811"
 description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer v7.3.2 followed by a report and overlay images. Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
@@ -84,7 +84,7 @@ plugin_tree:
     plugin_parameter_defaults:
       verbosity: "1"
   - title: segmentation-vols-to-jpg
-    plugin: pl-multipass v1.3.0
+    plugin: pl-multipass v1.3.4
     previous: FreeSurfer-v7.3.2
     plugin_parameter_defaults:
       commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
