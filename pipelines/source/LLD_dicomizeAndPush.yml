@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: image-to-DICOM 
-    plugin: pl-dicommake v2.2.2
+    plugin: pl-dicommake v2.2.3
     previous: ~
     plugin_parameter_defaults:
       outputSubDir: "data"
