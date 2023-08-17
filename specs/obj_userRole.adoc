@@ -1,0 +1,58 @@
+# _ChRIS_ users
+
+## Abstract
+
+This RFC proposes an object user and permission model for _ChRIS_.
+
+## Introduction
+
+_ChRIS_ consists of _users_ and _objects_. While the idea of _users_ is generally easily understood, the concept of an _object_ is a superset of all named elements that can be expressed in a _ChRIS_ filesystem. While this obviously means _directories_ and _files_, the concept of a _file_ in the _ChRIS_ filesystem can also be _virtual_ database element (such as a _plugin_, or a representation of some internal _ChRIS_ state such as a _computeEnvironment_).
+
+## Summary
+
+The _ChRIS_ filesystem will be used to expose not only real actual files that exist in the _ChRIS_ system and which are in object storage, but also support _links_ (implemented in the _ChRIS_ database) to real files. In addition, the _ChRIS_ filesystem will use a file metaphor to express non-file objects, such as _plugins_, and internal system values.
+
+### Users and ``uid``
+
+Each user in _ChRIS_ shall have a corresponding `uid` (user-id) that uniquely identifies the user. This `uid` can be associated with a string user name.
+
+* The `root` user shall have a `uid` of 0;
+* A human/client of _ChRIS_ shall have a primary _username_ but can also be a _member_ of many other named _users_;
+* The CUBE database shall maintain this association;
+* A default user called `all` exists and every user of the system is part of `all`.
+* 
+
+### "Groups" are just users, too!
+
+To allow for better sharing, we propose handling the idea of user "groups". In a slight departure from conventional UNIX norms, we propose that "groups" are simply "users" from a functional perspective -- in other words the system only knows "users". A client (human or software) user of the system, however, can be one of many "users", depending on role or context.
+
+* any user can "become" any group by simply knowing the group name and password
+* file/directory object ownership is simply a list of "users", thus a generalization of the standard UNIX 3-tuple to an _N_-tuple.
+
+The deeper practical implications of this concept would need to be more fully explored.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
