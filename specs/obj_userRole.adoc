@@ -1,36 +1,212 @@
-# _ChRIS_ users
+# _CUBE_ Specification -- _objects_, their representation and _attributes_
+
+[options="header"]
+|==============================================
+| version | description
+| 20230818-1  | initial document
+|==============================================
 
 ## Abstract
 
-This RFC proposes an object user and permission model for _ChRIS_.
+This document provides a _new_ specification for services provided by the **C**hRIS **U**nderlying **B**ack **E**nd (or _CUBE_). The philosophy of this specification is to simplify the client-side experience considerably, which by necessity will introduce some burden of complexity _server-side_ to _CUBE_. Dealing with this complexity _once_ server-side is deemed more manageable than dealing with it every time again with a new client.
+
+The specification consists of two main components: (1) the definition of _objects_ within _CUBE_ and their _attributes_; and (2) a new _model_ that presents an internally-self consistent view of data and execution behavior of the system.
+
+In this new specification, _CUBE_ organizationally supports only **one** fundamental _object_ type: **directories**. This object contains a _manifest_ (or table) that denotes a second _sub-object_: **files**. These objects have attributes including **labels** such as _users_, _roles/permissions_, _links_, _sizes_, _dates_, etc. Some of these labels, such as _users_ and _permissions_ are fully described in a new specification, while others such as file _sizes_ are self-evident.
+
+The simplest _model_ for this abstraction is a single-edged graph. Nodes are _directories_ and edges are relationships between them. _Nodes_ contain _files_ (but files themselves can be expressed as a single table or manifest), in other words _CUBE_ *does not have to explicitly track/register files*. Practically thus, the _model_ will be represented as a filesystem. Using the model, **every** current operation in _CUBE_ can be observed and controlled through operations on **files** and **directories**, consistent with this **model**.
+
+_CUBE_ shall implement this specification and provide clients with a consistent and uniform experience built on this specification. **Clients should be able to fully use all of _CUBE_ functionality from only this specification/interface**.
+
+## Scope
+
+The _scope_ of this specification is a _CUBE_ interface/API boundary. In other words, clients accessing this API will be presented with services and API endpoints consistent with this specification. This boundary can either be an extension of the current `collection+json` interface, or a new interface that specifically services this specification.
+
+Since the services called for by this specification are markedly different from the current _CUBE_ design, it is possible that a new API or provider might be needed. This document makes no comment on the most efficient manner to provide this specification from beyond the _CUBE_ API boundary. Similarly, this document **does not specify the API technology or design needed to service this specification**.
+
 
 ## Introduction
 
-_ChRIS_ consists of _users_ and _objects_. While the idea of _users_ is generally easily understood, the concept of an _object_ is a superset of all named elements that can be expressed in a _ChRIS_ filesystem. While this obviously means _directories_ and _files_, the concept of a _file_ in the _ChRIS_ filesystem can also be _virtual_ database element (such as a _plugin_, or a representation of some internal _ChRIS_ state such as a _computeEnvironment_).
+At its core, _CUBE_ can be thought of as maintaining an organized collection of _objects_ in some relationship to each other. Importantly, this relationship can be visualized in its most general sense as a simple single-edge graph between these _objects_.
 
-## Summary
+This specification aims to present a single unifying view of these objects and their defined properties. More concretely, this specification aims to define these _objects_ and their _attributes_ by using an internally self-consistent model of some reality. Objects and their relationships are defined wholly within in this model and _CUBE_ provides an interface to the internal _ChRIS_ state via operations on this model.
 
-The _ChRIS_ filesystem will be used to expose not only real actual files that exist in the _ChRIS_ system and which are in object storage, but also support _links_ (implemented in the _ChRIS_ database) to real files. In addition, the _ChRIS_ filesystem will use a file metaphor to express non-file objects, such as _plugins_, and internal system values.
+An important insight into this specification is the world or reality it is trying to model. Understanding this model is key to understanding the philosophy of this specification and will provide both clients and _CUBE_ a mutually understood contract of interaction. It is hoped that by understanding the _model_, clients should be able to largely self-discover attributes of _CUBE_, and moreover that _CUBE_ developers can expose parts of the system simply and logically using this model (see _Model_) and accelerate innovation.
 
-### Users and ``uid``
+## Current State and Shortcomings
 
-Each user in _ChRIS_ shall have a corresponding `uid` (user-id) that uniquely identifies the user. This `uid` can be associated with a string user name.
+This has been extensively discussed elsewhere in various rfcs (rfcs/11-crossroads.adoc). This can be summarised as:
 
-* The `root` user shall have a `uid` of 0;
-* A human/client of _ChRIS_ shall have a primary _username_ but can also be a _member_ of many other named _users_;
-* The CUBE database shall maintain this association;
-* A default user called `all` exists and every user of the system is part of `all`.
-* 
+### Inconsistent and Unknowable Behaviour
 
-### "Groups" are just users, too!
+The current _CUBE_ is largely the result of a rapid _evolutionary_ process geared to addressing ad-hoc needs that has been mostly undocumented. For example, the roles and abilities of users and user classes are vague and only knowable by trial and error.
 
-To allow for better sharing, we propose handling the idea of user "groups". In a slight departure from conventional UNIX norms, we propose that "groups" are simply "users" from a functional perspective -- in other words the system only knows "users". A client (human or software) user of the system, however, can be one of many "users", depending on role or context.
+Moreover, while the core `collection+json` API is wonderfully self-consistent, the services that it exposes are not. This has resulted in _logically_ different APIs that though _semantically_ consistent, offer little insight into their use (for instance the _feedsAPI_, the _uploadsAPI_, the _servicesAPI_).
 
-* any user can "become" any group by simply knowing the group name and password
-* file/directory object ownership is simply a list of "users", thus a generalization of the standard UNIX 3-tuple to an _N_-tuple.
+### Complexity
 
-The deeper practical implications of this concept would need to be more fully explored.
+Organizationally, _CUBE_ is internally complex. It supports _Feeds_ which are groupings of executable instances of plugins and the files created by these plugins. It supports an _Uploads_ context which is in reality a file/directory implementation. It supports a different _SERIVCES_ concept which attempts to leverage certain meta-data of certain filetypes in a optimized manner. It tracks executable applications called _plugins_. It supports static text descriptions of _plugins_ called _pipelines_. Each of these services, though semantically consistent in the _CUBE_ API are logically inconsistent and unrelated.
 
+### Inconsistent Configuration
+
+Core administrative functions are complex and accessed by a completely different API and website. This has resulted in a set of inconsistent and developer-specific _client-side_ supporting applications (`plugin2cube`, `pipeline2cube`, `chrs`, etc).
+
+### Lack of Cohesive Internal Model/View
+
+_CUBE_ currently lacks an internally fully consistent view of how it sees the world. The only _real_ object it supports is a _file_ which is a database entry of the same object that exists in object storage. However, depending on _where_ this same real file exists in the object space, different APIs are needed to use this resource.
+
+For example, _CUBE_ provides services on concepts such as _Feeds_ and on _Files_, but internally there is no discernable relationship between these entities -- even though both ultimately represent real files. This has led to contextually specific APIs. A client has to use one API when operating on "files" in one part, but a different API when operating on "files" elsewhere. This ironically has led to cascading complexity on the back end. Consider the trivial example of a user who might wish to uploads _Files_ to their "file space" in some directory. The user notes that _Feeds_ are presented similarly to them -- _Files_ in what seem to be directories. However, these _entities_ are completely different in _CUBE_ and while the _Files_ entities might allow for simple uploading of objects, the _Feeds_ entities do not and would require highly complex reworking. From the user perspective there is _no logical reason_ for this.
+
+Moreover, the burden of creating a unified _sense_ of objects in _CUBE_ is currently fully delegated to be client-side. This means that for every client, for every implementation, for every language, a *new completely assemblage must be created* and relies on deep understanding of the undocumented inner world of how _CUBE_ sees concepts. This is a considerable barrier-to-entry.
+
+### Innovation Stagnation and Asymmetrical Knowledge
+
+This is perhaps the most compelling shortcoming. The technical expertise of _CUBE_ is asymmetrically distributed across the development team. Since there is no shared understanding of how _CUBE_ works across the ACG team, innovation by necessity stagnates. Moreover, asymmetric knowledge is never a good long term strategy.
+
+While arguably introducing a new **model** of what _CUBE_ should provide could be seen as an unnecessary burden on a knowledgeable _CUBE_ developer, it will allow for quicker team innovation, and reduce the barrier-of-entry to collaborators.
+
+## Model
+
+Having said all of this, the internal _model_ that _CUBE_ will be specified to provide is conceptually quite simple: **a typical UNIX-inspired filesystem analog serviced by a _kernel_ that uses this filesystem and interacts with objects on the filesystem**. Standard filesystem operations/abstractions will be *directly* and *consistently* supported by _CUBE_. In this representation, the _kernel_ is _CUBE_ itself, i.e. server-side operations and functionality.
+
+The filesystem model will support representations of _real_ actual files, as well as _virtual_ files (or links to real files), as well as _dynamic_ files which are placeholders for information that is dynamically generated on access and/or interpreted by _CUBE_ on ingestion.
+
+## Vision
+
+The _vision statement_ of this specification is simply: **all operations and observability on ChRIS can be effected through operations and observability on _files_ contained with _directories_ represented in a filesystem**.
+
+## Object Defintions
+
+**There is only a single database trackable object in the model**: _directories_.
+
+### Object Relationships
+
+_directories_ contain _files_ and it is _proposed_ (but not _specified_) that _files_ are simply described in a single _manifest_ in each _directory_. In other words, it is _suggested_ that the _CUBE_ database need not register individual files, but can simply access them by reading the _manifest_. This is an example of a single-edge graph between nodes where nodes map to _directories_ and edges map the logical hierarchy of these directories. Here, _nodes_ contain _files_ (or a single object that represents all the files).
+
+### Object Manifests
+
+The specification _proposes_ the universal use of _manifests_ as a data structure for objects. A single directory needs only contain a single manifest. Thus, instead of keeping direct track of every object, _CUBE_ instead only works with _manifests_ (tables of files) that themselves contain a list of all objects at a given tree location. For example, a single _manifest_ could be:
+
+[options="header"]
+|==============================================
+| type | name      | owner                           | refs              | size  | date
+| dir  | Pictures  | `rudolph:rwx` + `jack:r--` + `jill:rwx` |                   | 0     | `20230824.1351`
+| file | image1.dcm | `rudolph:rwx` + `ellen:r--` + `jack:rwx`| `<-obj:432543.453`| 24354 | `20230824.1351`
+| file | image2.dcm | `rudolph:rwx` + `ellen:r--` + `jack:rwx`| `<-obj:432543.454`| 24354 | `20230824.1351`
+| file | image3.dcm | `rudolph:rwx` + `ellen:r--` + `jack:rwx`| `<-obj:432543.455`| 24354 | `20230824.1351`
+| file | image4.dcm | `rudolph:rwx` + `ellen:r--` + `jack:rwx`| `<-obj:432543.456`| 24354 | `20230824.1351`
+| file | image5.dcm | `rudolph:rwx` + `ellen:r--` + `jack:rwx`| `<-obj:432543.457`| 24354 | `20230824.1351`
+| file | filter.txt| `rudolph:rwx`                   | `<-obj:654345.423`| 432   | `20230824.1351`
+|==============================================
+
+
+In a manifest, operations such as _delete_ or _copy_  of files are simply removing or adding rows in the manifest table. Changing references or links or ownership is simply editing columnar data. Adding new attributes is simply adding new columns with minimal database impact.
+
+### CUBE Requirements:
+
+#### Files and Directories:
+
+. a single API to navigate this *entire* tree structure;
+. a manifest of objects (files and directories) at each location of the tree
+.. objects _do not have to be real_, i.e. they do not have to exist at a corresponding location in object storage but can be links or references
+.. the manifest that is returned is a function of the _attributes_ of each object
+. the ability to create new (or delete existing) objects (files or directories) *anywhere* in the tree structure (subject to permission attributes);
+.. support for uploading / downloading objects
+. the ability to examine/and set the _attributes_ of objects
+
+#### Directories:
+
+Operations on directories simply operate on all _files_ in that directory _en mass_ and optionally are recursive. This can have useful results such as statistics on total file size, number of files, etc.
+
+## Object Attributes
+
+Attributes are _traits_ or _meta_ data associated with every object.
+
+### Core attributes
+
+Every object will have a set of core attributes
+
+* name
+* type
+* size
+* owner(s)
+* access bits
+* references (or links)
+* time/date information
+
+### Optional attributes
+
+In additional, objects of specific types can have additional _type_ attributes
+
+### CUBE Requirements
+
+* based on certain attributes (such as ownership and access), filter and/or limit visibility of objects to a client
+* where allowed, the ability for clients to examine and set certain attributes:
+** name
+** access
+** additional owner(s)
+
+
+## File Object Existence -- all files are effectively virtual
+
+In this specification, _directories_ always exist as database elements. However, _files_ only really exist in object storage, and only a single copy of every file is stored. The location of these files within the _CUBE_ "filesystem" is simply governed by the _manifest_ table in each directory that lists the files and their attributes in this directory. Copying, moving, deleting files to different places in the filesystem tree are simply operations on the _manifest_ in a directory.
+
+It is important to highlight that in this _manifest_ concept, *all files in the CUBE filesystem are virtual* and are just placeholders in a table with links to where the actual copy exists. This enforces by fiat file linkage concepts and solves one core intractable problem in the current _CUBE_: needless duplication of all files.
+
+## Dynamic Files
+
+An important directive of this specification is understanding a new concept: _dynamic_ files. A _dynamic_ file is a file that does not exist in object storage. A _dynamic_ file can be listed in a directory _manifest_ (an _a priori dynamic file_) or the _manifest_ itself can be generated at access time, as too the contents of the files (_in vivo dynamic files_).
+
+Dynamic files are crucial to the requirement of providing the ability to *fully* operate _CUBE_ in this model, in particular for administration and pervasive observability. They are purely server-side artifacts and are specified so that _CUBE_ can abstract and consolidate its behavior subject to this model. There are two types of _dynamic_ files: static _a priori_ and  _in vivo_.
+
+### A priori dynamic files
+
+_A priori dynamic files_ are proposed as a model-conformant solution to tasks such as, but not limited to, administration. For instance, imagine the problem of changing the "compute environment" of a "plugin" (these terms are out of scope of this document. See elsewhere for their definitions).
+
+This specification would propose a file that exists in the _CUBE_ filesystem here:
+
+[source,shell]
+----
+/etc/compute_env.json
+----
+
+In the _manifest_ of the `etc` *directory* is an entry for `compute_env.json`. If the client tries to "view" this file, _CUBE_ dynamically creates the contents and passes this to the client. The details are not imporant to this document, however it is reasonable that this dynamically generated file can contain whatever is deemed reasonable. For example, a list of the existing environments and their details. Perhaps even which plugins are registered to use each environment.
+
+Now, if the client "updates" the contents of this file _CUBE_ can parse this and accordingly update information pertinent to the compute environment.
+
+Note how using the filesystem model in this example completely sidesteps the client-side complexity of logging into a different website, or using idiosyncratic administration tools. The *model* provides a context for simplifying the experience -- admittedly at the one-time cost of complexity for the server. Nonetheless, this mechanism provides a simple, consistent and *documentable* method of performing these tasks.
+
+Moreover, access to this file can be logically and consistently controlled by the file attribute characteristics of this specification, with no need for additional authentication or other special administration access.
+
+It should be self-evident how this concept can be extended to other internal state details of _CUBE_ as exposed by this model.
+
+### In vivo dynamic files
+
+_In vivo dynamic files_ do not even exist _a priori_, i.e. do not exist in a directory _manifest_, but the _manifest_ itself is created at directory access time. In other words directories that at access time populate their list of files. This is useful for say getting a list of existing plugins by simply access a directory like
+
+[source,shell]
+----
+/bin
+----
+
+When this "special" **directory** object is requested by a client, _CUBE_ generates a _manifest_ at request time, generating an entry for every plugin that exists at that moment in _CUBE_. In this manner, the list of existing/available plugins appears simply and consistently as a list of files by "reading" the `/bin` directory. _CUBE_ is also free to define what it means to "access" one of these plugin files. A client might then request access to `/bin/pl-dcm2nixx` and _CUBE_ can then generate a return that is the README of that plugin.
+
+### Additional Innovations
+
+_CUBE_ can leverage this *model* internally also to provide a model-based view of complex operations. For instance, when a _feed_ executes, its run-time instances can be recoded in this *model*, say
+
+[source,shell]
+----
+/var/run/feed-10
+/var/run/feed-10/pl-dircopy-23
+/var/run/feed-10/pl-dircopy-23/pl-dcm2niix-45
+/var/run/feed-10/pl-dircopy-23/pl-dcm2niix-45/pl-intensity-67
+----
+
+Describing in a directory tree representation the relationship of plugins and their `plugininstanceid`s.
+
+
+_-30-_
 
 
 
