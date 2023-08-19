@@ -31,7 +31,7 @@ At its core, _CUBE_ can be thought of as maintaining an organized collection of 
 
 This specification aims to present a single unifying view of these objects and their defined properties. More concretely, this specification aims to define these _objects_ and their _attributes_ by using an internally self-consistent model of some reality. Objects and their relationships are defined wholly within in this model and _CUBE_ provides an interface to the internal _ChRIS_ state via operations on this model.
 
-An important insight into this specification is the world or reality it is trying to model. Understanding this model is key to understanding the philosophy of this specification and will provide both clients and _CUBE_ a mutually understood contract of interaction. It is hoped that by understanding the _model_, clients should be able to largely self-discover attributes of _CUBE_, and moreover that _CUBE_ developers can expose parts of the system simply and logically using this model (see _Model_) and accelerate innovation.
+An important insight into this specification is the world or reality it is trying to model. This specification represents this model as a single, consistent conventional UNIX-inspired _filesystem_. Understanding this model is key to understanding the philosophy of this specification and will provide both clients and _CUBE_ a mutually understood contract of interaction. It is hoped that by understanding the _model_, clients should be able to largely self-discover attributes of _CUBE_, and moreover that _CUBE_ developers can expose parts of the system simply and logically using this model (see _Model_) and accelerate innovation.
 
 ## Current State and Shortcomings
 
@@ -45,11 +45,11 @@ Moreover, while the core `collection+json` API is wonderfully self-consistent, t
 
 ### Complexity
 
-Organizationally, _CUBE_ is internally complex. It supports _Feeds_ which are groupings of executable instances of plugins and the files created by these plugins. It supports an _Uploads_ context which is in reality a file/directory implementation. It supports a different _SERIVCES_ concept which attempts to leverage certain meta-data of certain filetypes in a optimized manner. It tracks executable applications called _plugins_. It supports static text descriptions of _plugins_ called _pipelines_. Each of these services, though semantically consistent in the _CUBE_ API are logically inconsistent and unrelated.
+Organizationally, _CUBE_ is internally complex. It supports _Feeds_ which are groupings of executable instances of plugins and the files created by these plugins. It supports an _Uploads_ context which is in reality a file/directory implementation. It supports a different _SERIVCES_ concept which attempts to leverage certain meta-data of certain filetypes in a optimized manner. It tracks executable applications called _plugins_. It supports static text descriptions of _plugins_ called _pipelines_. Each of these realms, though semantically consistent in the _CUBE_ API are logically inconsistent and unrelated.
 
 ### Inconsistent Configuration
 
-Core administrative functions are complex and accessed by a completely different API and website. This has resulted in a set of inconsistent and developer-specific _client-side_ supporting applications (`plugin2cube`, `pipeline2cube`, `chrs`, etc).
+Core administrative functions are complex and accessed by a completely different API and website. This has resulted in a set of inconsistent and developer-specific _client-side_ supporting applications (`plugin2cube`, `pipeline2cube`, `chrs`, etc), or worse, mandated the use of a human-only point-click web interface.
 
 ### Lack of Cohesive Internal Model/View
 
@@ -57,23 +57,23 @@ _CUBE_ currently lacks an internally fully consistent view of how it sees the wo
 
 For example, _CUBE_ provides services on concepts such as _Feeds_ and on _Files_, but internally there is no discernable relationship between these entities -- even though both ultimately represent real files. This has led to contextually specific APIs. A client has to use one API when operating on "files" in one part, but a different API when operating on "files" elsewhere. This ironically has led to cascading complexity on the back end. Consider the trivial example of a user who might wish to uploads _Files_ to their "file space" in some directory. The user notes that _Feeds_ are presented similarly to them -- _Files_ in what seem to be directories. However, these _entities_ are completely different in _CUBE_ and while the _Files_ entities might allow for simple uploading of objects, the _Feeds_ entities do not and would require highly complex reworking. From the user perspective there is _no logical reason_ for this.
 
-Moreover, the burden of creating a unified _sense_ of objects in _CUBE_ is currently fully delegated to be client-side. This means that for every client, for every implementation, for every language, a *new completely assemblage must be created* and relies on deep understanding of the undocumented inner world of how _CUBE_ sees concepts. This is a considerable barrier-to-entry.
+Moreover, the burden of creating a unified _sense_ of some consistent world-representation objects in _CUBE_ is currently fully delegated to be client-side. This means that for every client, for every implementation, for every language, a *new completely assemblage must be created* and relies on deep understanding of the undocumented inner world of how _CUBE_ sees concepts. This is a considerable barrier-to-entry.
 
-### Innovation Stagnation and Asymmetrical Knowledge
+### Innovation Stagnation and Asymmetrical Knowledge Distribution
 
 This is perhaps the most compelling shortcoming. The technical expertise of _CUBE_ is asymmetrically distributed across the development team. Since there is no shared understanding of how _CUBE_ works across the ACG team, innovation by necessity stagnates. Moreover, asymmetric knowledge is never a good long term strategy.
 
-While arguably introducing a new **model** of what _CUBE_ should provide could be seen as an unnecessary burden on a knowledgeable _CUBE_ developer, it will allow for quicker team innovation, and reduce the barrier-of-entry to collaborators.
+While arguably introducing a new **model** of what _CUBE_ should provide could be seen as an unnecessary burden on a knowledgeable _CUBE_ developer, it will allow for quicker team innovation, and reduce the barrier-of-entry to other, new collaborators.
 
 ## Model
 
 Having said all of this, the internal _model_ that _CUBE_ will be specified to provide is conceptually quite simple: **a typical UNIX-inspired filesystem analog serviced by a _kernel_ that uses this filesystem and interacts with objects on the filesystem**. Standard filesystem operations/abstractions will be *directly* and *consistently* supported by _CUBE_. In this representation, the _kernel_ is _CUBE_ itself, i.e. server-side operations and functionality.
 
-The filesystem model will support representations of _real_ actual files, as well as _virtual_ files (or links to real files), as well as _dynamic_ files which are placeholders for information that is dynamically generated on access and/or interpreted by _CUBE_ on ingestion.
+The filesystem model will support representations of _real_ actual files, as well as _virtual_ files (or links to real files), as well as _dynamic_ files which are placeholders for information that is dynamically generated on access and/or interpreted by _CUBE_ on ingestion (see _File Object Existence_).
 
 ## Vision
 
-The _vision statement_ of this specification is simply: **all operations and observability on ChRIS can be effected through operations and observability on _files_ contained with _directories_ represented in a filesystem**.
+The _vision statement_ of this specification is simply: **all operations and observability on ChRIS can be effected through operations and observability on a model of _files_ contained with _directories_ represented in a filesystem**.
 
 ## Object Defintions
 
@@ -155,7 +155,7 @@ It is important to highlight that in this _manifest_ concept, *all files in the 
 
 ## Dynamic Files
 
-An important directive of this specification is understanding a new concept: _dynamic_ files. A _dynamic_ file is a file that does not exist in object storage. A _dynamic_ file can be listed in a directory _manifest_ (an _a priori dynamic file_) or the _manifest_ itself can be generated at access time, as too the contents of the files (_in vivo dynamic files_).
+An important directive of this specification is understanding a new concept: _dynamic_ files. A _dynamic_ file is a file that does not exist in object storage, but uses the concept of a _file_ to provide or hook into internal _CUBE_ functionality. A _dynamic_ file can be listed in a directory _manifest_ (an _a priori dynamic file_) or the _manifest_ itself can be generated at access time (_in vivo dynamic files_).
 
 Dynamic files are crucial to the requirement of providing the ability to *fully* operate _CUBE_ in this model, in particular for administration and pervasive observability. They are purely server-side artifacts and are specified so that _CUBE_ can abstract and consolidate its behavior subject to this model. There are two types of _dynamic_ files: static _a priori_ and  _in vivo_.
 
@@ -170,9 +170,9 @@ This specification would propose a file that exists in the _CUBE_ filesystem her
 /etc/compute_env.json
 ----
 
-In the _manifest_ of the `etc` *directory* is an entry for `compute_env.json`. If the client tries to "view" this file, _CUBE_ dynamically creates the contents and passes this to the client. The details are not imporant to this document, however it is reasonable that this dynamically generated file can contain whatever is deemed reasonable. For example, a list of the existing environments and their details. Perhaps even which plugins are registered to use each environment.
+In the _manifest_ of the `etc` *directory* is an entry for `compute_env.json`. If the client tries to "view" this file, _CUBE_ dynamically creates the contents at access time and passes this to the client. The details are not important to this document, however it is reasonable that this dynamically generated file can contain whatever is deemed necessary to describe the compute environment. For example, a list of the existing environments and their details. Perhaps even which plugins are registered to use each environment.
 
-Now, if the client "updates" the contents of this file _CUBE_ can parse this and accordingly update information pertinent to the compute environment.
+Now, if the client "updates" the contents of this file, _CUBE_ can parse this and accordingly update information pertinent to the compute environment.
 
 Note how using the filesystem model in this example completely sidesteps the client-side complexity of logging into a different website, or using idiosyncratic administration tools. The *model* provides a context for simplifying the experience -- admittedly at the one-time cost of complexity for the server. Nonetheless, this mechanism provides a simple, consistent and *documentable* method of performing these tasks.
 
@@ -182,14 +182,14 @@ It should be self-evident how this concept can be extended to other internal sta
 
 ### In vivo dynamic files
 
-_In vivo dynamic files_ do not even exist _a priori_, i.e. do not exist in a directory _manifest_, but the _manifest_ itself is created at directory access time. In other words directories that at access time populate their list of files. This is useful for say getting a list of existing plugins by simply access a directory like
+_In vivo dynamic files_ do not even exist _a priori_, i.e. do not exist in a directory _manifest_, but the _manifest_ itself is created at directory access time. In other words directories that at access time populate their list of files. This is useful for say getting a list of existing plugins by simply accessing a directory like
 
 [source,shell]
 ----
 /bin
 ----
 
-When this "special" **directory** object is requested by a client, _CUBE_ generates a _manifest_ at request time, generating an entry for every plugin that exists at that moment in _CUBE_. In this manner, the list of existing/available plugins appears simply and consistently as a list of files by "reading" the `/bin` directory. _CUBE_ is also free to define what it means to "access" one of these plugin files. A client might then request access to `/bin/pl-dcm2nixx` and _CUBE_ can then generate a return that is the README of that plugin.
+When this "special" **directory** object is requested by a client, _CUBE_ generates a _manifest_ at request time, generating an entry for every plugin that exists at that moment in _CUBE_. In this manner, the list of existing/available plugins appears simply and consistently as a list of files by "reading" the `/bin` directory. _CUBE_ is also free to define what it means to "access" one of these plugin files. A client might then request access to `/bin/pl-dcm2nixx` and _CUBE_ can then generate a return that is the README of that plugin, for example.
 
 ### Additional Innovations
 
@@ -203,7 +203,7 @@ _CUBE_ can leverage this *model* internally also to provide a model-based view o
 /var/run/feed-10/pl-dircopy-23/pl-dcm2niix-45/pl-intensity-67
 ----
 
-Describing in a directory tree representation the relationship of plugins and their `plugininstanceid`s.
+Describing in a directory tree representation the relationship of plugins and their `plugininstanceid` s. It should be self apparent how this can be seamless extended to arbitrarily complex feeds.
 
 
 _-30-_
