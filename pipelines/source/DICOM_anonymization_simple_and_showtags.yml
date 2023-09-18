@@ -1,15 +1,15 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: DICOM anonymization simple and extract tag info v20220803-1
+name: DICOM anonymization simple and extract tag info v20230918
 description: Anonymize all DICOM files in a parent node and add a child node with the anonymized tag information as a report.
 category: Medical Imaging
 locked: false
 plugin_tree:
   - title: dicom-anonymization
-    plugin: pl-pfdicom_tagsub v3.2.4
+    plugin: pl-dicom_headerEdit v1.1.1
     previous: ~
     plugin_parameter_defaults:
-      extension: ".dcm"
+      fileFilter: ".dcm"
       splitToken: ","
       splitKeyValue:  "="
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
@@ -20,12 +20,11 @@ plugin_tree:
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag" 
   - title: tag information 
-    plugin: pl-pfdicom_tagExtract v3.1.3
+    plugin: pl-pfdicom_tagExtract v3.2.1
     previous: dicom-anonymization 
     plugin_parameter_defaults:
       outputFileStem: tagInfo 
       imageScale: "3:none"
-      extension: dcm
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
-      outputFileType: "raw,html"
+      outputFileType: "raw,json,html,dict,col,csv"
 

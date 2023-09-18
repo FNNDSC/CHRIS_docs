@@ -1,28 +1,28 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: DICOM anonymization and original-vs-anon tag report v20220804-2
+name: DICOM anonymization and original-vs-anon tag report v20230918_2
 description: Anonymize an input directory of DICOM files -- create two branches where one branch has tag report on original data, the other branch has anon images and tag report.
 category: Medical Imaging
 locked: false
 plugin_tree:
-  - title: root-node-copy 
+  - title: root-node-copy-rep 
     plugin: pl-simpledsapp v2.1.0
     previous: ~
-    plugin_parameter_defaults: ~
+    plugin_parameter_defaults:
+      prefix: 0-
   - title: original-node-tags 
-    plugin: pl-pfdicom_tagExtract v3.1.3
-    previous: root-node-copy 
+    plugin: pl-pfdicom_tagExtract v3.2.1
+    previous: root-node-copy-rep 
     plugin_parameter_defaults:
       imageScale: "3:none"
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
-      extension: dcm
       outputFileStem: originalTags
-      outputFileType: "raw,html"
-  - title: dicom-anonymization
-    plugin: pl-pfdicom_tagsub v3.2.4
-    previous: root-node-copy 
+      outputFileType: "raw,html,csv,json"
+  - title: dicom-anonymization-node
+    plugin: pl-dicom_headerEdit v1.1.1
+    previous: root-node-copy-rep 
     plugin_parameter_defaults:
-      extension: ".dcm"
+      fileFilter: ".dcm"
       splitToken: ","
       splitKeyValue:  "="
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
@@ -33,12 +33,11 @@ plugin_tree:
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag" 
   - title: tag information 
-    plugin: pl-pfdicom_tagExtract v3.1.3
-    previous: dicom-anonymization 
+    plugin: pl-pfdicom_tagExtract v3.2.1
+    previous: dicom-anonymization-node 
     plugin_parameter_defaults:
       outputFileStem: tagInfo 
       imageScale: "3:none"
-      extension: dcm
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
       outputFileType: "raw,html,csv,json"
 
