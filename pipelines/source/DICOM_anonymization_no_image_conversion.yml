@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: DICOM anonymization and original-vs-anon tag report v20230918_2
+name: DICOM anonymization and original-vs-anon tag report v20230920
 description: Anonymize an input directory of DICOM files -- create two branches where one branch has tag report on original data, the other branch has anon images and tag report.
 category: Medical Imaging
 locked: false
@@ -11,9 +11,10 @@ plugin_tree:
     plugin_parameter_defaults:
       prefix: 0-
   - title: original-node-tags 
-    plugin: pl-pfdicom_tagExtract v3.2.1
+    plugin: pl-pfdicom_tagExtract v3.2.2
     previous: root-node-copy-rep 
     plugin_parameter_defaults:
+      fileFilter: ".dcm"
       imageScale: "3:none"
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
       outputFileStem: originalTags
@@ -33,9 +34,10 @@ plugin_tree:
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag" 
   - title: tag information 
-    plugin: pl-pfdicom_tagExtract v3.2.1
+    plugin: pl-pfdicom_tagExtract v3.2.2
     previous: dicom-anonymization-node 
     plugin_parameter_defaults:
+      fileFilter: ".dcm"
       outputFileStem: tagInfo 
       imageScale: "3:none"
       imageFile: "m:%_nospc|-_ProtocolName.jpg"

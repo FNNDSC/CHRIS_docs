@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: "DICOM anon, tag info, image conversion, FreeSurfer, report and overlay v20230811"
+name: "DICOM anon, tag info, image conversion, FreeSurfer, report and overlay v20230920"
 description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer v7.3.2 followed by a report and overlay images. Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
@@ -27,19 +27,19 @@ plugin_tree:
       fileFilter: dcm
       analyzeFileIndex: f
   - title: tags-on-original-dicom
-    plugin: pl-pfdicom_tagExtract v3.1.3
+    plugin: pl-pfdicom_tagExtract v3.2.2
     previous: root-group-copy
     plugin_parameter_defaults:
       outputFileType: "raw,html"
       imageScale: "3:none"
-      extension: dcm
+      fileFilter: dcm
       outputFileStem: originalTags
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
   - title: dicom-anonymize
-    plugin: pl-pfdicom_tagsub v3.2.4
+    plugin: pl-dicom_headerEdit v1.1.1
     previous: root-group-copy
     plugin_parameter_defaults:
-      extension: ".dcm"
+      fileFilter: ".dcm"
       splitToken: ","
       splitKeyValue:  "="
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
@@ -50,10 +50,10 @@ plugin_tree:
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag" 
   - title: tags-on-anon-dicom
-    plugin: pl-pfdicom_tagExtract v3.1.3
+    plugin: pl-pfdicom_tagExtract v3.2.2
     previous: dicom-anonymize
     plugin_parameter_defaults:
-      extension: dcm
+      fileFilter: dcm
       outputFileStem: anonymizedTags
       imageScale: "3:none"
       outputFileType: "raw,json,html,dict,col,csv"
