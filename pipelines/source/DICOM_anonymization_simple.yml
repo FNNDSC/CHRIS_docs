@@ -1,12 +1,12 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: DICOM anonymization simple v20230920
+name: DICOM anonymization simple v20230926
 description: Anonymize all DICOM files in a parent node and zip the results. No mess no fuss.
 category: Medical Imaging
 locked: false
 plugin_tree:
   - title: dicom-anonymization
-    plugin: pl-pfdicom_tagsub v3.3.1
+    plugin: pl-dicom_headerEdit v1.1.1
     previous: ~
     plugin_parameter_defaults:
       fileFilter: ".dcm"
@@ -21,10 +21,9 @@ plugin_tree:
                 re:.*ddress         =  #tag
                 " 
   - title: file-to-tar
-    plugin: pl-pfdorun v2.2.8
+    plugin: pl-pfdorun v2.2.14
     previous: dicom-anonymization
     plugin_parameter_defaults:
-      inputFile: "input.meta.json"
+      maxDepth: 0
       exec: "tar cvfz %outputDir/parent.tgz %inputDir"
-      verbose: 5
       noJobLogging: true
