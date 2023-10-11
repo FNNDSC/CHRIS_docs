@@ -1,0 +1,13 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "DICOM push to PACS v20231011"
+description: "Push DICOMs to a PACS via orthanc"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: pacs-push
+    plugin: pl-orthanc_push v1.2.2
+    previous: image-to-DICOM
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.dcm"
+      orthancUrl: http://192.168.1.200:8042
