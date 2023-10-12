@@ -1,2 +1,60 @@
 ---
-
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "Ultra Sound DICOM anonymization including PHI removal v20231012"
+description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS via orthanc
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.0
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: 0-
+  - title: filtered-pngs
+    plugin: pl-dicom_filter v0.0.7
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      outputType: png
+      dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
+  - title: filtered-dcms
+    plugin: pl-dicom_filter v0.0.7
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      outputType: dcm
+      dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
+  - title: phi-removed-pngs
+    plugin: pl-image_textremove v0.2.2
+    previous: filtered-pngs
+    plugin_parameter_defaults:
+      fileFilter: png
+      outputType: png
+  - title: pngs-and-dicoms
+    plugin: pl-topologicalcopy v0.2.6
+    previous: filtered-dcms
+    plugin_parameter_defaults:
+      plugininstances: filtered-dcms,phi-removed-pngs
+      filter: \.dcm$,\.png$
+  - title: png-to-dcm
+    plugin: pl-dicommake v2.2.3
+    previous: pngs-and-dicoms
+    plugin_parameter_defaults:
+      filterIMG: "**/*.png"
+      outputSubDir: data
+      thread: true
+  - title: dicom-anonymized
+    plugin: pl-dicom_headerEdit v1.1.1
+    previous: png-to-dcm
+    plugin_parameter_defaults:
+      fileFilter: ".dcm"
+      tagInfo: "PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ AccessionNumber,%_md5|8_AccessionNumber ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate ++ re:.*hysician,%_md5|4_#tag ++ re:.*stitution,#tag ++ re:.*ddress,#tag"
+      splitToken: "++"
+      splitKeyValue: ","
+  - title: pacs-push
+    plugin: pl-orthanc_push v1.2.2
+    previous: dicom-anonymized
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.dcm"
+      orthancUrl: http://galena.tch.harvard.edu:30030
+      username: "admin"
+      password: "mrK40zPQpYWE"
+      pushToRemote: "SYNAPSERESEARCH"
