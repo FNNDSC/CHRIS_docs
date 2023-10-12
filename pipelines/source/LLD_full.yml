@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "Leg Length Discrepency Full Workflow v20230425"
+name: "Leg Length Discrepency Full Workflow v20231006"
 description: "Perform the full leg length workflow, including joins"
 category: Imaging
 locked: false
@@ -85,7 +85,7 @@ plugin_tree:
   # With the join containing all the necessary information, we can now
   # generate new DICOMs
   - title: image-to-DICOM-8
-    plugin: pl-dicommake v2.2.2
+    plugin: pl-dicommake v2.2.3
     previous: measurement-join-dicom-7
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
@@ -98,7 +98,8 @@ plugin_tree:
     previous: image-to-DICOM-8
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
-      orthancUrl: http://192.168.1.200:8042
-      username: "orthanc"
-      password: "orthanc"
+      orthancUrl: http://galena.tch.harvard.edu:30030
+      username: "admin"
+      password: "mrK40zPQpYWE"
+      pushToRemote: "SYNAPSERESEARCH"
 

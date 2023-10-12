@@ -1,0 +1,22 @@
+2023-10-06T14:04:21.963483-04:00	START
+2023-10-06T14:04:21.973342-04:00	
+{
+    "status": false,
+    "message": "a failure occured",
+    "obj": {
+        "status": false,
+        "run": {
+            "stdout": "",
+            "stderr": "invalid reference format: repository name must be lowercase\n",
+            "cmd": "docker pull fnndsc/pl-image_textIdentify:0.2.3",
+            "cwd": "/home/sandip/CHRIS_docs/pipelines/source",
+            "returncode": 1
+        },
+        "rep": {
+            "error": "could not pull image"
+        }
+    }
+}
+2023-10-06T14:04:21.973386-04:00	END
+2023-10-06T14:04:31.733058-04:00	START
+2023-10-06T14:10:51.766938-04:00	START

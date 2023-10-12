@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: measure-leg-segments 
-    plugin: pl-markimg v1.2.30
+    plugin: pl-markimg v1.3.4
     previous: ~
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
@@ -14,3 +14,8 @@ plugin_tree:
       pointSize: 10
       linewidth: 0.5
       lineGap: 70
+      addText: "Not for diagnostic use"
+      addTextPos: bottom
+      addTextSize: 10
+      addTextColor: darkred
+      addTextOffset: "-500, 500"
