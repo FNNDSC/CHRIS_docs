@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization including PHI removal v20231012"
+name: "Ultra Sound DICOM anonymization including PHI removal v20231013"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS via orthanc
 category: Medical Imaging
 locked: false
@@ -51,7 +51,7 @@ plugin_tree:
       splitKeyValue: ","
   - title: pacs-push
     plugin: pl-orthanc_push v1.2.2
-    previous: dicom-anonymized
+    previous: png-to-dcm
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
       orthancUrl: http://galena.tch.harvard.edu:30030

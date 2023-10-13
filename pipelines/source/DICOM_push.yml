@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <dev@babymri.org>
-name: "DICOM push to PACS v20231011"
+name: "DICOM push to SYNAPSERESEARCH v20231013"
 description: "Push DICOMs to a PACS via orthanc"
 category: Imaging
 locked: false
