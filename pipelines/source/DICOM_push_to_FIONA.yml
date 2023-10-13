@@ -1,0 +1,16 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "DICOM push to FIONA v20231013"
+description: "Push DICOMs to a FIONA via orthanc"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: pacs-push
+    plugin: pl-orthanc_push v1.2.2
+    previous: ~
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*.dcm"
+      orthancUrl: http://galena.tch.harvard.edu:30030
+      username: "admin"
+      password: "mrK40zPQpYWE"
+      pushToRemote: "FIONA"

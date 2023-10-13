@@ -1,0 +1,75 @@
+2023-10-13T14:38:25.908591-04:00	START
+2023-10-13T14:38:26.591469-04:00	
+{
+    "status": false,
+    "message": "a failure occured",
+    "obj": {
+        "status": false,
+        "run": {
+            "stdout": "",
+            "stderr": "Error response from daemon: pull access denied for local/pl-image_textremove, repository does not exist or may require 'docker login': denied: requested access to the resource is denied\n",
+            "cmd": "docker pull local/pl-image_textremove:0.2.3",
+            "cwd": "/home/sandip/CHRIS_docs/pipelines/source",
+            "returncode": 1
+        },
+        "rep": {
+            "error": "could not pull image"
+        }
+    }
+}
+2023-10-13T14:38:26.591513-04:00	END
+2023-10-13T14:38:42.767839-04:00	START
+2023-10-13T14:39:01.000733-04:00	
+{
+    "status": false,
+    "obj": {
+        "run": {
+            "status": false,
+            "stdout": "an exception occurred",
+            "stderr": "User 'chris' is not a ChRIS admin.",
+            "returncode": 1
+        }
+    }
+}
+2023-10-13T14:39:01.000786-04:00	END
+2023-10-13T14:40:01.793812-04:00	START
+2023-10-13T14:40:04.356707-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 66,
+                "creation_date": "2023-10-13T14:40:04.146010-04:00",
+                "name": "pl-image_textremove",
+                "version": "0.2.3",
+                "dock_image": "fnndsc/pl-image_textremove:0.2.3",
+                "public_repo": "https://github.com/FNNDSC/pl-image_textremove",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "My ChRIS plugin",
+                "category": "",
+                "description": "A ChRIS plugin to remove text from images",
+                "documentation": "https://github.com/FNNDSC/pl-image_textRe",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "image_textRemove",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 1000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 100,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-13T14:40:04.356770-04:00	END
