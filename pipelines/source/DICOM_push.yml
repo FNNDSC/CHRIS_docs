@@ -7,7 +7,10 @@ locked: false
 plugin_tree:
   - title: pacs-push
     plugin: pl-orthanc_push v1.2.2
-    previous: image-to-DICOM
+    previous: ~
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
-      orthancUrl: http://192.168.1.200:8042
+      orthancUrl: http://galena.tch.harvard.edu:30030
+      username: "admin"
+      password: "mrK40zPQpYWE"
+      pushToRemote: "SYNAPSERESEARCH"
