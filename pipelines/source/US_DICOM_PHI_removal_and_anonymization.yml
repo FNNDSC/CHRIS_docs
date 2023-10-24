@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization including PHI removal v20231013"
+name: "Ultra Sound DICOM anonymization including PHI removal v20231024"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS via orthanc
 category: Medical Imaging
 locked: false
@@ -10,48 +10,98 @@ plugin_tree:
     previous: ~
     plugin_parameter_defaults:
       prefix: 0-
-  - title: filtered-pngs
+  - title: report-dcms
     plugin: pl-dicom_filter v0.0.7
     previous: root-group-copy
     plugin_parameter_defaults:
-      outputType: png
-      dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
-  - title: filtered-dcms
+      outputType: dcm
+      dicomFilter: '{"SOPClassUID":"Secondary Capture Image Storage"}'
+  - title: image-dcms
     plugin: pl-dicom_filter v0.0.7
     previous: root-group-copy
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
-  - title: phi-removed-pngs
+  - title: multiframe-dcms
+    plugin: pl-dicom_filter v0.0.7
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      outputType: dcm
+      dicomFilter: '{"SOPClassUID":"Ultrasound Multi-frame Image Storage"}'
+  - title: unpacked-dcms
+    plugin: pl-dicom_unpack v1.0.1                  
+    previous: multiframe-dcms
+    plugin_parameter_defaults:
+      fileFilter: dcm
+  - title: unpacked-pngs
+    plugin: pl-dicom_filter v0.0.7
+    previous: unpacked-dcms
+    plugin_parameter_defaults:
+      fileFilter: dcm
+      outputType: png
+  - title: image-pngs
+    plugin: pl-dicom_filter v0.0.7
+    previous: image-dcms
+    plugin_parameter_defaults:
+      fileFilter: dcm
+      outputType: png
+  - title: phi-removed-unpacked-pngs
     plugin: pl-image_textremove v0.2.3
-    previous: filtered-pngs
+    previous: unpacked-pngs
     plugin_parameter_defaults:
       fileFilter: png
       outputType: png
-  - title: pngs-and-dicoms
-    plugin: pl-topologicalcopy v0.2.6
-    previous: filtered-dcms
+  - title: phi-removed-image-pngs
+    plugin: pl-image_textremove v0.2.3
+    previous: image-pngs
     plugin_parameter_defaults:
-      plugininstances: filtered-dcms,phi-removed-pngs
+      fileFilter: png
+      outputType: png
+  - title: unpacked-dcms-and-phi-removed-pngs
+    plugin: pl-topologicalcopy v0.2.6
+    previous: unpacked-dcms
+    plugin_parameter_defaults:
+      plugininstances: unpacked-dcms,phi-removed-unpacked-pngs
       filter: \.dcm$,\.png$
-  - title: png-to-dcm
+  - title: image-dcms-and-phi-removed-pngs
+    plugin: pl-topologicalcopy v0.2.6
+    previous: image-dcms
+    plugin_parameter_defaults:
+      plugininstances: image-dcms,phi-removed-image-pngs
+      filter: \.dcm$,\.png$
+  - title: converted-unpacked-dcms
     plugin: pl-dicommake v2.2.3
-    previous: pngs-and-dicoms
+    previous: unpacked-dcms-and-phi-removed-pngs
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
-      outputSubDir: data
       thread: true
-  - title: dicom-anonymized
+  - title: converted-image-dcms
+    plugin: pl-dicommake v2.2.3
+    previous: image-dcms-and-phi-removed-pngs
+    plugin_parameter_defaults:
+      filterIMG: "**/*.png"
+      thread: true
+  - title: repacked-dcms
+    plugin: pl-dicom_repack v1.0.1        
+    previous: converted-unpacked-dcms
+    plugin_parameter_defaults:
+      fileFilter: dcm
+  - title: original-and-converted-dcms
+    plugin: pl-topologicalcopy v0.2.6    
+    previous: report-dcms
+    plugin_parameter_defaults:
+      plugininstances: report-dcms,converted-image-dcms,repacked-dcms
+  - title: dcms-anonymized
     plugin: pl-dicom_headerEdit v1.1.1
-    previous: png-to-dcm
+    previous: original-and-converted-dcms
     plugin_parameter_defaults:
       fileFilter: ".dcm"
       tagInfo: "PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ AccessionNumber,%_md5|8_AccessionNumber ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate ++ re:.*hysician,%_md5|4_#tag ++ re:.*stitution,#tag ++ re:.*ddress,#tag"
       splitToken: "++"
       splitKeyValue: ","
-  - title: pacs-push
+  - title: dcms-push-to-SYNAPSERESEARCH
     plugin: pl-orthanc_push v1.2.2
-    previous: png-to-dcm
+    previous: original-and-converted-dcms
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
       orthancUrl: http://galena.tch.harvard.edu:30030
