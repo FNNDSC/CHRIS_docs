@@ -73,3 +73,372 @@
     }
 }
 2023-10-13T14:40:04.356770-04:00	END
+2023-10-25T13:04:13.235023-04:00	START
+2023-10-25T13:04:16.788795-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 74,
+                "creation_date": "2023-10-25T13:04:16.678222-04:00",
+                "name": "pl-dicom_repack",
+                "version": "1.0.4",
+                "dock_image": "fnndsc/pl-dicom_repack:1.0.4",
+                "public_repo": "https://github.com/FNNDSC/pl-dicom_repack",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "My ChRIS plugin",
+                "category": "",
+                "description": "A ChRIS plugin to do something awesome",
+                "documentation": "https://github.com/FNNDSC/pl-dicom_re",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dicom_repack",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 80000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-25T13:04:16.788858-04:00	END
+2023-10-25T13:16:47.325888-04:00	START
+2023-10-25T13:16:50.263184-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 75,
+                "creation_date": "2023-10-25T13:16:50.185686-04:00",
+                "name": "pl-dicom_repack",
+                "version": "1.0.5",
+                "dock_image": "fnndsc/pl-dicom_repack:1.0.5",
+                "public_repo": "https://github.com/FNNDSC/pl-dicom_repack",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "My ChRIS plugin",
+                "category": "",
+                "description": "A ChRIS plugin to do something awesome",
+                "documentation": "https://github.com/FNNDSC/pl-dicom_re",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dicom_repack",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 20000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-25T13:16:50.263257-04:00	END
+2023-10-25T13:26:12.372160-04:00	START
+2023-10-25T13:26:15.596374-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 76,
+                "creation_date": "2023-10-25T13:26:15.506783-04:00",
+                "name": "pl-dicom_repack",
+                "version": "1.0.6",
+                "dock_image": "fnndsc/pl-dicom_repack:1.0.6",
+                "public_repo": "https://github.com/FNNDSC/pl-dicom_repack",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "A DICOM repack plugin",
+                "category": "",
+                "description": "A ChRIS plugin to merge individual dicom slices into a single multiframe DICOM",
+                "documentation": "https://github.com/FNNDSC/pl-dicom_re",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dicom_repack",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 40000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 3072,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-25T13:26:15.596744-04:00	END
+2023-10-25T18:18:00.399879-04:00	START
+2023-10-25T18:18:05.291166-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 77,
+                "creation_date": "2023-10-25T18:18:05.075070-04:00",
+                "name": "pl-dcm2niix",
+                "version": "1.0.0",
+                "dock_image": "fnndsc/pl-dcm2niix:1.0.0",
+                "public_repo": "https://github.com/FNNDSC/pl-dcm2niix",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "dcm2niix",
+                "category": "MRI Processing",
+                "description": "A ChRIS DS plugin wrapper for dcm2niix",
+                "documentation": "https://github.com/FNNDSC/pl-dcm2niix",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dcm2niixw",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 1000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-25T18:18:05.291328-04:00	END
+2023-10-25T18:28:02.722704-04:00	START
+2023-10-25T18:28:15.920286-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 78,
+                "creation_date": "2023-10-25T18:28:15.517808-04:00",
+                "name": "pl-pfdo_med2img",
+                "version": "1.2.0",
+                "dock_image": "fnndsc/pl-pfdo_med2img:1.2.0",
+                "public_repo": "https://github.com/FNNDSC/pl-pfdo_med2img",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "Arushi Vyas <dev@babyMRI.org>",
+                "title": "A ChRIS plugin app",
+                "category": "",
+                "description": "An app to recursively walk down a directory tree and perform bulk med2image on files/dirs.",
+                "documentation": "http://wiki",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "pfdo_med2img",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 1000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-25T18:28:15.920350-04:00	END
+2023-10-26T11:23:33.558532-04:00	START
+2023-10-26T11:23:46.640460-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 79,
+                "creation_date": "2023-10-26T11:23:46.160086-04:00",
+                "name": "pl-pfdo_med2img",
+                "version": "1.2.1",
+                "dock_image": "fnndsc/pl-pfdo_med2img:1.2.1",
+                "public_repo": "https://github.com/FNNDSC/pl-pfdo_med2img",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "Arushi Vyas <dev@babyMRI.org>",
+                "title": "A ChRIS plugin app",
+                "category": "",
+                "description": "An app to recursively walk down a directory tree and perform bulk med2image on files/dirs.",
+                "documentation": "http://wiki",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "pfdo_med2img",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 1000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-26T11:23:46.640625-04:00	END
+2023-10-26T14:52:26.790079-04:00	START
+2023-10-26T14:52:30.219635-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 80,
+                "creation_date": "2023-10-26T14:52:30.101042-04:00",
+                "name": "pl-dicom_repack",
+                "version": "1.0.7",
+                "dock_image": "fnndsc/pl-dicom_repack:1.0.7",
+                "public_repo": "https://github.com/FNNDSC/pl-dicom_repack",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "A DICOM repack plugin",
+                "category": "",
+                "description": "A ChRIS plugin to merge individual dicom slices into a single multiframe DICOM",
+                "documentation": "https://github.com/FNNDSC/pl-dicom_re",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dicom_repack",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 20000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-26T14:52:30.219704-04:00	END
+2023-10-26T15:07:43.544698-04:00	START
+2023-10-26T15:07:46.855015-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 81,
+                "creation_date": "2023-10-26T15:07:46.768481-04:00",
+                "name": "pl-dicom_repack",
+                "version": "1.0.8",
+                "dock_image": "fnndsc/pl-dicom_repack:1.0.8",
+                "public_repo": "https://github.com/FNNDSC/pl-dicom_repack",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "A DICOM repack plugin",
+                "category": "",
+                "description": "A ChRIS plugin to merge individual dicom slices into a single multiframe DICOM",
+                "documentation": "https://github.com/FNNDSC/pl-dicom_re",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dicom_repack",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 20000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 4096,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-26T15:07:46.855077-04:00	END
+2023-10-26T17:52:36.710762-04:00	START
+2023-10-26T17:52:50.139942-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 82,
+                "creation_date": "2023-10-26T17:52:49.784439-04:00",
+                "name": "pl-pfdo_med2img",
+                "version": "1.2.2",
+                "dock_image": "fnndsc/pl-pfdo_med2img:1.2.2",
+                "public_repo": "https://github.com/FNNDSC/pl-pfdo_med2img",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "Arushi Vyas <dev@babyMRI.org>",
+                "title": "A ChRIS plugin app",
+                "category": "",
+                "description": "An app to recursively walk down a directory tree and perform bulk med2image on files/dirs.",
+                "documentation": "http://wiki",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "pfdo_med2img",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 1000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2023-10-26T17:52:50.140002-04:00	END

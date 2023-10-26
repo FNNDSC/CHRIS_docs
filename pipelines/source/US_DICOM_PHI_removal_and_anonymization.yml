@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization including PHI removal v20231024"
+name: "Ultra Sound DICOM anonymization including PHI removal v20231027"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS via orthanc
 category: Medical Imaging
 locked: false
@@ -10,24 +10,24 @@ plugin_tree:
     previous: ~
     plugin_parameter_defaults:
       prefix: 0-
-  - title: report-dcms
-    plugin: pl-dicom_filter v0.0.7
-    previous: root-group-copy
-    plugin_parameter_defaults:
-      outputType: dcm
-      dicomFilter: '{"SOPClassUID":"Secondary Capture Image Storage"}'
-  - title: image-dcms
-    plugin: pl-dicom_filter v0.0.7
-    previous: root-group-copy
-    plugin_parameter_defaults:
-      outputType: dcm
-      dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
   - title: multiframe-dcms
     plugin: pl-dicom_filter v0.0.7
     previous: root-group-copy
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Multi-frame Image Storage"}'
+  - title: image-dcms
+    plugin: pl-dicom_filter v0.0.7
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      outputType: dcm
+      dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
+  - title: report-dcms
+    plugin: pl-dicom_filter v0.0.7
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      outputType: dcm
+      dicomFilter: '{"SOPClassUID":"Secondary Capture Image Storage"}'
   - title: unpacked-dcms
     plugin: pl-dicom_unpack v1.0.1                  
     previous: multiframe-dcms
@@ -74,15 +74,13 @@ plugin_tree:
     previous: unpacked-dcms-and-phi-removed-pngs
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
-      thread: true
   - title: converted-image-dcms
     plugin: pl-dicommake v2.2.3
     previous: image-dcms-and-phi-removed-pngs
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
-      thread: true
   - title: repacked-dcms
-    plugin: pl-dicom_repack v1.0.1        
+    plugin: pl-dicom_repack v1.0.8        
     previous: converted-unpacked-dcms
     plugin_parameter_defaults:
       fileFilter: dcm
