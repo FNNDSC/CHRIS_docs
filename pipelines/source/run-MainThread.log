@@ -442,3 +442,17 @@
     }
 }
 2023-10-26T17:52:50.140002-04:00	END
+2023-10-27T12:18:44.186778-04:00	START
+2023-10-27T12:18:46.618643-04:00	
+{
+    "status": false,
+    "obj": {
+        "run": {
+            "status": false,
+            "stdout": "an exception occurred",
+            "stderr": "{\"non_field_errors\": [\"Plugin with name pl-dicom_unpack and version 1.0.1 already exists.\"]}",
+            "returncode": 1
+        }
+    }
+}
+2023-10-27T12:18:46.618715-04:00	END

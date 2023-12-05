@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: measure-leg-segments 
-    plugin: pl-markimg v1.3.4
+    plugin: pl-markimg v1.3.8
     previous: ~
     plugin_parameter_defaults:
       inputImageName: "input.jpg"

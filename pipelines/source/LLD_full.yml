@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "Leg Length Discrepency Full Workflow v20231006"
+name: "Leg Length Discrepency Full Workflow v20231205"
 description: "Perform the full leg length workflow, including joins"
 category: Imaging
 locked: false
@@ -63,14 +63,19 @@ plugin_tree:
   # Working off that join we now measure lengths and generate a
   # report (burned directly into the image, and also saved as a json)
   - title: measure-leg-segments-6
-    plugin: pl-markimg v1.2.30
+    plugin: pl-markimg v1.3.8
     previous: heatmaps-join-json-5
     plugin_parameter_defaults:
-      inputImageName: "inputWithHeatmaps.jpg"
+      inputImageName: "input.jpg"
       pointMarker: "."
       pointSize: 10
       linewidth: 0.5
       lineGap: 70
+      addText: "Not for diagnostic use"
+      addTextPos: bottom
+      addTextSize: 10
+      addTextColor: darkred
+      addTextOffset: "-500, 500"
 
   # As we get ready to convert the above image to DICOM, we join the generated
   # image with the DICOM join to collect all the info needed to create
