@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "Leg Length Discrepency Full Workflow v20231205"
+name: "Leg Length Discrepency Full Workflow v20231211"
 description: "Perform the full leg length workflow, including joins"
 category: Imaging
 locked: false
@@ -63,7 +63,7 @@ plugin_tree:
   # Working off that join we now measure lengths and generate a
   # report (burned directly into the image, and also saved as a json)
   - title: measure-leg-segments-6
-    plugin: pl-markimg v1.3.8
+    plugin: pl-markimg v1.4.2
     previous: heatmaps-join-json-5
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
