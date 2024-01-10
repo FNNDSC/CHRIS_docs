@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization including PHI removal v20231214"
+name: "Ultra Sound DICOM anonymization including PHI removal v20231215"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS via orthanc
 category: Medical Imaging
 locked: false
