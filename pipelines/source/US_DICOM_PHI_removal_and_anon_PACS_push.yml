@@ -11,41 +11,41 @@ plugin_tree:
     previous: ~
     plugin_parameter_defaults:
       prefix: 0-
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: multiframe-dcms-2
     plugin: pl-dicom_filter v1.1.0
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Multi-frame Image Storage"}'
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: image-dcms-2
     plugin: pl-dicom_filter v1.1.0
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: report-dcms-2
     plugin: pl-dicom_filter v1.1.0
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Secondary Capture Image Storage"}'
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: unpacked-dcms-2
     plugin: pl-dicom_unpack v1.1.6
     previous: multiframe-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: unpacked-pngs-2
     plugin: pl-dicom_filter v1.1.0
     previous: unpacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
       outputType: png
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: unpacked-dcm-tags-2
     plugin: pl-pfdicom_tagExtract v3.2.2
     previous: unpacked-dcms-2
@@ -62,14 +62,14 @@ plugin_tree:
     plugin_parameter_defaults:
       plugininstances: unpacked-pngs-2,unpacked-dcm-tags-2
       filter: \.png$,\.json$
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: image-pngs-2
     plugin: pl-dicom_filter v1.0.2
     previous: image-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
       outputType: png
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: dcm-tags-2
     plugin: pl-pfdicom_tagExtract v3.2.2
     previous: image-dcms-2
@@ -86,7 +86,7 @@ plugin_tree:
     plugin_parameter_defaults:
       plugininstances: image-pngs-2,dcm-tags-2
       filter: \.png$,\.json$
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: phi-removed-image-pngs-2
     plugin: pl-image_textremove v1.1.2
     previous: image-pngs-and-dicom-tags-2
@@ -94,7 +94,7 @@ plugin_tree:
       fileFilter: png
       outputType: png
       filterTextFromJSON: anonymizedTags.json
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: phi-removed-unpacked-pngs-2
     plugin: pl-image_textremove v1.1.2
     previous: unpacked-pngs-and-dicom-tags-2
@@ -102,39 +102,39 @@ plugin_tree:
       fileFilter: png
       outputType: png
       filterTextFromJSON: anonymizedTags.json
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: unpacked-dcms-and-phi-removed-pngs-2
     plugin: pl-topologicalcopy v1.0.2
     previous: unpacked-dcms-2
     plugin_parameter_defaults:
       plugininstances: unpacked-dcms-2,phi-removed-unpacked-pngs-2
       filter: \.dcm$,\.png$
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: image-dcms-and-phi-removed-pngs-2
     plugin: pl-topologicalcopy v1.0.2
     previous: image-dcms-2
     plugin_parameter_defaults:
       plugininstances: image-dcms-2,phi-removed-image-pngs-2
       filter: \.dcm$,\.png$
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: converted-unpacked-dcms-2
     plugin: pl-dicommake v2.2.6
     previous: unpacked-dcms-and-phi-removed-pngs-2
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: converted-image-dcms-2
     plugin: pl-dicommake v2.2.6
     previous: image-dcms-and-phi-removed-pngs-2
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: repacked-dcms-2
     plugin: pl-dicom_repack v1.1.4
     previous: converted-unpacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: report-dcms-anonymized-2
     plugin: pl-dicom_headeredit v1.1.5
     previous: report-dcms-2
@@ -143,7 +143,7 @@ plugin_tree:
       tagInfo: "PatientName,%_name|patientID_PatientName"
       splitToken: "++"
       splitKeyValue: ","
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: report-dcms-push-to-SYNAPSERESEARCH-2
     plugin: pl-dicom_dirsend v1.1.2
     previous: report-dcms-anonymized-2
@@ -152,7 +152,7 @@ plugin_tree:
       host: 10.20.2.28
       port: 104
       aetTitle: "SYNAPSERESEARCH"
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: image-dcms-anonymized-2
     plugin: pl-dicom_headeredit v1.1.5
     previous: converted-image-dcms-2
@@ -161,7 +161,7 @@ plugin_tree:
       tagInfo: "PatientName,%_name|patientID_PatientName"
       splitToken: "++"
       splitKeyValue: ","
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: image-dcms-push-to-SYNAPSERESEARCH-2
     plugin: pl-dicom_dirsend v1.1.2
     previous: image-dcms-anonymized-2
@@ -170,7 +170,7 @@ plugin_tree:
       host: 10.20.2.28
       port: 104
       aetTitle: "SYNAPSERESEARCH"
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: repacked-dcms-anonymized-2
     plugin: pl-dicom_headeredit v1.1.5
     previous: repacked-dcms-2
@@ -179,7 +179,7 @@ plugin_tree:
       tagInfo: "PatientName,%_name|patientID_PatientName"
       splitToken: "++"
       splitKeyValue: ","
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
   - title: repacked-dcms-push-to-SYNAPSERESEARCH-2
     plugin: pl-dicom_dirsend v1.1.2
     previous: repacked-dcms-anonymized-2
@@ -188,4 +188,4 @@ plugin_tree:
       host: 10.20.2.28
       port: 104
       aetTitle: "SYNAPSERESEARCH"
-      pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
+      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/default/us_dicom/"
