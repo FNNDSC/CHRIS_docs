@@ -88,7 +88,7 @@ plugin_tree:
       filter: \.png$,\.json$
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: phi-removed-image-pngs-2
-    plugin: pl-image_textremove v1.1.7
+    plugin: pl-image_textremove v1.1.6
     previous: image-pngs-and-dicom-tags-2
     plugin_parameter_defaults:
       fileFilter: png
