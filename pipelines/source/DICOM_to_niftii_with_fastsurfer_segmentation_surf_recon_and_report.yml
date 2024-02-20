@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "DICOM to niftii conversion, FastSurfer segmentation and surface recon, report and overlay v20240215"
+name: "DICOM to niftii conversion, FastSurfer segmentation and surface recon, report and overlay v20240220"
 description: Convert DICOMs to niftii, run FastSurfer segmentation, surface reconstruction, and create overlay and report
 category: Medical Imaging
 locked: false
@@ -16,13 +16,13 @@ plugin_tree:
     plugin_parameter_defaults:
       d: 9
   - title: segmented-mgz-and-surf-recon
-    plugin: pl-fastsurfer_inference v1.3.8
+    plugin: pl-fastsurfer_inference v1.3.9
     previous: dicom-to-nifti
     plugin_parameter_defaults:
       sid: sub-000
       t1: "*.nii"
   - title: segmented-mgz-only
-    plugin: pl-fastsurfer_inference v1.3.8
+    plugin: pl-fastsurfer_inference v1.3.9
     previous: dicom-to-nifti
     plugin_parameter_defaults:
       sid: sub-000
