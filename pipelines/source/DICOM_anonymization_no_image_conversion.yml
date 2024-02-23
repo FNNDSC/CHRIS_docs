@@ -20,7 +20,7 @@ plugin_tree:
       outputFileStem: originalTags
       outputFileType: "raw,html,csv,json"
   - title: dicom-anonymization-node
-    plugin: pl-dicom_headerEdit v1.1.1
+    plugin: pl-dicom_headeredit v1.1.1
     previous: root-node-copy-rep 
     plugin_parameter_defaults:
       fileFilter: ".dcm"

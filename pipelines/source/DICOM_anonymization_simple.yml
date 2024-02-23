@@ -6,7 +6,7 @@ category: Medical Imaging
 locked: false
 plugin_tree:
   - title: dicom-anonymization
-    plugin: pl-dicom_headerEdit v1.1.1
+    plugin: pl-dicom_headeredit v1.1.1
     previous: ~
     plugin_parameter_defaults:
       fileFilter: ".dcm"

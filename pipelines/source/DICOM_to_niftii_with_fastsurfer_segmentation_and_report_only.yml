@@ -1,18 +1,13 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "DICOM to niftii conversion, FastSurfer, report and overlay v20240220"
+name: "DICOM to niftii conversion, FastSurfer, report and overlay v20240221"
 description: Convert DICOMs to niftii, run FastSurfer segmentation, and create overlay and report
 category: Medical Imaging
 locked: false
 plugin_tree:
-  - title: root-group-copy
-    plugin: pl-simpledsapp v2.1.0
-    previous: ~
-    plugin_parameter_defaults:
-      prefix: 0-
   - title: dicom-to-nifti
     plugin: pl-dcm2niix v1.0.0
-    previous: root-group-copy
+    previous: ~
     plugin_parameter_defaults:
       d: 9
   - title: segmented-mgz

@@ -41,7 +41,7 @@ plugin_tree:
     previous: image-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
-      tagInfo: "PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ PatientBirthDate,10010101"
+      tagInfo: "PatientName,MARK^TOURBO ++ PatientID,1234567 ++ PatientBirthDate,10010101"
       splitToken: "++"
       splitKeyValue: ","
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
