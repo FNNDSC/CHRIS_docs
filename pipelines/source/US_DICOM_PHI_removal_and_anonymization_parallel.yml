@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization including PHI removal in parallel branches v20240112"
+name: "Ultra Sound DICOM anonymization including PHI removal in parallel branches v20240228"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS via orthanc
   in parallel
 category: Medical Imaging
@@ -88,7 +88,7 @@ plugin_tree:
       filter: \.png$,\.json$
       pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
   - title: phi-removed-image-pngs-2
-    plugin: pl-image_textremove v1.1.4
+    plugin: pl-image_textremove v1.1.8
     previous: image-pngs-and-dicom-tags-2
     plugin_parameter_defaults:
       fileFilter: png
@@ -96,7 +96,7 @@ plugin_tree:
       filterTextFromJSON: anonymizedTags.json
       pftelDB: "http://192.168.0.14:22223/api/v1/default/us_dicom_2/"
   - title: phi-removed-unpacked-pngs-2
-    plugin: pl-image_textremove v1.1.4
+    plugin: pl-image_textremove v1.1.8
     previous: unpacked-pngs-and-dicom-tags-2
     plugin_parameter_defaults:
       fileFilter: png
