@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v2024028"
+name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240305"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS
   in parallel
 category: Medical Imaging
@@ -13,21 +13,21 @@ plugin_tree:
       prefix: 0-
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: multiframe-dcms-2
-    plugin: pl-dicom_filter v1.1.0
+    plugin: pl-dicom_filter v1.1.2
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Multi-frame Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-dcms-2
-    plugin: pl-dicom_filter v1.1.0
+    plugin: pl-dicom_filter v1.1.2
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: report-dcms-2
-    plugin: pl-dicom_filter v1.1.0
+    plugin: pl-dicom_filter v1.1.2
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
