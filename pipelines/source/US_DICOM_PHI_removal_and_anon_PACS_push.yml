@@ -52,10 +52,9 @@ plugin_tree:
     plugin_parameter_defaults:
       fileFilter: dcm
       tagList: PatientName,PatientID,PatientBirthDate
-      imageFile: m:%_nospc|-_ProtocolName.jpg
       imageScale: "3:none"
       outputFileStem: anonymizedTags
-      outputFileType: raw,json,html,dict,col,csv
+      outputFileType: json
   - title: unpacked-pngs-and-dicom-tags-2
     plugin: pl-topologicalcopy v1.0.2
     previous: unpacked-pngs-2
@@ -76,10 +75,9 @@ plugin_tree:
     plugin_parameter_defaults:
       fileFilter: dcm
       tagList: PatientName,PatientID,PatientBirthDate
-      imageFile: m:%_nospc|-_ProtocolName.jpg
       imageScale: "3:none"
       outputFileStem: anonymizedTags
-      outputFileType: raw,json,html,dict,col,csv
+      outputFileType: json
   - title: image-pngs-and-dicom-tags-2
     plugin: pl-topologicalcopy v1.0.2
     previous: image-pngs-2
