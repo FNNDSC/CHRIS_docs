@@ -1,12 +1,12 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: DICOM anonymization and original-vs-anon tag report v20230920
+name: DICOM anonymization and original-vs-anon tag report v20240402
 description: Anonymize an input directory of DICOM files -- create two branches where one branch has tag report on original data, the other branch has anon images and tag report.
 category: Medical Imaging
 locked: false
 plugin_tree:
   - title: root-node-copy-rep 
-    plugin: pl-simpledsapp v2.1.0
+    plugin: pl-simpledsapp v2.1.3
     previous: ~
     plugin_parameter_defaults:
       prefix: 0-

@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: dcm-to-mha
-    plugin: pl-dcm2mha_cnvtr v1.2.22
+    plugin: pl-dcm2mha_cnvtr v1.2.24
     previous: ~
     plugin_parameter_defaults:
       inputFileFilter: "**/*.dcm"
