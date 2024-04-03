@@ -36,7 +36,7 @@ plugin_tree:
       outputFileStem: originalTags
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
   - title: dicom-anonymized
-    plugin: pl-dicom_headerEdit v1.1.1
+    plugin: pl-dicom_headeredit v1.1.5
     previous: root-group-copy
     plugin_parameter_defaults:
       fileFilter: ".dcm"
