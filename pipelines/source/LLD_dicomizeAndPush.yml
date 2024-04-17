@@ -15,5 +15,9 @@ plugin_tree:
     plugin: pl-dicom_dirsend v1.1.2
     previous: image-to-DICOM
     plugin_parameter_defaults:
-      inputFileFilter: '**/*.dcm'
+      fileFilter: 'dcm'
+      host: '10.20.2.28'
+      port: '104'
+      aetTitle: 'SYNAPSERESEARCH'
+
 

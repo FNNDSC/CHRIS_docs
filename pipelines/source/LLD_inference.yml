@@ -12,7 +12,7 @@ plugin_tree:
       inputFileFilter: "**/*.dcm"
       rotate: 90
   - title: generate-landmark-heatmaps 
-    plugin: pl-lld_inference v2.2.10
+    plugin: pl-lld_inference v2.2.11
     previous: dcm-to-mha
     plugin_parameter_defaults:
       inputFileFilter: "**/*.mha"
