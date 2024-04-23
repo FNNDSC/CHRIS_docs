@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240402"
+name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240423-v3"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS
   in parallel
 category: Medical Imaging
@@ -34,7 +34,7 @@ plugin_tree:
       dicomFilter: '{"SOPClassUID":"Secondary Capture Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris2222/us_anon/"
   - title: unpacked-dcms-2
-    plugin: pl-dicom_unpack v1.1.6
+    plugin: pl-dicom_unpack v1.2.6
     previous: multiframe-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
@@ -128,13 +128,13 @@ plugin_tree:
       filterIMG: "**/*.png"
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: repacked-dcms-2
-    plugin: pl-dicom_repack v1.1.4
+    plugin: pl-dicom_repack v1.1.8
     previous: converted-unpacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: report-dcms-anonymized-2
-    plugin: pl-dicom_headeredit v1.1.5
+    plugin: pl-dicom_headeredit v1.1.6
     previous: report-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
@@ -152,7 +152,7 @@ plugin_tree:
       aetTitle: "SYNAPSERESEARCH"
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-dcms-anonymized-2
-    plugin: pl-dicom_headeredit v1.1.5
+    plugin: pl-dicom_headeredit v1.1.6
     previous: converted-image-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
@@ -170,7 +170,7 @@ plugin_tree:
       aetTitle: "SYNAPSERESEARCH"
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: repacked-dcms-anonymized-2
-    plugin: pl-dicom_headeredit v1.1.5
+    plugin: pl-dicom_headeredit v1.1.6
     previous: repacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
