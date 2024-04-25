@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: DICOM anonymization simple v20230926
+name: DICOM anonymization simple v20240425
 description: Anonymize all DICOM files in a parent node and zip the results. No mess no fuss.
 category: Medical Imaging
 locked: false
@@ -25,5 +25,5 @@ plugin_tree:
     previous: dicom-anonymization
     plugin_parameter_defaults:
       maxDepth: 0
-      exec: "tar cvfz %outputDir/parent.tgz %inputDir"
+      exec: "zip -r %outputDir/parent.zip %inputDir"
       noJobLogging: true

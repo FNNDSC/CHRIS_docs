@@ -1,7 +1,7 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240423-v3"
-description: Remove PHI burned on US DICOM images, anonymize the dicom headers, and finally push to a PACS
+name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240425"
+description: Remove PHI burned on US DICOM images, anonymize the dicom headers, zip, and finally push to a PACS
   in parallel
 category: Medical Imaging
 locked: false
@@ -13,21 +13,21 @@ plugin_tree:
       prefix: 0-
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: multiframe-dcms-2
-    plugin: pl-dicom_filter v1.1.5
+    plugin: pl-dicom_filter v1.2.0
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Multi-frame Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-dcms-2
-    plugin: pl-dicom_filter v1.1.5
+    plugin: pl-dicom_filter v1.2.0
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: report-dcms-2
-    plugin: pl-dicom_filter v1.1.5
+    plugin: pl-dicom_filter v1.2.0
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
@@ -40,7 +40,7 @@ plugin_tree:
       fileFilter: dcm
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: unpacked-pngs-2
-    plugin: pl-dicom_filter v1.1.5
+    plugin: pl-dicom_filter v1.2.0
     previous: unpacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
@@ -63,7 +63,7 @@ plugin_tree:
       filter: \.png$,\.json$
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-pngs-2
-    plugin: pl-dicom_filter v1.1.5
+    plugin: pl-dicom_filter v1.2.0
     previous: image-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
@@ -133,7 +133,7 @@ plugin_tree:
     plugin_parameter_defaults:
       fileFilter: dcm
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: report-dcms-anonymized-2
+  - title: report-dcms-anonymized-name-only
     plugin: pl-dicom_headeredit v1.1.6
     previous: report-dcms-2
     plugin_parameter_defaults:
@@ -142,16 +142,38 @@ plugin_tree:
       splitToken: "++"
       splitKeyValue: ","
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
+  - title: report-dcms-anonymized-full
+    plugin: pl-dicom_headeredit v1.1.6
+    previous: report-dcms-2
+    plugin_parameter_defaults:
+      fileFilter: ".dcm"
+      splitToken: ","
+      splitKeyValue: "="
+      tagInfo: "PatientName         =  %_name|patientID_PatientName,
+                PatientID           =  %_md5|7_PatientID,
+                AccessionNumber     =  %_md5|8_AccessionNumber,
+                PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
+                re:.*hysician       =  %_md5|4_#tag,
+                re:.*stitution      =  #tag,
+                re:.*ddress         =  #tag
+                "
+  - title: report-file-to-tar
+    plugin: pl-pfdorun v2.2.14
+    previous: report-dcms-anonymized-full
+    plugin_parameter_defaults:
+      maxDepth: 0
+      exec: "zip -r %outputDir/parent.zip %inputDir"
+      noJobLogging: true
   - title: report-dcms-push-to-SYNAPSERESEARCH-2
     plugin: pl-dicom_dirsend v1.1.2
-    previous: report-dcms-anonymized-2
+    previous: report-dcms-anonymized-name-only
     plugin_parameter_defaults:
       fileFilter: "dcm"
       host: 10.20.2.28
       port: 104
       aetTitle: "SYNAPSERESEARCH"
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: image-dcms-anonymized-2
+  - title: image-dcms-anonymized-name-only
     plugin: pl-dicom_headeredit v1.1.6
     previous: converted-image-dcms-2
     plugin_parameter_defaults:
@@ -160,16 +182,38 @@ plugin_tree:
       splitToken: "++"
       splitKeyValue: ","
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
+  - title: image-dcms-anonymized-full
+    plugin: pl-dicom_headeredit v1.1.6
+    previous: converted-image-dcms-2
+    plugin_parameter_defaults:
+      fileFilter: ".dcm"
+      splitToken: ","
+      splitKeyValue: "="
+      tagInfo: "PatientName         =  %_name|patientID_PatientName,
+                PatientID           =  %_md5|7_PatientID,
+                AccessionNumber     =  %_md5|8_AccessionNumber,
+                PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
+                re:.*hysician       =  %_md5|4_#tag,
+                re:.*stitution      =  #tag,
+                re:.*ddress         =  #tag
+                "
+  - title: image-file-to-tar
+    plugin: pl-pfdorun v2.2.14
+    previous: image-dcms-anonymized-full
+    plugin_parameter_defaults:
+      maxDepth: 0
+      exec: "zip -r %outputDir/parent.zip %inputDir"
+      noJobLogging: true
   - title: image-dcms-push-to-SYNAPSERESEARCH-2
     plugin: pl-dicom_dirsend v1.1.2
-    previous: image-dcms-anonymized-2
+    previous: image-dcms-anonymized-name-only
     plugin_parameter_defaults:
       fileFilter: "dcm"
       host: 10.20.2.28
       port: 104
       aetTitle: "SYNAPSERESEARCH"
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: repacked-dcms-anonymized-2
+  - title: repacked-dcms-anonymized-name-only
     plugin: pl-dicom_headeredit v1.1.6
     previous: repacked-dcms-2
     plugin_parameter_defaults:
@@ -178,9 +222,31 @@ plugin_tree:
       splitToken: "++"
       splitKeyValue: ","
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
+  - title: repacked-dcms-anonymized-full
+    plugin: pl-dicom_headeredit v1.1.6
+    previous: repacked-dcms-2
+    plugin_parameter_defaults:
+      fileFilter: ".dcm"
+      splitToken: ","
+      splitKeyValue: "="
+      tagInfo: "PatientName         =  %_name|patientID_PatientName,
+                PatientID           =  %_md5|7_PatientID,
+                AccessionNumber     =  %_md5|8_AccessionNumber,
+                PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
+                re:.*hysician       =  %_md5|4_#tag,
+                re:.*stitution      =  #tag,
+                re:.*ddress         =  #tag
+                "
+  - title: repacked-file-to-tar
+    plugin: pl-pfdorun v2.2.14
+    previous: repacked-dcms-anonymized-full
+    plugin_parameter_defaults:
+      maxDepth: 0
+      exec: "zip -r %outputDir/parent.zip %inputDir"
+      noJobLogging: true
   - title: repacked-dcms-push-to-SYNAPSERESEARCH-2
     plugin: pl-dicom_dirsend v1.1.2
-    previous: repacked-dcms-anonymized-2
+    previous: repacked-dcms-anonymized-name-only
     plugin_parameter_defaults:
       fileFilter: "dcm"
       host: 10.20.2.28
