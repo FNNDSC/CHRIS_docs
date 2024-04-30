@@ -1,7 +1,7 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240430"
-description: Remove PHI burned on US DICOM images, anonymize the dicom headers, zip, and finally push to a PACS
+name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20240430-v1"
+description: Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
   in parallel
 category: Medical Imaging
 locked: false
@@ -165,15 +165,6 @@ plugin_tree:
       maxDepth: 0
       exec: "zip -r %outputDir/parent.zip %inputDir"
       noJobLogging: true
-  - title: report-dcms-push-to-SYNAPSERESEARCH-2
-    plugin: pl-dicom_dirsend v1.1.2
-    previous: report-dcms-anonymized-name-only
-    plugin_parameter_defaults:
-      fileFilter: "dcm"
-      host: 10.20.2.28
-      port: 104
-      aetTitle: "SYNAPSERESEARCH"
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-dcms-anonymized-name-only
     plugin: pl-dicom_headeredit v1.1.6
     previous: converted-image-dcms-2
@@ -206,15 +197,6 @@ plugin_tree:
       maxDepth: 0
       exec: "zip -r %outputDir/parent.zip %inputDir"
       noJobLogging: true
-  - title: image-dcms-push-to-SYNAPSERESEARCH-2
-    plugin: pl-dicom_dirsend v1.1.2
-    previous: image-dcms-anonymized-name-only
-    plugin_parameter_defaults:
-      fileFilter: "dcm"
-      host: 10.20.2.28
-      port: 104
-      aetTitle: "SYNAPSERESEARCH"
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: repacked-dcms-anonymized-name-only
     plugin: pl-dicom_headeredit v1.1.6
     previous: repacked-dcms-2
@@ -247,12 +229,3 @@ plugin_tree:
       maxDepth: 0
       exec: "zip -r %outputDir/parent.zip %inputDir"
       noJobLogging: true
-  - title: repacked-dcms-push-to-SYNAPSERESEARCH-2
-    plugin: pl-dicom_dirsend v1.1.2
-    previous: repacked-dcms-anonymized-name-only
-    plugin_parameter_defaults:
-      fileFilter: "dcm"
-      host: 10.20.2.28
-      port: 104
-      aetTitle: "SYNAPSERESEARCH"
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
