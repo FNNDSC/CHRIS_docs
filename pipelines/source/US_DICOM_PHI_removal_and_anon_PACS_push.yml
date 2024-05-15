@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240430"
+name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240515"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, zip, and finally push to a PACS
   in parallel
 category: Medical Imaging
@@ -152,8 +152,9 @@ plugin_tree:
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
                 PatientID           =  %_md5|7_PatientID,
                 AccessionNumber     =  %_md5|8_AccessionNumber,
-                PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
-                StudyDate           =  %_strmsk|******01_StudyDate,
+                PatientBirthDate    =  20240101,
+                StudyDate           =  20240101,
+                SeriesDate          =  20240101,
                 re:.*hysician       =  %_md5|4_#tag,
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag
@@ -193,8 +194,9 @@ plugin_tree:
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
                 PatientID           =  %_md5|7_PatientID,
                 AccessionNumber     =  %_md5|8_AccessionNumber,
-                PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
-                StudyDate           =  %_strmsk|******01_StudyDate,
+                PatientBirthDate    =  20240101,
+                StudyDate           =  20240101,
+                SeriesDate          =  20240101,
                 re:.*hysician       =  %_md5|4_#tag,
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag
@@ -234,8 +236,9 @@ plugin_tree:
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
                 PatientID           =  %_md5|7_PatientID,
                 AccessionNumber     =  %_md5|8_AccessionNumber,
-                PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
-                StudyDate           =  %_strmsk|******01_StudyDate,
+                PatientBirthDate    =  20240101,
+                StudyDate           =  20240101,
+                SeriesDate          =  20240101,
                 re:.*hysician       =  %_md5|4_#tag,
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag
