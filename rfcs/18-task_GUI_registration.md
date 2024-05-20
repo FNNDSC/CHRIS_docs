@@ -11,15 +11,17 @@ The document will quantify somewhat the user experience complexity, and offer po
 
 As initial condition, assume the reference ChRIS UI is open the `Plugins` tab of app.chrisproject.org and a target plugin to install is [visible](https://app.chrisproject.org/plugin/100). We notice the "Copy and Paste the URL below into your ChRIS Admin Dashboard to install this plugin" with a link and a "copy-to-browser" button. All four of our users will have the identical experience since only one approach is possible.
 
-At this stage, the experience is functionally equivalent to the Desktop comparison, as there are no Implicit Preconditions and the let us assume the Required Preconditions are met (since the ChRIS UI satisfies all these at this juncture).
+At this stage, the experience seems functionally equivalent to the Desktop comparison, as there are no Implicit Preconditions and we assume the Required Preconditions are met (since the ChRIS UI satisfies all these at this juncture).
+
+Note imporantly, that if a user has a local CUBE, if they are browsing app.chrisproject.org they are technically in a _different_ CUBE. The similarity to the local experience could very easily be a source of confusion. We will nonetheless continue this experiment knowledgeable of this subtle but important distinction since most users _will not notice this_.
 
 ## First Hurdle
 
 ### Where is the "ChRIS Admin Dashboard"?
 
-The GUI and context we are in provides no indication of what this "ChRIS Admin Dashboard" is or where to find it, even though it is almost always at the same regular location relative to the GUI URL itself. In fact, new users at this point will most likely assume this Dashboard is somewhere in the ChRIS UI and could spend an ultimatley frustrating amount of time doing fruitless exploration.
+The GUI and context we are in provides no indication of what this "ChRIS Admin Dashboard" is or where to find it, even though it is almost always at the same regular location relative to the local GUI URL itself. In fact, new users at this point will most likely assume this Dashboard is somewhere in the ChRIS UI they are in (i.e. app.chrisproject.org) and could spend an ultimatley frustrating amount of time doing fruitless exploration, or have the presence of mind to return to their local ChRIS UI and of course still not find anything. The most obvious "fix" would be to have some text to that effect: "For a local ChRIS, your Admin Dashboard will be default be located here ....".
 
-From the user perspective at this point, there is simply no reason to have this obscured, particularly since the Admin Dashboard is password protected. From a _design perspective_ this violates the Locality of Behavior principle. Simply, if a _next_ behavior is obvious or implied in a context, then every should be made to provide this behavior in that context.
+From the user perspective at this point, there is simply no reason to have this obscured, particularly since the Admin Dashboard is password protected. From a _design perspective_ this violates the Locality of Behavior principle. Simply, if a _next_ behavior is obvious or implied in a context, then every should be made to provide this behavior in that context or guide the user.
 
 At this point, a user now:
 
