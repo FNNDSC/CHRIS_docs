@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "DICOM to niftii conversion, FastSurfer seg, surface recon, bulk-report-overlay v20240221"
+name: "DICOM to niftii conversion, FastSurfer seg, surface recon, bulk-report-overlay v20240227"
 description: Convert DICOMs to niftii, run FastSurfer segmentation, surf recon and create multiple overlay and multiple reports
 category: Medical Imaging
 locked: false

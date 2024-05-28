@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: measure-leg-segments 
-    plugin: pl-markimg v1.4.6
+    plugin: pl-markimg v1.4.8
     previous: ~
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
@@ -18,3 +18,10 @@ plugin_tree:
       addTextPos: bottom
       addTextSize: 5
       addTextColor: darkred
+
+  - title: send-to-neuro-FS
+    plugin: pl-neurofiles-push v0.2.0
+    previous: measure-leg-segments
+    plugin_parameter_defaults:
+      path: "/neuro/labs/grantlab/research/LLD/data/"
+      include: "*{-analysis}.json"
