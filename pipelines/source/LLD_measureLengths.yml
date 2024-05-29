@@ -24,4 +24,9 @@ plugin_tree:
     previous: measure-leg-segments
     plugin_parameter_defaults:
       path: "/neuro/labs/grantlab/research/LLD/data/"
-      include: "*{-analysis}.json"
+      filter: "+ *{-analysis}.json"
+      timeout: 0
+      min_size: 0
+      max_size: "1G"
+
+
