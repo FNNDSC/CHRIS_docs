@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20240625"
+name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20240709"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
   in parallel
 category: Medical Imaging
@@ -34,7 +34,7 @@ plugin_tree:
       dicomFilter: '{"SOPClassUID":"Secondary Capture Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris2222/us_anon/"
   - title: unpacked-dcms-2
-    plugin: pl-dicom_unpack v1.2.6
+    plugin: pl-dicom_unpack v1.3.0
     previous: multiframe-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm

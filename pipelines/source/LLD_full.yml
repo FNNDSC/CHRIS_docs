@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "Leg Length Discrepancy Full Workflow v20240417"
+name: "Leg Length Discrepancy Full Workflow v20240705"
 description: "Perform the full leg length workflow, including joins"
 category: Imaging
 locked: false
@@ -47,7 +47,7 @@ plugin_tree:
   # And directly off this join, we convert the csv file of the inference
   # to a json
   - title: landmarks-to-json-4
-    plugin: pl-csv2json v1.2.2
+    plugin: pl-csv2json v1.2.4
     previous: heatmaps-join-root-3
     plugin_parameter_defaults:
       inputFileFilter: "**/*.csv"
@@ -66,7 +66,7 @@ plugin_tree:
   # Working off that join we now measure lengths and generate a
   # report (burned directly into the image, and also saved as a json)
   - title: measure-leg-segments-6
-    plugin: pl-markimg v1.4.6
+    plugin: pl-markimg v1.4.8
     previous: heatmaps-join-json-5
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
@@ -92,7 +92,7 @@ plugin_tree:
   # With the join containing all the necessary information, we can now
   # generate new DICOMs
   - title: image-to-DICOM-8
-    plugin: pl-dicommake v2.2.8
+    plugin: pl-dicommake v2.3.2
     previous: measurement-join-dicom-7
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
@@ -105,7 +105,7 @@ plugin_tree:
     previous: image-to-DICOM-8
     plugin_parameter_defaults:
       fileFilter: "dcm"
-      host: 10.20.2.28
+      host: 0.0.0.0
       port: 104
       aetTitle: "SYNAPSERESEARCH"
 
