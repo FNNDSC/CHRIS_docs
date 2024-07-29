@@ -16,8 +16,8 @@ plugin_tree:
       lineGap: 70
       addText: "Not for diagnostic use"
       addTextPos: bottom
-      addTextSize: 5
-      addTextColor: darkred
+      addTextSize: 8
+      addTextColor: cyan
 
   - title: send-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.0
