@@ -23,7 +23,7 @@ plugin_tree:
     plugin: pl-neurofiles-push v0.2.0
     previous: measure-leg-segments
     plugin_parameter_defaults:
-      path: "/neuro/labs/grantlab/research/LLD/data/"
+      path: "/neuro/labs/grantlab/research/LLD/data/analysis/"
       filter: "+ *{-analysis}.json"
       timeout: 0
       min_size: 0
