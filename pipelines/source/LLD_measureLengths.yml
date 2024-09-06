@@ -6,18 +6,20 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: measure-leg-segments 
-    plugin: pl-markimg v1.5.4
+    plugin: pl-markimg v1.5.8
     previous: ~
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
       pointMarker: "."
-      pointSize: 10
-      linewidth: 0.5
+      pointSize: 1000
+      linewidth: 4
       lineGap: 100
       addText: "Not for diagnostic use"
       addTextPos: bottom
-      addTextSize: 8
+      addTextSize: 60
+      textSize: 40
       addTextColor: cyan
+      outputImageExtension: jpg
 
   - title: send-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.0
