@@ -63,8 +63,21 @@ plugin, meaning it waits till the entire LLD workflow finishes running on CUBE.
 
 ### 3) pl-dcm2mha
 ### 4) pl-csv2json
+This plugin expects an input dicom file and a csv file containing anatomical landmark points and serialize these information
+to an output JSON file. The JSON file contains PHI that were extracted from the input DICOM, and x-y coordinates about 
+joints like hips, ankles, and knees that the plugin interprets from the input csv file.
+
 ### 5) pl-lld_inference
+This plugin is an ML application that takes in an input Leg image as a .mha file. The plugin predicts landmark points to 
+represent various joints. These points(x-y coordinates) are recorded in a .csv file. The plugin also generates heatmap images
+of the leg joints.
+
+You can also find input images of the Leg as a jpg file in the plugin's output directory.
+
 ### 6) pl-topologicalcopy
+This plugin filters and aggregates data from multiple nodes in a CUBE analysis to an output directory. We use this plugin 
+at various points in the LLD workflow to provide necessary data to downstream plugins for further processing.
+
 ### 7) pl-markimg
 
 ### 8) pl-dicommake
