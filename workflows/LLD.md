@@ -39,7 +39,7 @@ We explain them in subsequent sections below.
     dcm2mha_cnvtr --> lld_inference: predict heatmap checkpoints on input files
     lld_inference --> topologicalcopy1
     lld_inference --> topologicalcopy2
-    topologicalcopy1 --> markimg: burn PHI and report measurements between L/R joints
+    topologicalcopy1 --> markimg: burn PHI and report measurements between L/R leg joints
     markimg --> neurofiles_push1: push a measurement summary JSON to neuro FS
     markimg --> topologicalcopy3
     
@@ -62,6 +62,10 @@ plugin, meaning it waits till the entire LLD workflow finishes running on CUBE.
 ### 2) pl-shexec
 
 ### 3) pl-dcm2mha
+This plugin converts the incoming DICOMs to .mha format and rotates the image 90 degrees anticlockwise. 
+The downstream ML plugin ``pl-lld_inference`` expects a .mha file as input with this particular orientation for predicting
+landmark points on the leg image.
+
 ### 4) pl-csv2json
 This plugin expects an input dicom file and a csv file containing anatomical landmark points and serialize these information
 to an output JSON file. The JSON file contains PHI that were extracted from the input DICOM, and x-y coordinates about 
@@ -79,6 +83,12 @@ This plugin filters and aggregates data from multiple nodes in a CUBE analysis t
 at various points in the LLD workflow to provide necessary data to downstream plugins for further processing.
 
 ### 7) pl-markimg
+This plugin uses the ``matplotlib`` library to measure and calculate leg lengths and draw joints on the input leg image.
+It expects an input image as well as a JSON file containing information such as PHI and different joints in the leg such
+as hips, knees, and ankles respectively. 
+
+The plugin also burns these information on the image. Finally, before saving, the plugin autoscales and rotates the 
+image 90 degrees clockwise using `pillow` to conform to the original input DICOM.
 
 ### 8) pl-dicommake
 This plugin is responsible to "DICOMize" an input image, given another input DICOM that contains a list of suitable file meta.
