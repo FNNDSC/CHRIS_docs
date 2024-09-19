@@ -21,6 +21,7 @@ We explain them in subsequent sections below.
 
 ```mermaid
    stateDiagram-v2
+    [*] --> dircopy: input data containing .dcm files of Leg X-rays
     dircopy --> unstack_folders: flatten directory structure
     unstack_folders --> dylld: dynamically create the LLD workflow on input
     unstack_folders --> shexec: copy input to output directory
@@ -34,7 +35,7 @@ We explain them in subsequent sections below.
     topologicalcopy3 --> lld_chxr: check the quality of measurements made by LLD analysis
     lld_chxr --> dicommake: create DICOM from input image
     lld_chxr --> neurofiles_push2: push a analysis report on the measurements to neuro FS
-    dicommake --> dicom_dirsend: send final DICOM generated to a remote PACS 
+    dicommake --> dicom_dirsend: send final DICOM generated to a remote PACS
     csv2json --> topologicalcopy1: filter json
     dcm2mha_cnvtr --> lld_inference: predict heatmap checkpoints on input files
     lld_inference --> topologicalcopy1: filter jpg
