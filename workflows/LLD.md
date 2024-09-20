@@ -63,7 +63,7 @@ plugin, meaning it waits till the entire LLD workflow finishes running on CUBE.
 ### 2) pl-shexec (https://github.com/FNNDSC/pl-shexec)
 This plugin simply copies the input file, conforming to the specified file filter, to it's output directory.
 
-### 3) pl-dcm2mha (https://github.com/FNNDSC/pl-dcm2mha)
+### 3) pl-dcm2mha_cnvtr (https://github.com/FNNDSC/pl-dcm2mha_cnvtr)
 This plugin converts the incoming DICOMs to .mha format and rotates the image 90 degrees anticlockwise. 
 The downstream ML plugin ``pl-lld_inference`` expects a .mha file as input with this particular orientation for predicting
 landmark points on the leg image.
