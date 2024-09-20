@@ -1,21 +1,39 @@
-# Leg Length Discrepancy(LLD) analysis of Leg Images
-The LLD analysis is one of the most used workflows in ChRIS. The workflow starts with Leg X-rays as DICOM files and 
-ends with a new DICOM generated, that has measurements of Tibia and Femur of both legs. Apart from their lengths, these
-measurements also include differences between the left and right leg. The measurements are typically expressed in cm, 
-however, sometimes(when a suitable scaling parameter is not present) these are also expressed in pixels.
+# LLD Analysis Workflow in ChRIS
+The Leg Length Discrepancy (LLD) analysis is one of the most frequently used workflows in ChRIS. This process transforms leg X-rays from DICOM files into new DICOM files containing detailed measurements of the tibia and femur for both legs.
 
-While the explanation of how the input DICOM ended up in ChRIS is interesting in itself, it's beyond the scope of the
-current topic. This document offers explanation of how the input file goes through multiple image and text processing 
-applications or _plugins_ until we have a final DICOM that contains information about measurements and their discrepancy
-in both the left and right leg. In order to calculate the length of tibia and femur of a leg, we need to determine its
-hip, knee, and ankle joint first. We use an ML plugin, `pl-lld_inference`, to determine the (x,y) coordinates of these joints.
-After that, we use an image processing plugin `pl-markimg` to use these coordinates to draw onto the input image, 
-calculate the lengths of parts of individual legs, and provide a comparison between these calculations made. Finally,
-we convert this image with additional information to a DICOM file using a plugin ``pl-dicommake``.
+## Input and Output
 
-There are other plugins in this workflow that offers filtering, converting, checking, and aggregating data within the workflow as well.
-We explain them in subsequent sections below.
+- **Input**: Leg X-rays in DICOM format
+- **Output**: New DICOM file with measurements including:
+    - Lengths of tibia and femur for both legs
+    - Differences between left and right leg measurements
+    - Units: Typically in centimeters, occasionally in pixels (when suitable scaling parameters are unavailable)
 
+## Workflow Overview
+
+This document explains how the input file undergoes multiple image and text processing stages through various applications or plugins to produce the final DICOM file. The workflow determines hip, knee, and ankle joint positions to calculate tibia and femur lengths.
+### Key Steps:
+
+1. **Joint Detection**:
+   - Plugin: pl-lld_inference (ML-based)
+   - Function: Determines (x,y) coordinates of hip, knee, and ankle joints
+
+2. **Image Processing and Measurement**:
+   - Plugin: pl-markimg
+   - Functions:
+       - Draws joint coordinates on the input image
+       - Calculates individual leg segment lengths
+       - Compares measurements between legs
+
+3. **DICOM Conversion**:
+   - Plugin: pl-dicommake
+   - Function: Converts the processed image with added information into a DICOM file
+
+### Additional Plugins
+
+The workflow includes other plugins for data filtering, conversion, validation, and aggregation. These are detailed in subsequent sections of this document.
+
+Note: While the process of importing the initial DICOM file into ChRIS is interesting, it falls outside the scope of this workflow description.
 
 ## Analysis tree
 
