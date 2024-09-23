@@ -27,7 +27,10 @@ This document explains how the input file undergoes multiple image and text proc
 
 3. **DICOM Conversion**:
    - Plugin: pl-dicommake
-   - Function: Converts the processed image with added information into a DICOM file
+   - Function:
+        - Converts the processed image with added information into a DICOM file
+        - Assigns SeriesInstanceUID and PhotometricInterpretation to the new DICOM
+        - Compresses DICOM using JPEG2000 encoding
 
 ### Additional Plugins
 
