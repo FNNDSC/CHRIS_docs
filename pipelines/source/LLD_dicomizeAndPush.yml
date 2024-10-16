@@ -13,7 +13,7 @@ plugin_tree:
       measurementsUnit: 'cm'
       splitToken: ':'
       splitKeyValue: '='
-      tagInfo: 'FieldOfViewDimensions = [\d,\d]: BodyPartExamined = LEG'
+      tagInfo: 'BodyPartExamined = LEG'
       limbDifference: 15
   - title: send-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.0
