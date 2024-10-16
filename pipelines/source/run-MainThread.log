@@ -456,3 +456,296 @@
     }
 }
 2023-10-27T12:18:46.618715-04:00	END
+2024-09-30T13:39:03.947423-04:00	START
+2024-09-30T13:39:04.497800-04:00	
+{
+    "status": false,
+    "message": "a failure occured",
+    "obj": {
+        "status": false,
+        "run": {
+            "stdout": "",
+            "stderr": "Error response from daemon: manifest unknown\n",
+            "cmd": "docker pull ghcr.io/fnndsc/pl-dcm2mha_cnvtr:1.2.4",
+            "cwd": "/home/sandip/CHRIS_docs/pipelines/source",
+            "returncode": 1
+        },
+        "rep": {
+            "error": "could not pull image"
+        }
+    }
+}
+2024-09-30T13:39:04.497856-04:00	END
+2024-09-30T13:39:52.225196-04:00	START
+2024-09-30T13:39:52.834580-04:00	
+{
+    "status": false,
+    "message": "a failure occured",
+    "obj": {
+        "status": false,
+        "run": {
+            "stdout": "",
+            "stderr": "Error response from daemon: manifest unknown\n",
+            "cmd": "docker pull ghcr.io/fnndsc/pl-dcm2mha_cnvtr:1.2.4",
+            "cwd": "/home/sandip/CHRIS_docs/pipelines/source",
+            "returncode": 1
+        },
+        "rep": {
+            "error": "could not pull image"
+        }
+    }
+}
+2024-09-30T13:39:52.834653-04:00	END
+2024-09-30T13:41:11.722522-04:00	START
+2024-09-30T13:41:33.499789-04:00	START
+2024-09-30T13:41:37.572142-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 248,
+                "creation_date": "2024-09-30T13:41:37.336979-04:00",
+                "name": "pl-dcm2mha_cnvtr",
+                "version": "1.2.24",
+                "dock_image": "ghcr.io/fnndsc/pl-dcm2mha_cnvtr:1.2.24",
+                "public_repo": "https://github.com/FNNDSC/pl-dcm2mha_cnvtr",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "A ChRIS plugin app to convert dcm files to mha and vice-versa",
+                "category": "",
+                "description": "An app to convert dcm files to mha and vice-versa",
+                "documentation": "http://wiki",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dcm2mha_cnvtr",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 2000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 8000,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2024-09-30T13:41:37.572217-04:00	END
+2024-09-30T13:43:01.762204-04:00	START
+2024-09-30T13:43:10.546721-04:00	
+{
+    "status": false,
+    "obj": {
+        "run": {
+            "status": false,
+            "stdout": "an exception occurred",
+            "stderr": "{\"non_field_errors\": [\"Plugin with name pl-lld_inference and version 2.2.10 already exists.\"]}",
+            "returncode": 1
+        }
+    }
+}
+2024-09-30T13:43:10.546831-04:00	END
+2024-09-30T14:28:00.929358-04:00	START
+2024-09-30T14:28:04.609890-04:00	
+{
+    "status": false,
+    "obj": {
+        "run": {
+            "status": false,
+            "stdout": "an exception occurred",
+            "stderr": "{\"non_field_errors\": [\"Plugin with name pl-orthanc_push and version 1.2.4 already exists.\"]}",
+            "returncode": 1
+        }
+    }
+}
+2024-09-30T14:28:04.609971-04:00	END
+2024-09-30T16:32:15.356667-04:00	START
+2024-09-30T16:32:18.966978-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 249,
+                "creation_date": "2024-09-30T16:32:18.300040-04:00",
+                "name": "pl-dicom_headeredit",
+                "version": "1.1.1",
+                "dock_image": "ghcr.io/fnndsc/pl-dicom_headeredit:1.1.1",
+                "public_repo": "https://github.com/FNNDSC/pl-dicom_headeredit",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC <dev@babyMRI.org>",
+                "title": "Edit DICOM header fields",
+                "category": "",
+                "description": "\"dicom_headerEdit\" is a ChRIS DS plugin that allows for batch editing of DICOM header fields.",
+                "documentation": "https://github.com/FNNDSC/pl-dicom_headerEdit",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dicom_headerEdit",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 1000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2048,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2024-09-30T16:32:18.967058-04:00	END
+2024-09-30T16:33:23.482637-04:00	START
+2024-09-30T16:33:24.035135-04:00	
+{
+    "status": false,
+    "message": "a failure occured",
+    "obj": {
+        "status": false,
+        "run": {
+            "stdout": "",
+            "stderr": "Error response from daemon: manifest unknown\n",
+            "cmd": "docker pull ghcr.io/fnndsc/pl-pfdicom_tagextract:2.3.2",
+            "cwd": "/home/sandip/CHRIS_docs/pipelines/source",
+            "returncode": 1
+        },
+        "rep": {
+            "error": "could not pull image"
+        }
+    }
+}
+2024-09-30T16:33:24.035199-04:00	END
+2024-09-30T16:34:13.035829-04:00	START
+2024-09-30T16:34:20.355461-04:00	
+{
+    "status": false,
+    "message": "a failure occured",
+    "obj": {
+        "status": false,
+        "run": {
+            "stdout": "",
+            "stderr": "docker: Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: \"pfdicom_tagextract\": executable file not found in $PATH: unknown.\n",
+            "cmd": "./cmd.sh",
+            "cwd": "/home/sandip/CHRIS_docs/pipelines/source",
+            "returncode": 127
+        },
+        "rep": {
+            "error": "could not pull image"
+        }
+    }
+}
+2024-09-30T16:34:20.355516-04:00	END
+2024-09-30T16:36:21.425433-04:00	START
+2024-09-30T16:36:26.172916-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 250,
+                "creation_date": "2024-09-30T16:36:25.202331-04:00",
+                "name": "pl-pfdicom_tagextract",
+                "version": "3.2.2",
+                "dock_image": "ghcr.io/fnndsc/pl-pfdicom_tagextract:3.2.2",
+                "public_repo": "https://github.com/FNNDSC/pl-pfdicom_tagextract",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "Sandip Samal <sandip.samal@childrens.harvard.edu>",
+                "title": "A DICOM tag extractor/reporting tool. Generates reports based on DICOM header information.",
+                "category": "DICOM",
+                "description": "This app performs a recursive walk down an input tree, and for each location with a DICOM file, will generate a report in the corresponding location in the output tree.",
+                "documentation": "https://github.com/FNNDSC/pfdicom_tagExtract",
+                "license": "MIT",
+                "execshell": "/usr/local/bin/python",
+                "selfpath": "/usr/local/bin",
+                "selfexec": "dcm_tagExtract",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 2000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 2000,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2024-09-30T16:36:26.173038-04:00	END
+2024-09-30T16:40:30.722593-04:00	START
+2024-09-30T16:49:35.819109-04:00	
+{
+    "status": false,
+    "message": "a failure occured",
+    "obj": {
+        "status": false,
+        "run": {
+            "stdout": "",
+            "stderr": "python3: can't open file 'fshack': [Errno 2] No such file or directory\n",
+            "cmd": "./cmd.sh",
+            "cwd": "/home/sandip/CHRIS_docs/pipelines/source",
+            "returncode": 2
+        },
+        "rep": {
+            "error": "could not pull image"
+        }
+    }
+}
+2024-09-30T16:49:35.819192-04:00	END
+2024-09-30T16:52:37.943238-04:00	START
+2024-09-30T16:52:41.175378-04:00	
+{
+    "status": true,
+    "obj": {
+        "run": {
+            "status": true,
+            "stdout": {
+                "id": 251,
+                "creation_date": "2024-09-30T16:52:41.038503-04:00",
+                "name": "pl-fshack",
+                "version": "1.5.0",
+                "dock_image": "ghcr.io/fnndsc/pl-fshack:1.5.0",
+                "public_repo": "https://github.com/FNNDSC/pl-fshack",
+                "icon": "",
+                "type": "ds",
+                "stars": 0,
+                "authors": "FNNDSC (dev@babyMRI.org)",
+                "title": "A quick-n-dirty attempt at hacking a FreeSurfer ChRIS plugin",
+                "category": "",
+                "description": "This app houses a complete FreeSurfer distro and exposes some\n        FreeSurfer apps at the level of the plugin CLI.'",
+                "documentation": "https://github.com/FNNDSC/pl-fshack",
+                "license": "Opensource (MIT)",
+                "execshell": "python3",
+                "selfpath": "/usr/src/fshack",
+                "selfexec": "fshack.py",
+                "min_number_of_workers": 1,
+                "max_number_of_workers": 1,
+                "min_cpu_limit": 3000,
+                "max_cpu_limit": 2147483647,
+                "min_memory_limit": 16384,
+                "max_memory_limit": 2147483647,
+                "min_gpu_limit": 0,
+                "max_gpu_limit": 0
+            },
+            "stderr": "",
+            "returncode": 0
+        }
+    }
+}
+2024-09-30T16:52:41.175456-04:00	END

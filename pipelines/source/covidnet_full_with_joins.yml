@@ -1,0 +1,33 @@
+---
+authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
+name: "COVIDnet pipeline with push-to-PACS v20240227-3"
+description: Run an input lungct DICOM through a COVID analysis pipeline. Output is typically a PDF report, that is converted to an image file, DICOMized, and then pushed to a PACS.
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: root
+    plugin: pl-simpledsapp v2.1.0
+    previous: ~
+  - title: Convert Original DICOM to JPG
+    plugin: pl-pfdo_med2img v1.2.2
+    previous: root
+    plugin_parameter_defaults:
+      fileFilter: dcm
+      outputFileType: jpg
+      convertOnlySingleDICOM: true
+      preserveDICOMinputName: true
+  - title: COVIDnet classification
+    plugin: pl-covidnet v0.3.0
+    previous: Convert Original DICOM to JPG
+  - title: Generate PDF report
+    plugin: pl-covidnet-pdfgeneration v0.3.0
+    previous: COVIDnet classification
+  - title: Combine PDF and DCM
+    plugin: pl-topologicalcopy v1.0.2
+    previous: root
+    plugin_parameter_defaults:
+      filter: \.dcm$,\.pdf$
+      plugininstances: root,Generate PDF report
+  - title: Unstack folders
+    plugin: pl-unstack-folders v1.0.0
+    previous: Combine PDF and DCM

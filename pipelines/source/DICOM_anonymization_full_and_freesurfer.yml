@@ -27,7 +27,7 @@ plugin_tree:
       fileFilter: dcm
       analyzeFileIndex: f
   - title: tags-on-original-dicom
-    plugin: pl-pfdicom_tagExtract v3.2.2
+    plugin: pl-pfdicom_tagextract v3.2.2
     previous: root-group-copy
     plugin_parameter_defaults:
       outputFileType: "raw,html"
@@ -36,7 +36,7 @@ plugin_tree:
       outputFileStem: originalTags
       imageFile: "m:%_nospc|-_ProtocolName.jpg"
   - title: dicom-anonymize
-    plugin: pl-dicom_headeredit v1.1.1
+    plugin: pl-pfdicom_tagsub v3.2.4
     previous: root-group-copy
     plugin_parameter_defaults:
       extension: ".dcm"
@@ -50,7 +50,7 @@ plugin_tree:
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag" 
   - title: tags-on-anon-dicom
-    plugin: pl-pfdicom_tagExtract v3.2.2
+    plugin: pl-pfdicom_tagextract v3.2.2
     previous: dicom-anonymize
     plugin_parameter_defaults:
       extension: dcm
@@ -78,4 +78,11 @@ plugin_tree:
       inputFile: ".dcm"
       args: "ARGS: -all"
       threads: 2
+  - title: Visual-Data
+    plugin: pl-visual-dataset v0.3.1
+    previous: FreeSurfer-v7.4.1
+    plugin_parameter_defaults:
+      mode: "freesurfer-7.3.3"
+      readme: "FreeSurfer v7.3.2 analysis of data from https://zenodo.org/records/3677090"
+
       
