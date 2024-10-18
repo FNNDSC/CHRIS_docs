@@ -14,7 +14,6 @@ plugin_tree:
       splitToken: ':'
       splitKeyValue: '='
       tagInfo: 'BodyPartExamined = LEG'
-      limbDifference: 15
   - title: send-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.0
     previous: QA-Check
@@ -38,8 +37,8 @@ plugin_tree:
     previous: image-to-DICOM
     plugin_parameter_defaults:
       fileFilter: 'dcm'
-      host: '10.20.2.28'
+      host: '134.174.12.21'
       port: '104'
-      aetTitle: 'SYNAPSERESEARCH'
+      aetTitle: 'PACSDCM'
 
 
