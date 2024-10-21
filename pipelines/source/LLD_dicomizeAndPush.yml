@@ -14,6 +14,7 @@ plugin_tree:
       splitToken: ':'
       splitKeyValue: '='
       tagInfo: 'BodyPartExamined = LEG'
+      limbDifference: 15
   - title: send-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.0
     previous: QA-Check
@@ -24,7 +25,7 @@ plugin_tree:
       min_size: 0
       max_size: "1G"
   - title: image-to-DICOM 
-    plugin: pl-dicommake v2.3.6
+    plugin: pl-dicommake v2.3.9
     previous: QA-Check
     plugin_parameter_defaults:
       outputSubDir: "data"
@@ -33,12 +34,13 @@ plugin_tree:
       filterIMG: '**/*.jpg'
       filterDCM: '**/*.dcm'
   - title: pacs-push
-    plugin: pl-dicom_dirsend v1.1.6
+    plugin: pl-dicom_dirsend v1.1.9
     previous: image-to-DICOM
     plugin_parameter_defaults:
       fileFilter: 'dcm'
       host: '134.174.12.21'
       port: '104'
-      aetTitle: 'PACSDCM'
+      aeTitle: 'ChRIS'
+      calledAETitle: 'PACSDCM'
 
 
