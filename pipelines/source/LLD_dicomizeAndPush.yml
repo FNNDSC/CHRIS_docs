@@ -34,7 +34,7 @@ plugin_tree:
       filterIMG: '**/*.jpg'
       filterDCM: '**/*.dcm'
   - title: pacs-push
-    plugin: pl-dicom_dirsend v1.1.9
+    plugin: pl-dicom_dirsend v1.2.0
     previous: image-to-DICOM
     plugin_parameter_defaults:
       fileFilter: 'dcm'
