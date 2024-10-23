@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: QA-Check
-    plugin: pl-lld_chxr v1.1.2
+    plugin: pl-lld_chxr v1.1.5
     previous: ~
     plugin_parameter_defaults:
       fileFilter: 'analysis.json'
@@ -15,6 +15,8 @@ plugin_tree:
       splitKeyValue: '='
       tagInfo: 'BodyPartExamined = LEG'
       limbDifference: 15
+      femurDifference: 50
+      tibiaDifference: 50
   - title: send-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.0
     previous: QA-Check
