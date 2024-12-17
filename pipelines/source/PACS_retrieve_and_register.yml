@@ -1,0 +1,35 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "PACS query, retrieve, and registration verification in CUBE 20241217"
+description: "Query PACS for DICOM images, retrieve and register them in CUBE, and finally verify registration."
+category: Imaging
+locked: false
+plugin_tree:
+  - title: PACS-query
+    plugin: pl-pacs_query v1.0.3
+    previous: ~
+    plugin_parameter_defaults:
+      PACSurl: 'http://localhost:4005/api/v1/'
+      PACSname: 'MINICHRISORTHANC'
+      PACSdirective: ''
+  - title: PACS-retrieve
+    plugin: pl-pacs_retrieve v1.0.2
+    previous: PACS-query
+    plugin_parameter_defaults:
+      PACSurl: 'http://localhost:4005/api/v1/'
+      PACSname: 'MINICHRISORTHANC'
+      inputJSONfile: "search_results.json"
+      copyInputFile: True
+  - title: verify-registration
+    plugin: pl-reg_chxr v1.0.7
+    previous: PACS-retrieve
+    plugin_parameter_defaults:
+      CUBEurl: "http://localhost:8000/api/v1/"
+      CUBEuser: 'chris'
+      CUBEpassword: 'chris1234'
+      inputJSONfile: 'search_results.json'
+      tagStruct: ''
+      orthancUrl: "http://havana.tch.harvard.edu:8042/"
+      username: "orthanc"
+      password: "orthanc"
+      pushToRemote: "ChRIS"
