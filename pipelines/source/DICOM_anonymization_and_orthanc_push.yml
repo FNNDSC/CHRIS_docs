@@ -1,23 +1,16 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: DICOM anonymization and Orthanc push 20241202
+name: DICOM anonymization and Orthanc push 20241217
 description: Anonymize all DICOM files in a parent node and push the results to an Orthanc instance.
 category: Medical Imaging
 locked: false
 plugin_tree:
   - title: dicom-anonymization
-    plugin: pl-dicom_headeredit v1.1.8
+    plugin: pl-pfdicom_tagSub v3.3.4
     previous: ~
     plugin_parameter_defaults:
       fileFilter: ".dcm"
-      splitToken: ","
-      splitKeyValue:  "="
-      tagInfo: "PatientName         =  %_name|patientID_PatientName,
-                PatientID           =  %_md5|7_PatientID,
-                AccessionNumber     =  %_md5|8_AccessionNumber,
-                PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
-                re:.*stitution      =  #tag,
-                "
+      tagStruct: ""
   - title: push-to-orthanc
     plugin: pl-orthanc_push v1.2.7
     previous: dicom-anonymization

@@ -21,7 +21,7 @@ plugin_tree:
       inputJSONfile: "search_results.json"
       copyInputFile: True
   - title: verify-registration
-    plugin: pl-reg_chxr v1.0.7
+    plugin: pl-reg_chxr v1.0.8
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
