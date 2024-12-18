@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: PACS-query
-    plugin: pl-pacs_query v1.0.3
+    plugin: pl-pacs_query v1.0.4
     previous: ~
     plugin_parameter_defaults:
       PACSurl: 'http://localhost:4005/api/v1/'
