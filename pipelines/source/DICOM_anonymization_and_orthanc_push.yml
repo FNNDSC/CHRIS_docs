@@ -10,7 +10,7 @@ plugin_tree:
     previous: ~
     plugin_parameter_defaults:
       fileFilter: ".dcm"
-      tagStruct: ""
+      tagStruct: '{"PatientBirthDate": "19910101", "AccessionNumber": "%_md5|8_AccessionNumber", "PatientID": "%_md5|7_PatientID", "PatientName": "%_name|patientID_PatientName"}'
   - title: push-to-orthanc
     plugin: pl-orthanc_push v1.2.7
     previous: dicom-anonymization
