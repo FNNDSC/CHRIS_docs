@@ -1,0 +1,64 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "NIfTI --> FreeSurfer 20250131"
+description: Run FreeSurfer v7.4.1 (notalairach) on an input directory of NIfTI followed by a report and overlay images. Limit to 2 in-node FS threads.
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.0
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: 0-
+  - title: bulk-rename
+    # This bulk-rename shortens the long directory path names that ChRIS
+    # typically generates. Too-long names run the risk of exceeding the
+    # Linux FS 255 char limit. Also, some FS apps hit a buffer-overflow
+    # error when attemtping to read too-long filenames.
+    # See https://github.com/FNNDSC/ChRIS_ultron_backEnd/issues/418
+    plugin: pl-bulk-rename v0.1.2
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      filter: ^.*.nii(.gz)?$
+      expression: .*/(.*/.*)
+      replacement: $1
+  - title: FreeSurfer-v7.4.1
+    plugin: pl-fshack v1.5.0
+    previous: bulk-rename
+    plugin_parameter_defaults:
+      exec: recon-all
+      inputFile: ".nii"
+      args: "ARGS: -all"
+      threads: 2
+  - title: FreeSurfer-report
+    plugin: pl-freesurfer_simplereport v1.1.12
+    previous: FreeSurfer-v7.4.1
+    plugin_parameter_defaults:
+      verbosity: "1"
+  - title: segmentation-vols-to-jpg
+    plugin: pl-multipass v1.3.5
+    previous: FreeSurfer-v7.4.1
+    plugin_parameter_defaults:
+      commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
+      noJobLogging: true
+      splitExpr: ++
+      exec: pfdo_mgz2image
+      verbose: "1"
+      specificArgs: "--inputFile FreeSurferRecon/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile FreeSurferRecon/mri/aparc.a2009s+aseg.mgz --wholeVolume segVolume --lookupTable    __fs__"
+  - title: overlay-jpgs
+    plugin: pl-pfdorun v2.2.8
+    previous: segmentation-vols-to-jpg
+    plugin_parameter_defaults:
+      analyzeFileIndex: "-1"
+      fileFilter: png
+      exec: composite -dissolve 90 -gravity Center %inputWorkingDir/%inputWorkingFile %inputWorkingDir/../../aparc.a2009s+aseg.mgz/label-segVolume/%inputWorkingFile -alpha Set                %outputWorkingDir/%inputWorkingFile
+      noJobLogging: true
+      dirFilter: label-brainVolume
+      verbose: "5"
+  - title: visual-data
+    plugin: pl-visual-dataset v0.2.0
+    previous: FreeSurfer-v7.4.1
+    plugin_parameter_defaults:
+      mode: "freesurfer-7.3.3"
+      readme: "FreeSurfer v7.3.2 analysis of dataset"
+

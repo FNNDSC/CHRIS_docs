@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>
-name: "DICOM anon, tag info, image conversion, FreeSurfer (no talairach), report and overlay v20240405"
+name: "DICOM --> FreeSurfer 20250131"
 description: Anonymize an input directory of DICOM files -- with sub branches containing extracted DICOM tag info, as well image conversions (JPG and NIfTI). Run FreeSurfer v7.4.1 (notalairach) followed by a report and overlay images. Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
@@ -39,16 +39,16 @@ plugin_tree:
     plugin: pl-dicom_headeredit v1.1.1
     previous: root-group-copy
     plugin_parameter_defaults:
-      extension: ".dcm"
+      fileFilter: ".dcm"
       splitToken: ","
-      splitKeyValue:  "="
+      splitKeyValue: "="
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
                 PatientID           =  %_md5|7_PatientID,
                 AccessionNumber     =  %_md5|8_AccessionNumber,
                 PatientBirthDate    =  %_strmsk|******01_PatientBirthDate,
                 re:.*hysician       =  %_md5|4_#tag,
                 re:.*stitution      =  #tag,
-                re:.*ddress         =  #tag" 
+                re:.*ddress         =  #tag"
   - title: tags-on-anon-dicom
     plugin: pl-pfdicom_tagextract v3.2.2
     previous: dicom-anonymize
@@ -76,7 +76,7 @@ plugin_tree:
     plugin_parameter_defaults:
       exec: recon-all
       inputFile: ".dcm"
-      args: "ARGS: -all -notalairach"
+      args: "ARGS: -all"
       threads: 2
   - title: FreeSurfer-report
     plugin: pl-freesurfer_simplereport v1.1.12
