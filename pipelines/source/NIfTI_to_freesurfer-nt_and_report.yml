@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "NIfTI --> FreeSurfer 20250131"
+name: "NIfTI --> FreeSurfer 20250203"
 description: Run FreeSurfer v7.4.1 (notalairach) on an input directory of NIfTI followed by a report and overlay images. Limit to 2 in-node FS threads.
 category: Medical Imaging
 locked: false
@@ -30,6 +30,7 @@ plugin_tree:
       inputFile: ".nii"
       args: "ARGS: -all"
       threads: 2
+      outputFile: FreeSurfer
   - title: FreeSurfer-report
     plugin: pl-freesurfer_simplereport v1.1.12
     previous: FreeSurfer-v7.4.1
@@ -39,12 +40,12 @@ plugin_tree:
     plugin: pl-multipass v1.3.5
     previous: FreeSurfer-v7.4.1
     plugin_parameter_defaults:
-      commonArgs: "--printElapsedTime --verbosity 5 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
+      commonArgs: "--printElapsedTime --verbosity 1 --saveImages --skipAllLabels --outputFileStem sample --outputFileType png"
       noJobLogging: true
       splitExpr: ++
       exec: pfdo_mgz2image
       verbose: "1"
-      specificArgs: "--inputFile FreeSurferRecon/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile FreeSurferRecon/mri/aparc.a2009s+aseg.mgz --wholeVolume segVolume --lookupTable    __fs__"
+      specificArgs: "--inputFile FreeSurfer/mri/brainmask.mgz --wholeVolume brainVolume ++ --inputFile FreeSurfer/mri/aparc.a2009s+aseg.mgz --wholeVolume segVolume --lookupTable    __fs__"
   - title: overlay-jpgs
     plugin: pl-pfdorun v2.2.8
     previous: segmentation-vols-to-jpg
