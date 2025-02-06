@@ -22,7 +22,7 @@ plugin_tree:
       copyInputFile: True
       retrieveStudy: True
   - title: verify-registration
-    plugin: pl-reg_chxr v1.1.3
+    plugin: pl-reg_chxr v1.1.4
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
@@ -33,5 +33,7 @@ plugin_tree:
       orthancUrl: "http://havana.tch.harvard.edu:8042/"
       orthancUsername: "orthanc"
       orthancPassword: "orthanc"
+      PACSname: "MINICHRISORTHANC"
+      PACSurl: "http://localhost:4005/api/v1/"
       pushToRemote: "ChRIS"
-      maxPoll: 20
+      maxPoll: 5
