@@ -1,0 +1,22 @@
+---
+authors: "Rudolph Pienaar <rudolph.pienaar@childrens.harvard.edu>"
+name: simpledsapp-simpledsapp1
+description: Sample pipeline.
+category: Testing
+locked: false
+plugin_tree:
+  - title: simpledsapp1
+    plugin: pl-simpledsapp v2.1.4
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: "lolo"
+  - title: simpledsapp2
+    plugin: pl-simpledsapp v2.1.4
+    previous: simpledsapp1
+    plugin_parameter_defaults:
+      prefix: "lele"
+  - title: topo-copy-1
+    plugin: pl-topologicalcopy v1.0.12
+    previous: simpledsapp1
+    plugin_parameter_defaults:
+      plugininstances: "simpledsapp1,simpledsapp2"
