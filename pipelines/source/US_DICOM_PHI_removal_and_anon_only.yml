@@ -1,7 +1,8 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20240709"
-description: Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
+name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20250303"
+description:
+  Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
   in parallel
 category: Medical Imaging
 locked: false
@@ -150,15 +151,16 @@ plugin_tree:
       splitToken: ","
       splitKeyValue: "="
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
-                PatientID           =  %_md5|7_PatientID,
-                AccessionNumber     =  %_md5|8_AccessionNumber,
-                PatientBirthDate    =  20240101,
-                StudyDate           =  20240101,
-                SeriesDate          =  20240101,
-                re:.*hysician       =  %_md5|4_#tag,
-                re:.*stitution      =  #tag,
-                re:.*ddress         =  #tag
-                "
+        PatientID           =  %_md5|7_PatientID,
+        AccessionNumber     =  %_md5|8_AccessionNumber,
+        PatientBirthDate    =  20240101,
+        StudyDate           =  20240101,
+        SeriesDate          =  20240101,
+        ContentDate         =  20240101,
+        re:.*hysician       =  %_md5|4_#tag,
+        re:.*stitution      =  #tag,
+        re:.*ddress         =  #tag
+        "
   - title: report-file-to-tar
     plugin: pl-pfdorun v2.2.14
     previous: report-dcms-anonymized-full
@@ -183,15 +185,16 @@ plugin_tree:
       splitToken: ","
       splitKeyValue: "="
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
-                PatientID           =  %_md5|7_PatientID,
-                AccessionNumber     =  %_md5|8_AccessionNumber,
-                PatientBirthDate    =  20240101,
-                StudyDate           =  20240101,
-                SeriesDate          =  20240101,
-                re:.*hysician       =  %_md5|4_#tag,
-                re:.*stitution      =  #tag,
-                re:.*ddress         =  #tag
-                "
+        PatientID           =  %_md5|7_PatientID,
+        AccessionNumber     =  %_md5|8_AccessionNumber,
+        PatientBirthDate    =  20240101,
+        StudyDate           =  20240101,
+        SeriesDate          =  20240101,
+        ContentDate         =  20240101,
+        re:.*hysician       =  %_md5|4_#tag,
+        re:.*stitution      =  #tag,
+        re:.*ddress         =  #tag
+        "
   - title: image-file-to-tar
     plugin: pl-pfdorun v2.2.14
     previous: image-dcms-anonymized-full
@@ -216,15 +219,16 @@ plugin_tree:
       splitToken: ","
       splitKeyValue: "="
       tagInfo: "PatientName         =  %_name|patientID_PatientName,
-                PatientID           =  %_md5|7_PatientID,
-                AccessionNumber     =  %_md5|8_AccessionNumber,
-                PatientBirthDate    =  20240101,
-                StudyDate           =  20240101,
-                SeriesDate          =  20240101,
-                re:.*hysician       =  %_md5|4_#tag,
-                re:.*stitution      =  #tag,
-                re:.*ddress         =  #tag
-                "
+        PatientID           =  %_md5|7_PatientID,
+        AccessionNumber     =  %_md5|8_AccessionNumber,
+        PatientBirthDate    =  20240101,
+        StudyDate           =  20240101,
+        SeriesDate          =  20240101,
+        ContentDate         =  20240101,
+        re:.*hysician       =  %_md5|4_#tag,
+        re:.*stitution      =  #tag,
+        re:.*ddress         =  #tag
+        "
   - title: repacked-file-to-tar
     plugin: pl-pfdorun v2.2.14
     previous: repacked-dcms-anonymized-full
