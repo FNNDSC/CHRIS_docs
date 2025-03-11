@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20240625"
+name: "Ultra Sound DICOM anonymization and PHI removal with PACS push v20250310"
 description: Remove PHI burned on US DICOM images, anonymize the dicom headers, zip, and finally push to a PACS
   in parallel
 category: Medical Imaging
@@ -155,6 +155,7 @@ plugin_tree:
                 PatientBirthDate    =  20240101,
                 StudyDate           =  20240101,
                 SeriesDate          =  20240101,
+                ContentDate         =  20240101,
                 re:.*hysician       =  %_md5|4_#tag,
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag
@@ -197,6 +198,7 @@ plugin_tree:
                 PatientBirthDate    =  20240101,
                 StudyDate           =  20240101,
                 SeriesDate          =  20240101,
+                ContentDate         =  20240101,
                 re:.*hysician       =  %_md5|4_#tag,
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag
@@ -239,6 +241,7 @@ plugin_tree:
                 PatientBirthDate    =  20240101,
                 StudyDate           =  20240101,
                 SeriesDate          =  20240101,
+                ContentDate         =  20240101,
                 re:.*hysician       =  %_md5|4_#tag,
                 re:.*stitution      =  #tag,
                 re:.*ddress         =  #tag
