@@ -1,0 +1,21 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "BLT anonymization pipeline"
+description: "Query PACS for DICOM images, retrieve and register them in CUBE, and finally anonymiza and push to another CUBE"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: dynamic-anon
+    plugin: pl-dyanon v1.1.1
+    previous: ~
+    plugin_parameter_defaults:
+      pattern: "**/*csv"
+      CUBEurl: "http://ekanite.tch.harvard.edu:32223/api/v1/"
+      CUBEuser: 'sandip.samal'
+      CUBEpassword: 'clinical'
+      orthancUrl: "https://blt-orthanc.apps.shift.nerc.mghpcc.org/"
+      orthancUsername: "fnndsc"
+      orthancPassword: "KaytnoopbotJiaz5"
+      pushToRemote: "BLT-ChRIS"
+      PACSname: "PACSDCM"
+      PACSurl: "http://chris.tch.harvard.edu:3224/api/v1/"

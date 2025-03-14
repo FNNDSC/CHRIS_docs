@@ -1,0 +1,15 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "DICOM anonymization for ContentDate only v20250314"
+description: "Anonymize ContentDate tag of input DICOM files"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: content-date-anonymized-dicoms
+    plugin: pl-dicom_headeredit v1.1.6
+    previous: ~
+    plugin_parameter_defaults:
+      fileFilter: ".dcm"
+      splitToken: ","
+      splitKeyValue: "="
+      tagInfo: "ContentDate = 20240101"
