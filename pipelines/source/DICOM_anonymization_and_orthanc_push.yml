@@ -10,13 +10,23 @@ plugin_tree:
     previous: ~
     plugin_parameter_defaults:
       fileFilter: ".dcm"
-      tagStruct: '{"PatientBirthDate": "19910101", "AccessionNumber": "%_md5|8_AccessionNumber", "PatientID": "%_md5|7_PatientID", "PatientName": "%_name|patientID_PatientName"}'
+      tagStruct: '{"AccessionNumber": "%_md5|8_AccessionNumber", "PatientID": "%_md5|7_PatientID", "PatientName": "%_name|patientID_PatientName"}'
   - title: dicom-anonymization-rest
     plugin: pl-pfdicom_tagSub v3.3.4
     previous: dicom-anonymization
     plugin_parameter_defaults:
-      fileFilter: ".dcm"
-      tagInfo: "re:.*hysician       =  %_md5|4_#tag,                re:.*stitution      =  #tag,                re:.*ddress         =  #tag,   re:.*ime   =  000000, StudyDate  =  20240101"
+      fileFilter: "dcm"
+      tagInfo: "re:.*hysician  =  %_md5|4_#tag,
+                re:.*stitution =  #tag,
+                re:.*ddress  =  #tag,
+                re:.*ime   =  000000,
+                PatientBirthDate = 20240101, 
+                StudyDate  =  20240101,
+                ContentDate = 20240101,
+                SeriesDate = 20240101,
+                AcquisitionDate = 20240101"
+      splitKeyValue: "="
+      splitToken: ","
   - title: push-to-orthanc
     plugin: pl-orthanc_push v1.2.8
     previous: dicom-anonymization-rest

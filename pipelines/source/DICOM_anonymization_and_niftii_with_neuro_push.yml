@@ -1,0 +1,50 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "DICOM anonymization, niftii conversion, and push to neuro tree v20250319"
+description: Anonymize an input directory of DICOM files -- with niftii conversion and neuro push.
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.3
+    previous: ~
+    plugin_parameter_defaults:
+      prefix: 0-
+  - title: send-dicoms-to-neuro-FS
+    plugin: pl-neurofiles-push v0.2.1
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      path: "/neuro/labs/grantlab/research/sandip/data/dicoms/"
+      timeout: 0
+      min_size: 0
+      max_size: "1G"
+  - title: dicom-anonymized
+    plugin: pl-pfdicom_tagSub v3.3.4
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      fileFilter: ".dcm"
+      tagInfo: "PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ AccessionNumber,%_md5|8_AccessionNumber ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate ++ re:.*hysician,%_md5|4_#tag ++ re:.*stitution,#tag ++ re:.*ddress,#tag"
+      splitToken: "++"
+      splitKeyValue: ","
+  - title: send-anon-dicoms-to-neuro-FS
+    plugin: pl-neurofiles-push v0.2.1
+    previous: dicom-anonymized
+    plugin_parameter_defaults:
+      path: "/neuro/labs/grantlab/research/sandip/data/anon-dicoms/"
+      timeout: 0
+      min_size: 0
+      max_size: "1G"
+  - title: dicom-to-nifti
+    plugin: pl-dcm2niix v1.0.1
+    previous: dicom-anonymized
+    plugin_parameter_defaults:
+      d: 9
+  - title: send-niftii-to-neuro-FS
+    plugin: pl-neurofiles-push v0.2.1
+    previous: dicom-to-nifti
+    plugin_parameter_defaults:
+      path: "/neuro/labs/grantlab/research/sandip/data/niftii/"
+      timeout: 0
+      min_size: 0
+      max_size: "1G"
+
