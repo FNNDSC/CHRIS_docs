@@ -13,3 +13,10 @@ plugin_tree:
       splitToken: ","
       splitKeyValue: "="
       tagInfo: "ContentDate = 20240101"
+  - title: file-to-zip
+    plugin: pl-pfdorun v2.2.14
+    previous: content-date-anonymized-dicoms
+    plugin_parameter_defaults:
+      maxDepth: 0
+      exec: "zip -r %outputDir/parent.zip %inputDir"
+      noJobLogging: true
