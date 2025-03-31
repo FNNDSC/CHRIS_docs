@@ -1,0 +1,36 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "PACS query, retrieve, registration verification, and run pipeline in CUBE 20250331"
+description: "Query PACS for DICOM images, retrieve in CUBE, and verify and run anon pipeline"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: PACS-query
+    plugin: pl-pacs_query v1.0.5
+    previous: ~
+    plugin_parameter_defaults:
+      PACSurl: 'http://localhost:4005/api/v1/'
+      PACSname: 'MINICHRISORTHANC'
+      PACSdirective: ''
+  - title: PACS-retrieve
+    plugin: pl-pacs_retrieve v1.0.5
+    previous: PACS-query
+    plugin_parameter_defaults:
+      PACSurl: 'http://localhost:4005/api/v1/'
+      PACSname: 'MINICHRISORTHANC'
+      inputJSONfile: "search_results.json"
+      copyInputFile: True
+      retrieveStudy: True
+  - title: verify-registration
+    plugin: pl-dy_regiflow v1.0.0
+    previous: PACS-retrieve
+    plugin_parameter_defaults:
+      CUBEurl: "http://localhost:8000/api/v1/"
+      CUBEuser: 'chris'
+      CUBEpassword: 'chris1234'
+      inputJSONfile: 'search_results.json'
+      PACSname: "MINICHRISORTHANC"
+      PACSurl: "http://localhost:4005/api/v1/"
+      neuroLocation: "/neuro/labs/grantlab/research/sandip/test-3"
+      folderName: ""
+      maxPoll: 5

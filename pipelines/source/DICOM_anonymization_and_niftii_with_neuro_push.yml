@@ -10,17 +10,13 @@ plugin_tree:
     previous: ~
     plugin_parameter_defaults:
       filter: ^.*.dcm?$
-      expression: .*-(.*?)-.*/(.*)
+      expression: .*-(.*?-.*)/(.*)
       replacement: $1/$2
   - title: send-dicoms-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.1
     previous: root-group-copy
     plugin_parameter_defaults:
-      path: "/neuro/labs/grantlab/research/sandip/bulk-3/dicom/sub01-MPRAGE-ses-1/"
-      timeout: 0
-      min_size: 0
-      max_size: "1G"
-      include: "*.dcm"
+      path: ""
   - title: dicom-anonymized
     plugin: pl-pfdicom_tagSub v3.3.4
     previous: root-group-copy
@@ -40,24 +36,16 @@ plugin_tree:
     plugin: pl-neurofiles-push v0.2.1
     previous: flatten-anon-dicoms
     plugin_parameter_defaults:
-      path: "/neuro/labs/grantlab/research/sandip/bulk-3/anon-dicom/sub01-MPRAGE-ses-1/"
-      timeout: 0
-      min_size: 0
-      max_size: "1G"
-      include: "*.dcm"
+      path: ""
   - title: dicom-to-nifti
     plugin: pl-dcm2niix v1.0.1
     previous: dicom-anonymized
     plugin_parameter_defaults:
       d: 9
-      f: "%p/%f_%p_%t_%s"
+      f: "%d_%s/%f_%p_%t_%s"
   - title: send-niftii-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.1
     previous: dicom-to-nifti
     plugin_parameter_defaults:
-      path: "/neuro/labs/grantlab/research/sandip/bulk-3/niftii/sub01-MPRAGE-ses-1/"
-      timeout: 0
-      min_size: 0
-      max_size: "1G"
-      include: "*.nii"
+      path: ""
 
