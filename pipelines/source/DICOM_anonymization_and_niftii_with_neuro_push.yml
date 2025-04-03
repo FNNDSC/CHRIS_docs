@@ -48,4 +48,9 @@ plugin_tree:
     previous: dicom-to-nifti
     plugin_parameter_defaults:
       path: ""
+  - title: send-json-to-neuro-FS
+    plugin: pl-neurofiles-push v0.2.1
+    previous: dicom-to-nifti
+    plugin_parameter_defaults:
+      path: ""
 

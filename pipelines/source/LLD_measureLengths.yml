@@ -22,7 +22,7 @@ plugin_tree:
       outputImageExtension: jpg
 
   - title: send-to-neuro-FS
-    plugin: pl-neurofiles-push v0.2.0
+    plugin: pl-neurofiles-push v0.2.1
     previous: measure-leg-segments
     plugin_parameter_defaults:
       path: "/neuro/labs/grantlab/research/LLD/data/analysis/"

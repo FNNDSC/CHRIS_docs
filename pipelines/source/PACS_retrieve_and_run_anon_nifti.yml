@@ -22,7 +22,7 @@ plugin_tree:
       copyInputFile: True
       retrieveStudy: True
   - title: verify-registration
-    plugin: pl-dy_regiflow v1.0.0
+    plugin: pl-dy_regiflow v1.0.1
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
@@ -31,6 +31,6 @@ plugin_tree:
       inputJSONfile: 'search_results.json'
       PACSname: "MINICHRISORTHANC"
       PACSurl: "http://localhost:4005/api/v1/"
-      neuroLocation: "/neuro/labs/grantlab/research/sandip/test-3"
+      neuroLocation: ""
       folderName: ""
       maxPoll: 5
