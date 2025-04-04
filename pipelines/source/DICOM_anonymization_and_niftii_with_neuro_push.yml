@@ -43,12 +43,8 @@ plugin_tree:
     plugin_parameter_defaults:
       d: 9
       f: "%d_%s/%f_%p_%t_%s"
+      z: y
   - title: send-niftii-to-neuro-FS
-    plugin: pl-neurofiles-push v0.2.1
-    previous: dicom-to-nifti
-    plugin_parameter_defaults:
-      path: ""
-  - title: send-json-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.1
     previous: dicom-to-nifti
     plugin_parameter_defaults:

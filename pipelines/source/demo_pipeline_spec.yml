@@ -1,0 +1,14 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: demo v20250403-v2
+description: Copy contents of input dir to output dir
+category: Test
+locked: false
+plugin_tree:
+  - title: root-copy
+    plugin: pl-simpledsapp v2.1.3
+    previous: ~
+    cpu_limit: 8000m
+    memory_limit: 8Gi
+    plugin_parameter_defaults:
+      prefix: 0-
