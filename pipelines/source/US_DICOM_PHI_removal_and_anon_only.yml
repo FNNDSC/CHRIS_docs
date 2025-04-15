@@ -117,13 +117,13 @@ plugin_tree:
       filter: \.dcm$,\.png$
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: converted-unpacked-dcms-2
-    plugin: pl-dicommake v2.2.8
+    plugin: pl-dicommake v2.4.1
     previous: unpacked-dcms-and-phi-removed-pngs-2
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: converted-image-dcms-2
-    plugin: pl-dicommake v2.2.8
+    plugin: pl-dicommake v2.4.1
     previous: image-dcms-and-phi-removed-pngs-2
     plugin_parameter_defaults:
       filterIMG: "**/*.png"
