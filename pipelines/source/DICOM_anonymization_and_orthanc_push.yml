@@ -16,15 +16,18 @@ plugin_tree:
     previous: dicom-anonymization
     plugin_parameter_defaults:
       fileFilter: "dcm"
-      tagInfo: "re:.*hysician  =  %_md5|4_#tag,
-                re:.*stitution =  #tag,
+      tagInfo: "re:.*stitution =  #tag,
                 re:.*ddress  =  #tag,
                 re:.*ime   =  000000,
                 PatientBirthDate = 20240101, 
                 StudyDate  =  20240101,
                 ContentDate = 20240101,
                 SeriesDate = 20240101,
-                AcquisitionDate = 20240101"
+                AcquisitionDate = 20240101,
+                ReferringPhysicianName = #tag,
+                RequestingPhysician = #tag,
+                PerformingPhysicianName = #tag,
+                PhysiciansOfRecord = #tag"
       splitKeyValue: "="
       splitToken: ","
   - title: push-to-orthanc
