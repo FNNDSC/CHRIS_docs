@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20250318"
+name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20250430"
 description:
   Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
   in parallel

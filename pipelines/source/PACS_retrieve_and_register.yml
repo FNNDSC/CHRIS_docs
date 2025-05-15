@@ -9,15 +9,15 @@ plugin_tree:
     plugin: pl-pacs_query v1.0.5
     previous: ~
     plugin_parameter_defaults:
-      PACSurl: 'http://localhost:4005/api/v1/'
-      PACSname: 'MINICHRISORTHANC'
+      PACSurl: 'http://chris.tch.harvard.edu:3224/api/v1/'
+      PACSname: 'PACSDCM'
       PACSdirective: ''
   - title: PACS-retrieve
     plugin: pl-pacs_retrieve v1.0.5
     previous: PACS-query
     plugin_parameter_defaults:
-      PACSurl: 'http://localhost:4005/api/v1/'
-      PACSname: 'MINICHRISORTHANC'
+      PACSurl: 'http://chris.tch.harvard.edu:3224/api/v1/'
+      PACSname: 'PACSDCM'
       inputJSONfile: "search_results.json"
       copyInputFile: True
       retrieveStudy: True
@@ -30,10 +30,10 @@ plugin_tree:
       CUBEpassword: 'chris1234'
       inputJSONfile: 'search_results.json'
       tagStruct: ''
-      orthancUrl: "http://havana.tch.harvard.edu:8042/"
-      orthancUsername: "orthanc"
-      orthancPassword: "orthanc"
-      PACSname: "MINICHRISORTHANC"
-      PACSurl: "http://localhost:4005/api/v1/"
-      pushToRemote: "ChRIS"
+      orthancUrl: "https://orthanc-basic-auth-proxy-chris-3114b1.apps.shift.nerc.mghpcc.org"
+      orthancUsername: "uploader"
+      orthancPassword: "Enmyd5Medd"
+      PACSname: "PACSDCM"
+      PACSurl: "http://chris.tch.harvard.edu:3224/api/v1/"
+      pushToRemote: "BLT-ChRIS"
       maxPoll: 5
