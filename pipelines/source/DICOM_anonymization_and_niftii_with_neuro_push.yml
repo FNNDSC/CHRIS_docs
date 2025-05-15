@@ -13,7 +13,7 @@ plugin_tree:
       expression: .*-(.*?-.*)/(.*)
       replacement: $1/$2
   - title: send-dicoms-to-neuro-FS
-    plugin: pl-orthanc_push v1.2.8
+    plugin: pl-neurofiles-push v0.2.1
     previous: root-group-copy
     plugin_parameter_defaults:
       path: ""
@@ -33,7 +33,7 @@ plugin_tree:
       expression: .*/(.*/.*)
       replacement: $1
   - title: send-anon-dicoms-to-neuro-FS
-    plugin: pl-orthanc_push v1.2.8
+    plugin: pl-neurofiles-push v0.2.1
     previous: flatten-anon-dicoms
     plugin_parameter_defaults:
       path: ""
@@ -45,7 +45,7 @@ plugin_tree:
       f: "%s_%f_%p_%t"
       z: y
   - title: send-niftii-to-neuro-FS
-    plugin: pl-orthanc_push v1.2.8
+    plugin: pl-neurofiles-push v0.2.1
     previous: dicom-to-nifti
     plugin_parameter_defaults:
       path: ""
