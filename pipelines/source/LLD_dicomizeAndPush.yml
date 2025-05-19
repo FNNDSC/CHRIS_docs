@@ -17,15 +17,6 @@ plugin_tree:
       limbDifference: 15
       femurDifference: 50
       tibiaDifference: 50
-  - title: send-to-neuro-FS
-    plugin: pl-neurofiles-push v0.2.1
-    previous: QA-Check
-    plugin_parameter_defaults:
-      path: "/neuro/labs/grantlab/research/LLD/data/status/"
-      filter: "+ *{-status}.json"
-      timeout: 0
-      min_size: 0
-      max_size: "1G"
   - title: image-to-DICOM 
     plugin: pl-dicommake v2.4.1
     previous: QA-Check
@@ -37,13 +28,13 @@ plugin_tree:
       filterDCM: '**/*.dcm'
       appendToSeriesDescription: "AI annotated image"
   - title: pacs-push
-    plugin: pl-dicom_dirsend v1.2.0
+    plugin: pl-orthanc_push v1.2.8
     previous: image-to-DICOM
     plugin_parameter_defaults:
-      fileFilter: 'dcm'
-      host: '134.174.12.21'
-      port: '104'
-      aeTitle: 'ChRIS'
-      calledAETitle: 'PACSDCM'
+      inputFileFilter: "**/*dcm"
+      orthancUrl: "https://orthanc-basic-auth-proxy-chris-3114b1.apps.shift.nerc.mghpcc.org"
+      username: "uploader"
+      password: "Enmyd5Medd"
+      pushToRemote: "BLT-ChRIS"
 
 

@@ -21,14 +21,5 @@ plugin_tree:
       addTextColor: cyan
       outputImageExtension: jpg
 
-  - title: send-to-neuro-FS
-    plugin: pl-neurofiles-push v0.2.1
-    previous: measure-leg-segments
-    plugin_parameter_defaults:
-      path: "/neuro/labs/grantlab/research/LLD/data/analysis/"
-      filter: "+ *{-analysis}.json"
-      timeout: 0
-      min_size: 0
-      max_size: "1G"
 
 
