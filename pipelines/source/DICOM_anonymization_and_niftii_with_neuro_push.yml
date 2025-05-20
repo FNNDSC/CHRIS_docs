@@ -41,9 +41,9 @@ plugin_tree:
     plugin: pl-dcm2niix v1.0.1
     previous: dicom-anonymized
     plugin_parameter_defaults:
-      d: 9
-      f: "%s_%f_%p_%t"
+      f: "%3s_%d_%c"
       z: y
+      m: 0
   - title: send-niftii-to-neuro-FS
     plugin: pl-neurofiles-push v0.2.1
     previous: dicom-to-nifti
