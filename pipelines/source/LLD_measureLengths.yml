@@ -12,7 +12,7 @@ plugin_tree:
       inputImageName: "input.jpg"
       pointMarker: "."
       pointSize: 20
-      linewidth: 4
+      linewidth: 2
       lineGap: 2
       addText: "Not for diagnostic use"
       addTextPos: bottom
