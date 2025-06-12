@@ -5,9 +5,15 @@ description: Anonymize all DICOM files in a parent node and push the results to 
 category: Medical Imaging
 locked: false
 plugin_tree:
+  - title: dicom-filter
+    plugin: pl-dicom_filter v1.2.5
+    previous: ~
+    plugin_parameter_defaults:
+      dicomFilter: '{"SOPClassUID": "Secondary Capture Image Storage"}'
+      exclude: True
   - title: dicom-anonymization
     plugin: pl-pfdicom_tagSub v3.3.4
-    previous: ~
+    previous: dicom-filter
     plugin_parameter_defaults:
       fileFilter: ".dcm"
       tagStruct: '{"AccessionNumber": "%_md5|8_AccessionNumber", "PatientID": "%_md5|7_PatientID", "PatientName": "%_name|patientID_PatientName"}'
@@ -31,7 +37,7 @@ plugin_tree:
       splitKeyValue: "="
       splitToken: ","
   - title: push-to-orthanc
-    plugin: pl-orthanc_push v1.2.8
+    plugin: pl-orthanc_push v1.3.2
     previous: anonymized-additional-tags
     plugin_parameter_defaults:
       inputFileFilter: "**/*dcm"

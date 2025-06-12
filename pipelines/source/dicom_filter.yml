@@ -1,0 +1,13 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: DICOM anonymization and Orthanc push 20241217
+description: Anonymize all DICOM files in a parent node and push the results to an Orthanc instance.
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: dicom-filter
+    plugin: pl-dicom_filter v1.2.5
+    previous: ~
+    plugin_parameter_defaults:
+      dicomFilter: '{"SOPClassUID": "Secondary Capture Image Storage"}'
+      exclude: True
