@@ -11,7 +11,7 @@ plugin_tree:
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
       pointMarker: "."
-      pointSize: 20
+      pointSize: 2
       linewidth: 2
       lineGap: 2
       addText: "Not for diagnostic use"
