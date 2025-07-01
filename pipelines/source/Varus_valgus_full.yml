@@ -1,6 +1,6 @@
 ---
 authors: Rudolph Pienaar <dev@babymri.org>
-name: "Leg Length Discrepancy Full Workflow v20250625-v1"
+name: "Varus Valgus Full Workflow v20250627"
 description: "Perform the full leg length workflow, including joins"
 category: Imaging
 locked: false
@@ -28,11 +28,12 @@ plugin_tree:
   # The inference node reads data as mha format (one subject per mha image)
   # and determines the heatmap locations of relevant landmarks    
   - title: generate-landmark-heatmaps-2
-    plugin: pl-lld_inference v2.2.22
+    plugin: pl-lld_inference v2.2.23
     previous: dcm-to-mha-1
     plugin_parameter_defaults:
       inputFileFilter: "**/*.mha"
       heatmapThreshold: '0.5'
+      modelType: 'vv'
 
   # Now back up to the top, and we create a new branch off the root
   # that combines the original node DICOM with the csv output of the
@@ -66,18 +67,16 @@ plugin_tree:
   # Working off that join we now measure lengths and generate a
   # report (burned directly into the image, and also saved as a json)
   - title: measure-leg-segments-6
-    plugin: pl-markimg v1.6.4
+    plugin: pl-landmarkimg v1.0.1
     previous: heatmaps-join-json-5
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
       pointMarker: "."
       pointSize: 10
-      linewidth: 0.5
-      lineGap: 70
-      addText: "Not for diagnostic use"
-      addTextPos: bottom
-      addTextSize: 5
-      addTextColor: darkred
+      pointColor: yellow
+      lineWidth: 10
+      lineColor: yellow
+
 
   # As we get ready to convert the above image to DICOM, we join the generated
   # image with the DICOM join to collect all the info needed to create
@@ -87,7 +86,7 @@ plugin_tree:
     previous: heatmaps-join-root-3
     plugin_parameter_defaults:
       plugininstances: heatmaps-join-root-3,measure-leg-segments-6
-      filter: \.dcm$,\.png$
+      filter: \.dcm$,\.jpg$
 
   # With the join containing all the necessary information, we can now
   # generate new DICOMs
@@ -95,7 +94,10 @@ plugin_tree:
     plugin: pl-dicommake v2.4.1
     previous: measurement-join-dicom-7
     plugin_parameter_defaults:
-      filterIMG: "**/*.png"
+      filterIMG: "**/*.jpg"
       outputSubDir: data
       thread: true
+      compress: true
+      appendToSeriesDescription: 'AI annotated image'
+
 

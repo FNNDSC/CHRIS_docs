@@ -45,3 +45,4 @@ plugin_tree:
       username: ""
       password: ""
       pushToRemote: "ChRIS"
+      timeout: 5

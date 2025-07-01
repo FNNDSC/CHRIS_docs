@@ -22,7 +22,7 @@ plugin_tree:
       copyInputFile: True
       retrieveStudy: True
   - title: verify-registration
-    plugin: pl-dy_regiflow v1.0.3
+    plugin: pl-dy_regiflow v1.0.4
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
