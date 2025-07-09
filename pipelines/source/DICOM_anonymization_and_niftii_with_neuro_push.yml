@@ -38,8 +38,8 @@ plugin_tree:
     plugin_parameter_defaults:
       path: ""
   - title: dicom-to-nifti
-    plugin: pl-dcm2niix v1.0.1
-    previous: dicom-anonymized
+    plugin: pl-dcm2niix v1.0.2
+    previous: root-group-copy
     plugin_parameter_defaults:
       f: "%3s_%d_%c"
       z: y
