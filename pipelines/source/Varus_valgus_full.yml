@@ -1,6 +1,6 @@
 ---
-authors: Rudolph Pienaar <dev@babymri.org>
-name: "Varus Valgus Full Workflow v20250703"
+authors: Sandip Samal <dev@babymri.org>
+name: "Varus Valgus Full Workflow v20250710"
 description: "Perform the full Varus/Valgus workflow, including joins"
 category: Imaging
 locked: false
@@ -100,4 +100,13 @@ plugin_tree:
       compress: true
       appendToSeriesDescription: 'AI annotated image'
 
-
+  # We finally push the annotated DICOM to research PACS
+  - title: DICOM-to-PACS-9
+    plugin: pl-dicom_dirsend v1.2.0
+    previous: image-to-DICOM-8
+    plugin_parameter_defaults:
+      fileFilter: "dcm"
+      host: 10.20.2.28
+      port: 104
+      calledAETitle: 'SYNAPSERESEARCH'
+      aeTitle: 'ChRIS'
