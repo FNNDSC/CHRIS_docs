@@ -28,13 +28,13 @@ plugin_tree:
       filterDCM: '**/*.dcm'
       appendToSeriesDescription: "AI annotated image"
   - title: pacs-push
-    plugin: pl-orthanc_push v1.2.8
+    plugin: pl-dicom_dirsend v1.2.0
     previous: image-to-DICOM
     plugin_parameter_defaults:
-      inputFileFilter: "**/*dcm"
-      orthancUrl: "https://orthanc-basic-auth-proxy-chris-3114b1.apps.shift.nerc.mghpcc.org"
-      username: "uploader"
-      password: "Enmyd5Medd"
-      pushToRemote: "BLT-ChRIS"
+      fileFilter: "dcm"
+      host: "134.174.12.21"
+      port: 104
+      aeTitle: "ChRIS"
+      calledAETitle: "PACSDCM"
 
 
