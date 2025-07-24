@@ -1,12 +1,20 @@
 ---
 authors: Sandip Samal <dev@babymri.org>
-name: "Detect PHI containing DICOMs 20250716"
+name: "Detect PHI containing DICOMs 20250723"
 description: "Analyze input DICOMs to detect PHI containing texts"
 category: Imaging
 locked: false
 plugin_tree:
   - title: PHI-DICOMs
-    plugin: pl-phi_detector v1.0.3
+    plugin: pl-phi_detector v1.0.4
     previous: ~
     plugin_parameter_defaults:
       fileFilter: "dcm"
+  - title: push-to-orthanc
+    plugin: pl-orthanc_push v1.3.2
+    previous: PHI-DICOMs
+    plugin_parameter_defaults:
+      inputFileFilter: "**/*dcm"
+      orthancUrl: "http://havana.tch.harvard.edu:8042"
+      username: "orthanc"
+      password: "orthanc"
