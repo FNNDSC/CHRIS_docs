@@ -18,7 +18,7 @@ plugin_tree:
       femurDifference: 50
       tibiaDifference: 50
   - title: image-to-DICOM 
-    plugin: pl-dicommake v2.4.3
+    plugin: pl-dicommake v2.4.4
     previous: QA-Check
     plugin_parameter_defaults:
       outputSubDir: "data"

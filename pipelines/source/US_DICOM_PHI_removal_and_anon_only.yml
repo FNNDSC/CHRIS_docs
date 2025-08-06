@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20250724"
+name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20250729"
 description:
   Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
   in parallel
@@ -14,21 +14,21 @@ plugin_tree:
       prefix: 0-
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: multiframe-dcms-2
-    plugin: pl-dicom_filter v1.2.0
+    plugin: pl-dicom_filter v1.2.5
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Multi-frame Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-dcms-2
-    plugin: pl-dicom_filter v1.2.0
+    plugin: pl-dicom_filter v1.2.5
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
       dicomFilter: '{"SOPClassUID":"Ultrasound Image Storage"}'
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: report-dcms-2
-    plugin: pl-dicom_filter v1.2.0
+    plugin: pl-dicom_filter v1.2.5
     previous: root-group-copy-2
     plugin_parameter_defaults:
       outputType: dcm
@@ -41,7 +41,7 @@ plugin_tree:
       fileFilter: dcm
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: unpacked-pngs-2
-    plugin: pl-dicom_filter v1.2.0
+    plugin: pl-dicom_filter v1.2.5
     previous: unpacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm
@@ -64,7 +64,7 @@ plugin_tree:
       filter: \.png$,\.json$
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-pngs-2
-    plugin: pl-dicom_filter v1.2.0
+    plugin: pl-dicom_filter v1.2.5
     previous: image-dcms-2
     plugin_parameter_defaults:
       fileFilter: dcm

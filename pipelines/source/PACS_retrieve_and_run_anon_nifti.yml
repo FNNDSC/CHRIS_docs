@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <dev@babymri.org>
-name: "PACS query, retrieve, registration verification, and run pipeline in CUBE 20250331"
+name: "PACS query, retrieve, registration verification, and run pipeline in CUBE 20250806"
 description: "Query PACS for DICOM images, retrieve in CUBE, and verify and run anon pipeline"
 category: Imaging
 locked: false
@@ -22,7 +22,7 @@ plugin_tree:
       copyInputFile: True
       retrieveStudy: True
   - title: verify-registration
-    plugin: pl-dy_regiflow v1.0.4
+    plugin: pl-dy_regiflow v1.0.5
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
