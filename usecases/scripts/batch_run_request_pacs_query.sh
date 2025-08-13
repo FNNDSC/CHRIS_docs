@@ -19,7 +19,7 @@ run_command() {
    --username chris \
    --password chris1234 \
    --title "$title" \
-   --query  "{\"PatientID\" : \"5572297\"}" \
+   --query  "{\"PatientID\" : \"<MRN>\"}" \
    --base-url http://localhost:8000 \
    --pacs-name MINICHRISORTHANC 2>&1)
    

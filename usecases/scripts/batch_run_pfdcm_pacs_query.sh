@@ -14,7 +14,7 @@ times=()
 run_command() {
   start_time=$(date +%s.%N)
 
-  output=$(python pfdcm_query.py --pacs_name MINICHRISORTHANC --query "{\"PatientID\" : \"5572297\"}" --base-url http://localhost:4005/api/v1 2>&1)
+  output=$(python pfdcm_query.py --pacs_name MINICHRISORTHANC --query "{\"PatientID\" : \"<MRN>\"}" --base-url http://localhost:4005/api/v1 2>&1)
 
   end_time=$(date +%s.%N)
   duration=$(echo "$end_time - $start_time" | bc)
