@@ -19,14 +19,14 @@ The objective of this experiment was to compare the **performance and reliabilit
 
 ## Results Summary (Side-by-Side Comparison)
 
-| Metric                     | **PFDCM API**     | **CUBE API (requests)** | **CUBE API (chrisclient)** |
-|----------------------------|-------------------|--------------------------|-----------------------------|
-| Total Requests             | 100               | 100                      | 100                         |
-| Successes                  | 100               | 100                      | 100                         |
-| Errors                     | 0                 | 0                        | 0                           |
-| Total Time (seconds)       | 31.5213           | 177.654                  | 280.18                      |
-| Mean Time per Request (s)  | 0.315213          | 1.77654                  | 2.8018                      |
-| Standard Deviation (s)     | 0.0194088         | 0.111805                 | 0.132822                    | 
+| Metric                     | **PFDCM API** | **CUBE API (requests)** | **CUBE API (chrisclient)** |
+|----------------------------|---------------|---------------------|----------------------------|
+| Total Requests             | 100           | 100                 | 100                        |
+| Successes                  | 100           | 100                 | 100                        |
+| Errors                     | 0             | 0                   | 0                          |
+| Total Time (seconds)       | 31.52         | 177.65              | 280.18                     |
+| Mean Time per Request (s)  | 0.32          | 1.78                | 2.80                       |
+| Standard Deviation (s)     | 0.02          | 0.11                | 0.13                       | 
 
 ---
 
