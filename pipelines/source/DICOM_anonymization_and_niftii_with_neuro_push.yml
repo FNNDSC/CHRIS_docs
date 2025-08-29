@@ -17,6 +17,7 @@ plugin_tree:
     previous: root-group-copy
     plugin_parameter_defaults:
       path: ""
+      sleepLength: 50
   - title: dicom-anonymized
     plugin: pl-pfdicom_tagSub v3.3.4
     previous: root-group-copy
@@ -37,6 +38,7 @@ plugin_tree:
     previous: flatten-anon-dicoms
     plugin_parameter_defaults:
       path: ""
+      sleepLength: 50
   - title: dicom-to-nifti
     plugin: pl-dcm2niix v1.0.2
     previous: root-group-copy

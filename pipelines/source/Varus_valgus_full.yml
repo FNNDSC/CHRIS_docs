@@ -67,13 +67,13 @@ plugin_tree:
   # Working off that join we now measure lengths and generate a
   # report (burned directly into the image, and also saved as a json)
   - title: measure-leg-segments-6
-    plugin: pl-landmarkimg v1.0.5
+    plugin: pl-landmarkimg v1.0.6
     previous: heatmaps-join-json-5
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
       pointMarker: "."
       pointSize: 10
-      pointColor: yellow
+      pointColor: red
       lineWidth: 10
       lineColor: yellow
       addText: "Not for diagnostic use"
