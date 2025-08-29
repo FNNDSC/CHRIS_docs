@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <dev@babymri.org>
-name: "Varus Valgus Full Workflow v20250710"
+name: "Varus Valgus Full Workflow v20250829"
 description: "Perform the full Varus/Valgus workflow, including joins"
 category: Imaging
 locked: false
