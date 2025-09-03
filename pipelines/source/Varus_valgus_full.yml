@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <dev@babymri.org>
-name: "Varus Valgus Full Workflow v20250829"
+name: "Varus Valgus Full Workflow v20250903"
 description: "Perform the full Varus/Valgus workflow, including joins"
 category: Imaging
 locked: false
@@ -74,7 +74,7 @@ plugin_tree:
       pointMarker: "."
       pointSize: 10
       pointColor: red
-      lineWidth: 10
+      lineWidth: 2
       lineColor: yellow
       addText: "Not for diagnostic use"
       addTextSize: 1.5
