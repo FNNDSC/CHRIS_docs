@@ -6,7 +6,7 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: QA-Check
-    plugin: pl-lld_chxr v1.1.5
+    plugin: pl-lld_chxr v1.1.7
     previous: ~
     plugin_parameter_defaults:
       fileFilter: 'analysis.json'
@@ -17,6 +17,10 @@ plugin_tree:
       limbDifference: 15
       femurDifference: 50
       tibiaDifference: 50
+      addText: "AI annotation failed"
+      addTextSize: 2
+      addTextColor: cyan
+      addTextPos: top
   - title: image-to-DICOM 
     plugin: pl-dicommake v2.4.4
     previous: QA-Check
