@@ -22,7 +22,7 @@ plugin_tree:
       addTextColor: cyan
       addTextPos: top
   - title: image-to-DICOM 
-    plugin: pl-dicommake v2.4.4
+    plugin: pl-dicommake v2.4.5
     previous: QA-Check
     plugin_parameter_defaults:
       outputSubDir: "data"
