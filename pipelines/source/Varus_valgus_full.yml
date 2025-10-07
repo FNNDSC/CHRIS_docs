@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <dev@babymri.org>
-name: "Varus Valgus Full Workflow v20251003"
+name: "Varus Valgus Full Workflow v20251007"
 description: "Perform the full Varus/Valgus workflow, including joins"
 category: Imaging
 locked: false
@@ -67,7 +67,7 @@ plugin_tree:
   # Working off that join we now measure lengths and generate a
   # report (burned directly into the image, and also saved as a json)
   - title: measure-leg-segments-6
-    plugin: pl-landmarkimg v1.0.7
+    plugin: pl-landmarkimg v1.0.8
     previous: heatmaps-join-json-5
     plugin_parameter_defaults:
       inputImageName: "input.jpg"
@@ -100,7 +100,6 @@ plugin_tree:
     plugin_parameter_defaults:
       filterIMG: "**/*.jpg"
       outputSubDir: data
-      thread: true
       compress: true
       appendToSeriesDescription: 'AI annotated image'
 
