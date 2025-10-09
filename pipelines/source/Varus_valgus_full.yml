@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <dev@babymri.org>
-name: "Varus Valgus Full Workflow v20251007"
+name: "Varus Valgus Full Workflow v20251009"
 description: "Perform the full Varus/Valgus workflow, including joins"
 category: Imaging
 locked: false
@@ -95,7 +95,7 @@ plugin_tree:
   # With the join containing all the necessary information, we can now
   # generate new DICOMs
   - title: image-to-DICOM-8
-    plugin: pl-dicommake v2.4.5
+    plugin: pl-dicommake v2.4.6
     previous: measurement-join-dicom-7
     plugin_parameter_defaults:
       filterIMG: "**/*.jpg"
