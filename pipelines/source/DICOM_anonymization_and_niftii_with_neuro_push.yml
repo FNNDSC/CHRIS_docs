@@ -39,9 +39,17 @@ plugin_tree:
     plugin_parameter_defaults:
       path: ""
       sleepLength: 50
+  - title: decompress-dicoms
+    plugin: pl-shexec v1.2.18
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      maxDepth: 2
+      verbosity: 1
+      fileFilter: dcm
+      exec: "dcmdjpeg %inputWorkingDir/%inputWorkingFile %outputWorkingDir/%inputWorkingFile"
   - title: dicom-to-nifti
     plugin: pl-dcm2niix v1.0.2
-    previous: root-group-copy
+    previous: decompress-dicoms
     plugin_parameter_defaults:
       f: "%3s_%d_%c"
       z: y
