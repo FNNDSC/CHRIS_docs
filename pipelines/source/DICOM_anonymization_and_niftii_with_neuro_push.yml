@@ -13,11 +13,12 @@ plugin_tree:
       expression: .*-(.*?-.*)/(.*)
       replacement: $1/$2
   - title: send-dicoms-to-neuro-FS
-    plugin: pl-neurofiles-push v0.2.1
+    plugin: pl-neurofiles-push v0.3.0
     previous: root-group-copy
     plugin_parameter_defaults:
       path: ""
       sleepLength: 50
+      ignore_existing: true
   - title: dicom-anonymized
     plugin: pl-pfdicom_tagSub v3.3.4
     previous: root-group-copy
@@ -34,11 +35,12 @@ plugin_tree:
       expression: .*/(.*/.*)
       replacement: $1
   - title: send-anon-dicoms-to-neuro-FS
-    plugin: pl-neurofiles-push v0.2.1
+    plugin: pl-neurofiles-push v0.3.0
     previous: flatten-anon-dicoms
     plugin_parameter_defaults:
       path: ""
       sleepLength: 50
+      ignore_existing: true
   - title: decompress-dicoms
     plugin: pl-shexec v1.2.18
     previous: root-group-copy
@@ -55,8 +57,9 @@ plugin_tree:
       z: y
       m: 0
   - title: send-niftii-to-neuro-FS
-    plugin: pl-neurofiles-push v0.2.1
+    plugin: pl-neurofiles-push v0.3.0
     previous: dicom-to-nifti
     plugin_parameter_defaults:
       path: ""
+      ignore_existing: true
 
