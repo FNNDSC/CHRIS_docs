@@ -6,39 +6,26 @@ category: Medical Imaging
 locked: false
 plugin_tree:
   - title: dicom-filter
-    plugin: pl-dicom_filter v1.2.5
+    plugin: pl-dicom_filter v1.2.7
     previous: ~
     plugin_parameter_defaults:
-      dicomFilter: '{"SOPClassUID": "Secondary Capture Image Storage"}'
-      exclude: True
-  - title: dicom-anonymization
+      dicomFilter: 'Modality=MR/CT/XA,SOPClassUID!="Secondary Capture Image Storage"'
+      minImgCount: 20
+  - title: preserved-dicom-anonymization
     plugin: pl-pfdicom_tagSub v3.3.4
     previous: dicom-filter
     plugin_parameter_defaults:
       fileFilter: ".dcm"
-      tagStruct: '{"AccessionNumber": "%_md5|8_AccessionNumber", "PatientID": "%_md5|7_PatientID", "PatientName": "%_name|patientID_PatientName"}'
-  - title: anonymized-additional-tags
-    plugin: pl-pfdicom_tagSub v3.3.4
-    previous: dicom-anonymization
+      tagStruct: ''
+  - title: full-dicom-anonymization
+    plugin: pl-dicomize v1.0.5
+    previous: preserved-dicom-anonymization
     plugin_parameter_defaults:
-      fileFilter: "dcm"
-      tagInfo: "re:.*stitution =  #tag,
-                re:.*ddress  =  #tag,
-                re:.*ime   =  000000,
-                StudyDate  =  19010101,
-                ContentDate = 19010101,
-                SeriesDate = 19010101,
-                StudyID = %_md5|6_StudyID,
-                AcquisitionDate = 19010101,
-                ReferringPhysicianName = #tag,
-                RequestingPhysician = #tag,
-                PerformingPhysicianName = #tag,
-                PhysiciansOfRecord = #tag"
-      splitKeyValue: "="
-      splitToken: ","
+      pattern: "dcm"
+      createFrom: "dicom"
   - title: push-to-orthanc
     plugin: pl-orthanc_push v1.3.2
-    previous: anonymized-additional-tags
+    previous: full-dicom-anonymization
     plugin_parameter_defaults:
       inputFileFilter: "**/*dcm"
       orthancUrl: ""
