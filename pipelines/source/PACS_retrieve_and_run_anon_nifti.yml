@@ -31,4 +31,4 @@ plugin_tree:
       PACSurl: "http://localhost:4005/api/v1/"
       neuroLocation: ""
       folderName: ""
-      maxPoll: 5
+      maxPoll: 20
