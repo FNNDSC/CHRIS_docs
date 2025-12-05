@@ -1,0 +1,1186 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "All plugins as of 20251205_142435"
+description: An exhaustive list of all the available DS/TS-type plugins obtained from https://cube.chrisproject.org/api/v1/plugins/?limit=2000
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: root
+    plugin: pl-superlink v0.0.9
+    previous: ~
+  - title: plugin-1
+    plugin: pl-superlink v0.0.8
+    previous: root
+  - title: plugin-2
+    plugin: pl-superlink v0.0.6
+    previous: plugin-1
+  - title: plugin-3
+    plugin: pl-superlink v0.0.5
+    previous: plugin-2
+  - title: plugin-4
+    plugin: pl-superlink v0.0.4
+    previous: plugin-3
+  - title: plugin-5
+    plugin: pl-superlink v0.0.3
+    previous: plugin-4
+  - title: plugin-6
+    plugin: pl-superlink v0.0.2
+    previous: plugin-5
+  - title: plugin-7
+    plugin: pl-superlink v0.0.1
+    previous: plugin-6
+  - title: plugin-8
+    plugin: pl-supernode v0.0.9
+    previous: plugin-7
+  - title: plugin-9
+    plugin: pl-supernode v0.0.6
+    previous: plugin-8
+  - title: plugin-10
+    plugin: pl-supernode v0.0.5
+    previous: plugin-9
+  - title: plugin-11
+    plugin: pl-supernode v0.0.4
+    previous: plugin-10
+  - title: plugin-12
+    plugin: pl-supernode v0.0.2
+    previous: plugin-11
+  - title: plugin-13
+    plugin: pl-supernode v0.0.1
+    previous: plugin-12
+  - title: plugin-14
+    plugin: pl-publish-test v1.0.5
+    previous: plugin-13
+  - title: plugin-15
+    plugin: pl-publish-test v1.0.4
+    previous: plugin-14
+  - title: plugin-16
+    plugin: pl-publish-test v1.0.3
+    previous: plugin-15
+  - title: plugin-17
+    plugin: pl-publish-test v1.0.0
+    previous: plugin-16
+  - title: plugin-18
+    plugin: pl-dicomize v1.0.6
+    previous: plugin-17
+  - title: plugin-19
+    plugin: pl-dicomize v1.0.5
+    previous: plugin-18
+  - title: plugin-20
+    plugin: pl-dicomize v1.0.4
+    previous: plugin-19
+  - title: plugin-21
+    plugin: pl-dicomize v1.0.3
+    previous: plugin-20
+  - title: plugin-22
+    plugin: pl-dicomize v1.0.2
+    previous: plugin-21
+  - title: plugin-23
+    plugin: pl-dicomize v1.0.1
+    previous: plugin-22
+  - title: plugin-24
+    plugin: pl-dicomize v1.0.0
+    previous: plugin-23
+  - title: plugin-25
+    plugin: pl-errorgenerator v1.0.2
+    previous: plugin-24
+  - title: plugin-26
+    plugin: pl-errorgenerator v1.0.1
+    previous: plugin-25
+  - title: plugin-27
+    plugin: pl-sanitize-filename v0.1.4
+    previous: plugin-26
+  - title: plugin-28
+    plugin: pl-sanitize-filename v0.1.3
+    previous: plugin-27
+  - title: plugin-29
+    plugin: pl-sanitize-filename v0.1.2
+    previous: plugin-28
+  - title: plugin-30
+    plugin: pl-sanitize-filename v0.1.0
+    previous: plugin-29
+  - title: plugin-31
+    plugin: pl-phi_detector v1.0.4
+    previous: plugin-30
+  - title: plugin-32
+    plugin: pl-phi_detector v1.0.3
+    previous: plugin-31
+  - title: plugin-33
+    plugin: pl-phi_detector v1.0.2
+    previous: plugin-32
+  - title: plugin-34
+    plugin: pl-phi_detector v1.0.1
+    previous: plugin-33
+  - title: plugin-35
+    plugin: pl-landmarkimg v1.0.8
+    previous: plugin-34
+  - title: plugin-36
+    plugin: pl-landmarkimg v1.0.7
+    previous: plugin-35
+  - title: plugin-37
+    plugin: pl-landmarkimg v1.0.6
+    previous: plugin-36
+  - title: plugin-38
+    plugin: pl-landmarkimg v1.0.5
+    previous: plugin-37
+  - title: plugin-39
+    plugin: pl-landmarkimg v1.0.4
+    previous: plugin-38
+  - title: plugin-40
+    plugin: pl-landmarkimg v1.0.3
+    previous: plugin-39
+  - title: plugin-41
+    plugin: pl-landmarkimg v1.0.2
+    previous: plugin-40
+  - title: plugin-42
+    plugin: pl-landmarkimg v1.0.1
+    previous: plugin-41
+  - title: plugin-43
+    plugin: pl-download-bulk v1.0.0
+    previous: plugin-42
+  - title: plugin-44
+    plugin: pl-dypxflow v1.1.0
+    previous: plugin-43
+  - title: plugin-45
+    plugin: pl-dypxflow v1.0.9
+    previous: plugin-44
+  - title: plugin-46
+    plugin: pl-dypxflow v1.0.8
+    previous: plugin-45
+  - title: plugin-47
+    plugin: pl-dypxflow v1.0.7
+    previous: plugin-46
+  - title: plugin-48
+    plugin: pl-dypxflow v1.0.6
+    previous: plugin-47
+  - title: plugin-49
+    plugin: pl-dypxflow v1.0.5
+    previous: plugin-48
+  - title: plugin-50
+    plugin: pl-dypxflow v1.0.4
+    previous: plugin-49
+  - title: plugin-51
+    plugin: pl-dypxflow v1.0.3
+    previous: plugin-50
+  - title: plugin-52
+    plugin: pl-dypxflow v1.0.2
+    previous: plugin-51
+  - title: plugin-53
+    plugin: pl-dypxflow v1.0.1
+    previous: plugin-52
+  - title: plugin-54
+    plugin: pl-dypxflow v1.0.0
+    previous: plugin-53
+  - title: plugin-55
+    plugin: pl-dy_regiflow v1.1.1
+    previous: plugin-54
+  - title: plugin-56
+    plugin: pl-dy_regiflow v1.1.0
+    previous: plugin-55
+  - title: plugin-57
+    plugin: pl-dy_regiflow v1.0.9
+    previous: plugin-56
+  - title: plugin-58
+    plugin: pl-dy_regiflow v1.0.8
+    previous: plugin-57
+  - title: plugin-59
+    plugin: pl-dy_regiflow v1.0.7
+    previous: plugin-58
+  - title: plugin-60
+    plugin: pl-dy_regiflow v1.0.6
+    previous: plugin-59
+  - title: plugin-61
+    plugin: pl-dy_regiflow v1.0.5
+    previous: plugin-60
+  - title: plugin-62
+    plugin: pl-dy_regiflow v1.0.4
+    previous: plugin-61
+  - title: plugin-63
+    plugin: pl-dy_regiflow v1.0.3
+    previous: plugin-62
+  - title: plugin-64
+    plugin: pl-dy_regiflow v1.0.2
+    previous: plugin-63
+  - title: plugin-65
+    plugin: pl-dy_regiflow v1.0.1
+    previous: plugin-64
+  - title: plugin-66
+    plugin: pl-dy_regiflow v1.0.0
+    previous: plugin-65
+  - title: plugin-67
+    plugin: pl-reg_chxr v1.1.7
+    previous: plugin-66
+  - title: plugin-68
+    plugin: pl-reg_chxr v1.1.6
+    previous: plugin-67
+  - title: plugin-69
+    plugin: pl-reg_chxr v1.1.5
+    previous: plugin-68
+  - title: plugin-70
+    plugin: pl-reg_chxr v1.1.4
+    previous: plugin-69
+  - title: plugin-71
+    plugin: pl-reg_chxr v1.1.3
+    previous: plugin-70
+  - title: plugin-72
+    plugin: pl-reg_chxr v1.1.1
+    previous: plugin-71
+  - title: plugin-73
+    plugin: pl-reg_chxr v1.0.9
+    previous: plugin-72
+  - title: plugin-74
+    plugin: pl-reg_chxr v1.0.8
+    previous: plugin-73
+  - title: plugin-75
+    plugin: pl-reg_chxr v1.0.7
+    previous: plugin-74
+  - title: plugin-76
+    plugin: pl-reg_chxr v1.0.6
+    previous: plugin-75
+  - title: plugin-77
+    plugin: pl-reg_chxr v1.0.5
+    previous: plugin-76
+  - title: plugin-78
+    plugin: pl-reg_chxr v1.0.4
+    previous: plugin-77
+  - title: plugin-79
+    plugin: pl-reg_chxr v1.0.3
+    previous: plugin-78
+  - title: plugin-80
+    plugin: pl-reg_chxr v1.0.2
+    previous: plugin-79
+  - title: plugin-81
+    plugin: pl-reg_chxr v1.0.1
+    previous: plugin-80
+  - title: plugin-82
+    plugin: pl-pacs_retrieve v1.0.5
+    previous: plugin-81
+  - title: plugin-83
+    plugin: pl-pacs_retrieve v1.0.4
+    previous: plugin-82
+  - title: plugin-84
+    plugin: pl-pacs_retrieve v1.0.3
+    previous: plugin-83
+  - title: plugin-85
+    plugin: pl-pacs_retrieve v1.0.2
+    previous: plugin-84
+  - title: plugin-86
+    plugin: pl-pacs_retrieve v1.0.1
+    previous: plugin-85
+  - title: plugin-87
+    plugin: pl-pacs_query v1.0.6
+    previous: plugin-86
+  - title: plugin-88
+    plugin: pl-pacs_query v1.0.5
+    previous: plugin-87
+  - title: plugin-89
+    plugin: pl-pacs_query v1.0.4
+    previous: plugin-88
+  - title: plugin-90
+    plugin: pl-pacs_query v1.0.3
+    previous: plugin-89
+  - title: plugin-91
+    plugin: pl-pacs_query v1.0.2
+    previous: plugin-90
+  - title: plugin-92
+    plugin: pl-pacs_query v1.0.1
+    previous: plugin-91
+  - title: plugin-93
+    plugin: pl-dyanon v1.1.5
+    previous: plugin-92
+  - title: plugin-94
+    plugin: pl-dyanon v1.1.4
+    previous: plugin-93
+  - title: plugin-95
+    plugin: pl-dyanon v1.1.2
+    previous: plugin-94
+  - title: plugin-96
+    plugin: pl-dyanon v1.1.1
+    previous: plugin-95
+  - title: plugin-97
+    plugin: pl-dyanon v1.1.0
+    previous: plugin-96
+  - title: plugin-98
+    plugin: pl-dyanon v1.0.9
+    previous: plugin-97
+  - title: plugin-99
+    plugin: pl-dyanon v1.0.8
+    previous: plugin-98
+  - title: plugin-100
+    plugin: pl-dyanon v1.0.7
+    previous: plugin-99
+  - title: plugin-101
+    plugin: pl-dyanon v1.0.6
+    previous: plugin-100
+  - title: plugin-102
+    plugin: pl-dyanon v1.0.3
+    previous: plugin-101
+  - title: plugin-103
+    plugin: pl-dyanon v1.0.2
+    previous: plugin-102
+  - title: plugin-104
+    plugin: pl-dyanon v1.0.1
+    previous: plugin-103
+  - title: plugin-105
+    plugin: pl-NeSVoR_pp v1.0.0
+    previous: plugin-104
+  - title: plugin-106
+    plugin: pl-uae_gen v1.0.3
+    previous: plugin-105
+  - title: plugin-107
+    plugin: pl-uae_gen v1.0.2
+    previous: plugin-106
+  - title: plugin-108
+    plugin: pl-uae_gen v1.0.0
+    previous: plugin-107
+  - title: plugin-109
+    plugin: pl-dicom_info v1.0.29
+    previous: plugin-108
+  - title: plugin-110
+    plugin: pl-image_textremove v1.2.6
+    previous: plugin-109
+  - title: plugin-111
+    plugin: pl-image_textremove v1.2.5
+    previous: plugin-110
+  - title: plugin-112
+    plugin: pl-image_textremove v1.2.4
+    previous: plugin-111
+  - title: plugin-113
+    plugin: pl-image_textremove v1.2.3
+    previous: plugin-112
+  - title: plugin-114
+    plugin: pl-dicom_filter v1.2.7
+    previous: plugin-113
+  - title: plugin-115
+    plugin: pl-dicom_filter v1.2.6
+    previous: plugin-114
+  - title: plugin-116
+    plugin: pl-dicom_filter v1.2.5
+    previous: plugin-115
+  - title: plugin-117
+    plugin: pl-dicom_filter v1.2.4
+    previous: plugin-116
+  - title: plugin-118
+    plugin: pl-dicom_filter v1.2.2
+    previous: plugin-117
+  - title: plugin-119
+    plugin: pl-dicom_repack v1.2.6
+    previous: plugin-118
+  - title: plugin-120
+    plugin: pl-dicom_repack v1.2.5
+    previous: plugin-119
+  - title: plugin-121
+    plugin: pl-dicom_repack v1.2.4
+    previous: plugin-120
+  - title: plugin-122
+    plugin: pl-pfdicom_tagextract v3.2.2
+    previous: plugin-121
+  - title: plugin-123
+    plugin: pl-coneme v1.0.0
+    previous: plugin-122
+  - title: plugin-124
+    plugin: bulkprocess v1.0.0
+    previous: plugin-123
+  - title: plugin-125
+    plugin: pl-images-register v1.0.1
+    previous: plugin-124
+  - title: plugin-126
+    plugin: pl-lld_chxr v1.1.9
+    previous: plugin-125
+  - title: plugin-127
+    plugin: pl-lld_chxr v1.1.8
+    previous: plugin-126
+  - title: plugin-128
+    plugin: pl-lld_chxr v1.1.7
+    previous: plugin-127
+  - title: plugin-129
+    plugin: pl-lld_chxr v1.1.6
+    previous: plugin-128
+  - title: plugin-130
+    plugin: pl-lld_chxr v1.1.5
+    previous: plugin-129
+  - title: plugin-131
+    plugin: pl-lld_chxr v1.1.4
+    previous: plugin-130
+  - title: plugin-132
+    plugin: pl-lld_chxr v1.1.3
+    previous: plugin-131
+  - title: plugin-133
+    plugin: pl-lld_chxr v1.0.1
+    previous: plugin-132
+  - title: plugin-134
+    plugin: pl-lld_chxr v1.0.0
+    previous: plugin-133
+  - title: plugin-135
+    plugin: pl-monai_spleenseg v1.2.52
+    previous: plugin-134
+  - title: plugin-136
+    plugin: pl-monai_spleenseg v1.2.50
+    previous: plugin-135
+  - title: plugin-137
+    plugin: pl-monai_spleenseg v1.2.48
+    previous: plugin-136
+  - title: plugin-138
+    plugin: pl-monai_spleenseg v1.2.46
+    previous: plugin-137
+  - title: plugin-139
+    plugin: pl-monai_spleenseg v1.2.44
+    previous: plugin-138
+  - title: plugin-140
+    plugin: pl-monai_spleenseg v1.2.42
+    previous: plugin-139
+  - title: plugin-141
+    plugin: pl-monai_spleenseg v1.2.40
+    previous: plugin-140
+  - title: plugin-142
+    plugin: pl-monai_spleenseg v1.2.38
+    previous: plugin-141
+  - title: plugin-143
+    plugin: pl-monai_spleenseg v1.2.36
+    previous: plugin-142
+  - title: plugin-144
+    plugin: pl-monai_spleenseg v1.2.34
+    previous: plugin-143
+  - title: plugin-145
+    plugin: pl-monai_spleenseg v1.2.30
+    previous: plugin-144
+  - title: plugin-146
+    plugin: pl-spleendatads v2.0.6
+    previous: plugin-145
+  - title: plugin-147
+    plugin: pl-spleendatads v2.0.2
+    previous: plugin-146
+  - title: plugin-148
+    plugin: pl-spleendatads v2.0.0
+    previous: plugin-147
+  - title: plugin-149
+    plugin: pl-spleendatads v1.0.8
+    previous: plugin-148
+  - title: plugin-150
+    plugin: pl-spleendatads v1.0.6
+    previous: plugin-149
+  - title: plugin-151
+    plugin: pl-spleendatads v1.0.4
+    previous: plugin-150
+  - title: plugin-152
+    plugin: pl-med2img v1.1.0.1
+    previous: plugin-151
+  - title: plugin-153
+    plugin: pl-med2img v1.1.12
+    previous: plugin-152
+  - title: plugin-154
+    plugin: pl-med2img v1.1.2
+    previous: plugin-153
+  - title: plugin-155
+    plugin: pl-covidnet v0.2.3
+    previous: plugin-154
+  - title: plugin-156
+    plugin: pl-covidnet v0.3.0
+    previous: plugin-155
+  - title: plugin-157
+    plugin: pl-covidnet v0.2.4
+    previous: plugin-156
+  - title: plugin-158
+    plugin: pl-CT-covidnet v0.2.0
+    previous: plugin-157
+  - title: plugin-159
+    plugin: pl-fetal-brain-mask v1.2.1
+    previous: plugin-158
+  - title: plugin-160
+    plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.1
+    previous: plugin-159
+  - title: plugin-161
+    plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.2
+    previous: plugin-160
+  - title: plugin-162
+    plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.3
+    previous: plugin-161
+  - title: plugin-163
+    plugin: pl-ANTs_N4BiasFieldCorrection v0.2.7.4
+    previous: plugin-162
+  - title: plugin-164
+    plugin: pl-irtk-reconstruction v1.0.3
+    previous: plugin-163
+  - title: plugin-165
+    plugin: pl-irtk-reconstruction v1.1.0
+    previous: plugin-164
+  - title: plugin-166
+    plugin: pl-fetal-brain-assessment v1.3.1
+    previous: plugin-165
+  - title: plugin-167
+    plugin: pl-fetal-brain-assessment v1.3.0
+    previous: plugin-166
+  - title: plugin-168
+    plugin: pl-covidnet-pdfgeneration v0.2.0
+    previous: plugin-167
+  - title: plugin-169
+    plugin: pl-covidnet-pdfgeneration v0.3.0
+    previous: plugin-168
+  - title: plugin-170
+    plugin: pl-covidnet-pdfgeneration v0.2.1
+    previous: plugin-169
+  - title: plugin-171
+    plugin: pl-mpcs v1.0.10
+    previous: plugin-170
+  - title: plugin-172
+    plugin: pl-z2labelmap v2.4.3
+    previous: plugin-171
+  - title: plugin-173
+    plugin: pl-fshack-infant v1.0.2
+    previous: plugin-172
+  - title: plugin-174
+    plugin: pl-mgz2imageslices v2.0.10
+    previous: plugin-173
+  - title: plugin-175
+    plugin: pl-heatmap v2.0.6
+    previous: plugin-174
+  - title: plugin-176
+    plugin: pl-mgz2LUT_report v1.0.2
+    previous: plugin-175
+  - title: plugin-177
+    plugin: pl-mgz2LUT_report v1.1.1
+    previous: plugin-176
+  - title: plugin-178
+    plugin: pl-mgz2LUT_report v1.1.2
+    previous: plugin-177
+  - title: plugin-179
+    plugin: pl-mgz2LUT_report v1.2.0
+    previous: plugin-178
+  - title: plugin-180
+    plugin: pl-mgz2LUT_report v1.2.2
+    previous: plugin-179
+  - title: plugin-181
+    plugin: pl-mgz2LUT_report v1.2.3
+    previous: plugin-180
+  - title: plugin-182
+    plugin: pl-mgz2LUT_report v1.2.4
+    previous: plugin-181
+  - title: plugin-183
+    plugin: pl-mgz2LUT_report v1.2.5
+    previous: plugin-182
+  - title: plugin-184
+    plugin: pl-mgz2LUT_report v1.3.0
+    previous: plugin-183
+  - title: plugin-185
+    plugin: pl-mgz2LUT_report v1.3.1
+    previous: plugin-184
+  - title: plugin-186
+    plugin: pl-infantfs v7.1.1.1
+    previous: plugin-185
+  - title: plugin-187
+    plugin: pl-fshack_ghcr v1.2.0
+    previous: plugin-186
+  - title: plugin-188
+    plugin: pl-pfdicom_tagsub_ghcr v3.2.0
+    previous: plugin-187
+  - title: plugin-189
+    plugin: pl-dsdircopy v1.0.2
+    previous: plugin-188
+  - title: plugin-190
+    plugin: pl-dsdircopy v1.0.1
+    previous: plugin-189
+  - title: plugin-191
+    plugin: pl-mri-preview v1.2.0
+    previous: plugin-190
+  - title: plugin-192
+    plugin: pl-unirep_analysis:cpu v0.1.7
+    previous: plugin-191
+  - title: plugin-193
+    plugin: pl-unirep_analysis v0.3.0
+    previous: plugin-192
+  - title: plugin-194
+    plugin: pl-fpmmid v1.0.4
+    previous: plugin-193
+  - title: plugin-195
+    plugin: pl-fpmmid v1.0.7
+    previous: plugin-194
+  - title: plugin-196
+    plugin: pl-fpmmid v1.0.8
+    previous: plugin-195
+  - title: plugin-197
+    plugin: pl-fpmmid v1.0.9
+    previous: plugin-196
+  - title: plugin-198
+    plugin: pl-fpmmid v1.1.0
+    previous: plugin-197
+  - title: plugin-199
+    plugin: pl-fpmmid v1.1.4
+    previous: plugin-198
+  - title: plugin-200
+    plugin: pl-fpmmid v1.1.5
+    previous: plugin-199
+  - title: plugin-201
+    plugin: pl-fpmmid v1.1.6
+    previous: plugin-200
+  - title: plugin-202
+    plugin: pl-fpmmid v1.1.7
+    previous: plugin-201
+  - title: plugin-203
+    plugin: pl-fpmmid v1.1.8
+    previous: plugin-202
+  - title: plugin-204
+    plugin: pl-fpmmid v1.1.9
+    previous: plugin-203
+  - title: plugin-205
+    plugin: pl-covidnet-meta v1.0.8
+    previous: plugin-204
+  - title: plugin-206
+    plugin: pl-covidnet-meta v1.0.10
+    previous: plugin-205
+  - title: plugin-207
+    plugin: pl-sys_info v0.2.2
+    previous: plugin-206
+  - title: plugin-208
+    plugin: pl-nii2mnc-u8 v1.0.1
+    previous: plugin-207
+  - title: plugin-209
+    plugin: ep-subdivide-mnc-methods v1.1.1
+    previous: plugin-208
+  - title: plugin-210
+    plugin: pl-pyvista-volume v1.0.0
+    previous: plugin-209
+  - title: plugin-211
+    plugin: pl-nii2mnc v1.0.0
+    previous: plugin-210
+  - title: plugin-212
+    plugin: pl-nii2mnc v1.1.0
+    previous: plugin-211
+  - title: plugin-213
+    plugin: pl-unstack-folders v1.0.0
+    previous: plugin-212
+  - title: plugin-214
+    plugin: pl-img2dcm v1.0.10
+    previous: plugin-213
+  - title: plugin-215
+    plugin: pl-img2dcm v1.0.12
+    previous: plugin-214
+  - title: plugin-216
+    plugin: pl-img2dcm v1.2.0
+    previous: plugin-215
+  - title: plugin-217
+    plugin: pl-img2dcm v1.2.2
+    previous: plugin-216
+  - title: plugin-218
+    plugin: pl-dicom_headeredit v1.1.8
+    previous: plugin-217
+  - title: plugin-219
+    plugin: pl-dicom_headeredit v1.1.1
+    previous: plugin-218
+  - title: plugin-220
+    plugin: pl-dicom_headeredit v1.0.8
+    previous: plugin-219
+  - title: plugin-221
+    plugin: pl-abs v1.0.0
+    previous: plugin-220
+  - title: plugin-222
+    plugin: pl-abs v1.0.1
+    previous: plugin-221
+  - title: plugin-223
+    plugin: pl-nums2mask v2.0.0
+    previous: plugin-222
+  - title: plugin-224
+    plugin: pl-nums2mask v2.0.1
+    previous: plugin-223
+  - title: plugin-225
+    plugin: pl-re-sub v1.1.1
+    previous: plugin-224
+  - title: plugin-226
+    plugin: pl-s3push v0.1.2
+    previous: plugin-225
+  - title: plugin-227
+    plugin: pl-pfdo_mgz2img v1.0.3
+    previous: plugin-226
+  - title: plugin-228
+    plugin: pl-dicom_unpack v1.3.3
+    previous: plugin-227
+  - title: plugin-229
+    plugin: pl-dicom_unpack v1.3.2
+    previous: plugin-228
+  - title: plugin-230
+    plugin: pl-dicom_unpack v0.2.0
+    previous: plugin-229
+  - title: plugin-231
+    plugin: pl-surfigures v1.2.0
+    previous: plugin-230
+  - title: plugin-232
+    plugin: pl-fetal-surface-extract v2.0.2
+    previous: plugin-231
+  - title: plugin-233
+    plugin: pl-fetal-surface-extract v2.1.0
+    previous: plugin-232
+  - title: plugin-234
+    plugin: pl-fetal-surface-extract v2.1.1
+    previous: plugin-233
+  - title: plugin-235
+    plugin: pl-civet v2.1.1.3
+    previous: plugin-234
+  - title: plugin-236
+    plugin: pl-gifit v0.1.0
+    previous: plugin-235
+  - title: plugin-237
+    plugin: pl-gifit v0.2.0
+    previous: plugin-236
+  - title: plugin-238
+    plugin: pl-gifit v0.2.1
+    previous: plugin-237
+  - title: plugin-239
+    plugin: pl-gifit v0.3.0
+    previous: plugin-238
+  - title: plugin-240
+    plugin: pl-mni2common v1.0.0
+    previous: plugin-239
+  - title: plugin-241
+    plugin: pl-mni2common v1.1.0
+    previous: plugin-240
+  - title: plugin-242
+    plugin: pl-zerobg v1.0.0
+    previous: plugin-241
+  - title: plugin-243
+    plugin: pl-n4biasfieldcorrection v2.5.3.0
+    previous: plugin-242
+  - title: plugin-244
+    plugin: pl-n4biasfieldcorrection v2.5.0.2
+    previous: plugin-243
+  - title: plugin-245
+    plugin: pl-n4biasfieldcorrection v2.5.0.1
+    previous: plugin-244
+  - title: plugin-246
+    plugin: pl-mail v0.0.2
+    previous: plugin-245
+  - title: plugin-247
+    plugin: pl-visual-dataset v0.3.1
+    previous: plugin-246
+  - title: plugin-248
+    plugin: pl-visual-dataset v0.3.0
+    previous: plugin-247
+  - title: plugin-249
+    plugin: pl-visual-dataset v0.2.3
+    previous: plugin-248
+  - title: plugin-250
+    plugin: pl-visual-dataset v0.2.2
+    previous: plugin-249
+  - title: plugin-251
+    plugin: pl-visual-dataset v0.2.1
+    previous: plugin-250
+  - title: plugin-252
+    plugin: pl-visual-dataset v0.2.0
+    previous: plugin-251
+  - title: plugin-253
+    plugin: pl-visual-dataset v0.0.1
+    previous: plugin-252
+  - title: plugin-254
+    plugin: pl-visual-dataset v0.0.2
+    previous: plugin-253
+  - title: plugin-255
+    plugin: pl-visual-dataset v0.0.4
+    previous: plugin-254
+  - title: plugin-256
+    plugin: pl-visual-dataset v0.0.5
+    previous: plugin-255
+  - title: plugin-257
+    plugin: pl-visual-dataset v0.1.0
+    previous: plugin-256
+  - title: plugin-258
+    plugin: pl-malpem v1.3.0
+    previous: plugin-257
+  - title: plugin-259
+    plugin: pl-pfdicom_tagsub v3.2.4
+    previous: plugin-258
+  - title: plugin-260
+    plugin: pl-pfdo_med2img v1.1.8
+    previous: plugin-259
+  - title: plugin-261
+    plugin: pl-pfdo_med2img v1.1.9
+    previous: plugin-260
+  - title: plugin-262
+    plugin: pl-pfdo_med2img v1.2.2
+    previous: plugin-261
+  - title: plugin-263
+    plugin: pl-bulk-rename v0.1.2
+    previous: plugin-262
+  - title: plugin-264
+    plugin: pl-fshack v1.5.0
+    previous: plugin-263
+  - title: plugin-265
+    plugin: pl-fshack v1.3.0
+    previous: plugin-264
+  - title: plugin-266
+    plugin: pl-fshack v1.4.0
+    previous: plugin-265
+  - title: plugin-267
+    plugin: pl-fshack v1.4.1
+    previous: plugin-266
+  - title: plugin-268
+    plugin: pl-fshack v1.4.2
+    previous: plugin-267
+  - title: plugin-269
+    plugin: pl-fshack v1.4.4
+    previous: plugin-268
+  - title: plugin-270
+    plugin: pl-pfdicom_tagSub v3.3.4
+    previous: plugin-269
+  - title: plugin-271
+    plugin: pl-pfdicom_tagSub v3.2.3
+    previous: plugin-270
+  - title: plugin-272
+    plugin: pl-pfdicom_tagExtract v3.2.4
+    previous: plugin-271
+  - title: plugin-273
+    plugin: pl-pfdicom_tagExtract v3.2.3
+    previous: plugin-272
+  - title: plugin-274
+    plugin: pl-pfdicom_tagExtract v3.0.0
+    previous: plugin-273
+  - title: plugin-275
+    plugin: pl-pfdicom_tagExtract v3.1.2
+    previous: plugin-274
+  - title: plugin-276
+    plugin: pl-pfdicom_tagExtract v3.1.3
+    previous: plugin-275
+  - title: plugin-277
+    plugin: pl-orthanc_push v1.3.2
+    previous: plugin-276
+  - title: plugin-278
+    plugin: pl-orthanc_push v1.2.8
+    previous: plugin-277
+  - title: plugin-279
+    plugin: pl-orthanc_push v1.2.7
+    previous: plugin-278
+  - title: plugin-280
+    plugin: pl-orthanc_push v1.0.16
+    previous: plugin-279
+  - title: plugin-281
+    plugin: pl-orthanc_push v1.0.18
+    previous: plugin-280
+  - title: plugin-282
+    plugin: pl-orthanc_push v1.2.0
+    previous: plugin-281
+  - title: plugin-283
+    plugin: pl-orthanc_push v1.2.2
+    previous: plugin-282
+  - title: plugin-284
+    plugin: pl-orthanc_push v1.2.4
+    previous: plugin-283
+  - title: plugin-285
+    plugin: pl-gpu_test v0.2.2
+    previous: plugin-284
+  - title: plugin-286
+    plugin: pl-gpu_test v0.2.3
+    previous: plugin-285
+  - title: plugin-287
+    plugin: pl-gpu_test v0.2.5
+    previous: plugin-286
+  - title: plugin-288
+    plugin: pl-gpu_test v1.0.0
+    previous: plugin-287
+  - title: plugin-289
+    plugin: pl-shexec v1.2.18
+    previous: plugin-288
+  - title: plugin-290
+    plugin: pl-shexec v1.2.17
+    previous: plugin-289
+  - title: plugin-291
+    plugin: pl-shexec v1.2.6
+    previous: plugin-290
+  - title: plugin-292
+    plugin: pl-shexec v1.2.8
+    previous: plugin-291
+  - title: plugin-293
+    plugin: pl-shexec v1.2.10
+    previous: plugin-292
+  - title: plugin-294
+    plugin: pl-shexec v1.2.14
+    previous: plugin-293
+  - title: plugin-295
+    plugin: pl-shexec v1.2.16
+    previous: plugin-294
+  - title: plugin-296
+    plugin: pl-dylld v4.4.45
+    previous: plugin-295
+  - title: plugin-297
+    plugin: pl-dylld v4.4.10
+    previous: plugin-296
+  - title: plugin-298
+    plugin: pl-dylld v4.4.12
+    previous: plugin-297
+  - title: plugin-299
+    plugin: pl-dylld v4.4.16
+    previous: plugin-298
+  - title: plugin-300
+    plugin: pl-dylld v4.4.18
+    previous: plugin-299
+  - title: plugin-301
+    plugin: pl-dylld v4.4.20
+    previous: plugin-300
+  - title: plugin-302
+    plugin: pl-dylld v4.4.21
+    previous: plugin-301
+  - title: plugin-303
+    plugin: pl-dylld v4.4.22
+    previous: plugin-302
+  - title: plugin-304
+    plugin: pl-dylld v4.4.24
+    previous: plugin-303
+  - title: plugin-305
+    plugin: pl-dylld v4.4.28
+    previous: plugin-304
+  - title: plugin-306
+    plugin: pl-dylld v4.4.34
+    previous: plugin-305
+  - title: plugin-307
+    plugin: pl-markimg v1.6.4
+    previous: plugin-306
+  - title: plugin-308
+    plugin: pl-markimg v1.6.2
+    previous: plugin-307
+  - title: plugin-309
+    plugin: pl-markimg v1.5.8
+    previous: plugin-308
+  - title: plugin-310
+    plugin: pl-markimg v1.1.22
+    previous: plugin-309
+  - title: plugin-311
+    plugin: pl-markimg v1.1.24
+    previous: plugin-310
+  - title: plugin-312
+    plugin: pl-markimg v1.2.28
+    previous: plugin-311
+  - title: plugin-313
+    plugin: pl-markimg v1.2.30
+    previous: plugin-312
+  - title: plugin-314
+    plugin: pl-markimg v1.4.2
+    previous: plugin-313
+  - title: plugin-315
+    plugin: pl-dcm2mha_cnvtr v1.2.26
+    previous: plugin-314
+  - title: plugin-316
+    plugin: pl-dcm2mha_cnvtr v1.2.24
+    previous: plugin-315
+  - title: plugin-317
+    plugin: pl-dcm2mha_cnvtr v1.0.0
+    previous: plugin-316
+  - title: plugin-318
+    plugin: pl-dcm2mha_cnvtr v1.1.14
+    previous: plugin-317
+  - title: plugin-319
+    plugin: pl-dcm2mha_cnvtr v1.1.16
+    previous: plugin-318
+  - title: plugin-320
+    plugin: pl-dcm2mha_cnvtr v1.1.18
+    previous: plugin-319
+  - title: plugin-321
+    plugin: pl-dcm2mha_cnvtr v1.2.22
+    previous: plugin-320
+  - title: plugin-322
+    plugin: pl-csv2json v1.3.7
+    previous: plugin-321
+  - title: plugin-323
+    plugin: pl-csv2json v1.2.4
+    previous: plugin-322
+  - title: plugin-324
+    plugin: pl-csv2json v1.0.8
+    previous: plugin-323
+  - title: plugin-325
+    plugin: pl-csv2json v1.0.10
+    previous: plugin-324
+  - title: plugin-326
+    plugin: pl-csv2json v1.2.0
+    previous: plugin-325
+  - title: plugin-327
+    plugin: pl-csv2json v1.2.2
+    previous: plugin-326
+  - title: plugin-328
+    plugin: pl-dicom_dirsend v1.2.0
+    previous: plugin-327
+  - title: plugin-329
+    plugin: pl-dicom_dirsend v1.1.9
+    previous: plugin-328
+  - title: plugin-330
+    plugin: pl-dicom_dirsend v1.1.8
+    previous: plugin-329
+  - title: plugin-331
+    plugin: pl-dicom_dirsend v1.1.7
+    previous: plugin-330
+  - title: plugin-332
+    plugin: pl-dicom_dirsend v1.1.2
+    previous: plugin-331
+  - title: plugin-333
+    plugin: pl-dicommake v2.4.6
+    previous: plugin-332
+  - title: plugin-334
+    plugin: pl-dicommake v2.4.5
+    previous: plugin-333
+  - title: plugin-335
+    plugin: pl-dicommake v2.4.4
+    previous: plugin-334
+  - title: plugin-336
+    plugin: pl-dicommake v2.4.3
+    previous: plugin-335
+  - title: plugin-337
+    plugin: pl-dicommake v2.4.2
+    previous: plugin-336
+  - title: plugin-338
+    plugin: pl-dicommake v2.4.1
+    previous: plugin-337
+  - title: plugin-339
+    plugin: pl-dicommake v2.4.0
+    previous: plugin-338
+  - title: plugin-340
+    plugin: pl-dicommake v2.3.9
+    previous: plugin-339
+  - title: plugin-341
+    plugin: pl-dicommake v2.3.8
+    previous: plugin-340
+  - title: plugin-342
+    plugin: pl-dicommake v2.2.6
+    previous: plugin-341
+  - title: plugin-343
+    plugin: pl-pfdorun v2.2.17
+    previous: plugin-342
+  - title: plugin-344
+    plugin: pl-pfdorun v2.2.16
+    previous: plugin-343
+  - title: plugin-345
+    plugin: pl-pfdorun v2.2.15
+    previous: plugin-344
+  - title: plugin-346
+    plugin: pl-pfdorun v2.2.14
+    previous: plugin-345
+  - title: plugin-347
+    plugin: pl-pfdorun v2.2.6
+    previous: plugin-346
+  - title: plugin-348
+    plugin: pl-pfdorun v2.2.8
+    previous: plugin-347
+  - title: plugin-349
+    plugin: pl-multipass v1.2.3
+    previous: plugin-348
+  - title: plugin-350
+    plugin: pl-multipass v1.3.6
+    previous: plugin-349
+  - title: plugin-351
+    plugin: pl-multipass v1.2.12
+    previous: plugin-350
+  - title: plugin-352
+    plugin: pl-multipass v1.3.0
+    previous: plugin-351
+  - title: plugin-353
+    plugin: pl-multipass v1.3.5
+    previous: plugin-352
+  - title: plugin-354
+    plugin: pl-freesurfer_simplereport v1.1.2
+    previous: plugin-353
+  - title: plugin-355
+    plugin: pl-freesurfer_simplereport v1.1.12
+    previous: plugin-354
+  - title: plugin-356
+    plugin: pl-fastsurfer_inference v1.4.0
+    previous: plugin-355
+  - title: plugin-357
+    plugin: pl-fastsurfer_inference v1.0.15
+    previous: plugin-356
+  - title: plugin-358
+    plugin: pl-fastsurfer_inference v1.3.9
+    previous: plugin-357
+  - title: plugin-359
+    plugin: pl-dcm2niix v1.0.2
+    previous: plugin-358
+  - title: plugin-360
+    plugin: pl-dcm2niix v1.0.1
+    previous: plugin-359
+  - title: plugin-361
+    plugin: pl-dcm2niix v0.1.0
+    previous: plugin-360
+  - title: plugin-362
+    plugin: pl-dcm2niix v1.0.0
+    previous: plugin-361
+  - title: plugin-363
+    plugin: pl-lld_inference v2.2.23
+    previous: plugin-362
+  - title: plugin-364
+    plugin: pl-lld_inference v2.2.22
+    previous: plugin-363
+  - title: plugin-365
+    plugin: pl-lld_inference v0.1.0
+    previous: plugin-364
+  - title: plugin-366
+    plugin: pl-lld_inference v1.0.1
+    previous: plugin-365
+  - title: plugin-367
+    plugin: pl-lld_inference v1.0.3
+    previous: plugin-366
+  - title: plugin-368
+    plugin: pl-lld_inference v1.0.4
+    previous: plugin-367
+  - title: plugin-369
+    plugin: pl-lld_inference v2.2.4
+    previous: plugin-368
+  - title: plugin-370
+    plugin: pl-lld_inference v2.2.6
+    previous: plugin-369
+  - title: plugin-371
+    plugin: pl-lld_inference v2.2.7
+    previous: plugin-370
+  - title: plugin-372
+    plugin: pl-lld_inference v2.2.8
+    previous: plugin-371
+  - title: plugin-373
+    plugin: pl-lld_inference v2.2.10
+    previous: plugin-372
+  - title: plugin-374
+    plugin: pl-simpledsapp v2.1.4
+    previous: plugin-373
+  - title: plugin-375
+    plugin: pl-simpledsapp v2.0.2
+    previous: plugin-374
+  - title: plugin-376
+    plugin: pl-simpledsapp v2.1.0
+    previous: plugin-375
+  - title: plugin-377
+    plugin: pl-emerald v0.3.1
+    previous: plugin-376
+  - title: plugin-378
+    plugin: pl-emerald v0.3.0
+    previous: plugin-377
+  - title: plugin-379
+    plugin: pl-emerald v0.2.3
+    previous: plugin-378
+  - title: plugin-380
+    plugin: pl-emerald v0.2.2
+    previous: plugin-379
+  - title: plugin-381
+    plugin: pl-emerald v0.1.0
+    previous: plugin-380
+  - title: plugin-382
+    plugin: pl-emerald v0.1.1
+    previous: plugin-381
+  - title: plugin-383
+    plugin: pl-emerald v0.2.0
+    previous: plugin-382
+  - title: plugin-384
+    plugin: pl-emerald v0.2.1
+    previous: plugin-383
+  - title: plugin-385
+    plugin: pl-NeSVoR-reconstruct v0.5.0
+    previous: plugin-384
+  - title: plugin-386
+    plugin: pl-topologicalcopy v1.0.12
+    previous: plugin-385
+  - title: plugin-387
+    plugin: pl-topologicalcopy v1.0.7
+    previous: plugin-386
+  - title: plugin-388
+    plugin: pl-topologicalcopy v1.0.2
+    previous: plugin-387
+  - title: plugin-389
+    plugin: pl-topologicalcopy v0.2.6
+    previous: plugin-388
+  - title: plugin-390
+    plugin: pl-topologicalcopy v0.2
+    previous: plugin-389
+  - title: plugin-391
+    plugin: pl-tsdircopy v1.2.0
+    previous: plugin-390
+  - title: plugin-392
+    plugin: pl-tsdircopy v1.2.1
+    previous: plugin-391

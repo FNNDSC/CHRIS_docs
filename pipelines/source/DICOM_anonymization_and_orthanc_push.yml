@@ -18,7 +18,7 @@ plugin_tree:
       fileFilter: ".dcm"
       tagStruct: ''
   - title: full-dicom-anonymization
-    plugin: pl-dicomize v1.0.5
+    plugin: pl-dicomize v1.0.6
     previous: preserved-dicom-anonymization
     plugin_parameter_defaults:
       pattern: "dcm"
