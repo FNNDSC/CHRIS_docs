@@ -22,16 +22,16 @@ plugin_tree:
       copyInputFile: True
       retrieveStudy: True
   - title: verify-registration
-    plugin: pl-reg_chxr v1.1.7
+    plugin: pl-reg_chxr v1.2.0
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
       CUBEuser: 'chris'
       inputJSONfile: 'search_results.json'
       tagStruct: ''
-      orthancUrl: "https://orthanc-basic-auth-proxy-chris-3114b1.apps.shift.nerc.mghpcc.org"
+      orthancUrl: "https://orthanc-some-orthanc-uploading-link.org"
       orthancUsername: "uploader"
-      orthancPassword: "Enmyd5Medd"
+      orthancPassword: "password"
       PACSname: "PACSDCM"
       PACSurl: "http://chris.tch.harvard.edu:3224/api/v1/"
       pushToRemote: "BLT-ChRIS"

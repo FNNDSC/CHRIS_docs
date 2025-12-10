@@ -1,23 +1,28 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: DICOM filter and Orthanc push 20250616
+name: DICOM anonymization and Orthanc push 20241217
 description: Filter out all DICOMs containing PHI and push the results to an Orthanc instance.
 category: Medical Imaging
 locked: false
 plugin_tree:
   - title: dicom-filter
-    plugin: pl-dicom_filter v1.2.5
+    plugin: pl-dicom_filter v1.2.7
     previous: ~
     plugin_parameter_defaults:
-      dicomFilter: '{"SOPClassUID": "Secondary Capture Image Storage"}'
-      exclude: True
-  - title: push-to-orthanc
-    plugin: pl-orthanc_push v1.3.2
+      dicomFilter: 'Modality=MR/CT/XA,SOPClassUID!="Secondary Capture Image Storage"'
+      minImgCount: 20
+  - title: text-dicoms
+    plugin: pl-dcm_txtlocr v1.0.7
     previous: dicom-filter
     plugin_parameter_defaults:
+      fileFilter: "dcm"
+  - title: push-to-orthanc
+    plugin: pl-orthanc_push v1.3.2
+    previous: text-dicoms
+    plugin_parameter_defaults:
       inputFileFilter: "**/*dcm"
-      orthancUrl: "https://orthanc-basic-auth-proxy-again.apps.shift.nerc.mghpcc.org"
-      username: "uploader"
-      password: "Enmyd5Medd"
-      pushToRemote: "BLT-ChRIS"
+      orthancUrl: "http://havana.tch.harvard.edu:8042"
+      username: "orthanc"
+      password: "orthanc"
+      pushToRemote: "ChRIS"
       timeout: 5
