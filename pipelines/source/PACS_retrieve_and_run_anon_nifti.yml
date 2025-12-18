@@ -22,7 +22,7 @@ plugin_tree:
       copyInputFile: True
       retrieveStudy: True
   - title: verify-registration
-    plugin: pl-dy_regiflow v1.1.1
+    plugin: pl-dy_regiflow v1.1.4
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
@@ -31,4 +31,4 @@ plugin_tree:
       PACSurl: "http://localhost:4005/api/v1/"
       neuroLocation: ""
       folderName: ""
-      maxPoll: 20
+      maxPoll: 10

@@ -5,12 +5,19 @@ description: Anonymize all DICOM files in a parent node and push the results to 
 category: Medical Imaging
 locked: false
 plugin_tree:
-  - title: dicom-filter
-    plugin: pl-dicom_filter v1.2.7
+  - title: text-detection
+    plugin: pl-dcm_txtlocr v1.1.2
     previous: ~
+    plugin_parameter_defaults:
+      textOutputDir: "text_data"
+  - title: dicom-filter
+    plugin: pl-dicom_filter v1.2.8
+    previous: text-detection
     plugin_parameter_defaults:
       dicomFilter: 'Modality=MR/CT/XA,SOPClassUID!="Secondary Capture Image Storage"'
       minImgCount: 20
+      phiMode: "allow"
+      inspectTags: "PatientID,PatientName,PatientBirthDate,StudyDate,InstitutionName"
   - title: preserved-dicom-anonymization
     plugin: pl-pfdicom_tagSub v3.3.4
     previous: dicom-filter
