@@ -6,18 +6,18 @@ category: Medical Imaging
 locked: false
 plugin_tree:
   - title: dicom-filter
-    plugin: pl-dicom_filter v1.2.9
+    plugin: pl-dicom_filter v1.3.0
     previous: ~
     plugin_parameter_defaults:
-      dicomFilter: 'Modality=MR/CT/XA,SOPClassUID!="Secondary Capture Image Storage"'
-      minImgCount: 10
+      dicomFilter: ''
+      imgCount: ""
   - title: text-detection
     plugin: pl-dcm_txtlocr v1.1.5
     previous: dicom-filter
     plugin_parameter_defaults:
       textOutputDir: "text_data"
   - title: phi-filter
-    plugin: pl-dicom_filter v1.2.9
+    plugin: pl-dicom_filter v1.3.0
     previous: text-detection
     plugin_parameter_defaults:
       phiMode: "detect"
