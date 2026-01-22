@@ -1,0 +1,80 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "DICOM anonymization of large sequences, niftii conversion, and push to neuro tree v20260122"
+description: Anonymize an input directory of DICOM files -- with niftii conversion and neuro push to .
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-bulk-rename v0.1.2
+    previous: ~
+    plugin_parameter_defaults:
+      filter: ^.*.dcm?$
+      expression: .*-(.*?-.*)/(.*)
+      replacement: $1/$2
+  - title: send-dicoms-to-neuro-FS
+    plugin: pl-neurofiles-push v0.3.0
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      path: "/neuro/labs/grantlab/research/anon_user/not_anon"
+      include: "*.dcm"
+      min_size: 0
+      timeout: 0
+      max_size: 1G
+      max_depth: 3
+      sleepLength: 50
+      ignore_existing: true
+  - title: dicom-anonymized
+    plugin: pl-pfdicom_tagSub v3.3.4
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      fileFilter: ".dcm"
+      tagInfo: "PatientName,%_name|patientID_PatientName ++ PatientID,%_md5|7_PatientID ++ AccessionNumber,%_md5|8_AccessionNumber ++ PatientBirthDate,%_strmsk|******01_PatientBirthDate ++ re:.*hysician,%_md5|4_#tag ++ re:.*stitution,#tag ++ re:.*ddress,#tag"
+      splitToken: "++"
+      splitKeyValue: ","
+  - title: flatten-anon-dicoms
+    plugin: pl-bulk-rename v0.1.2
+    previous: dicom-anonymized
+    plugin_parameter_defaults:
+      filter: ^.*.dcm?$
+      expression: .*/(.*/.*)
+      replacement: $1
+  - title: send-anon-dicoms-to-neuro-FS
+    plugin: pl-neurofiles-push v0.3.0
+    previous: flatten-anon-dicoms
+    plugin_parameter_defaults:
+      path: "/neuro/labs/grantlab/research/anon_user/anon"
+      include: "*.dcm"
+      min_size: 0
+      timeout: 0
+      max_size: 1G
+      max_depth: 3
+      sleepLength: 50
+      ignore_existing: true
+  - title: decompress-dicoms
+    plugin: pl-shexec v1.2.18
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      maxDepth: 2
+      verbosity: 1
+      fileFilter: dcm
+      exec: "dcmdjpeg %inputWorkingDir/%inputWorkingFile %outputWorkingDir/%inputWorkingFile"
+  - title: dicom-to-nifti
+    plugin: pl-dcm2niix v1.0.2
+    previous: decompress-dicoms
+    plugin_parameter_defaults:
+      f: "%3s_%d_%c"
+      z: y
+      m: 0
+  - title: send-niftii-to-neuro-FS
+    plugin: pl-neurofiles-push v0.3.0
+    previous: dicom-to-nifti
+    plugin_parameter_defaults:
+      path: "/neuro/labs/grantlab/research/anon_user/nifti"
+      include: "*"
+      min_size: 0
+      timeout: 0
+      max_size: 1G
+      max_depth: 3
+      ignore_existing: true
+
