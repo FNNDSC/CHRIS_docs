@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20251009"
+name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20260209"
 description:
   Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
   in parallel
@@ -8,7 +8,7 @@ category: Medical Imaging
 locked: false
 plugin_tree:
   - title: root-group-copy-2
-    plugin: pl-simpledsapp v2.1.3
+    plugin: pl-simpledsapp v2.1.5
     previous: ~
     plugin_parameter_defaults:
       prefix: 0-

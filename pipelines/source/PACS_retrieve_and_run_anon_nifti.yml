@@ -13,7 +13,7 @@ plugin_tree:
       PACSname: 'MINICHRISORTHANC'
       PACSdirective: ''
   - title: PACS-retrieve
-    plugin: pl-pacs_retrieve v1.0.5
+    plugin: pl-pacs_retrieve v1.0.6
     previous: PACS-query
     plugin_parameter_defaults:
       PACSurl: 'http://localhost:4005/api/v1/'
@@ -22,7 +22,7 @@ plugin_tree:
       copyInputFile: True
       retrieveStudy: True
   - title: verify-registration
-    plugin: pl-dy_regiflow v1.1.4
+    plugin: pl-dy_regiflow v1.1.5
     previous: PACS-retrieve
     plugin_parameter_defaults:
       CUBEurl: "http://localhost:8000/api/v1/"
