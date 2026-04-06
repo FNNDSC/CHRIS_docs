@@ -15,8 +15,9 @@
 - auditable
 - scalable
 
-## Example (BLT anonymization workflow)
-![BLT workflow](https://raw.githubusercontent.com/FNNDSC/CHRIS_docs/master/images/BLT-workflow.png)
+## Example
+BLT anonymization workflow
+<img src="https://raw.githubusercontent.com/fnndsc/CHRIS_docs/master/images/BLT-workflow.png" style="width:90%; max-width:1200px;">
 
 ## Conclusion
 - next steps
