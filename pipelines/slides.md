@@ -15,8 +15,7 @@
 - auditable
 - scalable
 
-## Example
-BLT anonymization workflow
+## Example (BLT anonymization workflow)
 ![BLT workflow](https://raw.githubusercontent.com/FNNDSC/CHRIS_docs/master/images/BLT-workflow.png)
 
 ## Conclusion
