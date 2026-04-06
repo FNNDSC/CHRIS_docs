@@ -16,8 +16,10 @@
 - scalable
 
 ## Example
-BLT anonymization workflow
-<img src="https://raw.githubusercontent.com/fnndsc/CHRIS_docs/master/images/BLT-workflow.png" style="width:90%; max-width:1200px;">
+<p align="center">
+  BLT anonymization workflow
+  <img src="https://raw.githubusercontent.com/fnndsc/CHRIS_docs/master/images/BLT-workflow.png" width="5000">
+</p>
 
 ## Conclusion
 - next steps
