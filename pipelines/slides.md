@@ -7,7 +7,7 @@
 | 002        | 2024-02-03 | MR       | ACC67890         |
 
 ## Different types of pipelines
-![Types of pipelines](/images/types-of-pipelines.png)
+![Types of pipelines](https://github.com/FNNDSC/CHRIS_docs/blob/master/images/types-of-pipelines.png)
 
 ## Advantages
 - simple
@@ -17,7 +17,7 @@
 
 ## Example
 BLT anonymization workflow
-![BLT workflow](/images/BLT-workflow.png)
+![BLT workflow](https://github.com/FNNDSC/CHRIS_docs/blob/master/images/BLT-workflow.png)
 
 ## Conclusion
 - next steps
