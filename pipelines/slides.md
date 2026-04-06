@@ -1,23 +1,24 @@
 # Pipelines in ChRIS
 
 ## csv as manifest
+| patient_id | study_date | modality | accession_number |
+|------------|------------|----------|------------------|
+| 001        | 2024-01-15 | CT       | ACC12345         |
+| 002        | 2024-02-03 | MR       | ACC67890         |
 
 ## Different types of pipelines
+![Types of pipelines](/images/types-of-pipelines.png)
 
 ## Advantages
-simple
-reproducible
-auditable
-scalable
+- simple
+- reproducible
+- auditable
+- scalable
 
 ## Example
 BLT anonymization workflow
+![BLT workflow](/images/BLT-workflow.png)
 
 ## Conclusion
-<div style="background-color:black; color:white; padding:40px; height:100vh;">
-
-# My Slide Title
-
-Some content here
-
-</div>
+- next steps
+- sleep corpus
