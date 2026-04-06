@@ -20,7 +20,7 @@ plugin_tree:
       addTextSize: 1.5
       addTextColor: cyan
       addTextPos: top
-      addLineSpace: 1
+      addLineSpace: 1.2
   - title: image-to-DICOM 
     plugin: pl-dicommake v2.4.6
     previous: QA-Check

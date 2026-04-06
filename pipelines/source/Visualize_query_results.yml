@@ -1,0 +1,14 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "Tablify PACS query results using CUBE 20260402"
+description: "Merge multiple output JSON file and render them in tabular form in HTML, csv, xlsx"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: JSON-to-table
+    plugin: pl-tablify v1.0.3
+    previous: ~
+    plugin_parameter_defaults:
+      pattern: '**/search_results*.json'
+      includeHeaders: 'PatientID,PatientName,PatientBirthDate,Modality,StudyDate,AccessionNumber,SeriesDescription'
+      outputFileStem: 'output_data'
