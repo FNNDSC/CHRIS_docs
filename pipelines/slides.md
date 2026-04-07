@@ -1,10 +1,10 @@
 # Pipelines in ChRIS
 
 ## csv as manifest
-| Search_PatientID | Search_StudyDate | Search_Modality | Search_SeriesDescription |
-|------------------|------------------|------------------|---------------------------|
-| 001              | 20240115         | CT               |        \*EPI\*                   |
-| 002              | 20240203         | MR               |         \*EPI\*              |
+| Search_PatientID | Search_StudyDate | Search_Modality | Search_\<tag\>|
+|------------------|------------------|------------------|---------------|
+| 001              | 20240115         | CT               |  ---                    |
+| 002              | 20240203         | MR               |  ---                  |
 
 ## Different types of pipelines
 ![Types of pipelines](https://raw.githubusercontent.com/FNNDSC/CHRIS_docs/master/images/types-of-pipelines.png)
