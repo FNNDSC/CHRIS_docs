@@ -125,3 +125,99 @@ $ echo "Done 🚀"
 
 </div>
 </p>
+<p align="center">
+<pre>
+$ ./run_pipeline.sh
+
+[LOAD] Reading CSV...
+[PROCESS] Filtering errors...
+[WRITE] Saving output...
+
+✔ Done.
+</pre>
+</p>
+
+# 🖥️ Animated Terminal
+
+---
+
+## 🚀 Running Pipeline (Animated)
+
+<p align="center">
+<div style="background:#0d1117; border-radius:10px; padding:20px; color:#c9d1d9; font-family:monospace; text-align:left; max-width:900px; margin:auto;">
+
+<pre>
+
+<span class="line1">$ ./run_pipeline.sh</span>
+<span class="line2">[LOAD] Reading CSV...</span>
+<span class="line3">[PROCESS] Filtering errors...</span>
+<span class="line4">[WRITE] Saving output...</span>
+<span class="line5">✔ SUCCESS: Done</span>
+
+</pre>
+
+</div>
+</p>
+
+<style>
+.line1 { opacity: 0; animation: fadeIn 1s forwards 0.5s; }
+.line2 { opacity: 0; animation: fadeIn 1s forwards 1.5s; color:#f2cc60; }
+.line3 { opacity: 0; animation: fadeIn 1s forwards 2.5s; color:#f2cc60; }
+.line4 { opacity: 0; animation: fadeIn 1s forwards 3.5s; color:#f2cc60; }
+.line5 { opacity: 0; animation: fadeIn 1s forwards 4.5s; color:#7ee787; }
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+</style>
+
+---
+
+## ⌨️ Typing Effect
+
+<p align="center">
+<div style="background:#0d1117; border-radius:10px; padding:20px; color:#c9d1d9; font-family:monospace; max-width:900px; margin:auto;">
+
+<pre>
+<span class="typing">$ echo "Hello World"</span>
+</pre>
+
+</div>
+</p>
+
+<style>
+.typing {
+  border-right: 2px solid #c9d1d9;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  width: 0;
+  animation: typing 3s steps(20, end) forwards, blink 0.7s infinite;
+}
+
+@keyframes typing {
+  to { width: 22ch; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+</style>
+
+---
+
+## 🧠 Animated Pipeline
+
+<p align="center">
+<div style="background:#0d1117; border-radius:10px; padding:30px; font-family:monospace; text-align:center; max-width:900px; margin:auto; font-size:22px;">
+
+<span class="p1">[CSV]</span> → <span class="p2">[QUERY]</span> → <span class="p3">[OUTPUT]</span>
+
+</div>
+</p>
+
+<style>
+.p1 { opacity:0; animation: fadeIn 1s forwards 0.5s; color:#ff7b72; }
+.p2 { opacity:0; animation: fadeIn 1s forwards 2s; color:#f2cc60; }
+.p3 { opacity:0; animation: fadeIn 1s forwards 3.5s; color:#7ee787; }
+</style>
