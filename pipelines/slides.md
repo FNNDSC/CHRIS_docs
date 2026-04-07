@@ -36,6 +36,10 @@
 
 <span style="color:#7ee787;">➜</span> <span style="color:#79c0ff;">~/project</span> <span style="color:#ff7b72;">git:(main)</span>
 $ ./run_pipeline.sh
+| patient_id | study_date | modality | accession_number |
+|------------|------------|----------|------------------|
+| 001        | 2024-01-15 | CT       | ACC12345         |
+| 002        | 2024-02-03 | MR       | ACC67890         |
 
 <br>
 
@@ -221,3 +225,33 @@ $ ./run_pipeline.sh
 .p2 { opacity:0; animation: fadeIn 1s forwards 2s; color:#f2cc60; }
 .p3 { opacity:0; animation: fadeIn 1s forwards 3.5s; color:#7ee787; }
 </style>
+## 📄 Animated CSV in Terminal
+
+<p align="center">
+<div style="background:#0d1117; border-radius:10px; padding:20px; color:#c9d1d9; font-family:monospace; text-align:left; max-width:1000px; margin:auto;">
+
+<pre>
+<span class="cmd">$ cat sample.csv</span>
+
+<span class="h">patient_id | study_date | modality | accession_number</span>
+<span class="h">-----------+------------+----------+------------------</span>
+<span class="r1">001        | 2024-01-15 | CT       | ACC12345</span>
+<span class="r2">002        | 2024-02-03 | MR       | ACC67890</span>
+</pre>
+
+</div>
+</p>
+
+<style>
+.cmd { color:#7ee787; opacity:0; animation: fadeIn 1s forwards 0.5s; }
+
+.h { color:#79c0ff; opacity:0; animation: fadeIn 1s forwards 1.5s; }
+
+.r1 { opacity:0; animation: fadeIn 1s forwards 3s; }
+.r2 { opacity:0; animation: fadeIn 1s forwards 4.5s; }
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+</style>
+
