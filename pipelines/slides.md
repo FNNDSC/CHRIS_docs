@@ -1,7 +1,13 @@
 # Pipelines in ChRIS
 
 ## The big picture
-[ CSV Spec ] --> [ PACS Query ] --> [ PACS Retrieve ] --> [ Anonymize ]
+[ CSV Spec ]
+      ↓
+[ PACS Query ]
+      ↓
+[ PACS Retrieve ]
+      ↓
+[ Anonymize ]
 
 ## csv as manifest
 | Search_PatientID | Search_StudyDate | Search_Modality | 
