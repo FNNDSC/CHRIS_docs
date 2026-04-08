@@ -1,12 +1,12 @@
 # Pipelines in ChRIS
 
 ## The big picture
-[ CSV Spec ]
-      ↓
-[ PACS Query ]
-      ↓
-[ PACS Retrieve ]
-      ↓
+[ CSV Spec ]  
+↓  
+[ PACS Query ]  
+↓  
+[ PACS Retrieve ]  
+↓  
 [ Anonymize ]
 
 ## csv as manifest
