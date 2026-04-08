@@ -18,12 +18,6 @@
 ## Different types of pipelines
 ![Types of pipelines](https://raw.githubusercontent.com/FNNDSC/CHRIS_docs/master/images/types-of-pipelines.png)
 
-## Advantages
-- simple
-- reproducible
-- auditable
-- scalable
-
 ## Example
 <p align="center">
   BLT anonymization workflow
@@ -33,6 +27,12 @@
 | Patients | Studies | Series | Instances | Storage Size |
 |----------|---------|--------|-----------|---------------|
 | 34       | 421     | 7533   | 901759    | 84.71 GB      |
+
+## Advantages
+- simple
+- reproducible
+- auditable
+- scalable
 
 ## Next steps
 - Collaborators in Toronto
