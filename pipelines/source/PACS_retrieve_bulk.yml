@@ -1,0 +1,37 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "Bulk PACS retrieve pipeline using CUBE 20260428"
+description: "Query/retrieve PACS for DICOM images using a csv file to specify a list of MRNs and other PACS directives"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: PACS-query
+    plugin: pl-pacs_query v1.0.9
+    previous: ~
+    plugin_parameter_defaults:
+      PACSurl: 'http://chris.tch.harvard.edu:3224/api/v1/'
+      PACSname: 'PACSDCM'
+      PACSdirective: ''
+      reportName: search_results
+  - title: PACS-retrieve
+    plugin: pl-pacs_retrieve v1.0.7
+    previous: PACS-query
+    plugin_parameter_defaults:
+      src_aet: MINICHRISORTHANC
+      dst_aet: ChRIS
+      src_ip: 192.168.130.1
+      src_port: 4242
+      inputJSONfile: "search_results*.json"
+      copyInputFile: True
+  - title: verify-registration
+    plugin: pl-reg_chxr v1.3.1
+    previous: PACS-retrieve
+    plugin_parameter_defaults:
+      CUBEurl: "http://localhost:8000/api/v1/"
+      inputJSONfile: 'search_results.json'
+      PACSname: "MINICHRISORTHANC"
+      PACSurl: "http://localhost:4005/api/v1/"
+      neuroLocation: ""
+      folderName: ""
+      maxPoll: 10
+      pipelineName: "Push to neuro tree and zip the directory 20260506"

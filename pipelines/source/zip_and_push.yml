@@ -1,0 +1,24 @@
+---
+authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
+name: "Push to neuro tree and zip the directory 20260506"
+description: Push DICOM files to a neuro location and zip the directory to be downloaded from the UI
+category: Medical Imaging
+locked: false
+plugin_tree:
+  - title: root-group-copy
+    plugin: pl-simpledsapp v2.1.5
+    previous: ~
+  - title: send-dicoms-to-neuro-FS
+    plugin: pl-neurofiles-push v0.3.0
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      path: ""
+      sleepLength: 50
+      ignore_existing: true
+  - title: file-to-zip
+    plugin: pl-pfdorun v2.2.14
+    previous: root-group-copy
+    plugin_parameter_defaults:
+      maxDepth: 0
+      exec: "zip -r %outputDir/%inputWorkingFile.zip %inputDir"
+      noJobLogging: true
