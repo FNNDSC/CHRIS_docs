@@ -6,13 +6,17 @@ category: Testing
 locked: false
 plugin_tree:
   - title: simpledsapp1
-    plugin: pl-simpledsapp v2.1.4
+    plugin: pl-simpledsapp v2.1.5
     previous: ~
+    cpu_limit: 2550m
+    memory_limit: 3000Mi
     plugin_parameter_defaults:
       prefix: "lolo"
   - title: simpledsapp2
-    plugin: pl-simpledsapp v2.1.4
+    plugin: pl-simpledsapp v2.1.5
     previous: simpledsapp1
+    cpu_limit: 3980m
+    memory_limit: 4000Mi
     plugin_parameter_defaults:
       prefix: "lele"
   - title: topo-copy-1
