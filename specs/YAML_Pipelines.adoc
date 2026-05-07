@@ -66,6 +66,39 @@ Description of piping. `title` must be unique for all elements of <<plugin_tree>
 
 NOTE: `title` is not (currently) included in the _ChRIS_ pipeline creation protocol.
 
+[#piping-cpu_limit]
+=== `plugin_tree[*].cpu_limit`
+
+Type: string | integer
+
+Description of piping. `cpu_limit` must be specified as an 'xm' string where x is an 
+integer or otherwise as a plain integer. Stores CPU quantity as integer in millicores.
+
+[#piping-memory_limit]
+=== `plugin_tree[*].memory_limit`
+
+Type: string | integer
+
+Description of piping. `memory_limit` must be specified as an 'xMi' or 'xGi' string 
+where x is an integer or otherwise as a plain integer. Stores memory quantity as integer 
+in Megabytes.
+
+[#piping-gpu_limit]
+=== `plugin_tree[*].gpu_limit`
+
+Type: integer
+
+Description of piping. `gpu_limit` must be specified as an integer representing the 
+requested number of GPUs. 
+
+[#piping-number_of_workers]
+=== `plugin_tree[*].number_of_workers`
+
+Type: integer
+
+Description of piping. `number_of_workers` must be specified as an integer representing 
+the requested number of kubernetes workers. 
+
 [#piping-plugin]
 === `plugin_tree[*].plugin`
 
