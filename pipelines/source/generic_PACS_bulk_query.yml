@@ -1,0 +1,16 @@
+---
+authors: Sandip Samal <dev@babymri.org>
+name: "Generic PACS bulk query pipeline using CUBE 20260914"
+description: "Query any PACS for DICOM images using a csv file to specify a list of MRNs and other PACS directives"
+category: Imaging
+locked: false
+plugin_tree:
+  - title: PACS-query
+    plugin: pl-pacs_query v1.1.0
+    previous: ~
+    plugin_parameter_defaults:
+      src_aet: MINICHRISORTHANC
+      dst_aet: CHRIS
+      src_ip: 192.162.0.1
+      src_port: 104
+      copyInputFile: True

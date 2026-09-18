@@ -6,21 +6,23 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: PACS-query
-    plugin: pl-pacs_query v1.0.7
+    plugin: pl-pacs_query v1.0.9
     previous: ~
     plugin_parameter_defaults:
       PACSurl: 'http://localhost:4005/api/v1/'
       PACSname: 'MINICHRISORTHANC'
       PACSdirective: ''
+      reportName: 'search_results'
   - title: PACS-retrieve
-    plugin: pl-pacs_retrieve v1.0.6
+    plugin: pl-pacs_retrieve v1.0.7
     previous: PACS-query
     plugin_parameter_defaults:
-      PACSurl: 'http://localhost:4005/api/v1/'
-      PACSname: 'MINICHRISORTHANC'
       inputJSONfile: "search_results.json"
       copyInputFile: True
-      retrieveStudy: True
+      src_aet: MINICHRISORTHANC
+      dst_aet: ChRIS
+      src_ip: 192.168.130.1
+      src_port: 4242
   - title: verify-registration
     plugin: pl-dy_regiflow v1.1.5
     previous: PACS-retrieve
