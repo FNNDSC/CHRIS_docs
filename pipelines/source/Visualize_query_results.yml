@@ -6,9 +6,9 @@ category: Imaging
 locked: false
 plugin_tree:
   - title: JSON-to-table
-    plugin: pl-tablify v1.0.3
+    plugin: pl-tablify v1.0.0
     previous: ~
     plugin_parameter_defaults:
       pattern: '**/search_results*.json'
-      includeHeaders: 'PatientID,PatientName,PatientBirthDate,Modality,StudyDate,AccessionNumber,SeriesDescription'
+      includeHeaders: 'PatientID,PatientName,PatientBirthDate,Modality,StudyDate,AccessionNumber,SeriesDescription,NumberOfSeriesRelatedInstances'
       outputFileStem: 'output_data'
