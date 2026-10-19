@@ -1,6 +1,6 @@
 ---
 authors: Sandip Samal <sandip.samal@childrens.harvard.edu>
-name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20260814"
+name: "Ultra Sound DICOM anonymization and PHI removal and anon only v20261019"
 description:
   Remove PHI burned on US DICOM images, anonymize the dicom headers and zip the results
   in parallel
@@ -40,102 +40,26 @@ plugin_tree:
     plugin_parameter_defaults:
       fileFilter: dcm
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: unpacked-pngs-2
-    plugin: pl-dicom_filter v1.3.1
-    previous: unpacked-dcms-2
-    plugin_parameter_defaults:
-      fileFilter: dcm
-      outputType: png
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: unpacked-dcm-tags-2
-    plugin: pl-dicom_info v1.0.28
-    previous: unpacked-dcms-2
-    plugin_parameter_defaults:
-      fileFilter: dcm
-      tagList: PatientName,PatientID,PatientBirthDate,StudyDate
-      imageScale: "3:none"
-      outputFileStem: anonymizedTags
-      outputFileType: json
-  - title: unpacked-pngs-and-dicom-tags-2
-    plugin: pl-topologicalcopy v1.0.2
-    previous: unpacked-pngs-2
-    plugin_parameter_defaults:
-      plugininstances: unpacked-pngs-2,unpacked-dcm-tags-2
-      filter: \.png$,\.json$
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: image-pngs-2
-    plugin: pl-dicom_filter v1.2.5
+  - title: phi-removed-dicoms
+    plugin: pl-dicom_pixel_redact v1.0.3
     previous: image-dcms-2
     plugin_parameter_defaults:
-      fileFilter: dcm
-      outputType: png
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: dcm-tags-2
-    plugin: pl-dicom_info v1.0.28
-    previous: image-dcms-2
-    plugin_parameter_defaults:
-      fileFilter: dcm
-      tagList: PatientName,PatientID,PatientBirthDate,StudyDate
-      imageScale: "3:none"
-      outputFileStem: anonymizedTags
-      outputFileType: json
-  - title: image-pngs-and-dicom-tags-2
-    plugin: pl-topologicalcopy v1.0.2
-    previous: image-pngs-2
-    plugin_parameter_defaults:
-      plugininstances: image-pngs-2,dcm-tags-2
-      filter: \.png$,\.json$
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: phi-removed-image-pngs-2
-    plugin: pl-image_textremove v1.3.0
-    previous: image-pngs-and-dicom-tags-2
-    plugin_parameter_defaults:
-      fileFilter: png
-      outputType: png
-      filterTextFromJSON: anonymizedTags.json
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: phi-removed-unpacked-pngs-2
-    plugin: pl-image_textremove v1.3.0
-    previous: unpacked-pngs-and-dicom-tags-2
-    plugin_parameter_defaults:
-      fileFilter: png
-      outputType: png
-      filterTextFromJSON: anonymizedTags.json
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: unpacked-dcms-and-phi-removed-pngs-2
-    plugin: pl-topologicalcopy v1.0.2
+      pattern: "**/*.dcm"
+      propagate_match_tags: "PatientID,PatientName,PatientBirthDate,AccessionNumber,InstitutionName,StudyDate"
+  - title: phi-removed-unpacked-dicoms
+    plugin: pl-dicom_pixel_redact v1.0.3
     previous: unpacked-dcms-2
     plugin_parameter_defaults:
-      plugininstances: unpacked-dcms-2,phi-removed-unpacked-pngs-2
-      filter: \.dcm$,\.png$
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: image-dcms-and-phi-removed-pngs-2
-    plugin: pl-topologicalcopy v1.0.2
-    previous: image-dcms-2
-    plugin_parameter_defaults:
-      plugininstances: image-dcms-2,phi-removed-image-pngs-2
-      filter: \.dcm$,\.png$
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: converted-unpacked-dcms-2
-    plugin: pl-dicommake v2.4.3
-    previous: unpacked-dcms-and-phi-removed-pngs-2
-    plugin_parameter_defaults:
-      filterIMG: "**/*.png"
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
-  - title: converted-image-dcms-2
-    plugin: pl-dicommake v2.4.3
-    previous: image-dcms-and-phi-removed-pngs-2
-    plugin_parameter_defaults:
-      filterIMG: "**/*.png"
-      pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
+      pattern: "**/*.dcm"
+      propagate_match_tags: "PatientID,PatientName,PatientBirthDate,AccessionNumber,InstitutionName,StudyDate"
   - title: repacked-dcms-2
-    plugin: pl-dicom_repack v1.2.7
-    previous: converted-unpacked-dcms-2
+    plugin: pl-dicom_repack v1.3.1
+    previous: phi-removed-unpacked-dicoms
     plugin_parameter_defaults:
       fileFilter: dcm
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: report-dcms-anonymized-name-only
-    plugin: pl-dicom_headeredit v1.1.6
+    plugin: pl-pfdicom_tagSub v3.3.5
     previous: report-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
@@ -144,7 +68,7 @@ plugin_tree:
       splitKeyValue: ","
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: report-dcms-anonymized-full
-    plugin: pl-dicom_headeredit v1.1.6
+    plugin: pl-pfdicom_tagSub v3.3.5
     previous: report-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
@@ -169,8 +93,8 @@ plugin_tree:
       exec: "zip -r %outputDir/parent.zip %inputDir"
       noJobLogging: true
   - title: image-dcms-anonymized-name-only
-    plugin: pl-dicom_headeredit v1.1.6
-    previous: converted-image-dcms-2
+    plugin: pl-pfdicom_tagSub v3.3.5
+    previous: phi-removed-dicoms
     plugin_parameter_defaults:
       fileFilter: ".dcm"
       tagInfo: "PatientName,ANON"
@@ -178,8 +102,8 @@ plugin_tree:
       splitKeyValue: ","
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: image-dcms-anonymized-full
-    plugin: pl-dicom_headeredit v1.1.6
-    previous: converted-image-dcms-2
+    plugin: pl-pfdicom_tagSub v3.3.5
+    previous: phi-removed-dicoms
     plugin_parameter_defaults:
       fileFilter: ".dcm"
       splitToken: ","
@@ -203,7 +127,7 @@ plugin_tree:
       exec: "zip -r %outputDir/parent.zip %inputDir"
       noJobLogging: true
   - title: repacked-dcms-anonymized-name-only
-    plugin: pl-dicom_headeredit v1.1.6
+    plugin: pl-pfdicom_tagSub v3.3.5
     previous: repacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
@@ -212,7 +136,7 @@ plugin_tree:
       splitKeyValue: ","
       pftelDB: "http://galena.tch.harvard.edu:30035/api/v1/chris/us_anon/"
   - title: repacked-dcms-anonymized-full
-    plugin: pl-dicom_headeredit v1.1.6
+    plugin: pl-pfdicom_tagSub v3.3.5
     previous: repacked-dcms-2
     plugin_parameter_defaults:
       fileFilter: ".dcm"
